@@ -1,0 +1,151 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kb.inno.admin.DAO.InterchangeDAO">
+    <!-- 글로벌 – 현지교류 리스트 조회 -->
+    <select id="selectList" resultType="com.kb.inno.admin.DTO.InterchangeDTO">
+        /* 글로벌 – 현지교류 리스트 조회 */
+        SELECT ROWNUM AS ROWNUMBER
+             , EXCH_PAGE.*
+         FROM (
+               SELECT EXCH.EXCH_SN        AS EXCH_SN
+                    , EXCH.EXCH_TTL       AS EXCH_TTL
+                    , EXCH.EXCH_CN        AS EXCH_CN
+                    , EXCH.EXPSR_YN       AS EXPSR_YN
+                    , EXCH.SORT_NO        AS SORT_NO
+                    , FILES.FILE_PATH     AS INTER_PATH1
+                    , FILES.FILE_NM       AS INTER_FILE_NAME1
+                 FROM KB_EXCH_INFO EXCH
+                    , KB_FILE_INFO FILES
+                WHERE EXCH.ATCH_FILE_SN1 = FILES.FILE_SN(+)
+                ORDER BY EXCH.EXCH_SN ASC
+              ) EXCH_PAGE
+         ORDER BY ROWNUMBER DESC
+    </select>
+    <!-- 글로벌 – 현지교류 파일 추가 -->
+    <insert id="insertFile" parameterType="com.kb.inno.admin.DTO.FileDTO">
+        /* 글로벌 – 현지교류 파일 추가 */
+        INSERT INTO KB_FILE_INFO
+        (
+         FILE_SN
+       , FILE_NM
+       , ORGNL_FILE_NM
+       , FILE_SZ
+       , FILE_EXTN
+       , FILE_PATH
+       , FRST_RGTR
+       , FRST_REG_DT
+       , LAST_MDFR
+       , LAST_MDFCN_DT
+        )
+        VALUES
+        (
+         FILE_SN_SEQ.NEXTVAL
+       , #{file_nm}
+       , #{orgnl_file_nm}
+       , #{file_sz}
+       , #{file_extn}
+       , #{file_path}
+       , #{frst_rgtr}
+       , SYSDATE
+       , #{last_mdfr}
+       , SYSDATE
+        )
+        <selectKey keyProperty="file_sn" resultType="int" order="AFTER">
+            /* 저장한 파일 중 제일 큰 것 조회(키 조회) */
+            SELECT MAX(FILE_SN) AS FILE_SN
+              FROM KB_FILE_INFO
+        </selectKey>
+    </insert>
+    <!-- 글로벌 – 현지교류 등록 -->
+    <insert id="insert" parameterType="com.kb.inno.admin.DTO.InterchangeDTO">
+        /* 글로벌 – 현지교류 등록 */
+        INSERT INTO KB_EXCH_INFO
+        (
+         EXCH_SN
+       , EXCH_TTL
+       , EXCH_CN
+       , EXPSR_YN
+       , SORT_NO
+       , ATCH_FILE_SN1
+       , FRST_RGTR
+       , FRST_REG_DT
+       , LAST_MDFR
+       , LAST_MDFCN_DT
+        )
+        VALUES
+        (
+         EXCH_SN_SEQ.NEXTVAL
+       , #{exch_ttl}
+       , #{exch_cn}
+       , #{expsr_yn}
+       , #{sort_no}
+       , #{atch_file_sn1}
+       , #{frst_rgtr}
+       , SYSDATE
+       , #{last_mdfr}
+       , SYSDATE
+        )
+    </insert>
+    <!-- 글로벌 – 현지교류 상세 조회 -->
+    <select id="select" parameterType="int" resultType="com.kb.inno.admin.DTO.InterchangeDTO">
+        /* 글로벌 – 현지교류 상세 조회 */
+        SELECT EXCH.EXCH_SN        AS EXCH_SN
+             , EXCH.EXCH_TTL       AS EXCH_TTL
+             , EXCH.EXCH_CN        AS EXCH_CN
+             , EXCH.EXPSR_YN       AS EXPSR_YN
+             , EXCH.SORT_NO        AS SORT_NO
+             , EXCH.ATCH_FILE_SN1  AS ATCH_FILE_SN1
+             , FILES.FILE_PATH     AS INTER_PATH1
+             , FILES.FILE_NM       AS INTER_FILE_NAME1
+        FROM KB_EXCH_INFO EXCH
+           , KB_FILE_INFO FILES
+        WHERE EXCH.EXCH_SN = #{exch_sn}
+          AND EXCH.ATCH_FILE_SN1 = FILES.FILE_SN(+)
+    </select>
+    <!-- 글로벌 – 현지교류 수정 -->
+    <update id="update" parameterType="com.kb.inno.admin.DTO.InterchangeDTO">
+        /* 글로벌 – 현지교류 수정 */
+        UPDATE KB_EXCH_INFO
+           SET EXCH_TTL      = #{exch_ttl}
+             , EXCH_CN       = #{exch_cn}
+             , EXPSR_YN      = #{expsr_yn}
+             , SORT_NO       = #{sort_no}
+             , ATCH_FILE_SN1 = #{atch_file_sn1}
+             , LAST_MDFR     = #{last_mdfr}
+             , LAST_MDFCN_DT = SYSDATE
+         WHERE EXCH_SN       = #{exch_sn}
+    </update>
+    <!-- 글로벌 – 현지교류 파일 삭제 -->
+    <delete id="deleteFile" parameterType="int">
+        /* 글로벌 – 현지교류 파일 삭제 */
+        DELETE
+          FROM KB_FILE_INFO
+         WHERE FILE_SN = #{file_sn}
+    </delete>
+    <!-- 글로벌 – 현지교류 삭제 -->
+    <delete id="delete" parameterType="int">
+        /* 글로벌 – 현지교류 삭제 */
+        DELETE
+          FROM KB_EXCH_INFO
+         WHERE EXCH_SN = #{exch_sn}
+    </delete>
+    <!-- 글로벌 – 현지교류 리스트 조회 (미리보기용) -->
+    <select id="selectListAll" parameterType="int" resultType="com.kb.inno.admin.DTO.InterchangeDTO">
+        /* 글로벌 – 현지교류 리스트 조회 (미리보기용) */
+        SELECT EXCH.EXCH_SN        AS EXCH_SN
+             , EXCH.EXCH_TTL       AS EXCH_TTL
+             , EXCH.EXCH_CN        AS EXCH_CN
+             , FILES.FILE_PATH     AS INTER_PATH1
+             , FILES.FILE_NM       AS INTER_FILE_NAME1
+        FROM KB_EXCH_INFO EXCH
+           , KB_FILE_INFO FILES
+        WHERE 1=1
+        <if test="exch_sn != 0">
+          AND NOT EXCH_SN IN (#{exch_sn})
+        </if>
+          AND EXCH.ATCH_FILE_SN1 = FILES.FILE_SN(+)
+          AND EXCH.EXPSR_YN = 'Y'
+        ORDER BY EXCH.EXCH_SN DESC
+    </select>
+</mapper>

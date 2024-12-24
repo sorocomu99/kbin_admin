@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragment/config :: configFragment"></head>
+<body>
+<div class="wrap">
+    <div th:replace="fragment/header :: headerFragment"></div>
+
+    <main class="main">
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <div class="paper">
+                        <h2 class="h4">관리자 계정 관리</h2>
+                        <div class="mt-4">
+                            <div class="col">
+                            </div>
+                            <div class="col">
+                                <div class="top-search d-flex mt-4">
+                                    <div class="col">
+                                    </div>
+                                    <div class="col">
+                                        <div class="button-wrap d-flex justify-content-end">
+                                            <a th:href="@{|/member/insert/${menuId}|}" class="btn btn-primary">
+                                                <i data-feather="edit"></i> 신규 등록
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <input type="hidden" name="menu_id" th:value="${menuId}"/>
+                            <table class="table text-center">
+                                <thead>
+                                <tr>
+                                    <th style="width:5%">NO</th>
+                                    <th style="width:25%">아이디</th>
+                                    <th style="width:20%">관리자명</th>
+                                    <th style="width:20%">이메일</th>
+                                    <th style="width:20%">관리</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="list : ${selectList}">
+                                        <td th:text="${list.mngr_sn}"></td>
+                                        <td th:text="${list.mngr_id}"></td>
+                                        <td th:text="${list.mngr_nm}"></td>
+                                        <td th:text="${list.mngr_eml}"></td>
+                                        <td>
+                                            <!-- <button type="button" th:onclick="updatePage([[${list.mngr_sn}]], [[${menuId}]])" class="btn btn-outline-dark btn-sm">수정</button> -->
+                                            <button type="button" th:onclick="|updatePage('${list.mngr_sn}', '${menuId}')|" class="btn btn-outline-dark btn-sm">수정</button>
+                                            <button th:onclick="|deleteAlert('${list.mngr_sn}')|" type="button" class="btn btn-outline-danger btn-sm">삭제</button>
+                                            <!-- <button th:onclick="deleteAlert([[${list.mngr_sn}]])" type="button" class="btn btn-outline-danger btn-sm">삭제</button> -->
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+<script th:inline="javascript">
+
+    // 페이지 로드 시 실행
+    window.onload = function () {
+        // 페이지 로드 시 메시지 확인 및 알림 표시
+        // 수정 및 등록 시 띄울 알림창
+        const msg = /*[[${msg}]]*/ '';
+        if (msg) alert(msg);
+    }
+
+    // 수정 페이지 이동
+    function updatePage(mngr_sn, menuId) {
+        // 빈 form 전달
+        let pageMoveForm = document.createElement('form');
+        // 인수 값 전달
+        let obj = document.createElement('input');
+        obj.setAttribute('type', 'hidden');
+        obj.setAttribute('name', 'mngr_sn');
+        obj.setAttribute('value', mngr_sn);
+        pageMoveForm.appendChild(obj);
+
+        let obj2 = document.createElement('input');
+        obj2.setAttribute('type', 'hidden');
+        obj2.setAttribute('name', 'menuId');
+        obj2.setAttribute('value', menuId);
+        pageMoveForm.appendChild(obj2);
+
+        pageMoveForm.setAttribute('method', 'post');
+        pageMoveForm.setAttribute('action', '/kbinnovationhub_devadm/member/detail');
+        document.body.appendChild(pageMoveForm);
+        pageMoveForm.submit();
+    }
+
+    // 삭제 성공/실패 알림창 띄우기
+    function deleteAlert(mngr_sn) {
+        let result = confirm("정말 삭제 하시겠습니까?");
+        if(result) {
+            $.ajax({
+                url: /*[[@{/member/delete}]]*/,
+                type: 'POST', // HTTP 메서드
+                contentType: 'application/x-www-form-urlencoded',
+                data: { mngr_sn: mngr_sn },
+                success: function(response) {
+                    alert("삭제에 성공하였습니다.");
+                    window.location.reload();
+                },
+                error: function(xhr, status, error) {
+                    alert('삭제에 실패하였습니다.');
+                    console.error('Error:', error);
+                }
+            });
+        }
+    }
+</script>
+</body>
+</html>

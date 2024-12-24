@@ -1,0 +1,121 @@
+@font-face {
+    font-family: 'KBFG Display';
+    src: url('../fonts/KBFGDisplay-Bold.woff2') format('woff2'), url('../fonts/KBFGDisplay-Bold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'KBFG Display';
+    src: url('../fonts/KBFGDisplay-Bold.woff2') format('woff2'), url('../fonts/KBFGDisplay-Bold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'KBFG Display';
+    src: url('../fonts/KBFGDisplay-Light.woff2') format('woff2'), url('../fonts/KBFGDisplay-Light.woff') format('woff');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'KBFG Display';
+    src: url('../fonts/KBFGDisplay-Medium.woff2') format('woff2'), url('../fonts/KBFGDisplay-Medium.woff') format('woff');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'KBFG Text';
+    src: url('../fonts/KBFGText-Bold.woff2') format('woff2'), url('../fonts/KBFGText-Bold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'KBFG Text';
+    src: url('../fonts/KBFGText-Light.woff2') format('woff2'), url('../fonts/KBFGText-Light.woff') format('woff');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'KBFG Text';
+    src: url('../fonts/KBFGText-Medium.woff2') format('woff2'), url('../fonts/KBFGText-Medium.woff') format('woff');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+:root {
+    --inner: 1420px;
+    --border: #E0E0E0;
+    --background: #F0F0F0;
+    --clr-dark: #1D1D1F;
+    --clr-gray: #666666;
+    --clr-primary: #FCAF17;
+    --clr-primary-hover: #ffbb00;
+    --clr-secondary: #57C5C7;
+    --clr-orange: #fdbf45;
+    --clr-teal: #76CECF;
+    --font-display: 'KBFG Display';
+}
+*, ::before, ::after { box-sizing: inherit }
+html {
+    overflow-x: hidden;
+    box-sizing: border-box;
+    overscroll-behavior: none;
+    line-height: 1.6;
+    font-family: "KBFG Text", sans-serif;
+    font-size: 62.5%;
+    font-weight: 300;
+    letter-spacing: 0;
+    color: #333;
+    background-color: #fff;
+    word-break: keep-all;
+    overflow-wrap: break-word;
+    -webkit-text-size-adjust: 100%;-moz-text-size-adjust: 100%;-ms-text-size-adjust: 100%;-moz-osx-font-smoothing: grayscale;-webkit-font-smoothing: antialiased;
+}
+body { margin: 0; font-size: 1.8rem; }
+h1, h2, h3, h4, h5, h6, p { margin: 0 }
+blockquote { margin: 0 }
+article, aside, details, figcaption, figure, footer, header, hgroup, main, nav, summary { display: block }
+ul, ol { margin: 0; padding: 0; list-style: none }
+dl, dd { margin: 0 }
+figure { margin: 0 }
+img { display: inline-block; vertical-align: top; max-width: 100%; pointer-events: none }
+fieldset { margin: 0; padding: 0; border: none }
+caption { text-align: left; color: #151515; font-weight: 500 }
+a { text-decoration: none; color: inherit }
+a:hover, a:focus, a:active { text-decoration: none }
+table { width: 100%; border-collapse: collapse }
+button { overflow: visible; vertical-align: middle; padding: 0; margin: 0; line-height: inherit; font-size: inherit; font-family: inherit; color: #111111; font-weight: 400; white-space: nowrap; letter-spacing: inherit; background: none; border: none; border-radius: 8px; cursor: pointer }
+button:active { outline: none }
+button::-moz-focus-inner { padding: 0; border: 0 }
+button:disabled { cursor: default }
+input { padding: 16px 20px; height: 65px; font-family: inherit; font-size: inherit; color: #333333; background-color: #ffffff; border: 1px solid #DDDDDD; border-radius: 8px; -webkit-transition: all ease 0.1s; transition: all ease 0.1s }
+textarea { vertical-align: middle; padding: 16px 20px; line-height: inherit; font-family: inherit; font-size: inherit; color: #333333; background-color: #ffffff; border: 1px solid #DDDDDD; border-radius: 0; -webkit-transition: all ease 0.1s; transition: all ease 0.1s; resize: none; overflow-y: auto; -ms-overflow-style: auto }
+select { margin: 0; padding: 16px 50px 16px 20px; height: 65px; font-family: inherit; font-size: inherit; color: #333333; -moz-appearance: none; -webkit-appearance: none; appearance: none; -webkit-appearance: none; background-image: url("/images/select-arrow-fill.svg"); background-color: #ffffff; background-size: auto 14px; background-repeat: no-repeat; background-position: right 18px center; border: 1px solid #DDDDDD; border-radius: 8px; box-shadow: none }
+select::-ms-expand { display: none }
+input[type=number] { -moz-appearance: textfield }
+input:-moz-read-only, textarea:-moz-read-only { background-color: #f8f8f8 }
+input:read-only, textarea:read-only { background-color: #f8f8f8 }
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0 }
+input.is-invalid { border-color: #FF692D }
+input.is-invalid::placeholder { color: #FF692D }
+select.is-invalid { color: #fff; background-color: #FF692D; border-color: #FF692D; background-image: url("/images/icon-select-arrow-light.svg") }
+textarea.is-invalid { border-color: #FF692D }
+textarea.is-invalid::placeholder { color: #FF692D }
+::placeholder { color: #999999 }
+:-ms-input-placeholder { color: #999999 }
+::-ms-input-placeholder { color: #999999 }
+[lang="en"] body { letter-spacing: -0.01em }
+@media screen and (max-width: 1024px) {
+body { font-size: 1.6rem }
+input, select { height: 45px; }
+}
+@media screen and (max-width: 768px) {
+body { font-size: 1.5rem }
+select { padding-top: 11px; padding-bottom: 11px; padding-left: 16px; background-size: auto 16px }
+input, textarea { padding-top: 11px; padding-bottom: 11px; padding-right: 16px; padding-left: 16px }
+}

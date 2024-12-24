@@ -1,0 +1,283 @@
+<!--
+ 파일명     : promote.html
+ 관련자바   : PromoteController
+ 화면명     : 국내 프로그램 - 육성 그래프 관리
+ 설명       : 국내 프로그램 - 육성 그래프 등록, 수정, 조회 처리
+ 최초개발일 : 2024.11.11
+ 최초개발자 : 양윤지
+ ==========================================================
+   수정일            수정자           설명
+ ==========================================================
+-->
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragment/config :: configFragment"></head>
+<body>
+<div class="wrap">
+    <div th:replace="fragment/header :: headerFragment"></div>
+    <main class="main">
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <div class="paper">
+                        <h2 class="h4">국내 프로그램 - 육성 그래프 관리</h2>
+                        <div class="mt-4">
+                            <form th:action="@{/promote/save}" method="post" name="promote_form">
+                                <input type="hidden" name="menu_id" th:value="${menuId}"/>
+                                <input type="hidden" th:value="${promote?.graph_sn}" name="graph_sn"/>
+                                <table class="table table-bordered align-middle">
+                                    <tbody>
+                                    <tr>
+                                        <th class="bg-light" style="width:18%">기준년월</th>
+                                        <td>
+                                            <input type="text" class="form-control" name="crtr_ym" th:value="${promote?.crtr_ym}" placeholder="ex) 2024년 7월 기준">
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <table class="table table-bordered align-middle">
+                                    <tbody>
+                                    <tr>
+                                        <th class="bg-light text-center" colspan="2" style="width:20%">그래프 1</th>
+                                        <th class="bg-light text-center" colspan="2" style="width:20%">그래프 2</th>
+                                        <th class="bg-light text-center" colspan="2" style="width:20%">그래프 3</th>
+                                        <th class="bg-light text-center" colspan="2" style="width:20%">그래프 4</th>
+                                        <th class="bg-light text-center" colspan="2" style="width:20%">그래프 5</th>
+                                    </tr>
+                                    <tr>
+                                        <th class="bg-light" style="width:8%">연도</th>
+                                        <td>
+<!--                                            <input type="number" class="form-control" name="graph1_yr" th:value="${promote?.graph1_yr}" placeholder=" ex) 2024">-->
+                                            <select class="form-select" name="graph1_yr" id="graph1_yr" onchange="graph_change(this.value, id)">
+                                                <option value="">-선택-</option>
+                                                <option th:each="i : ${#numbers.sequence(#dates.year(#dates.createNow()) - 5, #dates.year(#dates.createNow()) + 5)}" th:value="${i}" th:text="${i}" th:selected="${promote?.graph1_yr} == ${i}"></option>
+                                            </select>
+                                        </td>
+                                        <th class="bg-light" style="width:8%">연도</th>
+                                        <td>
+<!--                                            <input type="number" class="form-control" name="graph2_yr" th:value="${promote?.graph2_yr}" placeholder=" ex) 2024">-->
+                                            <select class="form-select" name="graph2_yr" id="graph2_yr" onchange="graph_change(this.value, id)">
+                                                <option value="">-선택-</option>
+                                                <option th:each="i : ${#numbers.sequence(#dates.year(#dates.createNow()) - 5, #dates.year(#dates.createNow()) + 5)}" th:value="${i}" th:text="${i}" th:selected="${promote?.graph2_yr} == ${i}"></option>
+                                            </select>
+                                        </td>
+                                        <th class="bg-light" style="width:8%">연도</th>
+                                        <td>
+<!--                                            <input type="number" class="form-control" name="graph3_yr" th:value="${promote?.graph3_yr}" placeholder=" ex) 2024">-->
+                                            <select class="form-select" name="graph3_yr" id="graph3_yr" onchange="graph_change(this.value, id)">
+                                                <option value="">-선택-</option>
+                                                <option th:each="i : ${#numbers.sequence(#dates.year(#dates.createNow()) - 5, #dates.year(#dates.createNow()) + 5)}" th:value="${i}" th:text="${i}" th:selected="${promote?.graph3_yr} == ${i}"></option>
+                                            </select>
+                                        </td>
+                                        <th class="bg-light" style="width:8%">연도</th>
+                                        <td>
+<!--                                            <input type="number" class="form-control" name="graph4_yr" th:value="${promote?.graph4_yr}" placeholder=" ex) 2024">-->
+                                            <select class="form-select" name="graph4_yr" id="graph4_yr" onchange="graph_change(this.value, id)">
+                                                <option value="">-선택-</option>
+                                                <option th:each="i : ${#numbers.sequence(#dates.year(#dates.createNow()) - 5, #dates.year(#dates.createNow()) + 5)}" th:value="${i}" th:text="${i}" th:selected="${promote?.graph4_yr} == ${i}"></option>
+                                            </select>
+                                        </td>
+                                        <th class="bg-light" style="width:8%">연도</th>
+                                        <td>
+<!--                                            <input type="number" class="form-control" name="graph5_yr" th:value="${promote?.graph5_yr}" placeholder=" ex) 2024">-->
+                                            <select class="form-select" name="graph5_yr" id="graph5_yr" onchange="graph_change(this.value, id)">
+                                                <option value="">-선택-</option>
+                                                <option th:each="i : ${#numbers.sequence(#dates.year(#dates.createNow()) - 5, #dates.year(#dates.createNow()) + 5)}" th:value="${i}" th:text="${i}" th:selected="${promote?.graph5_yr} == ${i}"></option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th class="bg-light">기업 수</th>
+                                        <td><input type="text" class="form-control" id="graph1_nocs" name="graph1_nocs" oninput="formatNumber(this)" th:value="${#numbers.formatInteger(promote?.graph1_nocs, 0, 'COMMA')}" placeholder="ex) 123"></td>
+                                        <th class="bg-light">기업 수</th>
+                                        <td><input type="text" class="form-control" id="graph2_nocs" name="graph2_nocs" oninput="formatNumber(this)" th:value="${#numbers.formatInteger(promote?.graph2_nocs, 0, 'COMMA')}" placeholder="ex) 123"></td>
+                                        <th class="bg-light">기업 수</th>
+                                        <td><input type="text" class="form-control" id="graph3_nocs" name="graph3_nocs" oninput="formatNumber(this)" th:value="${#numbers.formatInteger(promote?.graph3_nocs, 0, 'COMMA')}" placeholder="ex) 123"></td>
+                                        <th class="bg-light">기업 수</th>
+                                        <td><input type="text" class="form-control" id="graph4_nocs" name="graph4_nocs" oninput="formatNumber(this)" th:value="${#numbers.formatInteger(promote?.graph4_nocs, 0, 'COMMA')}" placeholder="ex) 123"></td>
+                                        <th class="bg-light">기업 수</th>
+                                        <td><input type="text" class="form-control" id="graph5_nocs" name="graph5_nocs" oninput="formatNumber(this)" th:value="${#numbers.formatInteger(promote?.graph5_nocs, 0, 'COMMA')}" placeholder="ex) 123"></td>
+                                    </tr>
+                                    <!-- <tr>
+                                        <th class="bg-light" style="width:18%">선발 프로세스</th>
+                                        <td>
+                                            <p class="mb-2">최대 48자까지 입력 가능합니다.</p>
+                                            <input type="text" class="form-control" value="">
+                                        </td>
+                                    </tr> -->
+                                    </tbody>
+                                </table>
+                                <div class="button-container">
+                                    <a id="preview-button" href="javascript:previewPage()" class="btn btn-outline-primary">미리보기</a>
+                                    <button type="button" class="btn btn-primary" onclick="javascript:confirmMsg()">저장하기</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+<script th:src="@{/js/admin.js}"></script>
+<script th:inline="javascript">
+    // 페이지 로드 시 실행
+    window.onload = function () {
+        // 페이지 로드 시 메시지 확인 및 알림 표시
+        // 수정 및 등록 시 띄울 알림창
+        const msg = /*[[${msg}]]*/ '';
+        if (msg) alert(msg);
+
+        // 현재 년도 기준으로 셀렉트 박스 선택 되게 하기
+        // 만약 값이 없으면 세팅(등록)
+        var year = new Date().getFullYear();
+        var select = document.getElementsByName("graph1_yr");
+        var options = select[0].options;
+        // 옵션들 중에서 해당 되는 년도를 선택
+        for(var i = 0; i < options.length; i++) {
+            if(options[i].value == String(year) && options[options.selectedIndex].value == '') {
+                options[i].selected = true;
+            }
+        }
+    }
+
+    // , 붙히기(숫자)
+    function formatNumber(input) {
+        input.value = input.value.replace(/[^0-9]/g, '');
+        input.value = Number(input.value).toLocaleString('ko-KR');
+    }
+
+    // 그래프 연도 선택 겹치지 않게 방지
+    function graph_change(graph, id) {
+        for(var i = 1; i < 6; i++) {
+            if("graph" + i + "_yr" != id) {
+                if($("#graph" + i + "_yr").val() == graph) {
+                    alert("같은 연도는 입력할 수 없습니다");
+                    $("#" + id).val("");
+                    return false;
+                }
+            }
+        }
+    }
+
+    // 프리뷰 페이지로 이동
+    function previewPage() {
+        const form = document.forms['promote_form'];
+        form.action = '/kbinnovationhub_devadm/promote/preview'; // 전송할 URL
+        form.method = 'POST';            // 전송 방식
+        form.target = '_blank';          // 새 창에서 열기
+        form.submit();                   // 폼 제출
+    }
+
+    // 컨펌 메시지 띄우는 함수
+    function confirmMsg() {
+        // 기준년월 입력 확인
+        var crtr_ym = $('input[name=crtr_ym]').val();
+        if(crtr_ym.trim() == "") {
+            alert("기준년월을 입력 해 주세요.");
+            return false;
+        }
+
+        // 그래프 1의 기업 수 입력 확인
+        var graph1_nocs = $('#graph1_nocs').val();
+        if(graph1_nocs.trim() == "") {
+            alert("기업 수를 입력 해 주세요.");
+            return false;
+        }
+
+        // 만약 input의 값이 0이 아니면
+        var graph2_nocs = $('#graph2_nocs').val();
+        var graph2_yr = $('#graph2_yr').val();
+        if(graph2_nocs.trim() == "") {
+            $('#graph2_nocs').val(0);
+        }
+
+        // 만약 값은 있고 연도를 선택하지 않았으면
+        if(graph2_nocs > 0 && graph2_yr == '') {
+            alert("그래프2의 연도를 선택하세요.");
+            return false;
+        }
+
+        // 만약 연도는 선택했고 값이 없으면
+        if(graph2_yr != '' && graph2_nocs == 0) {
+            alert("그래프2의 기업 수를 입력하세요.");
+            return false;
+        }
+
+        // 만약 input의 값이 0이 아니면
+        var graph3_nocs = $('#graph3_nocs').val();
+        var graph3_yr = $('#graph3_yr').val();
+        if(graph3_nocs.trim() == "") {
+            $('#graph3_nocs').val(0);
+        }
+
+        // 만약 값은 있고 연도를 선택하지 않았으면
+        if(graph3_nocs > 0 && graph3_yr == '') {
+            alert("그래프3의 연도를 선택하세요.");
+            return false;
+        }
+
+        // 만약 연도는 선택했고 값이 없으면
+        if(graph3_yr != '' && graph3_nocs == 0) {
+            alert("그래프3의 기업 수를 입력하세요.");
+            return false;
+        }
+
+        // 만약 input의 값이 0이 아니면
+        var graph4_nocs = $('#graph4_nocs').val();
+        var graph4_yr = $('#graph4_yr').val();
+        if(graph4_nocs.trim() == "") {
+            $('#graph4_nocs').val(0);
+        }
+
+        // 만약 값은 있고 연도를 선택하지 않았으면
+        if(graph4_nocs > 0 && graph4_yr == '') {
+            alert("그래프4의 연도를 선택하세요.");
+            return false;
+        }
+
+        // 만약 연도는 선택했고 값이 없으면
+        if(graph4_yr != '' && graph4_nocs == 0) {
+            alert("그래프4의 기업 수를 입력하세요.");
+            return false;
+        }
+
+        // 만약 input의 값이 0이 아니면
+        var graph5_nocs = $('#graph5_nocs').val();
+        var graph5_yr = $('#graph5_yr').val();
+        if(graph5_nocs.trim() == "") {
+            $('#graph5_nocs').val(0);
+        }
+
+        // 만약 값은 있고 연도를 선택하지 않았으면
+        if(graph5_nocs > 0 && graph5_yr == '') {
+            alert("그래프5의 연도를 선택하세요.");
+            return false;
+        }
+
+        // 만약 연도는 선택했고 값이 없으면
+        if(graph5_yr != '' && graph5_nocs == 0) {
+            alert("그래프5의 기업 수를 입력하세요.");
+            return false;
+        }
+
+        let result = confirm("저장 하시겠습니까?");
+        if(!result) {
+            return false;
+        } else {
+            var graph_sn = $("input[name=graph_sn]").val();
+            // PK 값이 비어있으면 기본 값 0 세팅
+            if(graph_sn == "") {
+                $("input[name=graph_sn]").val(0);
+            }
+            // 폼 태그 서브밋 보내기
+            const form = document.forms['promote_form'];
+            form.action = '/kbinnovationhub_devadm/promote/save'; // 전송할 URL
+            form.method = 'POST';            // 전송 방식
+            form.target = '';          // 새 창에서 열기
+            form.submit();                   // 폼 제출
+        }
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,139 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kb.inno.admin.DAO.FaqDAO">
+    <!-- FAQ 리스트 갯수 조회(전체) -->
+    <select id="selectPageCount" parameterType="com.kb.inno.admin.DTO.SearchDTO" resultType="int">
+        /* FAQ 리스트 갯수 조회(전체) */
+        SELECT COUNT(*)
+          FROM KB_FAQ_INFO
+         WHERE 1=1
+        <if test='keyword != null and keyword != ""'>
+        <choose>
+        <when test="type == 'all'">
+            AND (FAQ_QSTN LIKE '%'|| #{keyword} ||'%' OR FAQ_ANS   LIKE '%'|| #{keyword} ||'%')
+        </when>
+        <when test="type == 'title'">
+            AND FAQ_QSTN LIKE '%'|| #{keyword} ||'%'
+        </when>
+        <when test="type == 'content'">
+            AND FAQ_ANS   LIKE '%'|| #{keyword} ||'%'
+        </when>
+        </choose>
+        </if>
+    </select>
+    <!-- FAQ 리스트 조회 -->
+    <select id="selectList" parameterType="com.kb.inno.admin.DTO.SearchDTO" resultType="com.kb.inno.admin.DTO.FaqDTO">
+        /* FAQ 리스트 조회 */
+        SELECT FAQ_PAGE.ROWNUMBER
+             , FAQ_PAGE.FAQ_SN
+             , FAQ_PAGE.FAQ_CTGRY
+             , FAQ_PAGE.FAQ_QSTN
+             , FAQ_PAGE.FAQ_ANS
+             , FAQ_PAGE.SORT_NO
+        FROM (
+              /* 순번 매기기 */
+              SELECT ROWNUM ROWNUMBER
+                   , FAQ.*
+                FROM (
+                      /* 리스트 조회 */
+                      SELECT FAQ_SN
+                            , FAQ_CTGRY
+                            , FAQ_QSTN
+                            , FAQ_ANS
+                            , SORT_NO
+                         FROM KB_FAQ_INFO
+                        WHERE 1=1
+                        <if test='keyword != null and keyword != ""'>
+                        <choose>
+                        <when test="type == 'all'">
+                            AND (FAQ_QSTN LIKE '%'|| #{keyword} ||'%' OR FAQ_ANS   LIKE '%'|| #{keyword} ||'%')
+                        </when>
+                        <when test="type == 'title'">
+                            AND FAQ_QSTN LIKE '%'|| #{keyword} ||'%'
+                        </when>
+                        <when test="type == 'content'">
+                            AND FAQ_ANS   LIKE '%'|| #{keyword} ||'%'
+                        </when>
+                        </choose>
+                        </if>
+                        <if test='ctgry != null and ctgry != ""'>
+                          AND FAQ_CTGRY = #{ctgry}
+                        </if>
+                        ORDER BY FAQ_SN ASC
+                     ) FAQ
+                ORDER BY ROWNUMBER DESC
+             ) FAQ_PAGE
+        WHERE ROWNUMBER BETWEEN #{start} AND #{end}
+    </select>
+    <!-- FAQ 카테고리 조회 -->
+    <select id="selectCategory" parameterType="int" resultType="hashmap">
+        SELECT CTGRY_SN
+             , CTGRY_NM
+          FROM KB_CTGRY_INFO
+         WHERE CTGRY_SN = #{ctgry}
+    </select>
+    <!-- FAQ 등록 -->
+    <insert id="insert" parameterType="com.kb.inno.admin.DTO.FaqDTO">
+        /* FAQ 등록 */
+        INSERT INTO KB_FAQ_INFO
+        (
+         FAQ_SN
+       , FAQ_CTGRY
+       , FAQ_QSTN
+       , FAQ_ANS
+       , SORT_NO
+       , FRST_RGTR
+       , FRST_REG_DT
+       , LAST_MDFR
+       , LAST_MDFCN_DT
+        )
+        VALUES
+        (
+         FAQ_SN_SEQ.NEXTVAL
+       , #{faq_ctgry_sn}
+       , #{faq_qstn}
+       , #{faq_ans}
+       , #{sort_no}
+       , #{frst_rgtr}
+       , SYSDATE
+       , #{last_mdfr}
+       , SYSDATE
+        )
+    </insert>
+    <!-- FAQ 상세 조회 -->
+    <select id="select" parameterType="int" resultType="com.kb.inno.admin.DTO.FaqDTO">
+        /* FAQ 상세 조회 */
+        SELECT CTG.CTGRY_SN AS FAQ_CTGRY_SN
+             , CTG.CTGRY_NM AS FAQ_CTGRY_NM
+             , FAQ.FAQ_SN   AS FAQ_SN
+             , FAQ.FAQ_QSTN AS FAQ_QSTN
+             , FAQ.FAQ_ANS  AS FAQ_ANS
+             , FAQ.EXPSR_YN AS EXPSR_YN
+             , FAQ.SORT_NO  AS SORT_NO
+          FROM KB_FAQ_INFO FAQ
+             , KB_CTGRY_INFO CTG
+         WHERE 1=1
+           AND FAQ.FAQ_CTGRY = CTG.CTGRY_SN
+           AND FAQ.FAQ_SN    = #{faq_sn}
+    </select>
+    <!-- FAQ 수정 -->
+    <update id="update" parameterType="com.kb.inno.admin.DTO.FaqDTO">
+        /* FAQ 수정 */
+        UPDATE KB_FAQ_INFO
+           SET FAQ_CTGRY     = #{faq_ctgry_sn}
+             , FAQ_QSTN      = #{faq_qstn}
+             , FAQ_ANS       = #{faq_ans}
+             , SORT_NO       = #{sort_no}
+             , LAST_MDFR     = #{last_mdfr}
+             , LAST_MDFCN_DT = SYSDATE
+         WHERE FAQ_SN        = #{faq_sn}
+    </update>
+    <!-- FAQ 삭제 -->
+    <delete id="delete" parameterType="int">
+        /* FAQ 삭제 */
+        DELETE
+          FROM KB_FAQ_INFO
+         WHERE FAQ_SN = #{faq_sn}
+    </delete>
+</mapper>

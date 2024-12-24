@@ -1,0 +1,15 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kb.inno.admin.DAO.AdminLoginDAO">
+    <select id="adminSelectOne" parameterType="String" resultType="com.kb.inno.admin.DTO.AdminLoginDTO">
+        /* 로그인 관리자 계정 조회 */
+        SELECT MNGR_SN
+             , MNGR_ID
+             , MNGR_PSWD
+             , MNGR_NM
+             , MNGR_EML
+          FROM KB_MNGR_MBR_INFO
+         WHERE MNGR_ID = #{mngrId}
+    </select>
+</mapper>

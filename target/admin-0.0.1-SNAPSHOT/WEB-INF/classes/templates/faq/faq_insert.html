@@ -1,0 +1,130 @@
+<!--
+ 파일명     : faq_insert.html
+ 관련자바   : FaqController
+ 화면명     : FAQ 관리
+ 설명       : FAQ 등록 처리
+ 최초개발일 : 2024.11.08
+ 최초개발자 : 양윤지
+ ==========================================================
+   수정일            수정자           설명
+ ==========================================================
+-->
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragment/config :: configFragment"></head>
+<body>
+<div class="wrap">
+    <div th:replace="fragment/header :: headerFragment"></div>
+    
+        <main class="main">
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        <div class="paper">
+                            <h2 class="h4">FAQ 관리</h2>
+                            <div class="mt-4">
+                                <form th:action="@{/faq/insert}" method="post" name="faq_form">
+                                    <input type="hidden" name="menu_id" th:value="${menuId}"/>
+                                    <input type="hidden" name="faq_ctgry_sn" th:value="${ctgry_sn}"/>
+                                    <table class="table table-bordered align-middle">
+                                        <tbody>
+                                            <tr>
+                                                <th class="bg-light" width="20%">카테고리</th>
+                                                <td th:text="${ctgry_nm}">
+<!--                                                    <input type="text" class="form-control" name="faq_ctgry">-->
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th class="bg-light" width="20%">질문 텍스트</th>
+                                                <td>
+                                                    <textarea class="form-control" id="faq_qstn" rows="5" name="faq_qstn"></textarea>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th class="bg-light" width="20%">답변 텍스트</th>
+                                                <td>
+                                                    <textarea class="form-control" id="faq_ans" rows="5" name="faq_ans"></textarea>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th class="bg-light">노출여부</th>
+                                                <td>
+                                                    <div class="form-check form-check-inline">
+                                                        <input checked class="form-check-input" type="radio" name="expsr_yn" id="expsr_y" value="Y">
+                                                        <label class="form-check-label" for="expsr_y">노출</label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="expsr_yn" id="expsr_n" value="N">
+                                                        <label class="form-check-label" for="expsr_n">미노출</label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th class="bg-light">정렬</th>
+                                                <td>
+                                                    <div class="d-flex">
+                                                        <input class="form-control" type="number" name="sort_no" style="width:100px" value="1">
+                                                        <p class="mb-0 mt-2 ms-3">* 숫자가 낮을수록 상위 노출됩니다.</p>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div class="button-container">
+                                        <!-- <a href="javascript:" class="btn btn-outline-primary">미리보기</a> -->
+                                        <a class="btn btn-outline-dark" th:href="@{|/faq/list/${menuId}?ctgry=${ctgry_sn}|}">목록보기</a>
+                                        <!-- <a class="btn btn-outline-dark" th:href="@{/faq/list/{menuId}(menuId=${menuId})}">목록보기</a> -->
+                                        <button type="button" class="btn btn-primary" onclick="confirmMsg()">등록하기</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script th:inline="javascript">
+        // 페이지 로드 시 실행
+        window.onload = function () {
+            // 페이지 로드 시 메시지 확인 및 알림 표시
+            // 수정 및 등록 시 띄울 알림창
+            const msg = /*[[${msg}]]*/ '';
+            if (msg) alert(msg);
+        }
+
+        // 컨펌 메시지 띄우는 함수
+        function confirmMsg() {
+            // 질문 텍스트 입력 확인
+            var faq_qstn = $('#faq_qstn').val();
+            if(faq_qstn.trim() == "") {
+                alert("질문 텍스트를 입력하세요.");
+                return false;
+            }
+
+            // 답변 텍스트 입력 확인
+            var faq_ans = $('#faq_ans').val();
+            if(faq_ans.trim() == "") {
+                alert("답변 텍스트를 입력하세요.");
+                return false;
+            }
+
+            // sort_no를 비웠을 경우 1을 대입
+            if($("input[name=sort_no]").val() == '') {
+                $("input[name=sort_no]").val(1)
+            }
+
+            let result = confirm("등록 하시겠습니까?");
+            if(!result) {
+                return false;
+            } else {
+                // 폼 태그 서브밋 보내기
+                f=document.faq_form;
+                f.submit();
+            }
+        }
+    </script>
+    <script th:src="@{/js/admin.js}"></script>
+    
+</body>
+</html>

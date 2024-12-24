@@ -1,0 +1,221 @@
+<!--
+ 파일명     : notice_update.html
+ 관련자바   : NoticeController
+ 화면명     : 공지사항 수정
+ 설명       : 공지사항 수정
+ 최초개발일 : 2024.11.12
+ 최초개발자 : 양윤지
+ ==========================================================
+   수정일            수정자           설명
+ ==========================================================
+-->
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragment/config :: configFragment"></head>
+<body>
+<div class="wrap">
+    <div th:replace="fragment/header :: headerFragment"></div>
+    
+        <main class="main">
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        <div class="paper">
+                            <h2 class="h4">공지사항 관리</h2>
+                            <div class="mt-4">
+                                <form th:action="@{/notice/update}" method="post" enctype="multipart/form-data" name="notice_form">
+                                    <input type="hidden" name="menu_id" th:value="${menuId}"/>
+                                    <input type="hidden" id="file_yn" name="file_yn" value="0">
+                                    <input type="hidden" name="ntc_sn" th:value="${notice.ntc_sn}">
+                                    <input type="hidden" name="atch_file_sn" th:value="${notice.atch_file_sn}">
+                                    <input type="hidden" id="ntc_path" name="ntc_path" th:value="${notice.ntc_path}">
+                                    <input type="hidden" id="ntc_file_name" name="ntc_file_name" th:value="${notice.ntc_file_name}">
+                                    <table class="table table-bordered align-middle">
+                                        <tbody>
+                                            <tr>
+                                                <th class="bg-light" width="20%">제목</th>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <input type="text" class="form-control" id="ntc_ttl" name="ntc_ttl" th:value="${notice.ntc_ttl}">
+                                                        <div class="ms-3 mb-0 form-check form-switch">
+                                                            <input class="form-check-input" type="checkbox" role="switch" id="ntc_yn" name="ntc_yn" th:checked="${notice.ntc_yn == 'Y'}">
+                                                            <label class="form-check-label text-nowrap" for="ntc_yn">공지</label>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th class="bg-light" width="20%">내용</th>
+                                                <td>
+                                                    <!-- 에디터 -->
+                                                    <div id="summernote"></div>
+                                                    <!-- 에디터의 내용 복사하여 붙혀넣기 -->
+                                                    <textarea id="ntc_cn" name="ntc_cn" style="display:none;" th:text="${notice.ntc_cn}"></textarea>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th class="bg-light">첨부파일</th>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <input class="form-control w-auto" type="file" name="ntc_file" onchange="insertFile()">
+                                                        <div class="form-check form-check-inline mb-0 ms-2">
+                                                            <input class="form-check-input" type="checkbox" id="del_yn" name="del_yn">
+                                                            <label class="form-check-label" for="del_yn">삭제</label>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th class="bg-light">노출여부</th>
+                                                <td>
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="expsr_yn" id="expsr_y" value="Y" th:checked="${notice.expsr_yn == 'Y'}">
+                                                        <label class="form-check-label" for="expsr_y">노출</label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input checked class="form-check-input" type="radio" name="expsr_yn" id="expsr_n" value="N" th:checked="${notice.expsr_yn == 'N'}">
+                                                        <label class="form-check-label" for="expsr_n">미노출</label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th class="bg-light">정렬</th>
+                                                <td>
+                                                    <div class="d-flex">
+                                                        <input class="form-control" type="number" name="sort_no" style="width:100px" th:value="${notice.sort_no}">
+                                                        <p class="mb-0 mt-2 ms-3">* 숫자가 낮을수록 상위 노출됩니다.</p>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div class="button-container">
+                                        <a id="preview-button" href="javascript:previewPage()" class="btn btn-outline-primary">미리보기</a>
+                                        <a class="btn btn-outline-dark" th:href="@{/notice/list/{menuId}(menuId=${menuId})}">목록보기</a>
+                                        <button type="button" class="btn btn-primary" onclick="confirmMsg()">수정하기</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script th:inline="javascript">
+        // 페이지 로드 시 실행
+        window.onload = function () {
+            // 페이지 로드 시 메시지 확인 및 알림 표시
+            // 수정 및 등록 시 띄울 알림창
+            const msg = /*[[${msg}]]*/ '';
+            if (msg) alert(msg);
+
+            $("#summernote").summernote('code', $("#ntc_cn").val());
+        }
+
+        // 프리뷰 페이지로 이동
+        function previewPage() {
+            const form = document.forms['notice_form'];
+            form.action = '/kbinnovationhub_devadm/notice/preview'; // 전송할 URL
+            form.method = 'POST';            // 전송 방식
+            form.target = '_blank';          // 새 창에서 열기
+            form.submit();                   // 폼 제출
+        }
+
+        // 파일 추가 시 상태 값 변경
+        function insertFile() {
+            document.querySelector('#file_yn').value = 1;
+        }
+
+        // 이미지 업로드 함수
+        function uploadImage(file) {
+            var formData = new FormData();
+            formData.append('file', file);
+            $.ajax({
+                data : formData,
+                type : "POST",
+                url: /*[[@{/notice/upload/image}]]*/, // 요청 URL
+                contentType : false,
+                enctype : 'multipart/form-data',
+                processData : false,
+                success : function(data) {
+                    $('#summernote').summernote('insertImage', data.url);
+                }, error: function(xhr, status, error) {
+                    console.error('Error uploading image:', error);
+                    alert('이미지 업로드를 실패하였습니다.');
+                }
+            });
+        }
+
+        // 썸머노트 이미지 서버에 저장 후 가져와서 화면에 출력
+        $('#summernote').summernote({
+            height: 300, // 에디터 높이 설정
+            callbacks : {
+                onImageUpload: function(files) {
+                    uploadImage(files[0], this);
+                }
+            }
+        });
+
+        // 컨펌 메시지 띄우는 함수
+        function confirmMsg() {
+            // 제목 입력 확인
+            var ntc_ttl = $('input[name=ntc_ttl]').val();
+            if(ntc_ttl.trim() == "") {
+                alert("제목을 입력하세요.");
+                return false;
+            }
+
+            // 내용 입력 확인
+            var summernote_value = $("#summernote").summernote('code');
+            $("#ntc_cn").val(summernote_value);
+
+            var ntc_cn = $("#ntc_cn").val();
+            if(ntc_cn.trim() == "<p><br></p>") {
+                alert("내용을 입력하세요.");
+                return false;
+            }
+
+            // sort_no를 비웠을 경우 1을 대입
+            if($("input[name=sort_no]").val() == '') {
+                $("input[name=sort_no]").val(1)
+            }
+
+            let result = confirm("수정 하시겠습니까?");
+            if(!result) {
+                return false;
+            } else {
+                var summernote_value = $("#summernote").summernote('code');
+                $("#ntc_cn").val(summernote_value);
+
+                // 체크 박스 클릭 시 value 대입(공지사항 여부)
+                var checked = $("#ntc_yn").is(':checked');
+                if(checked) {
+                    $("#ntc_yn").val("Y");
+                } else {
+                    $("#ntc_yn").val("N");
+                }
+
+                // 체크 박스 클릭 시 value 대입(삭제 여부)
+                var checked = $("#del_yn").is(':checked');
+                if(checked) {
+                    $("#del_yn").val("Y");
+                } else {
+                    $("#del_yn").val("N");
+                }
+
+                // 폼 태그 서브밋 보내기
+                // 폼 태그 서브밋 보내기
+                const form = document.forms['notice_form'];
+                form.action = '/kbinnovationhub_devadm/notice/update'; // 전송할 URL
+                form.method = 'POST';            // 전송 방식
+                form.target = '';               // 새 창에서 열기
+                form.submit();                   // 폼 제출
+            }
+        }
+    </script>
+    <script th:src="@{/js/admin.js}"></script>
+    
+</body>
+</html>

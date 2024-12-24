@@ -1,0 +1,205 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kb.inno.admin.DAO.HubDAO">
+    <!-- HUB 센터 소식 갯수 조회 -->
+    <select id="selectPageCount" parameterType="String" resultType="int">
+        /* HUB 센터 소식 갯수 조회 */
+        SELECT COUNT(*)
+          FROM KB_HUB_DAY_INFO
+         WHERE 1=1
+         <if test='keyword != null and keyword != ""'>
+             <choose>
+                 <when test="type == 'all'">
+                     AND HUB_TTL LIKE '%'|| #{keyword} ||'%'
+                      OR HUB_CN  LIKE '%'|| #{keyword} ||'%'
+                 </when>
+                 <when test="type == 'title'">
+                     AND HUB_TTL LIKE '%'|| #{keyword} ||'%'
+                 </when>
+                 <when test="type == 'content'">
+                     AND HUB_TTL LIKE '%'|| #{keyword} ||'%'
+                 </when>
+             </choose>
+         </if>
+    </select>
+    <!-- HUB 센터 소식 리스트 조회 -->
+    <select id="selectList" parameterType="com.kb.inno.admin.DTO.SearchDTO" resultType="com.kb.inno.admin.DTO.HubDTO">
+        /* HUB 센터 소식 리스트 조회 */
+        SELECT HUB_PAGE.HUB_SN
+             , HUB_PAGE.HUB_TTL
+             , HUB_PAGE.HUB_CN
+             , HUB_PAGE.SORT_NO
+             , HUB_PAGE.ATCH_FILE_SN1
+             , HUB_PAGE.EXPSR_YN
+             , HUB_PAGE.HUB_PATH_IMG
+             , HUB_PAGE.HUB_IMG_NAME
+          FROM
+              (
+               /* 순번 매기기 */
+               SELECT ROWNUM ROWNUMBER
+                    , HUB.*
+                 FROM (
+                       /* 리스트 조회 */
+                       SELECT HUB.HUB_SN          AS HUB_SN
+                            , HUB.HUB_TTL         AS HUB_TTL
+                            , HUB.HUB_CN          AS HUB_CN
+                            , HUB.EXPSR_YN        AS EXPSR_YN
+                            , HUB.SORT_NO         AS SORT_NO
+                            , HUB.ATCH_FILE_SN1   AS ATCH_FILE_SN1
+                            , FILES1.FILE_PATH    AS HUB_PATH_IMG
+                            , FILES1.FILE_NM      AS HUB_IMG_NAME
+                            , HUB.ATCH_FILE_SN2   AS ATCH_FILE_SN2
+                            , FILES2.FILE_PATH    AS HUB_PATH_MOV
+                            , FILES2.FILE_NM      AS HUB_MOV_NAME
+                            , HUB.ATCH_FILE_SN3   AS ATCH_FILE_SN3
+                            , FILES3.FILE_PATH    AS HUB_PATH
+                            , FILES3.FILE_NM      AS HUB_FILE_NAME
+                         FROM KB_HUB_DAY_INFO HUB
+                            , KB_FILE_INFO FILES1
+                            , KB_FILE_INFO FILES2
+                            , KB_FILE_INFO FILES3
+                        WHERE HUB.ATCH_FILE_SN1 = FILES1.FILE_SN(+)
+                          AND HUB.ATCH_FILE_SN2 = FILES2.FILE_SN(+)
+                          AND HUB.ATCH_FILE_SN3 = FILES3.FILE_SN(+)
+                        ORDER BY HUB_SN DESC
+                       ) HUB
+                       WHERE 1=1
+                       <if test='keyword != null and keyword != ""'>
+                           <choose>
+                               <when test="type == 'all'">
+                                   AND HUB.HUB_TTL LIKE '%'|| #{keyword} ||'%'
+                                    OR HUB.HUB_CN  LIKE '%'|| #{keyword} ||'%'
+                               </when>
+                               <when test="type == 'title'">
+                                   AND HUB.HUB_TTL LIKE '%'|| #{keyword} ||'%'
+                               </when>
+                               <when test="type == 'content'">
+                                   AND HUB.HUB_TTL LIKE '%'|| #{keyword} ||'%'
+                               </when>
+                           </choose>
+                       </if>
+               ) HUB_PAGE
+           WHERE ROWNUMBER BETWEEN #{start} AND #{end}
+    </select>
+    <!-- HUB 센터 소식 파일 추가 -->
+    <insert id="insertFile" parameterType="com.kb.inno.admin.DTO.FileDTO">
+        /* HUB 센터 소식 파일 추가 */
+        INSERT INTO KB_FILE_INFO
+        (
+         FILE_SN
+       , FILE_NM
+       , ORGNL_FILE_NM
+       , FILE_SZ
+       , FILE_EXTN
+       , FILE_PATH
+       , FRST_RGTR
+       , FRST_REG_DT
+       , LAST_MDFR
+       , LAST_MDFCN_DT
+        )
+        VALUES
+        (
+         FILE_SN_SEQ.NEXTVAL
+       , #{file_nm}
+       , #{orgnl_file_nm}
+       , #{file_sz}
+       , #{file_extn}
+       , #{file_path}
+       , #{frst_rgtr}
+       , SYSDATE
+       , #{last_mdfr}
+       , SYSDATE
+        )
+        <selectKey keyProperty="file_sn" resultType="int" order="AFTER">
+            /* 저장한 파일 중 제일 큰 것 조회(키 조회) */
+            SELECT MAX(FILE_SN) AS FILE_SN
+              FROM KB_FILE_INFO
+        </selectKey>
+    </insert>
+    <!-- HUB 센터 소식 등록 -->
+    <insert id="insert" parameterType="com.kb.inno.admin.DTO.HubDTO">
+        /* HUB 센터 소식 등록 */
+        INSERT INTO KB_HUB_DAY_INFO
+        (
+         HUB_SN
+       , HUB_TTL
+       , HUB_CN
+       , EXPSR_YN
+       , SORT_NO
+       , CTGRY
+       , ATCH_FILE_SN1
+       , ATCH_FILE_SN2
+       , ATCH_FILE_SN3
+       , FRST_RGTR
+       , FRST_REG_DT
+       , LAST_MDFR
+       , LAST_MDFCN_DT
+        )
+        VALUES
+        (
+         HUB_SN_SEQ.NEXTVAL
+       , #{hub_ttl}
+       , #{hub_cn}
+       , #{expsr_yn}
+       , #{sort_no}
+       , #{ctgry}
+       , #{atch_file_sn1}
+       , #{atch_file_sn2}
+       , #{atch_file_sn3}
+       , #{frst_rgtr}
+       , SYSDATE
+       , #{last_mdfr}
+       , SYSDATE
+        )
+    </insert>
+    <!-- HUB 센터 소식 상세 -->
+    <select id="select" parameterType="int" resultType="com.kb.inno.admin.DTO.HubDTO">
+        /* HUB 센터 소식 상세 */
+        SELECT HUB.HUB_SN          AS HUB_SN
+             , HUB.HUB_TTL         AS HUB_TTL
+             , HUB.HUB_CN          AS HUB_CN
+             , HUB.EXPSR_YN        AS EXPSR_YN
+             , HUB.SORT_NO         AS SORT_NO
+             , HUB.CTGRY           AS CTGRY
+             , HUB.ATCH_FILE_SN1   AS ATCH_FILE_SN1
+             , HUB.ATCH_FILE_SN2   AS ATCH_FILE_SN2
+             , HUB.ATCH_FILE_SN3   AS ATCH_FILE_SN3
+             , FILES.FILE_PATH     AS HUB_PATH_IMG
+             , FILES.FILE_NM       AS HUB_IMG_NAME
+        FROM KB_HUB_DAY_INFO HUB
+           , KB_FILE_INFO FILES
+        WHERE HUB.ATCH_FILE_SN1 = FILES.FILE_SN(+)
+          AND HUB.HUB_SN        = #{hub_sn}
+    </select>
+    <!-- HUB 센터 소식 파일 삭제 -->
+    <delete id="deleteFile" parameterType="int">
+        /* HUB 센터 소식 파일 삭제 */
+        DELETE
+          FROM KB_FILE_INFO
+         WHERE FILE_SN = #{file_sn}
+    </delete>
+    <!-- HUB 센터 소식 수정 -->
+    <update id="update" parameterType="com.kb.inno.admin.DTO.HubDTO">
+        /* HUB 센터 소식 수정 */
+        UPDATE KB_HUB_DAY_INFO
+           SET HUB_TTL        = #{hub_ttl}
+             , HUB_CN         = #{hub_cn}
+             , ATCH_FILE_SN1  = #{atch_file_sn1}
+             , ATCH_FILE_SN2  = #{atch_file_sn2}
+             , ATCH_FILE_SN3  = #{atch_file_sn3}
+             , EXPSR_YN       = #{expsr_yn}
+             , SORT_NO        = #{sort_no}
+             , CTGRY          = #{ctgry}
+             , LAST_MDFR      = #{last_mdfr}
+             , LAST_MDFCN_DT  = SYSDATE
+        WHERE HUB_SN          = #{hub_sn}
+    </update>
+    <!-- HUB 센터 소식 삭제 -->
+    <delete id="delete" parameterType="int">
+        /* HUB 센터 소식 삭제 */
+        DELETE
+          FROM KB_HUB_DAY_INFO
+         WHERE HUB_SN = #{hub_sn}
+    </delete>
+</mapper>

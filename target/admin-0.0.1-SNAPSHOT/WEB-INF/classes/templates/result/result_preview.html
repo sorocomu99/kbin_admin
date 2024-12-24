@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KB Innovation HUB | 미리보기</title>
+
+    <!-- 공통 스타일 시트 -->
+    <link rel="stylesheet" href="/kbinnovationhub_devadm/css/swiper-bundle.min.css">
+    <link rel="stylesheet" href="/kbinnovationhub_devadm/css/base.css">
+    <link rel="stylesheet" href="/kbinnovationhub_devadm/css/board.css">
+    <link rel="stylesheet" href="/kbinnovationhub_devadm/css/common.css">
+    <link rel="stylesheet" href="/kbinnovationhub_devadm/css/main.css">
+    <link rel="stylesheet" href="/kbinnovationhub_devadm/css/sub.css">
+
+    <!-- 임시 스크립트: 헤더/푸터 컴포넌트 (작업용 임시 파일이므로 개발단계부터는 스크립트 파일 안에 HTML 코드 사용) -->
+    <script src="/kbinnovationhub_devadm/component/header_preview.js"></script>
+    <script src="/kbinnovationhub_devadm/component/footer_preview.js"></script>
+
+    <!-- 공통 스크립트 -->
+    <script src="/kbinnovationhub_devadm/js/scrollreveal.min.js"></script>
+    <script src="/kbinnovationhub_devadm/js/gsap.min.js"></script>
+    <script src="/kbinnovationhub_devadm/js/ScrollToPlugin.min.js"></script>
+    <script src="/kbinnovationhub_devadm/js/ScrollTrigger.min.js"></script>
+    <script src="/kbinnovationhub_devadm/js/lenis.min.js"></script>
+    <script src="/kbinnovationhub_devadm/js/split-type.min.js"></script>
+    <script src="/kbinnovationhub_devadm/js/echarts.min.js"></script>
+    <script src="/kbinnovationhub_devadm/js/echarts-wordcloud.min.js"></script>
+    <script src="/kbinnovationhub_devadm/js/flatpickr.js"></script>
+    <script src="/kbinnovationhub_devadm/js/ko.js"></script>
+    <script src="/kbinnovationhub_devadm/js/swiper-bundle.min.js"></script>
+    <script src="/kbinnovationhub_devadm/js/countUp.umd.js"></script>
+    <script src="/kbinnovationhub_devadm/js/common.js"></script>
+</head>
+<body>
+    <!-- 헤더 -->
+    <app-header></app-header>
+
+    <!-- 본문 -->
+    <main class="main">
+        <div class="home">
+            <div class="section-status" style="padding-top:11%">
+                <div class="section-wrap">
+                    <h4 class="section-title"><span class="block"><span class="highlight">육성 현황</span></span></h4>
+                    <div class="grid">
+                        <div class="col">
+                            <div class="box">
+                                <p class="title"><b>육성</b> <span th:text="${result.ent_crtr_ymd}"></span></p>
+                                <p class="text" th:if="${T(java.lang.Integer).parseInt(result.ent_nocs) % 1 != 0}"><b th:text="${result.ent_nocs}"></b> 개사</p>
+                                <p class="text" th:if="${T(java.lang.Integer).parseInt(result.ent_nocs) % 1 == 0}"><b th:text="${#numbers.formatInteger(result.ent_nocs, 3, 'COMMA')}"></b> 개사</p>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="box">
+                                <p class="title"><b>투자</b> <span th:text="${result.invest_crtr_ymd}"></span></p>
+                                <p class="text" th:if="${T(java.lang.Integer).parseInt(result.invest_nocs) % 1 != 0}"><b th:text="${result.invest_nocs}"></b> 억원</p>
+                                <p class="text" th:if="${T(java.lang.Integer).parseInt(result.invest_nocs) % 1 == 0}"><b th:text="${#numbers.formatInteger(result.invest_nocs, 3, 'COMMA')}"></b> 억원</p>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="box">
+                                <p class="title"><b>제휴</b> <span th:text="${result.affiliate_crtr_ymd}"></span></p>
+                                <p class="text" th:if="${T(java.lang.Integer).parseInt(result.affiliate_nocs) % 1 != 0}"><b th:text="${result.affiliate_nocs}"></b> 건</p>
+                                <p class="text" th:if="${T(java.lang.Integer).parseInt(result.affiliate_nocs) % 1 == 0}"><b th:text="${#numbers.formatInteger(result.affiliate_nocs, 3, 'COMMA')}"></b> 건</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 푸터 -->
+    <app-footer></app-footer>
+</body>
+</html>

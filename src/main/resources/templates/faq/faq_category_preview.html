@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KB Innovation HUB</title>
+
+    <!-- 공통 스타일 시트 -->
+    <link rel="stylesheet" href="/kbinnovationhub_devadm/css/swiper-bundle.min.css">
+    <link rel="stylesheet" href="/kbinnovationhub_devadm/css/flatpickr.min.css">
+    <link rel="stylesheet" href="/kbinnovationhub_devadm/css/base.css">
+    <link rel="stylesheet" href="/kbinnovationhub_devadm/css/board.css">
+    <link rel="stylesheet" href="/kbinnovationhub_devadm/css/common.css">
+    <link rel="stylesheet" href="/kbinnovationhub_devadm/css/main.css">
+    <link rel="stylesheet" href="/kbinnovationhub_devadm/css/sub.css">
+
+    <!-- 임시 스크립트: 헤더/푸터 컴포넌트 (작업용 임시 파일이므로 개발단계부터는 스크립트 파일 안에 HTML 코드 사용) -->
+    <script src="/kbinnovationhub_devadm/component/header_preview.js"></script>
+    <script src="/kbinnovationhub_devadm/component/footer_preview.js"></script>
+    <script>
+        const ENV = 'dev'
+    </script>
+
+    <!-- 공통 스크립트 -->
+    <script src="/kbinnovationhub_devadm/js/scrollreveal.min.js"></script>
+    <script src="/kbinnovationhub_devadm/js/gsap.min.js"></script>
+    <script src="/kbinnovationhub_devadm/js/ScrollToPlugin.min.js"></script>
+    <script src="/kbinnovationhub_devadm/js/ScrollTrigger.min.js"></script>
+    <script src="/kbinnovationhub_devadm/js/lenis.min.js"></script>
+    <script src="/kbinnovationhub_devadm/js/split-type.min.js"></script>
+    <script src="/kbinnovationhub_devadm/js/echarts.min.js"></script>
+    <script src="/kbinnovationhub_devadm/js/echarts-wordcloud.min.js"></script>
+    <script src="/kbinnovationhub_devadm/js/flatpickr.js"></script>
+    <script src="/kbinnovationhub_devadm/js/ko.js"></script>
+    <script src="/kbinnovationhub_devadm/js/swiper-bundle.min.js"></script>
+    <script src="/kbinnovationhub_devadm/js/countUp.umd.js"></script>
+    <script src="/kbinnovationhub_devadm/js/common.js"></script>
+</head>
+<body>
+<!-- 헤더 -->
+<app-header></app-header>
+    <!-- 본문 -->
+    <main class="main">
+        <div class="section-top">
+            <div class="section-top-wrap">
+                <nav aria-label="Breadcrumb" class="breadcrumb" data-breadcrub-theme="light">
+                    <ul>
+                        <li><a href=""><i class="icon icon-home"></i><span class="blind">HOME</span></a></li>
+                        <li><a href="">커뮤니티</a></li>
+                        <li><span aria-current="page">FAQ</span></li>
+                    </ul>
+                </nav>
+                <h2 class="title">FAQ</h2>
+            </div>
+        </div>
+        <div class="board">
+            <div class="board-list">
+                <div class="board-list-head">
+                    <div class="col">
+                        <form action="" method="get">
+                            <div class="search">
+                                <select class="form-select" aria-label="" name="type" th:value="${type}">
+                                    <option value="all" th:selected="${type} == 'all'">전체</option>
+                                    <option value="title" th:selected="${type} == 'title'">제목</option>
+                                    <option value="content" th:selected="${type} == 'content'">내용</option>
+                                </select>
+                                <div class="box">
+                                    <input type="text" placeholder="검색어를 입력해주세요." name="keyword" th:value="${keyword}">
+                                    <button type="button">
+                                        <span class="blind">검색</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="board-list-body">
+                    <div class="board-card">
+                        <div class="swiper category-list">
+                            <ul class="swiper-wrapper category-wrap">
+                                <li class="swiper-slide category-item category-item--active">
+                                    <span class="category-button category-button--selected">전체보기</span>
+                                </li>
+                                <li class="swiper-slide category-item">
+                                    <span th:id="${#ids.next('tabs')}" class="category-button"th:text="${faqCategory.ctgry_nm}"></span>
+                                </li>
+                                <li class="swiper-slide category-item" th:each="category : ${selectList}">
+                                    <span th:id="${#ids.next('tabs')}" class="category-button"th:text="${category.ctgry_nm}"></span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 푸터 -->
+    <app-footer></app-footer>
+
+    <!-- 스크립트 -->
+    <script>
+
+        window.addEventListener('DOMContentLoaded', () => {
+            accordion();
+        });
+
+        function accordion(){
+            const opened = document.querySelectorAll('[aria-expanded=true]');
+
+            for (let i = 0, l = opened.length; i < l; i++) {
+                const panel = document.getElementById(opened[i].id + '-section');                
+
+                panel.style.height = panel.scrollHeight + 'px';
+            }
+
+            function toggleExpanded(element, show) {
+                const target = document.getElementById(element.getAttribute('aria-controls'));
+                const height = target.scrollHeight;
+
+                if (target) {
+                    element.setAttribute('aria-expanded', show);
+                    target.setAttribute('aria-hidden', !show);
+                    show ? target.style.height = height + 'px' : target.style.removeProperty('height');
+                }
+            }
+
+            function setupAccordion(accordionContainer) {
+                function closeAllPanels() {
+                    const openPanels = accordionContainer.querySelectorAll('[aria-expanded=true]');
+
+                    for (let i = 0, l = openPanels.length; i < l; i++) {
+                        toggleExpanded(openPanels[i], false);
+                    }
+                }
+
+                accordionContainer.addEventListener('click', function (event) {
+                    let target = event.target;
+
+                    if (target.closest) {
+                        target = target.closest('[class*="accordion-tab"]');
+                    }
+
+                    if (target) {
+                        const isTargetOpen = target.getAttribute('aria-expanded') === 'true';
+                        closeAllPanels();
+                        toggleExpanded(target, !isTargetOpen);
+                    }
+                });
+            }
+
+            const accordions = document.querySelectorAll('.accordion');
+
+            for (let i = 0, l = accordions.length; i < l; i++) {
+                setupAccordion(accordions[i]);
+            }
+        }
+    </script>
+</body>
+</html>

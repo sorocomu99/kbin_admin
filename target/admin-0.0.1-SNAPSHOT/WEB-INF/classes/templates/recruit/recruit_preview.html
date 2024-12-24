@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KB Innovation HUB</title>
+
+    <!-- 공통 스타일 시트 -->
+    <link rel="stylesheet" href="/kbinnovationhub_devadm/css/swiper-bundle.min.css">
+    <link rel="stylesheet" href="/kbinnovationhub_devadm/css/flatpickr.min.css">
+    <link rel="stylesheet" href="/kbinnovationhub_devadm/css/base.css">
+    <link rel="stylesheet" href="/kbinnovationhub_devadm/css/board.css">
+    <link rel="stylesheet" href="/kbinnovationhub_devadm/css/common.css">
+    <link rel="stylesheet" href="/kbinnovationhub_devadm/css/main.css">
+    <link rel="stylesheet" href="/kbinnovationhub_devadm/css/sub.css">
+    
+    <!-- 임시 스크립트: 헤더/푸터 컴포넌트 (작업용 임시 파일이므로 개발단계부터는 스크립트 파일 안에 HTML 코드 사용) -->
+    <script src="/kbinnovationhub_devadm/component/header_preview.js"></script>
+    <script src="/kbinnovationhub_devadm/component/footer_preview.js"></script>
+    <script>
+        const ENV = 'dev'
+    </script>
+
+    <!-- 공통 스크립트 -->
+    <script src="/kbinnovationhub_devadm/js/scrollreveal.min.js"></script>
+    <script src="/kbinnovationhub_devadm/js/gsap.min.js"></script>
+    <script src="/kbinnovationhub_devadm/js/ScrollToPlugin.min.js"></script>
+    <script src="/kbinnovationhub_devadm/js/ScrollTrigger.min.js"></script>
+    <script src="/kbinnovationhub_devadm/js/lenis.min.js"></script>
+    <script src="/kbinnovationhub_devadm/js/split-type.min.js"></script>
+    <script src="/kbinnovationhub_devadm/js/echarts.min.js"></script>
+    <script src="/kbinnovationhub_devadm/js/echarts-wordcloud.min.js"></script>
+    <script src="/kbinnovationhub_devadm/js/flatpickr.js"></script>
+    <script src="/kbinnovationhub_devadm/js/ko.js"></script>
+    <script src="/kbinnovationhub_devadm/js/swiper-bundle.min.js"></script>
+    <script src="/kbinnovationhub_devadm/js/countUp.umd.js"></script>
+    <script src="/kbinnovationhub_devadm/js/common.js"></script>
+</head>
+<body>
+    <!-- 헤더 -->
+    <app-header></app-header>
+
+    <!-- 본문 -->
+    <main class="main">
+        <div class="nurture nurture-domestic">
+            <div class="section section-background">
+                <div class="section-wrap">
+                    <div class="section-context">
+                        <h4 class="section-title"><span class="block"><span class="highlight">채용지원</span><sup>02</sup></span></h4>
+                        <p class="section-text">우수기업 취업박람회 KB굿잡을 통한 채용 지원 우수 기업 채용 박람회인 ‘KB굿잡‘ 참여 기회를 제공하며, ‘KB굿잡’의 인재 매칭 서비스를 통해 정규직원 채용 시 채용지원금을 제공하여 스타트업의 유망한 인재 확보를 지원합니다.</p>
+                    </div>
+                    <div class="section-flex">
+                        <div class="side"></div>
+                        <div class="contents">
+                            <div class="job">
+                                <div class="job-head">
+                                    <div data-animate class="circle-1">
+                                        <img src="/kbinnovationhub_devadm/images/sub/nurture/domestic/job-circle.png" alt="국민과 함께하는 일자리 찾기 KB Good Job. KB 국민은행.">
+                                    </div>
+                                    <div data-animate class="circle-2">
+                                        <p class="year" th:text="${recruit.employ_yr + '년'}"></p>
+                                        <p class="title" th:switch="${recruit.employ_emp_nocs}">
+                                            <span th:if="${recruit.employ_emp_nocs % 1 != 0}" th:text="${recruit.employ_emp_nocs + '명 채용'}"></span>
+                                            <span th:if="${recruit.employ_emp_nocs % 1 == 0}" th:text="${#numbers.formatInteger(recruit.employ_emp_nocs, 3, 'COMMA') + '명 채용'}"></span>
+                                        </p>
+                                        <div class="data">
+                                            <p class="text">
+                                                <i class="icon icon-1"></i>
+                                                <span th:if="${recruit.sprt_amt % 1 != 0}" th:text="${recruit.sprt_amt + '억원'}"></span>
+                                                <span th:if="${recruit.sprt_amt % 1 == 0}" th:text="${#numbers.formatInteger(recruit.sprt_amt, 3, 'COMMA') + '억원'}"></span>
+                                            </p>
+                                            <p class="text">
+                                                <i class="icon icon-2"></i>
+                                                <span th:if="${recruit.employ_ent_nocs % 1 != 0}" th:text="${recruit.employ_ent_nocs + '개사'}"></span>
+                                                <span th:if="${recruit.employ_ent_nocs % 1 == 0}" th:text="${#numbers.formatInteger(recruit.employ_ent_nocs, 3, 'COMMA') + '개사'}"></span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="job-body">
+                                    <div data-animate class="thumbnail"><img src="/kbinnovationhub_devadm/images/sub/nurture/domestic/job-thumbnail.jpg" alt=""></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 푸터 -->
+    <app-footer></app-footer>
+
+</body>
+</html>

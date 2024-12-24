@@ -1,0 +1,86 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kb.inno.admin.DAO.PromoteDAO">
+    <!-- 국내 프로그램 - 육성 그래프 조회 -->
+    <select id="select" resultType="com.kb.inno.admin.DTO.PromoteDTO">
+        /* 국내 프로그램 - 육성 그래프 조회 */
+        SELECT GRAPH_SN
+             , CRTR_YM
+             , GRAPH1_YR
+             , GRAPH1_NOCS
+             , GRAPH2_YR
+             , GRAPH2_NOCS
+             , GRAPH3_YR
+             , GRAPH3_NOCS
+             , GRAPH4_YR
+             , GRAPH4_NOCS
+             , GRAPH5_YR
+             , GRAPH5_NOCS
+             , FRST_RGTR
+             , FRST_REG_DT
+             , LAST_MDFR
+             , LAST_MDFCN_DT
+          FROM KB_ENT_GRAPH_INFO
+    </select>
+    <!-- 국내 프로그램 - 육성 그래프 등록 -->
+    <insert id="insert" parameterType="com.kb.inno.admin.DTO.PromoteDTO">
+        /* 국내 프로그램 - 육성 그래프 등록 */
+        INSERT INTO KB_ENT_GRAPH_INFO
+        (
+         GRAPH_SN
+       , CRTR_YM
+       , GRAPH1_YR
+       , GRAPH1_NOCS
+       , GRAPH2_YR
+       , GRAPH2_NOCS
+       , GRAPH3_YR
+       , GRAPH3_NOCS
+       , GRAPH4_YR
+       , GRAPH4_NOCS
+       , GRAPH5_YR
+       , GRAPH5_NOCS
+       , FRST_RGTR
+       , FRST_REG_DT
+       , LAST_MDFR
+       , LAST_MDFCN_DT
+        )
+        VALUES
+        (
+         GRAPH_SN_SEQ.NEXTVAL
+       , #{crtr_ym}
+       , #{graph1_yr}
+       , #{graph1_nocs}
+       , #{graph2_yr}
+       , #{graph2_nocs}
+       , #{graph3_yr}
+       , #{graph3_nocs}
+       , #{graph4_yr}
+       , #{graph4_nocs}
+       , #{graph5_yr}
+       , #{graph5_nocs}
+       , #{frst_rgtr}
+       , SYSDATE
+       , #{last_mdfr}
+       , SYSDATE
+        )
+    </insert>
+    <!-- 국내 프로그램 - 육성 그래프 수정 -->
+    <update id="update" parameterType="com.kb.inno.admin.DTO.PromoteDTO">
+        /* 국내 프로그램 - 육성 그래프 수정 */
+        UPDATE KB_ENT_GRAPH_INFO
+           SET CRTR_YM       = #{crtr_ym}
+             , GRAPH1_YR     = #{graph1_yr}
+             , GRAPH1_NOCS   = #{graph1_nocs}
+             , GRAPH2_YR     = #{graph2_yr}
+             , GRAPH2_NOCS   = #{graph2_nocs}
+             , GRAPH3_YR     = #{graph3_yr}
+             , GRAPH3_NOCS   = #{graph3_nocs}
+             , GRAPH4_YR     = #{graph4_yr}
+             , GRAPH4_NOCS   = #{graph4_nocs}
+             , GRAPH5_YR     = #{graph5_yr}
+             , GRAPH5_NOCS   = #{graph5_nocs}
+             , LAST_MDFR     = #{last_mdfr}
+             , LAST_MDFCN_DT = SYSDATE
+    </update>
+</mapper>

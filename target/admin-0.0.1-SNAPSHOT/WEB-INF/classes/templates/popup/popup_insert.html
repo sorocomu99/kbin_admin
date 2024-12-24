@@ -1,0 +1,285 @@
+<!--
+ 파일명     : popup_insert.html
+ 관련자바   : PopupController
+ 화면명     : 팝업 등록
+ 설명       : 팝업 등록 처리
+ 최초개발일 : 2024.10.24
+ 최초개발자 : 양윤지
+ ==========================================================
+   수정일            수정자           설명
+ ==========================================================
+-->
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragment/config :: configFragment"></head>
+<body>
+<div class="wrap">
+    <div th:replace="fragment/header :: headerFragment"></div>
+    <main class="main">
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <div class="paper">
+                        <h2 class="h4">팝업 관리</h2>
+                        <div class="mt-4">
+                            <form name="popup_form" th:action="@{/popup/insert}" method="post">
+                                <input type="hidden" name="menu_id" th:value="${menuId}"/>
+                                <table class="table table-bordered align-middle">
+                                    <tbody>
+                                    <tr>
+                                        <th class="bg-light" width="20%">시작일시</th>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <div class="input-group w-auto flex-nowrap me-2 date" data-provide="datepicker">
+                                                    <input id="inputStart" type="text" class="form-control w-auto" name="bgng_ymd">
+                                                    <div class="input-group-addon">
+                                                        <span data-feather="calendar"></span>
+                                                    </div>
+                                                </div>
+                                                <div class="input-group clockpicker">
+                                                    <input type="text" class="form-control w-auto" name="bgng_hr">
+                                                    <span class="input-group-addon">
+                                                        <span data-feather="clock"></span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="form-check mt-2 mb-0">
+                                                <input id="check1" class="form-check-input" type="checkbox" value="" onclick="checkStart()">
+                                                <label class="form-check-label" for="check1">시작일시를 오늘부터</label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th class="bg-light" width="20%">종료일시</th>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <div class="input-group w-auto flex-nowrap me-2 date" data-provide="datepicker">
+                                                    <input id="inputEnd" type="text" class="form-control w-auto" name="end_ymd">
+                                                    <div class="input-group-addon">
+                                                        <span data-feather="calendar"></span>
+                                                    </div>
+                                                </div>
+                                                <div class="input-group clockpicker">
+                                                    <input type="text" class="form-control w-auto" name="end_hr">
+                                                    <span class="input-group-addon">
+                                                        <span data-feather="clock"></span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="form-check mt-2 mb-0">
+                                                <input id="check2" class="form-check-input" type="checkbox" value="" onclick="checkEnd()">
+                                                <label class="form-check-label" for="check2">종료일시를 오늘부터 7일 후 까지</label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th class="bg-light" width="20%">팝업 위치</th>
+                                        <td>
+                                            <div class="col-lg-6">
+                                                <div class="input-group mb-2" style="width:275px">
+                                                    <span class="input-group-text">X</span>
+                                                    <input type="number" class="form-control" name="popup_left_pstn">
+                                                    <span class="input-group-text">px</span>
+                                                </div>
+                                                <div class="input-group mb-2" style="width:275px">
+                                                    <span class="input-group-text">Y</span>
+                                                    <input type="number" class="form-control" name="popup_top_pstn">
+                                                    <span class="input-group-text">px</span>
+                                                </div>
+                                            </div>
+                                            <span>
+                                                팝업이 표시될 위치를 입력해주세요. (기본 값 = X: 120px / Y: 120px)<br>
+                                                ex) X: <span class="fw-bold text-danger">100</span> / Y: <span class="fw-bold text-danger">50</span> (화면 상단에서 <span class="fw-bold text-danger">100px</span>, 좌측에서 <span class="fw-bold text-danger">50px</span>)
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th class="bg-light" width="20%">팝업 제목</th>
+                                        <td>
+                                            <input type="text" class="form-control" name="mngr_ttl">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th class="bg-light" width="20%">내용</th>
+                                        <td>
+                                            <!-- 에디터 -->
+<!--                                            <div id="editor"></div>-->
+                                            <div id="summernote"></div>
+                                            <!-- 에디터의 내용 복사하여 붙혀넣기 -->
+                                            <textarea id="popup_cn" name="popup_cn" style="display:none;"></textarea>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <div class="button-container">
+                                    <a id="preview-button" href="javascript:previewPage()" class="btn btn-outline-primary">미리보기</a>
+                                    <a class="btn btn-outline-primary" th:href="@{/popup/list/{menuId}(menuId=${menuId})}">목록보기</a>
+                                    <button type="button" class="btn btn-primary" onclick="confirmMsg()">등록하기</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- 팝업 -->
+<div id="popup1" class="popup-container" style="display:none;top:150px;left:300px">
+    <div class="popup-body">
+<!--        <img th:src="@{/images/dummy/visual-slide-image-1.png}" alt="">-->
+        <div id="popupContents"></div>
+    </div>
+    <div class="popup-foot">
+        <div class="check check-light">
+            <input id="popupClose1" type="checkbox">
+            <i></i>
+            <label for="popupClose1">오늘 하루 열지 않기</label>
+        </div>
+        <a class="close" href="javascript:" onclick="closePopup1()"><span class="blind">팝업 닫기</span></a>
+    </div>
+</div>
+<script th:inline="javascript">
+
+    // 페이지 로드 시 실행
+    window.onload = function () {
+        // 페이지 로드 시 메시지 확인 및 알림 표시
+        // 수정 및 등록 시 띄울 알림창
+        const msg = /*[[${msg}]]*/ '';
+        if (msg) alert(msg);
+    }
+
+    // 시작/종료 일시 체크
+    let today = new Date();
+    let year = today.getFullYear(); // 년도
+    let month = today.getMonth() + 1;  // 월
+    let date = today.getDate();  // 날짜
+    let day = today.getDay();  // 요일
+
+    function pad(n){
+        if(n < 10){
+            return '0' + n;
+        }else{
+            return n;
+        }
+    }
+
+    // 오늘 날짜
+    function checkStart(){
+        if(event.target.checked){
+            inputStart.value = year + '-' + pad(month) + '-' + pad(date);
+        }
+    }
+
+    // 종료 날짜
+    function checkEnd(){
+        let after = new Date(new Date().setDate(new Date().getDate() + 7));
+        inputEnd.value = after.getFullYear() + '-' + pad((after.getMonth() + 1)) + '-' + pad(after.getDate());
+    }
+
+    // 프리뷰 페이지로 이동
+    function previewPage() {
+        // 팝업 위치 왼쪽 입력 확인
+        var popup_left_pstn = $('input[name=popup_left_pstn]').val();
+        if(popup_left_pstn.trim() == "") {
+            alert("X 축 값을 입력하세요.");
+            return false;
+        }
+
+        // 팝업 위치 위쪽 입력 확인
+        var popup_top_pstn = $('input[name=popup_top_pstn]').val();
+        if(popup_top_pstn.trim() == "") {
+            alert("Y 축 값을 입력하세요.");
+            return false;
+        }
+
+        var summernote_value = $("#summernote").summernote('code');
+        $("#popup_cn").val(summernote_value);
+
+        const form = document.forms['popup_form'];
+        form.action = '/kbinnovationhub_devadm/popup/preview'; // 전송할 URL
+        form.method = 'POST';            // 전송 방식
+        form.target = '_blank';          // 새 창에서 열기
+        form.submit();                   // 폼 제출
+    }
+
+    // 컨펌 메시지 띄우는 함수
+    function confirmMsg() {
+        // 팝업 위치 왼쪽 입력 확인
+        var popup_left_pstn = $('input[name=popup_left_pstn]').val();
+        if(popup_left_pstn.trim() == "") {
+            alert("X 축 값을 입력하세요.");
+            return false;
+        }
+
+        // 팝업 위치 위쪽 입력 확인
+        var popup_top_pstn = $('input[name=popup_top_pstn]').val();
+        if(popup_top_pstn.trim() == "") {
+            alert("Y 축 값을 입력하세요.");
+            return false;
+        }
+
+        // 팝업 제목 입력 확인
+        var mngr_ttl = $('input[name=mngr_ttl]').val();
+        if(mngr_ttl.trim() == "") {
+            alert("제목을 입력하세요.");
+            return false;
+        }
+
+        // 팝업 내용 입력 확인
+        var summernote_value = $("#summernote").summernote('code');
+        $("#popup_cn").val(summernote_value);
+
+        var popup_cn = $("#popup_cn").val();
+        if(popup_cn.trim() == "<p><br></p>") {
+            alert("내용을 입력하세요.");
+            return false;
+        }
+
+        let result = confirm("등록 하시겠습니까?");
+        if(!result) {
+            return false;
+        } else {
+            // 폼 태그 서브밋 보내기
+            var form = document.forms['popup_form'];
+            form.action = '/kbinnovationhub_devadm/popup/insert';  // 전송할 URL
+            form.method = 'POST';            // 전송 방식
+            form.target = '';          // 새 창에서 열기
+            form.submit();                   // 폼 제출
+        }
+    }
+
+    // 이미지 업로드 함수
+    function uploadImage(file) {
+        var formData = new FormData();
+        formData.append('file', file);
+        $.ajax({
+            data : formData,
+            type : "POST",
+            url: /*[[@{/popup/upload/image}]]*/, // 요청 URL
+            contentType : false,
+            enctype : 'multipart/form-data',
+            processData : false,
+            success : function(data) {
+                $('#summernote').summernote('insertImage', data.url);
+            }, error: function(xhr, status, error) {
+                console.error('Error uploading image:', error);
+                alert('이미지 업로드를 실패하였습니다.');
+            }
+        });
+    }
+
+    // 썸머노트 이미지 서버에 저장 후 가져와서 화면에 출력
+    $('#summernote').summernote({
+        height: 300, // 에디터 높이 설정
+        callbacks : {
+            onImageUpload: function(files) {
+                uploadImage(files[0], this);
+            }
+        }
+    });
+
+</script>
+</body>
+</html>

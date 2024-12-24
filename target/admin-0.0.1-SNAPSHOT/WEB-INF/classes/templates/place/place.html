@@ -1,0 +1,126 @@
+<!--
+ 파일명     : place.html
+ 관련자바   : PlaceController
+ 화면명     : 육성공간 관리
+ 설명       : 육성공간 조회, 삭제 처리
+ 최초개발일 : 2024.11.06
+ 최초개발자 : 양윤지
+ ==========================================================
+   수정일            수정자           설명
+ ==========================================================
+-->
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragment/config :: configFragment"></head>
+<body>
+    <div class="wrap">
+        <div th:replace="fragment/header :: headerFragment"></div>
+        <main class="main">
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        <div class="paper">
+                            <h2 class="h4">국내프로그램 - 육성공간 관리</h2>
+                            <div class="mt-4">
+                                <div class="top-search d-flex mt-4">
+                                    <div class="col">
+                                    </div>
+                                    <div class="col">
+                                        <div class="button-wrap d-flex justify-content-end">
+                                            <a th:href="@{/place/insert/{menuId}(menuId=${menuId})}" class="btn btn-primary">
+                                                <i data-feather="edit"></i> 신규 등록
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-4">
+                                <input type="hidden" name="menu_id" th:value="${menuId}"/>
+                                <table class="table text-center align-middle">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:5%">NO</th>
+                                            <th style="width:75%">공간이름</th>
+                                            <th style="width:20%">관리</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:if="${selectList == null or selectList.isEmpty()}">
+                                            <td class="py-5" colspan="10">
+                                                검색 결과가 없습니다.
+                                            </td>
+                                        </tr>
+                                        <tr th:unless="${selectList == null or selectList.isEmpty()}" th:each="list : ${selectList}">
+                                            <td th:text="${list.rownumber}"></td>
+                                            <td th:text="${list.plc_nm}"></td>
+                                            <td>
+                                                <a th:onclick="|updatePage('${list.plc_sn}', '${menuId}')|" class="btn btn-outline-dark btn-sm">수정</a>
+                                                <button type="button" class="btn btn-outline-danger btn-sm" th:onclick="|deleteAlert('${list.plc_sn}')|">삭제</button>
+                                                <!-- <a th:onclick="updatePage([[${list.plc_sn}]], [[${menuId}]])" class="btn btn-outline-dark btn-sm">수정</a>
+                                                <button type="button" class="btn btn-outline-danger btn-sm" th:onclick="deleteAlert([[${list.plc_sn}]])">삭제</button> -->
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script th:inline="javascript">
+        // 페이지 로드 시 실행
+        window.onload = function () {
+            // 페이지 로드 시 메시지 확인 및 알림 표시
+            // 수정 및 등록 시 띄울 알림창
+            const msg = /*[[${msg}]]*/ '';
+            if (msg) alert(msg);
+        }
+
+        // 수정 페이지 이동
+        function updatePage(plc_sn, menuId) {
+            // 빈 form 전달
+            let pageMoveForm = document.createElement('form');
+            // 인수 값 전달
+            let obj = document.createElement('input');
+            obj.setAttribute('type', 'hidden');
+            obj.setAttribute('name', 'plc_sn');
+            obj.setAttribute('value', plc_sn);
+            pageMoveForm.appendChild(obj);
+
+            let obj2 = document.createElement('input');
+            obj2.setAttribute('type', 'hidden');
+            obj2.setAttribute('name', 'menuId');
+            obj2.setAttribute('value', menuId);
+            pageMoveForm.appendChild(obj2);
+
+            pageMoveForm.setAttribute('method', 'post');
+            pageMoveForm.setAttribute('action', '/kbinnovationhub_devadm/place/detail');
+            document.body.appendChild(pageMoveForm);
+            pageMoveForm.submit();
+        }
+
+        // 삭제 성공/실패 알림창 띄우기
+        function deleteAlert(plc_sn) {
+            let result = confirm("정말 삭제 하시겠습니까?");
+            if(result) {
+                $.ajax({
+                    url: /*[[@{/place/delete}]]*/, // 요청 URL
+                    type: 'POST', // HTTP 메서드
+                    contentType: 'application/x-www-form-urlencoded', // 헤더 설정
+                    data: { plc_sn: plc_sn }, // 보내는 데이터
+                    success: function(response) {
+                        alert("삭제에 성공하였습니다.");
+                        window.location.reload();
+                    },
+                    error: function(xhr, status, error) {
+                        alert("삭제를 실패하였습니다.");
+                        console.error('Error:', error);
+                    }
+                });
+            }
+        }
+    </script>
+</body>
+</html>
