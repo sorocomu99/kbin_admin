@@ -23,7 +23,6 @@ public class ImageController {
     public ResponseEntity<Resource> getImage(@PathVariable String imageName) {
 		//System.out.println("imageName==================="+imageName);
         //Path path = Paths.get("D:/fsfile/dev_kbinnovation/").resolve(imageName).normalize();
-        //Path path = Paths.get("D:/fsfile/dev_kbinnovation/e53d80b4-6841-44fb-9728-f2d54858e33a");
         String imagePath = "D:/fsfile/dev_kbinnovation/" + imageName;
         //System.out.println("imagePath==================="+imagePath);
         //Resource resource = new FileSystemResource(path.toString());
