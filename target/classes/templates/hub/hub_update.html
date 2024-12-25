@@ -1,0 +1,267 @@
+<!--
+ 파일명     : hub_insert.html
+ 관련자바   : HubController
+ 화면명     : 공지사항 관리
+ 설명       : 공지사항 등록 처리
+ 최초개발일 : 2024.11.14
+ 최초개발자 : 양윤지
+ ==========================================================
+   수정일            수정자           설명
+ ==========================================================
+-->
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragment/config :: configFragment"></head>
+<body>
+<div class="wrap">
+    <div th:replace="fragment/header :: headerFragment"></div>
+        <main class="main">
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        <div class="paper">
+                            <h2 class="h4">HUB센터 소식 관리</h2>
+                            <div class="mt-4">
+                                <form th:action="@{/hub/update}" method="post" enctype="multipart/form-data" name="hub_form">
+                                    <input type="hidden" name="menu_id" th:value="${menuId}"/>
+
+                                    <input type="hidden" name="hub_sn" th:value="${hub.hub_sn}">
+
+                                    <input type="hidden" id="file_yn1" name="file_yn1" value="0">
+                                    <input type="hidden" id="file_yn2" name="file_yn2" value="0">
+                                    <input type="hidden" id="file_yn3" name="file_yn3" value="0">
+
+                                    <input type="hidden" name="atch_file_sn1" th:value="${hub.atch_file_sn1}">
+                                    <input type="hidden" name="atch_file_sn2" th:value="${hub.atch_file_sn2}">
+                                    <input type="hidden" name="atch_file_sn3" th:value="${hub.atch_file_sn3}">
+                                    <table class="table table-bordered align-middle">
+                                        <tbody>
+                                            <tr>
+                                                <th class="bg-light">썸네일 이미지</th>
+                                                <td>
+                                                    <div class="d-flex">
+                                                        <input class="form-control w-auto" type="file" name="hub_img" onchange="preview()">
+                                                    </div>
+                                                    <img id="previewFrame" th:src="${hub.hub_path_img == null ? '' : hub.hub_path_img + hub.hub_img_name}" width="200" class="img-fluid mt-2" style="display:none" />
+                                                    <p class="mb-0 mt-2">
+                                                        * 권장 사이즈 : 500x320px
+                                                    </p>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th class="bg-light">영상 파일</th>
+                                                <td>
+                                                    <div class="d-flex">
+                                                        <input class="form-control w-auto" type="file" name="hub_mov" onchange="fileYn(2)">
+                                                        <button id="deleteMedia" class="btn btn-secondary ms-2" style="display: none;">삭제</button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th class="bg-light" width="20%">카테고리</th>
+                                                <td>
+                                                    <input type="text" class="form-control" name="ctgry" th:value="${hub.ctgry}">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th class="bg-light" width="20%">제목</th>
+                                                <td>
+                                                    <input type="text" class="form-control" name="hub_ttl" th:value="${hub.hub_ttl}">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th class="bg-light" width="20%">내용</th>
+                                                <td>
+                                                    <!-- 에디터 -->
+                                                    <div id="summernote"></div>
+                                                    <!-- 에디터의 내용 복사하여 붙혀넣기 -->
+                                                    <textarea id="hub_cn" name="hub_cn" style="display:none;" th:text="${hub.hub_cn}"></textarea>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th class="bg-light">첨부파일</th>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <input class="form-control w-auto" type="file" name="hub_file" onchange="fileYn(3)">
+                                                        <div class="form-check form-check-inline mb-0 ms-2">
+                                                            <input class="form-check-input" type="checkbox" id="del_yn" name="del_yn">
+                                                            <label class="form-check-label" for="del_yn">삭제</label>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th class="bg-light">노출여부</th>
+                                                <td>
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="expsr_yn" id="expsr_y" value="Y" th:checked="${hub.expsr_yn == 'Y'}">
+                                                        <label class="form-check-label" for="expsr_y">노출</label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input checked class="form-check-input" type="radio" name="expsr_yn" id="expsr_n" value="N" th:checked="${hub.expsr_yn == 'N'}">
+                                                        <label class="form-check-label" for="expsr_n">미노출</label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th class="bg-light">정렬</th>
+                                                <td>
+                                                    <div class="d-flex">
+                                                        <input class="form-control" type="number" name="sort_no" th:value="${hub.sort_no}" style="width:100px">
+                                                        <p class="mb-0 mt-2 ms-3">* 숫자가 낮을수록 상위 노출됩니다.</p>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div class="button-container">
+                                        <a id="preview-button" href="javascript:previewPage()" class="btn btn-outline-primary">미리보기</a>
+                                        <a href="javascript:" class="btn btn-outline-dark" th:href="@{/hub/list/{menuId}(menuId=${menuId})}">목록보기</a>
+                                        <button type="button" class="btn btn-primary" onclick="confirmMsg()">수정하기</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script th:inline="javascript">
+        // 프리뷰 페이지로 이동
+        function previewPage() {
+            var summernote_value = $("#summernote").summernote('code');
+            $("#hub_cn").val(summernote_value);
+
+            const form = document.forms['hub_form'];
+            form.action = '/kbinnovationhub_devadm/hub/preview'; // 전송할 URL
+            form.method = 'POST';            // 전송 방식
+            form.target = '_blank';          // 새 창에서 열기
+            form.submit();                   // 폼 제출
+        }
+
+        // 썸네일 미리보기
+        // 게시글 수정 시, 썸네일이 등록되어있으면 다음 두개 태그에 인라인 스타일을 제거해주세요.
+        // #previewFrame, #deleteThumbnail
+        // ex)
+        // 수정 전: <button onclick="clearImage()" id="deleteThumbnail" class="btn btn-secondary ms-2" style="display: none;">삭제</button>
+        // 수정 후: <button onclick="clearImage()" id="deleteThumbnail" class="btn btn-secondary ms-2">삭제</button>
+        function preview() {
+            // 파일 추가 시 상태 값 변경
+            document.querySelector('#file_yn1').value = 1;
+            previewFrame.src = URL.createObjectURL(event.target.files[0]);
+            document.querySelector('#previewFrame').style.display = "block";
+        }
+
+        function fileYn(idx) {
+            document.querySelector('#file_yn' + idx).value = 1;
+        }
+
+        // 페이지 로드 시 실행
+        window.onload = function () {
+            // 페이지 로드 시 메시지 확인 및 알림 표시
+            // 수정 및 등록 시 띄울 알림창
+            const msg = /*[[${msg}]]*/ '';
+            if (msg) alert(msg);
+
+            $("#summernote").summernote('code', $("#hub_cn").val());
+
+            // 이미지가 있을 때 style block으로 변경
+            var img = document.querySelector('#previewFrame').attributes.src.value;
+            if(img != null) {
+                document.querySelector('#previewFrame').style.display = "block";
+            }
+        }
+
+        // 이미지 업로드 함수
+        function uploadImage(file) {
+            var formData = new FormData();
+            formData.append('file', file);
+            $.ajax({
+                data : formData,
+                type : "POST",
+                url: /*[[@{/hub/upload/image}]]*/, // 요청 URL
+                contentType : false,
+                enctype : 'multipart/form-data',
+                processData : false,
+                success : function(data) {
+                    $('#summernote').summernote('insertImage', data.url);
+                }, error: function(xhr, status, error) {
+                    console.error('Error uploading image:', error);
+                    alert('이미지 업로드를 실패하였습니다.');
+                }
+            });
+        }
+
+        // 썸머노트 이미지 서버에 저장 후 가져와서 화면에 출력
+        $('#summernote').summernote({
+            height: 300, // 에디터 높이 설정
+            callbacks : {
+                onImageUpload: function(files) {
+                    uploadImage(files[0], this);
+                }
+            }
+        });
+
+        // 컨펌 메시지 띄우는 함수
+        function confirmMsg() {
+            // 썸네일 이미지 등록 확인
+            var previewFrame = $('#previewFrame')[0].src;
+            if(previewFrame == null || previewFrame == "") {
+                alert("파일을 선택 해 주세요.");
+                return false;
+            }
+
+            // 제목 입력 확인
+            var hub_ttl = $('input[name=hub_ttl]').val();
+            if(hub_ttl.trim() == "") {
+                alert("제목을 입력하세요.");
+                return false;
+            }
+
+            // 카테고리 입력 확인
+            var ctgry = $('input[name=ctgry]').val();
+            if(ctgry.trim() == "") {
+                alert("카테고리를 입력하세요.");
+                return false;
+            }
+
+            // 내용 입력 확인
+            var summernote_value = $("#summernote").summernote('code');
+            $("#hub_cn").val(summernote_value);
+
+            var hub_cn = $("#hub_cn").val();
+            if(hub_cn.trim() == "<p><br></p>") {
+                alert("내용을 입력하세요.");
+                return false;
+            }
+
+            // sort_no를 비웠을 경우 1을 대입
+            if($("input[name=sort_no]").val() == '') {
+                $("input[name=sort_no]").val(1)
+            }
+
+            let result = confirm("수정 하시겠습니까?");
+            if(!result) {
+                return false;
+            } else {
+                // 체크박스에 체크가 되어있으면 value 대입
+                var checked = $("#del_yn").is(':checked');
+                if(checked) {
+                    $("#del_yn").val("Y");
+                } else {
+                    $("#del_yn").val("N");
+                }
+                var summernote_value = $("#summernote").summernote('code');
+                $("#hub_cn").val(summernote_value);
+                // 폼 태그 서브밋 보내기
+                const form = document.forms['hub_form'];
+                form.action = '/kbinnovationhub_devadm/hub/update'; // 전송할 URL
+                form.method = 'POST';            // 전송 방식
+                form.target = '';          // 새 창에서 열기
+                form.submit();                   // 폼 제출
+            }
+        }
+    </script>
+</body>
+</html>

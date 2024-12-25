@@ -1,0 +1,163 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kb.inno.admin.DAO.AffiliateDAO">
+    <!-- 국내 프로그램 - 제휴 사례 목록 조회 -->
+    <select id="selectList" resultType="com.kb.inno.admin.DTO.AffiliateDTO">
+        /* 국내 프로그램 - 제휴 사례 목록 조회 */
+        /* 메인 비주얼 조회 */
+        SELECT ROWNUM AS ROWNUMBER
+             , AFFILIATE_PAGE.*
+        FROM (
+              SELECT AFFI.AFFILIATE_SN AS AFFILIATE_SN
+                   , AFFI.SRVC_NM      AS SRVC_NM
+                   , AFFI.EXPSR_YN     AS EXPSR_YN
+                   , AFFI.SORT_NO      AS SORT_NO
+                   , FILES.FILE_NM     AS AFFILIATE_FILE_NAME
+                   , FILES.FILE_PATH   AS AFFILIATE_PATH
+                FROM KB_AFFILIATE_INFO AFFI
+                   , KB_FILE_INFO FILES
+               WHERE AFFI.ATCH_FILE_SN = FILES.FILE_SN(+)
+               ORDER BY AFFILIATE_SN ASC
+             ) AFFILIATE_PAGE
+        ORDER BY ROWNUMBER DESC
+    </select>
+    <!-- 국내 프로그램 - 제휴 사례 파일 저장 -->
+    <insert id="insertFile" parameterType="com.kb.inno.admin.DTO.FileDTO">
+        /* 국내 프로그램 - 제휴 사례 파일 저장 */
+        INSERT INTO KB_FILE_INFO
+        (
+         FILE_SN
+       , FILE_NM
+       , ORGNL_FILE_NM
+       , FILE_SZ
+       , FILE_EXTN
+       , FILE_PATH
+       , FRST_RGTR
+       , FRST_REG_DT
+       , LAST_MDFR
+       , LAST_MDFCN_DT
+        )
+       VALUES
+       (
+        FILE_SN_SEQ.NEXTVAL
+      , #{file_nm}
+      , #{orgnl_file_nm}
+      , #{file_sz}
+      , #{file_extn}
+      , #{file_path}
+      , #{frst_rgtr}
+      , SYSDATE
+      , #{last_mdfr}
+      , SYSDATE
+        )
+        <selectKey keyProperty="file_sn" resultType="int" order="AFTER">
+            /* 저장한 파일 중 제일 큰 것 조회(키 조회) */
+            SELECT MAX(FILE_SN) AS FILE_SN
+            FROM KB_FILE_INFO
+        </selectKey>
+    </insert>
+    <!-- 국내 프로그램 - 제휴 사례 등록 -->
+    <insert id="insert" parameterType="com.kb.inno.admin.DTO.AffiliateDTO">
+        /* 국내 프로그램 - 제휴 사례 등록 */
+        INSERT INTO KB_AFFILIATE_INFO
+        (
+         AFFILIATE_SN
+       , AFFILIATE_NM
+       , STARTER_NM
+       , SRVC_NM
+       , CTGRY_NM
+       , EXPSR_YN
+       , SORT_NO
+       , ATCH_FILE_SN
+       , FRST_RGTR
+       , FRST_REG_DT
+       , LAST_MDFR
+       , LAST_MDFCN_DT
+        )
+        VALUES
+        (
+         AFFILIATE_SN_SEQ.NEXTVAL
+       , #{affiliate_nm}
+       , #{starter_nm}
+       , #{srvc_nm}
+       , #{ctgry_nm}
+       , #{expsr_yn}
+       , #{sort_no}
+       , #{atch_file_sn}
+       , #{frst_rgtr}
+       , SYSDATE
+       , #{last_mdfr}
+       , SYSDATE
+        )
+    </insert>
+    <!-- 국내 프로그램 - 제휴 사례 상세 조회 -->
+    <select id="select" parameterType="int" resultType="com.kb.inno.admin.DTO.AffiliateDTO">
+        /* 국내 프로그램 - 제휴 사례 상세 조회 */
+        SELECT AFFI.AFFILIATE_SN   AS AFFILIATE_SN
+             , AFFI.AFFILIATE_NM   AS AFFILIATE_NM
+             , AFFI.STARTER_NM     AS STARTER_NM
+             , AFFI.SRVC_NM        AS SRVC_NM
+             , AFFI.CTGRY_NM       AS CTGRY_NM
+             , AFFI.EXPSR_YN       AS EXPSR_YN
+             , AFFI.SORT_NO        AS SORT_NO
+             , AFFI.ATCH_FILE_SN   AS ATCH_FILE_SN
+             , FILES.ORGNL_FILE_NM AS ORIGIN_FILE_NAME
+             , FILES.FILE_NM       AS AFFILIATE_FILE_NAME
+             , FILES.FILE_PATH     AS AFFILIATE_PATH
+          FROM KB_AFFILIATE_INFO AFFI
+             , KB_FILE_INFO FILES
+        WHERE AFFI.ATCH_FILE_SN = FILES.FILE_SN(+)
+          AND AFFI.AFFILIATE_SN = #{affiliate_sn}
+    </select>
+    <!-- 국내 프로그램 - 제휴 사례 수정 -->
+    <update id="update" parameterType="com.kb.inno.admin.DTO.AffiliateDTO">
+        /* 국내 프로그램 - 제휴 사례 수정 */
+        UPDATE KB_AFFILIATE_INFO
+           SET AFFILIATE_NM  = #{affiliate_nm}
+             , STARTER_NM    = #{starter_nm}
+             , SRVC_NM       = #{srvc_nm}
+             , CTGRY_NM      = #{ctgry_nm}
+             , EXPSR_YN      = #{expsr_yn}
+             , SORT_NO       = #{sort_no}
+             , ATCH_FILE_SN  = #{atch_file_sn}
+             , LAST_MDFR     = #{last_mdfr}
+             , LAST_MDFCN_DT = SYSDATE
+         WHERE AFFILIATE_SN  = #{affiliate_sn}
+    </update>
+    <!-- 국내 프로그램 - 제휴 사례 삭제 -->
+    <delete id="delete" parameterType="int">
+        /* 국내 프로그램 - 제휴 사례 삭제 */
+        DELETE
+          FROM KB_AFFILIATE_INFO
+         WHERE AFFILIATE_SN = #{affiliate_sn}
+    </delete>
+    <!-- 국내 프로그램 - 제휴 사례 파일 삭제 -->
+    <delete id="deleteFile" parameterType="int">
+        /* 국내 프로그램 - 제휴 사례 파일 삭제 */
+        DELETE
+          FROM KB_FILE_INFO
+         WHERE FILE_SN = #{file_sn}
+    </delete>
+    <!-- 메인 비주얼 리스트 조회 (미리보기용) -->
+    <select id="selectListAll" parameterType="int" resultType="com.kb.inno.admin.DTO.AffiliateDTO">
+        /* 메인 비주얼 리스트 조회 (미리보기용) */
+        SELECT AFFI.AFFILIATE_SN AS AFFILIATE_SN
+             , AFFI.AFFILIATE_NM AS AFFILIATE_NM
+             , AFFI.STARTER_NM   AS STARTER_NM
+             , AFFI.SRVC_NM      AS SRVC_NM
+             , AFFI.CTGRY_NM     AS CTGRY_NM
+             , AFFI.EXPSR_YN     AS EXPSR_YN
+             , AFFI.SORT_NO      AS SORT_NO
+             , FILES.FILE_NM     AS AFFILIATE_FILE_NAME
+             , FILES.FILE_PATH   AS AFFILIATE_PATH
+          FROM KB_AFFILIATE_INFO AFFI
+             , KB_FILE_INFO FILES
+         WHERE 1=1
+           AND AFFI.ATCH_FILE_SN = FILES.FILE_SN(+)
+         <if test="affiliate_sn != 0">
+           AND NOT AFFI.AFFILIATE_SN IN (#{affiliate_sn})
+         </if>
+         ORDER BY AFFI.SORT_NO DESC
+    </select>
+</mapper>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KB Innovation HUB</title>
+
+    <!-- 공통 스타일 시트 -->
+    <link rel="stylesheet" href="/kbinnovationhub_devadm/css/swiper-bundle.min.css">
+    <link rel="stylesheet" href="/kbinnovationhub_devadm/css/flatpickr.min.css">
+    <link rel="stylesheet" href="/kbinnovationhub_devadm/css/base.css">
+    <link rel="stylesheet" href="/kbinnovationhub_devadm/css/board.css">
+    <link rel="stylesheet" href="/kbinnovationhub_devadm/css/common.css">
+    <link rel="stylesheet" href="/kbinnovationhub_devadm/css/main.css">
+    <link rel="stylesheet" href="/kbinnovationhub_devadm/css/sub.css">
+    
+    <!-- 임시 스크립트: 헤더/푸터 컴포넌트 (작업용 임시 파일이므로 개발단계부터는 스크립트 파일 안에 HTML 코드 사용) -->
+    <script src="/kbinnovationhub_devadm/component/header_preview.js"></script>
+    <script src="/kbinnovationhub_devadm/component/footer_preview.js"></script>
+    <script>
+        const ENV = 'dev'
+    </script>
+
+    <!-- 공통 스크립트 -->
+    <script src="/kbinnovationhub_devadm/js/scrollreveal.min.js"></script>
+    <script src="/kbinnovationhub_devadm/js/gsap.min.js"></script>
+    <script src="/kbinnovationhub_devadm/js/ScrollToPlugin.min.js"></script>
+    <script src="/kbinnovationhub_devadm/js/ScrollTrigger.min.js"></script>
+    <script src="/kbinnovationhub_devadm/js/lenis.min.js"></script>
+    <script src="/kbinnovationhub_devadm/js/split-type.min.js"></script>
+    <script src="/kbinnovationhub_devadm/js/echarts.min.js"></script>
+    <script src="/kbinnovationhub_devadm/js/echarts-wordcloud.min.js"></script>
+    <script src="/kbinnovationhub_devadm/js/flatpickr.js"></script>
+    <script src="/kbinnovationhub_devadm/js/ko.js"></script>
+    <script src="/kbinnovationhub_devadm/js/swiper-bundle.min.js"></script>
+    <script src="/kbinnovationhub_devadm/js/countUp.umd.js"></script>
+    <script src="/kbinnovationhub_devadm/js/common.js"></script>
+</head>
+<body>
+    <!-- 헤더 -->
+    <app-header></app-header>
+
+    <!-- 본문 -->
+    <main class="main">
+        <div class="nurture nurture-domestic">
+            <div class="section section-cases section-border">
+                <div class="section-wrap">
+                    <h3 class="section-heading">육성 프로그램</h3>
+                    <div class="section-context">
+                        <h4 class="section-title"><span class="block"><span class="highlight">제휴</span><sup>01</sup></span></h4>
+                        <p class="section-text">상품·서비스 개선 및 출시 등 KB와의 실질적인 협업 논의 지원을 위해 유관 부서 실무자와 ‘1:1 밋업’ 등 제휴 연계 프로그램을 제공합니다.</p>
+                    </div>
+                    <div class="section-flex">
+                        <div class="side"></div>
+                        <div class="contents">
+                            <div class="cases">
+                                <div class="cases-head">
+                                    <p class="title">대표 사례</p>
+                                    <div class="controls">
+                                        <div class="swiper-pagination"></div>
+                                        <div class="swiper-button-prev"></div>
+                                        <div class="swiper-button-next"></div>
+                                    </div>
+                                </div>
+                                <div class="cases-body">
+                                    <div class="swiper cases-slider">
+                                        <div class="swiper-wrapper">
+                                            <div class="swiper-slide">
+                                                <div class="thumbnail"><img th:src="|\kbinnovationhub_devadm${affiliate.affiliate_path + affiliate.affiliate_file_name}|" alt=""></div>
+                                                <p class="sub"><b th:text="${affiliate.affiliate_nm}"></b> X <span th:text="${affiliate.starter_nm}"></span></p>
+                                                <p class="title" th:text="${affiliate.srvc_nm}"></p>
+                                                <div class="chips"><span class="chip" th:text="${affiliate.ctgry_nm}"></span></div>
+                                            </div>
+                                            <div class="swiper-slide" th:each="list : ${selectList}" th:if="${list.affiliate_path != null}">
+                                                <div class="thumbnail"><img th:src="|\kbinnovationhub_devadm${list.affiliate_path + list.affiliate_file_name}|" alt=""></div>
+                                                <p class="sub">
+                                                    <b th:text="${list.affiliate_nm}"></b> X <span th:text="${list.starter_nm}"></span>
+                                                </p>
+                                                <p class="title" th:text="${list.srvc_nm}"></p>
+                                                <div class="chips"><span class="chip" th:text="${list.ctgry_nm}"></span></div>
+                                            </div>
+                                        </div>
+                                        <div class="swiper-scrollbar"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 푸터 -->
+    <app-footer></app-footer>
+
+    <script>
+    window.addEventListener('DOMContentLoaded', () => {
+        slider();
+    });
+    
+    function slider() {
+        var slider = new Swiper('.cases-slider', {
+            speed: 400,
+            spaceBetween: 16,
+            slidesPerView: 1.5,
+            slidesPerGroup: 1,
+            scrollbar: {
+                el: '.section-cases .swiper-scrollbar',
+                draggable: true,
+            },
+            pagination: {
+                el: '.section-cases .swiper-pagination',
+                type: 'fraction',
+                renderFraction: function (currentClass, totalClass) {
+                    return '<span class="' + currentClass + '"></span> / <span class="' + totalClass + '"></span>';
+                }
+            },
+            navigation: {
+                nextEl: '.section-cases .swiper-button-next',
+                prevEl: '.section-cases .swiper-button-prev',
+            },
+            breakpoints: {
+                1025: {
+                    spaceBetween: 24,
+                    slidesPerView: 2.245,
+                    slidesPerGroup: 1,
+                }
+            }
+        });
+    }
+    </script>
+</body>
+</html>

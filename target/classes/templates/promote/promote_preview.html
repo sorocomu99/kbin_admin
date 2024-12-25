@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KB Innovation HUB | 미리보기</title>
+
+    <!-- 공통 스타일 시트 -->
+    <link rel="stylesheet" href="/kbinnovationhub_devadm/css/swiper-bundle.min.css">
+    <link rel="stylesheet" href="/kbinnovationhub_devadm/css/flatpickr.min.css">
+    <link rel="stylesheet" href="/kbinnovationhub_devadm/css/base.css">
+    <link rel="stylesheet" href="/kbinnovationhub_devadm/css/board.css">
+    <link rel="stylesheet" href="/kbinnovationhub_devadm/css/common.css">
+    <link rel="stylesheet" href="/kbinnovationhub_devadm/css/main.css">
+    <link rel="stylesheet" href="/kbinnovationhub_devadm/css/sub.css">
+    
+    <!-- 임시 스크립트: 헤더/푸터 컴포넌트 (작업용 임시 파일이므로 개발단계부터는 스크립트 파일 안에 HTML 코드 사용) -->
+    <script src="/kbinnovationhub_devadm/component/header_preview.js"></script>
+    <script src="/kbinnovationhub_devadm/component/footer_preview.js"></script>
+
+    <!-- 공통 스크립트 -->
+    <script src="/kbinnovationhub_devadm/js/scrollreveal.min.js"></script>
+    <script src="/kbinnovationhub_devadm/js/gsap.min.js"></script>
+    <script src="/kbinnovationhub_devadm/js/ScrollToPlugin.min.js"></script>
+    <script src="/kbinnovationhub_devadm/js/ScrollTrigger.min.js"></script>
+    <script src="/kbinnovationhub_devadm/js/lenis.min.js"></script>
+    <script src="/kbinnovationhub_devadm/js/split-type.min.js"></script>
+    <script src="/kbinnovationhub_devadm/js/echarts.min.js"></script>
+    <script src="/kbinnovationhub_devadm/js/echarts-wordcloud.min.js"></script>
+    <script src="/kbinnovationhub_devadm/js/flatpickr.js"></script>
+    <script src="/kbinnovationhub_devadm/js/ko.js"></script>
+    <script src="/kbinnovationhub_devadm/js/swiper-bundle.min.js"></script>
+    <script src="/kbinnovationhub_devadm/js/countUp.umd.js"></script>
+    <script src="/kbinnovationhub_devadm/js/common.js"></script>
+</head>
+<body>
+    <!-- 헤더 -->
+    <app-header></app-header>
+
+    <!-- 본문 -->
+    <main class="main">
+        <div class="nurture nurture-domestic">
+            <div class="section-intro">
+                <div class="sticky">
+                    <div class="section-top">
+                        <div class="section-top-wrap">
+                            <nav aria-label="Breadcrumb" class="breadcrumb" data-breadcrub-theme="light">
+                                <ul>
+                                    <li class="item"><a href="/"><i class="icon icon-home"></i><span class="blind">HOME</span></a></li>
+                                    <li class="item"><a href="javascript:">스타트업 육성</a></li>
+                                    <li class="item"><span aria-current="page">국내 프로그램</span></li>
+                                </ul>
+                            </nav>
+                            <h2 class="title">국내 프로그램</h2>
+                        </div>
+                    </div>
+                    <div class="background">
+                        <img class="item" src="/kbinnovationhub_devadm/images/sub/nurture/global/intro-background-domestic.jpg" alt="">
+                    </div>
+                    <div class="block">
+                        <div class="flex">
+                            <div class="side">
+                                <p class="heading">KB금융그룹 내 인프라를 <br>활용하여 스타트업의 <br>성장을 지원합니다</p>
+                            </div>
+                            <div class="contents">
+                                <div class="chart-box">
+                                    <p class="title">육성기업</p>
+                                    <div class="chart chart-nurture">
+                                        <div id="nurtureChart" class="item"></div>
+                                    </div>
+                                    <p class="footnote" th:text="${promote.crtr_ym}"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 푸터 -->
+    <app-footer></app-footer>
+
+    <script th:inline="javascript">
+    window.addEventListener('DOMContentLoaded', () => {
+        introduce();
+        nurtureChart();
+
+        setTimeout(() => {
+            window.scrollTo(0, 500);
+        }, 100);
+    });
+
+    function introduce() {
+        const tl = gsap.timeline();
+
+        gsap.to('.nurture .section-intro .background', 0.65, { ease: 'power1.out', opacity: 1, delay: 0.2 });
+
+        tl.fromTo('.nurture .section-intro .background', 1.5, {
+            top: 'calc(1.8vw + 340px)', width: '90%', maxWidth: '1420px', maxHeight: '460px', height: 'calc(95vh - 380px)', borderRadius: '24px'
+        }, {
+            ease: 'power2.inOut', top: 'calc(0vw + 0px)', maxWidth: '100vw', width: '100%', maxHeight: '100vh', height: 'calc(100vh - 0px)', borderRadius: '0px',
+        })
+        tl.to('.section-top', { opacity: 0, yPercent: -10 }, '<+15%')
+        tl.fromTo('.nurture .section-intro .heading', 0.35, { opacity: 0, yPercent: 35 }, { opacity: 1, yPercent: 0 }, '>+25%')
+        tl.fromTo('.nurture .section-intro .chart-box', 0.35, { opacity: 0, yPercent: 35 }, { opacity: 1, yPercent: 0 }, '<+35%')
+        tl.to('.nurture .section-intro .background .item', 0.35, { opacity: 0.6 }, '<')
+        .to({}, 1, {})
+
+        ScrollTrigger.create({
+            animation: tl,
+            trigger: '.section-intro',
+            start: 'top top',
+            end: 'bottom bottom',
+            scrub: 1,
+            // markers: true
+        });
+    }
+
+    function nurtureChart() {
+        const chart = echarts.init(document.getElementById('nurtureChart'), null, {
+            renderer: 'svg',
+        });
+
+        // 차트 데이터 배열에 담기
+        var data = [[${promote}]];
+
+        var graph_yr = [];
+        graph_yr.push(data.graph1_yr);
+        graph_yr.push(data.graph2_yr);
+        graph_yr.push(data.graph3_yr);
+        graph_yr.push(data.graph4_yr);
+        graph_yr.push(data.graph5_yr);
+        graph_yr.push("????");
+
+        for(var i = 0; i < graph_yr.length; i++) {
+            if(graph_yr[i] == null) {
+                graph_yr.splice(i, 1);
+            }
+        }
+
+        // data 데이터 배열에 담기
+        var graph_nocs = [];
+        graph_nocs.push(Number(data.graph1_nocs));
+        graph_nocs.push(Number(data.graph2_nocs));
+        graph_nocs.push(Number(data.graph3_nocs));
+        graph_nocs.push(Number(data.graph4_nocs));
+        graph_nocs.push(Number(data.graph5_nocs));
+
+        for(var i = 0; i < graph_nocs.length; i++) {
+            if(graph_nocs[i] == 0) {
+                graph_nocs.splice(i, 1);
+            }
+        }
+
+        // 최대 자릿 수 구해서 그래프 채우기
+        // 1. 값에 0.2 증가하게 작업
+        var lastValue = graph_nocs[graph_nocs.length - 1] + (graph_nocs[graph_nocs.length - 1] * 0.1);
+        // 3. 마지막 값 대입
+        graph_nocs.push(lastValue);
+
+        // 차트 데이터
+        const categories = graph_yr;
+        const dataValues = graph_nocs;
+        
+        window.addEventListener('resize', () => chart.resize());
+
+        chart.setOption({
+            grid: {
+                top: '0%',
+                left: '0%',
+                right: '0%',
+                bottom: '0%',
+            },
+            // tooltip: {},
+            xAxis: {
+                type: 'category',
+                data: categories,
+                boundaryGap: false,
+                position: 'top',
+                axisLabel: {
+                    padding: [0, 0, 0, 10],
+                    align: 'left',
+                    margin: -70,
+                    formatter: function (value, index) {
+                        if (index < graph_nocs.length - 1) {
+                            if (index === graph_nocs.length - 2) {
+                                return `{label|${value}}\n{value2|${dataValues[index].toLocaleString()}}`;
+                            } else {
+                                return `{label|${value}}\n{value|${dataValues[index].toLocaleString()}}`;
+                            }
+                        }
+                    },
+                    rich: {
+                        label: {
+                            padding: (handler.device === 'desktop') ? [0, 0, 0, 0] : [0, 0, 0, -5],
+                            fontFamily: 'KBFG Text',
+                            fontSize: (handler.device === 'desktop') ? 16 : 13,
+                            fontWeight: 'medium',
+                            color: '#333'
+                        },
+                        value: {
+                            padding: (handler.device === 'desktop') ? [16, 0, 0, 0] : [16, 0, 0, -5],
+                            fontFamily: 'KBFG Display',
+                            fontSize: (handler.device === 'desktop') ? 24 : 16,
+                            fontWeight: 'bold',
+                            color: '#252525'
+                        },
+                        value2: {
+                            padding: (handler.device === 'desktop') ? [16, 0, 0, 0] : [16, 0, 0, -5],
+                            fontFamily: 'KBFG Display',
+                            fontSize: (handler.device === 'desktop') ? 24 : 16,
+                            fontWeight: 'bold',
+                            color: '#FCAF17'
+                        }
+                    },
+                },
+                axisLine: {
+                    show: false,
+                },
+                axisTick: {
+                    show: false,
+                },
+                splitLine: {
+                    show: true,
+                    lineStyle: {
+                        type: 'solid',
+                        color: '#f3f3f3',
+                        width: 1
+                    }
+                },
+            },
+            yAxis: {
+                show: false,
+                max: 500
+            },
+            visualMap: {
+                type: 'piecewise',
+                show: false,
+                dimension: 0,
+                seriesIndex: 0,
+                opacity: 1,
+                pieces: [
+                    { gt: -1, lt: 1, color: '#fff2cf' },
+                    { gt: 1, lt: 2, color: '#ffe59f' },
+                    { gt: 2, lt: 3, color: '#fed870' },
+                    { gt: 3, lt: 4, color: '#fecb40' },
+                    { gt: 4, lt: 5, color: '#fcaf17' },
+                ]
+            },
+            series: [
+                {
+                    name: '육성기업',
+                    type: 'line',
+                    showSymbol: false,
+                    data: dataValues,
+                    smooth: true,
+                    itemStyle: {
+                        color: function(params) {
+                            const colors = [
+                                'rgba(254,190,16,0.2)', 
+                                'rgba(254,190,16,0.4)', 
+                                'rgba(254,190,16,0.6)', 
+                                'rgba(254,190,16,0.8)', 
+                                'rgba(252,175,23,1)'
+                            ];
+                            return colors[params.dataIndex];
+                        }
+                    },
+                    markArea: {
+                        itemStyle: {
+                            color: new echarts.graphic.LinearGradient(0, 1, 0, 0, [
+                                { offset: 0, color: 'rgba(251, 228, 163, 1)' },
+                                { offset: 1, color: 'rgba(251, 228, 163, 0)' }
+                            ])
+                        },
+                        data: [
+                            [
+                                {
+                                    xAxis: '2024'
+                                },
+                                {
+                                    xAxis: '????'
+                                }
+                            ],
+                        ]
+                    },
+                    lineStyle: {},
+                    areaStyle: {},
+                    emphasis: {
+                        scale: false,
+                        label: {
+                            offset: [0, -10]
+                        }
+                    }
+                }
+            ]
+        });
+    }
+    </script>
+</body>
+</html>

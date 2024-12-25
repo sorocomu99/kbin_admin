@@ -1,0 +1,283 @@
+<!--
+ 파일명     : result.html
+ 관련자바   : ResultController
+ 화면명     : 육성 현황 관리
+ 설명       : 육성 현황 등록, 수정, 조회 처리
+ 최초개발일 : 2024.11.11
+ 최초개발자 : 양윤지
+ ==========================================================
+   수정일            수정자           설명
+ ==========================================================
+-->
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragment/config :: configFragment"></head>
+<body>
+<div class="wrap">
+    <div th:replace="fragment/header :: headerFragment"></div>
+    <main class="main">
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <div class="paper">
+                        <h2 class="h4">육성 현황 관리</h2>
+                        <div class="mt-4">
+                            <form id="result_form" th:action="@{/result/save}" method="post" name="result_form">
+                                <input type="hidden" name="menu_id" th:value="${menuId}"/>
+                                <input type="hidden" id="rslt_sn" name="rslt_sn" th:value="${result?.rslt_sn}">
+                                <p class="h5">육성기업</p>
+                                <table class="table table-bordered align-middle">
+                                    <tbody>
+                                    <tr>
+                                        <th class="bg-light" style="width:15%">선발기업 수</th>
+                                        <td>
+                                            <th:block th:if="${result == null or result == ''}">
+	                                            <div class="d-flex align-items-center">
+	                                                <input type="text" class="form-control w-auto" placeholder="ex) 285" name="ent_nocs" oninput="formatNumber(this)" value="">
+	                                                <p class="my-0 ms-2">개사</p>
+	                                            </div>
+                                            </th:block>
+                                            <th:block th:if="${result != null and result != ''}">
+	                                            <div class="d-flex align-items-center">
+	                                                <input type="text" class="form-control w-auto" placeholder="ex) 285" name="ent_nocs" oninput="formatNumber(this)" th:value="${#numbers.formatInteger(result?.ent_nocs, 0, 'COMMA')}">
+	                                                <p class="my-0 ms-2">개사</p>
+	                                            </div>
+                                            </th:block>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th class="bg-light">기준년월</th>
+                                        <td>
+                                            <th:block th:if="${result == null or result == ''}">
+                                                <input type="text" class="form-control w-auto" placeholder="ex) 2024.07" maxlength="7" oninput="" name="ent_crtr_ymd" value="">
+                                            </th:block>
+                                            <th:block th:if="${result != null and result != ''}">
+                                                <input type="text" class="form-control w-auto" placeholder="ex) 2024.07" maxlength="7" oninput="" name="ent_crtr_ymd" th:value="${result?.ent_crtr_ymd}">
+                                            </th:block>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <p class="h5 mt-4">투자</p>
+                                <table class="table table-bordered align-middle">
+                                    <tbody>
+                                    <tr>
+                                        <th class="bg-light" style="width:15%">투자 수</th>
+                                        <td>
+                                            <th:block th:if="${result == null or result == ''}">
+                                                <div class="d-flex align-items-center">
+	                                                <input type="text" class="form-control w-auto" placeholder="ex) 2,178" name="invest_nocs" oninput="formatNumber(this)" value="">
+	                                                <p class="my-0 ms-2">억원</p>
+	                                            </div>
+                                            </th:block>
+                                            <th:block th:if="${result != null and result != ''}">
+	                                            <div class="d-flex align-items-center">
+	                                                <input type="text" class="form-control w-auto" placeholder="ex) 2,178" name="invest_nocs" oninput="formatNumber(this)" th:value="${#numbers.formatInteger(result?.invest_nocs, 3, 'COMMA')}">
+	                                                <p class="my-0 ms-2">억원</p>
+	                                            </div>
+                                            </th:block>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th class="bg-light">기준년월</th>
+                                        <td>
+                                            <th:block th:if="${result == null or result == ''}">
+                                                <input type="text" class="form-control w-auto" placeholder="ex) 2024.07" maxlength="7" oninput="" name="invest_crtr_ymd" value="">
+                                            </th:block>
+                                            <th:block th:if="${result != null and result != ''}">
+                                                <input type="text" class="form-control w-auto" placeholder="ex) 2024.07" maxlength="7" oninput="" name="invest_crtr_ymd" th:value="${result?.invest_crtr_ymd}">
+                                            </th:block>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <p class="h5 mt-4">계열사 제휴</p>
+                                <table class="table table-bordered align-middle">
+                                    <tbody>
+                                    <tr>
+                                        <th class="bg-light" style="width:15%">제휴 건수</th>
+                                        <td>
+                                            <th:block th:if="${result == null or result == ''}">
+                                                <div class="d-flex align-items-center">
+	                                                <input type="text" class="form-control w-auto" placeholder="ex) 330" name="affiliate_nocs" oninput="formatNumber(this)" value="">
+	                                                <p class="my-0 ms-2">건</p>
+	                                            </div>
+                                            </th:block>
+                                            <th:block th:if="${result != null and result != ''}">
+	                                            <div class="d-flex align-items-center">
+	                                                <input type="text" class="form-control w-auto" placeholder="ex) 330" name="affiliate_nocs" oninput="formatNumber(this)" th:value="${#numbers.formatInteger(result?.affiliate_nocs, 0, 'COMMA')}">
+	                                                <p class="my-0 ms-2">건</p>
+	                                            </div>
+	                                        </th:block>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th class="bg-light">기준년월</th>
+                                        <td>
+                                            <th:block th:if="${result == null or result == ''}">
+                                                <input type="text" class="form-control w-auto" placeholder="ex) 2024.07" oninput="" name="affiliate_crtr_ymd" value="">
+                                            </th:block>
+                                            <th:block th:if="${result != null and result != ''}">
+                                                <input type="text" class="form-control w-auto" placeholder="ex) 2024.07" oninput="" name="affiliate_crtr_ymd" th:value="${result?.affiliate_crtr_ymd}">
+                                            </th:block>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <div class="button-container">
+                                    <a id="preview-button" href="javascript:previewPage()" class="btn btn-outline-primary">미리보기</a>
+                                    <button type="button" class="btn btn-primary" onclick="javascript:confirmMsg()">저장하기</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script th:inline="javascript">
+    // 페이지 로드 시 실행
+    window.onload = function () {
+        // 페이지 로드 시 메시지 확인 및 알림 표시
+        // 수정 및 등록 시 띄울 알림창
+        const msg = /*[[${msg}]]*/ '';
+        if (msg) alert(msg);
+    }
+
+    // yyyy.mm 으로 쪼개기
+    function formatInput(input) {
+        let value = input.value.replace(/[^0-9]/g, ''); // 숫자만 허용
+        // 숫자를 3자리마다 콤마 삽입
+        let formattedValue = value.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        // 입력값 업데이트
+        input.value = formattedValue;
+    }
+
+    // , 붙히기(숫자)
+    function formatNumber(input) {
+        input.value = input.value.replace(/[^0-9]/g, '');
+        input.value = Number(input.value).toLocaleString('ko-KR');
+    }
+
+    // 프리뷰 페이지로 이동
+    function previewPage() {
+        // 육성기업 - 선발기업 수 입력 확인
+        var ent_nocs = $('input[name=ent_nocs]').val();
+        if(ent_nocs.trim() == "") {
+            alert("선발기업 수를 입력 해 주세요.");
+            return false;
+        }
+
+        // 육성기업 - 기준년월 입력 확인
+        var ent_crtr_ymd = $('input[name=ent_crtr_ymd]').val();
+        if(ent_crtr_ymd.trim() == "") {
+            alert("육성기업 기준년월을 입력 해 주세요.");
+            return false;
+        }
+
+        // 투자 - 투자 수 입력 확인
+        var invest_nocs = $('input[name=invest_nocs]').val();
+        if(invest_nocs.trim() == "") {
+            alert("투자 수를 입력 해 주세요.");
+            return false;
+        }
+
+        // 투자 - 기준년월 입력 확인
+        var invest_crtr_ymd = $('input[name=invest_crtr_ymd]').val();
+        if(invest_crtr_ymd.trim() == "") {
+            alert("투자 기준년월을 입력 해 주세요.");
+            return false;
+        }
+
+        // 계열사 제휴 - 제휴 건수 입력 확인
+        var affiliate_nocs = $('input[name=affiliate_nocs]').val();
+        if(affiliate_nocs.trim() == "") {
+            alert("제휴 건수를 입력 해 주세요.");
+            return false;
+        }
+
+        // 계열사 제휴 - 기준년월 입력 확인
+        var affiliate_crtr_ymd = $('input[name=affiliate_crtr_ymd]').val();
+        if(affiliate_crtr_ymd.trim() == "") {
+            alert("계열사 제휴 기준년월을 입력 해 주세요.");
+            return false;
+        }
+        
+        $("#rslt_sn").val("1");
+
+        const form = document.forms['result_form'];
+        form.action = '/kbinnovationhub_devadm/result/preview'; // 전송할 URL
+        form.method = 'POST';            // 전송 방식
+        form.target = '_blank';          // 새 창에서 열기
+        form.submit();                   // 폼 제출
+    }
+
+    // 컨펌 메시지 띄우는 함수
+    function confirmMsg() {
+        // 육성기업 - 선발기업 수 입력 확인
+        var ent_nocs = $('input[name=ent_nocs]').val();
+        if(ent_nocs.trim() == "") {
+            alert("선발기업 수를 입력 해 주세요.");
+            return false;
+        }
+
+        // 육성기업 - 기준년월 입력 확인
+        var ent_crtr_ymd = $('input[name=ent_crtr_ymd]').val();
+        if(ent_crtr_ymd.trim() == "") {
+            alert("육성기업 기준년월을 입력 해 주세요.");
+            return false;
+        }
+
+        // 투자 - 투자 수 입력 확인
+        var invest_nocs = $('input[name=invest_nocs]').val();
+        if(invest_nocs.trim() == "") {
+            alert("투자 수를 입력 해 주세요.");
+            return false;
+        }
+
+        // 투자 - 기준년월 입력 확인
+        var invest_crtr_ymd = $('input[name=invest_crtr_ymd]').val();
+        if(invest_crtr_ymd.trim() == "") {
+            alert("투자 기준년월을 입력 해 주세요.");
+            return false;
+        }
+
+        // 계열사 제휴 - 제휴 건수 입력 확인
+        var affiliate_nocs = $('input[name=affiliate_nocs]').val();
+        if(affiliate_nocs.trim() == "") {
+            alert("제휴 건수를 입력 해 주세요.");
+            return false;
+        }
+
+        // 계열사 제휴 - 기준년월 입력 확인
+        var affiliate_crtr_ymd = $('input[name=affiliate_crtr_ymd]').val();
+        if(affiliate_crtr_ymd.trim() == "") {
+            alert("계열사 제휴 기준년월을 입력 해 주세요.");
+            return false;
+        }
+
+        let result = confirm("저장 하시겠습니까?");
+        if(!result) {
+            return false;
+        } else {
+            var rslt_sn = $("input[name=rslt_sn]").val();
+            // PK 값이 비어있으면 기본 값 0 세팅
+            if(rslt_sn == "") {
+                $("input[name=rslt_sn]").val(0);
+            }
+            // 폼 태그 서브밋 보내기
+            const form = document.forms['result_form'];
+            form.action = '/kbinnovationhub_devadm/result/save'; // 전송할 URL
+            form.method = 'POST';            // 전송 방식
+            form.target = '';          // 새 창에서 열기
+            form.submit();                   // 폼 제출
+        }
+    }
+</script>
+
+<script th:src="@{/js/admin.js}"></script>
+
+</body>
+</html>

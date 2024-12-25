@@ -1,0 +1,91 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kb.inno.admin.DAO.MemberDAO">
+    <!-- 관리자 계정 리스트 조회 -->
+    <select id="selectList" resultType="com.kb.inno.admin.DTO.MemberDTO">
+        /* 관리자 계정 리스트 조회 */
+        SELECT MNGR_SN
+               , MNGR_ID
+               , MNGR_NM
+               , MNGR_EML
+               , LAST_CNTN_DT
+               , FRST_RGTR
+               , FRST_REG_DT
+               , LAST_MDFR
+               , LAST_MDFCN_DT
+          FROM KB_MNGR_MBR_INFO
+         ORDER BY MNGR_SN DESC
+    </select>
+    <!-- 관리자 계정 상세 조회 -->
+    <select id="select" parameterType="int" resultType="com.kb.inno.admin.DTO.MemberDTO">
+        /* 관리자 계정 상세 조회 */
+        SELECT MNGR_SN
+             , MNGR_ID
+             , MNGR_NM
+             , MNGR_EML
+             , LAST_CNTN_DT
+             , FRST_RGTR
+             , FRST_REG_DT
+             , LAST_MDFR
+             , LAST_MDFCN_DT
+          FROM KB_MNGR_MBR_INFO
+         WHERE MNGR_SN = #{memberId}
+    </select>
+    <!-- 관리자 계정 아이디 중복 체크 -->
+    <select id="selectId" parameterType="String" resultType="int">
+        /* 관리자 계정 아이디 중복 체크 */
+        SELECT COUNT(*)
+          FROM KB_MNGR_MBR_INFO
+         WHERE MNGR_ID = #{memberId}
+    </select>
+    <!-- 관리자 계정 추가 -->
+    <insert id="insert" parameterType="com.kb.inno.admin.DTO.MemberDTO">
+        /* 관리자 계정 추가 */
+        INSERT INTO KB_MNGR_MBR_INFO
+        (
+         MNGR_SN
+       , MNGR_ID
+       , MNGR_PSWD
+       , MNGR_NM
+       , MNGR_EML
+       , LAST_CNTN_DT
+       , FRST_RGTR
+       , FRST_REG_DT
+       , LAST_MDFR
+       , LAST_MDFCN_DT
+        )
+        VALUES
+        (
+         MNGR_SN_SEQ.NEXTVAL
+       , #{mngr_id}
+       , #{mngr_pswd}
+       , #{mngr_nm}
+       , #{mngr_eml}
+       , #{last_cntn_dt}
+       , #{frst_rgtr}
+       , SYSDATE
+       , #{last_mdfr}
+       , SYSDATE
+        )
+    </insert>
+    <!-- 관리자 계정 수정 -->
+    <update id="update" parameterType="com.kb.inno.admin.DTO.MemberDTO">
+        /* 관리자 계정 수정 */
+        UPDATE KB_MNGR_MBR_INFO
+           SET MNGR_PSWD     = #{mngr_pswd},
+               MNGR_NM       = #{mngr_nm},
+               MNGR_EML      = #{mngr_eml},
+               LAST_CNTN_DT  = #{last_cntn_dt},
+               LAST_MDFR     = #{last_mdfr},
+               LAST_MDFCN_DT = SYSDATE
+         WHERE MNGR_SN       = #{mngr_sn}
+    </update>
+    <!-- 관리자 계정 삭제 -->
+    <delete id="delete" parameterType="int">
+        /* 관리자 계정 삭제 */
+        DELETE
+        FROM KB_MNGR_MBR_INFO
+        WHERE MNGR_SN = #{memberId}
+    </delete>
+</mapper>

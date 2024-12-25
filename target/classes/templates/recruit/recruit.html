@@ -1,0 +1,168 @@
+<!--
+ 파일명     : recruit.html
+ 관련자바   : RecruitController
+ 화면명     : 국내 프로그램 - 채용 지원 관리
+ 설명       : 국내 프로그램 - 채용 지원 등록, 수정, 조회 처리
+ 최초개발일 : 2024.11.11
+ 최초개발자 : 양윤지
+ ==========================================================
+   수정일            수정자           설명
+ ==========================================================
+-->
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragment/config :: configFragment"></head>
+<body>
+    <div class="wrap">
+        <div th:replace="fragment/header :: headerFragment"></div>
+        <main class="main">
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        <div class="paper">
+                            <h2 class="h4">국내 프로그램 - 채용 지원 관리</h2>
+                            <div class="mt-4">
+                                <form th:action="@{/recruit/save}" method="post" name="recruit_form">
+                                    <input type="hidden" name="menu_id" th:value="${menuId}"/>
+                                    <input type="hidden" th:value="${recruit?.employ_sn}" name="employ_sn"/>
+                                    <table class="table table-bordered align-middle">
+                                        <tbody>
+                                            <tr>
+                                                <th class="bg-light" width="20%">연도</th>
+                                                <td>
+                                                    <select class="form-select" name="employ_yr">
+                                                        <option>선택</option>
+                                                        <!-- <option value="" th:disabled th:hidden="true">-선택-</option> -->
+                                                        <option th:each="i : ${#numbers.sequence(#dates.year(#dates.createNow()) - 5, #dates.year(#dates.createNow()) + 5)}" th:value="${i}" th:text="${i}" th:selected="${recruit?.employ_yr} == ${i}"></option>
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th class="bg-light" width="20%">채용 수</th>
+                                                <td>
+                                                    <input type="number" class="form-control" name="employ_emp_nocs" placeholder="ex) 1,142" th:value="${recruit?.employ_emp_nocs}">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th class="bg-light" width="20%">지원 금액</th>
+                                                <td>
+                                                    <input type="text" class="form-control" name="sprt_amt" placeholder=" ex) 6.7" th:value="${recruit?.sprt_amt}">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th class="bg-light" width="20%">채용 기업 수</th>
+                                                <td>
+                                                    <input type="number" class="form-control" name="employ_ent_nocs" placeholder=" ex) 116" th:value="${recruit?.employ_ent_nocs}">
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div class="button-container">
+                                        <a id="preview-button" href="javascript:previewPage()" class="btn btn-outline-primary">미리보기</a>
+                                        <button type="button" class="btn btn-primary" onclick="javascript:confirmMsg()">저장하기</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+<script th:src="@{/js/admin.js}"></script>
+
+<script th:inline="javascript">
+    // 페이지 로드 시 실행
+    window.onload = function () {
+        // 페이지 로드 시 메시지 확인 및 알림 표시
+        // 수정 및 등록 시 띄울 알림창
+        const msg = /*[[${msg}]]*/ '';
+        if (msg) alert(msg);
+
+        // 현재 년도 기준으로 셀렉트 박스 선택 되게 하기
+        // 만약 값이 없으면 세팅(등록)
+        var year = new Date().getFullYear();
+        var select = document.getElementsByName("employ_yr");
+        var options = select[0].options;
+        // 옵션들 중에서 해당 되는 년도를 선택
+        for(var i = 0; i < options.length; i++) {
+            if(options[i].value == String(year) && options[options.selectedIndex].value == '') {
+                options[i].selected = true;
+            }
+        }
+    };
+
+    function previewPage() {
+        // 채용 수 입력 확인
+        var employ_emp_nocs = $('input[name=employ_emp_nocs]').val();
+        if(employ_emp_nocs == "") {
+            alert("채용 수를 입력하세요.");
+            return false;
+        }
+
+        // 지원 금액 입력 확인
+        var sprt_amt = $('input[name=sprt_amt]').val();
+        if(sprt_amt.trim() == "") {
+            alert("지원 금액을 입력하세요.");
+            return false;
+        }
+
+        // 채용 기업 수 입력 확인
+        var employ_ent_nocs = $('input[name=employ_ent_nocs]').val();
+        if(employ_ent_nocs == "") {
+            alert("채용 기업 수를 입력하세요.");
+            return false;
+        }
+
+        const form = document.forms['recruit_form'];
+        form.action = '/kbinnovationhub_devadm/recruit/preview'; // 전송할 URL
+        form.method = 'POST';            // 전송 방식
+        form.target = '_blank';          // 새 창에서 열기
+        form.submit();                   // 폼 제출
+    }
+
+    // 컨펌 메시지 띄우는 함수
+    function confirmMsg() {
+        // 채용 수 입력 확인
+        var employ_emp_nocs = $('input[name=employ_emp_nocs]').val();
+        if(employ_emp_nocs == "") {
+            alert("채용 수를 입력하세요.");
+            return false;
+        }
+
+        // 지원 금액 입력 확인
+        var sprt_amt = $('input[name=sprt_amt]').val();
+        if(sprt_amt.trim() == "") {
+            alert("지원 금액을 입력하세요.");
+            return false;
+        }
+
+        // 채용 기업 수 입력 확인
+        var employ_ent_nocs = $('input[name=employ_ent_nocs]').val();
+        if(employ_ent_nocs == "") {
+            alert("채용 기업 수를 입력하세요.");
+            return false;
+        }
+
+        let result = confirm("저장 하시겠습니까?");
+        if(!result) {
+            return false;
+        } else {
+            var graph_sn = $("input[name=employ_sn]").val();
+            // PK 값이 비어있으면 기본 값 0 세팅
+            if(graph_sn == "") {
+                $("input[name=employ_sn]").val(0);
+            }
+            // 폼 태그 서브밋 보내기
+            const form = document.forms['recruit_form'];
+            form.action = '/kbinnovationhub_devadm/recruit/save'; // 전송할 URL
+            form.method = 'POST';            // 전송 방식
+            form.target = '';          // 새 창에서 열기
+            form.submit();                   // 폼 제출
+        }
+    }
+</script>
+    
+</body>
+</html>

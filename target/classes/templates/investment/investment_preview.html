@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KB Innovation HUB</title>
+
+    <!-- 공통 스타일 시트 -->
+    <link rel="stylesheet" href="/kbinnovationhub_devadm/css/swiper-bundle.min.css">
+    <link rel="stylesheet" href="/kbinnovationhub_devadm/css/flatpickr.min.css">
+    <link rel="stylesheet" href="/kbinnovationhub_devadm/css/base.css">
+    <link rel="stylesheet" href="/kbinnovationhub_devadm/css/board.css">
+    <link rel="stylesheet" href="/kbinnovationhub_devadm/css/common.css">
+    <link rel="stylesheet" href="/kbinnovationhub_devadm/css/main.css">
+    <link rel="stylesheet" href="/kbinnovationhub_devadm/css/sub.css">
+    
+    <!-- 임시 스크립트: 헤더/푸터 컴포넌트 (작업용 임시 파일이므로 개발단계부터는 스크립트 파일 안에 HTML 코드 사용) -->
+    <script src="/kbinnovationhub_devadm/component/header_preview.js"></script>
+    <script src="/kbinnovationhub_devadm/component/footer_preview.js"></script>
+    <script>
+        const ENV = 'dev'
+    </script>
+
+    <!-- 공통 스크립트 -->
+    <script src="/kbinnovationhub_devadm/js/scrollreveal.min.js"></script>
+    <script src="/kbinnovationhub_devadm/js/gsap.min.js"></script>
+    <script src="/kbinnovationhub_devadm/js/ScrollToPlugin.min.js"></script>
+    <script src="/kbinnovationhub_devadm/js/ScrollTrigger.min.js"></script>
+    <script src="/kbinnovationhub_devadm/js/lenis.min.js"></script>
+    <script src="/kbinnovationhub_devadm/js/split-type.min.js"></script>
+    <script src="/kbinnovationhub_devadm/js/echarts.min.js"></script>
+    <script src="/kbinnovationhub_devadm/js/echarts-wordcloud.min.js"></script>
+    <script src="/kbinnovationhub_devadm/js/flatpickr.js"></script>
+    <script src="/kbinnovationhub_devadm/js/ko.js"></script>
+    <script src="/kbinnovationhub_devadm/js/swiper-bundle.min.js"></script>
+    <script src="/kbinnovationhub_devadm/js/countUp.umd.js"></script>
+    <script src="/kbinnovationhub_devadm/js/common.js"></script>
+</head>
+<body>
+    <!-- 헤더 -->
+    <app-header></app-header>
+
+    <!-- 본문 -->
+    <main class="main">
+        <div class="nurture nurture-domestic">
+            <div class="section section-investment section-background">
+                <div class="section-wrap">
+                    <div class="section-context">
+                        <h4 class="section-title"><span class="block"><span class="highlight">투자</span><sup>02</sup></span></h4>
+                        <p class="section-text">피치데이, 데모데이 등을 통해 스타트업에게 투자 IR 기회를 제공하고 그룹 CVC, SI 펀드 및 계열사 투자 재원을 활용해 성장 단계별 투자를 지원합니다.</p>
+                    </div>
+                    <div class="section-flex">
+                        <div class="side">
+                            <img class="kb-logo" src="/kbinnovationhub_devadm/images/sub/nurture/domestic/kb-logo-gray.svg" alt="">
+                        </div>
+                        <div class="contents">
+                            <div class="chart-box">
+                                <div class="flex">
+                                    <p class="title">누적 투자 금액</p>
+                                    <p class="text">(억원)</p>
+                                </div>
+                                <div class="chart chart-investment">
+                                    <div id="investmentChart" class="item"></div>
+                                </div>
+                                <p class="footnote" th:text="${investment.crtr_ym}"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 푸터 -->
+    <app-footer></app-footer>
+
+    <script th:inline="javascript">
+    window.addEventListener('DOMContentLoaded', () => {
+        investmentChart();
+    });
+    function investmentChart() {
+        const chart = echarts.init(document.getElementById('investmentChart'), null, {
+            renderer: 'svg',
+        });
+
+        // 차트 데이터 배열에 담기
+        var data = [[${investment}]];
+
+        var graph_yr = [];
+        graph_yr.push(data.graph1_yr);
+        graph_yr.push(data.graph2_yr);
+        graph_yr.push(data.graph3_yr);
+        graph_yr.push(data.graph4_yr);
+        graph_yr.push(data.graph5_yr);
+        graph_yr.push("????");
+
+        var graph_yr2 = [];
+        for(var i = 0; i < graph_yr.length; i++) {
+            if(graph_yr[i] != null) {
+                graph_yr2.push(graph_yr[i]);
+            }
+        }
+
+        // data 데이터 배열에 담기
+        var graph_nocs = [];
+        graph_nocs.push(Number(data.graph1_nocs));
+        graph_nocs.push(Number(data.graph2_nocs));
+        graph_nocs.push(Number(data.graph3_nocs));
+        graph_nocs.push(Number(data.graph4_nocs));
+        graph_nocs.push(Number(data.graph5_nocs));
+
+        var graph_nocs2 = [];
+        for(var i = 0; i < graph_nocs.length; i++) {
+            if(graph_nocs[i] != 0) {
+                graph_nocs2.push(graph_nocs[i]);
+            }
+        }
+
+        // 최대 자릿 수 구해서 그래프 채우기
+        // 1. 값에 0.2 증가하게 작업
+        var lastValue = graph_nocs2[graph_nocs2.length - 1] + (graph_nocs2[graph_nocs2.length - 1] * 0.1);
+        // 3. 마지막 값 대입
+        graph_nocs2.push(lastValue);
+
+        const categories = graph_yr2;
+        const dataValues = graph_nocs2;
+        
+        window.addEventListener('resize', () => chart.resize());
+
+        chart.setOption({
+            grid: {
+                top: '0%',
+                left: '0%',
+                right: '0%',
+                bottom: '0%',
+            },
+            // tooltip: {},
+            xAxis: {
+                type: 'category',
+                data: categories,
+                boundaryGap: false,
+                position: 'top',
+                axisLabel: {
+                    padding: [0, 0, 0, 16],
+                    align: 'left',
+                    margin: -70,
+                    formatter: function (value, index) {
+                        if(index < 5) {
+                            if(index === 4) {
+                                return `{label|${value}}\n{value2|${dataValues[index].toLocaleString()}}`;
+                            } else {
+                                return `{label|${value}}\n{value|${dataValues[index].toLocaleString()}}`;
+                            }
+                        }
+                    },
+                    rich: {
+                        label: {
+                            fontFamily: 'KBFG Text',
+                            fontSize: (handler.device === 'desktop') ? 16 : 13,
+                            fontWeight: 'medium',
+                            color: '#333'
+                        },
+                        value: {
+                            padding: [16, 0, 0, 0],
+                            fontFamily: 'KBFG Display',
+                            fontSize: (handler.device === 'desktop') ? 24 : 18,
+                            fontWeight: 'bold',
+                            color: '#252525'
+                        },
+                        value2: {
+                            padding: [16, 0, 0, 0],
+                            fontFamily: 'KBFG Display',
+                            fontSize: (handler.device === 'desktop') ? 24 : 18,
+                            fontWeight: 'bold',
+                            color: '#FCAF17'
+                        }
+                    },
+                },
+                axisLine: {
+                    show: false,
+                },
+                axisTick: {
+                    show: false,
+                },
+                splitLine: {
+                    show: true,
+                    lineStyle: {
+                        type: 'solid',
+                        color: '#f3f3f3',
+                        width: 1
+                    }
+                },
+            },
+            yAxis: {
+                show: false,
+                max: 5000,
+            },
+            visualMap: {
+                type: 'piecewise',
+                show: false,
+                dimension: 0,
+                seriesIndex: 0,
+                pieces: [
+                    { gt: -1, lt: 1, color: '#fff2cf' },
+                    { gt: 1, lt: 2, color: '#ffe59f' },
+                    { gt: 2, lt: 3, color: '#fed870' },
+                    { gt: 3, lt: 4, color: '#fecb40' },
+                    { gt: 4, lt: 5, color: '#fcaf17' },
+                ]
+            },
+            series: [
+                {
+                    name: '투자 금액',
+                    type: 'line',
+                    showSymbol: false,
+                    data: dataValues,
+                    smooth: true,
+                    itemStyle: {
+                        color: function(params) {
+                            const colors = [
+                                'rgba(254,190,16,0.2)', 
+                                'rgba(254,190,16,0.4)', 
+                                'rgba(254,190,16,0.6)', 
+                                'rgba(254,190,16,0.8)', 
+                                'rgba(252,175,23,1)'
+                            ];
+                            return colors[params.dataIndex];
+                        }
+                    },
+                    markArea: {
+                        itemStyle: {
+                            color: new echarts.graphic.LinearGradient(0, 1, 0, 0, [
+                                { offset: 0, color: 'rgba(255, 241, 201, 1)' },
+                                { offset: 1, color: 'rgba(255, 241, 201, 0)' }
+                            ])
+                        },
+                        data: [
+                            [
+                                {
+                                    xAxis: '2024'
+                                },
+                                {
+                                    xAxis: '????'
+                                }
+                            ],
+                        ]
+                    },
+                    lineStyle: {},
+                    areaStyle: {},
+                    emphasis: {
+                        scale: false,
+                        label: {
+                            offset: [0, -10]
+                        }
+                    }
+                }
+            ]
+        });
+    }
+    </script>
+</body>
+</html>
