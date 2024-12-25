@@ -18,13 +18,7 @@ import org.springframework.core.io.FileSystemResource;
 
 @RestController
 public class ImageController {
-/*	
-    public RedirectView redirectImage(@PathVariable String imageName) {
-		System.out.println("imageName==================="+imageName);
-        String imagePath = "file:///D:/fsfile/dev_kbinnovation/" + imageName;
-        return new RedirectView(imagePath);
-    }
-*/	
+
     @RequestMapping("/upload/{imageName:.+}")
 	@ResponseBody
     public ResponseEntity<Resource> getImage(@PathVariable String imageName) {
