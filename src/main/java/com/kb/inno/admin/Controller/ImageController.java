@@ -18,7 +18,6 @@ import org.springframework.core.io.FileSystemResource;
 
 @RestController
 public class ImageController {
-
     @RequestMapping("/upload/{imageName:.+}")
 	@ResponseBody
     public ResponseEntity<Resource> getImage(@PathVariable String imageName) {
