@@ -127,10 +127,10 @@ public class FileUploader {
         String fileName = UUID.randomUUID().toString() + fileExtension;
 
         // 경로 설정
-        //Path path = Paths.get("D:\\").toAbsolutePath().normalize();
-        Path path = Paths.get("/fsfile").toAbsolutePath().normalize();
-        //String savePath = path + "\\upload\\";
-        String savePath = path + "/dev_kbinnovation/";
+        Path path = Paths.get("D:\\fsfile").toAbsolutePath().normalize();
+        //Path path = Paths.get("/fsfile").toAbsolutePath().normalize();
+        String savePath = path + "\\dev_kbinnovation\\";
+        //String savePath = path + "/dev_kbinnovation/";
 
         // 디렉토리 없으면 생성
         File directory = new File(savePath + fileName);
