@@ -36,7 +36,12 @@ public class MemberController {
     // Service 연결
     private final MemberService memberService;
 
-    // 관리자 리스트 조회
+    /**
+     * @param menuId
+     * @param model
+     * @return
+     * 관리자 리스트 조회
+     */
     @GetMapping("/list/{menuId}")
     public String adminList(@PathVariable int menuId, Model model) {
         List<MemberDTO> selectList = memberService.selectList();

@@ -1,9 +1,0 @@
-Manifest-Version: 1.0
-Created-By: IntelliJ IDEA
-Built-By: 프로
-Build-Jdk: Oracle OpenJDK 1.7
-Implementation-Title: admin
-Implementation-Version: 0.0.1-SNAPSHOT
-Implementation-Vendor-Id: com.kbin
-Main-Class: ${start-class}
-

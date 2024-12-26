@@ -1,3 +1,14 @@
+/**
+ * 파일명     : FileUploader.java
+ * 화면명     : 파일 업로드 (공통)
+ * 설명       : 첨부파일 업로드
+ * 최초개발일  : 2024.10.24
+ * 최초개발자  : 양윤지
+ * ==========================================================
+ *   수정일            수정자           설명
+ * ==========================================================
+ * 2024.12.25         이훈희           첨부파일 업로드 경로 오류 해결
+ */
 package com.kb.inno.common;
 
 import com.kb.inno.admin.DTO.FileDTO;
@@ -127,21 +138,46 @@ public class FileUploader {
         String fileName = UUID.randomUUID().toString() + fileExtension;
 
         // 경로 설정
+        /*Path path = Paths.get("D:\\fsfile\\dev_kbinnovation\\").toAbsolutePath().normalize();
+        //String uploadPath = "D:/fsfile/dev_kbinnovation/";
+        //Path path = Paths.get("/fsfile").toAbsolutePath().normalize();
+        //String savePath = path + "\\dev_kbinnovation\\";
+        String savePath = path.toString();*/
+        //String savePath = path + "/dev_kbinnovation/";
+
         Path path = Paths.get("D:\\fsfile").toAbsolutePath().normalize();
         //Path path = Paths.get("/fsfile").toAbsolutePath().normalize();
         String savePath = path + "\\dev_kbinnovation\\";
         //String savePath = path + "/dev_kbinnovation/";
 
+        File directory = new File(savePath);
+
+        System.out.println("savePath====================="+savePath);
+
         // 디렉토리 없으면 생성
-        File directory = new File(savePath + fileName);
+        //File directory = new File(savePath + fileName);
+        //File directory = new File(savePath);
+        //File directory = new File(savePath + fileName);
+
+        System.out.println("directory====================="+directory);
 
         if(!directory.exists()) {
             directory.mkdirs();
         }
 
+        File targetFile = new File(savePath + fileName);
+
         // 파일 저장
+        /*
         try {
             file.transferTo(new File(savePath, fileName));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+*/
+        try (InputStream fileStream = file.getInputStream()) {
+            // 파일 복사
+            Files.copy(fileStream, targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
