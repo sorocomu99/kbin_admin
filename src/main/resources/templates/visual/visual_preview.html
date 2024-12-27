@@ -45,9 +45,9 @@
                         <div class="swiper-slide">
                             <div class="background">
                                 <!-- 새로 등록한 파일 -->
-                                <img th:if="${visual.main_path != null}" class="item" th:src="${visual.main_path + visual.main_file_name}" alt="">
+                                <img th:if="${visual.main_path != null}" class="item" th:src="|\kbinnovationhub_devadm${visual.main_path + visual.main_file_name}|" alt="">
                                 <!-- 기존 등록한 파일 -->
-                                <img th:unless="${visual.main_path != null}" class="item" th:src="${visual.file_path + visual.file_nm}" alt="">
+                                <img th:unless="${visual.main_path != null}" class="item" th:src="|\kbinnovationhub_devadm${visual.file_path + visual.file_nm}|" alt="">
                             </div>
                             <div class="context">
                                 <p class="text" data-split th:utext="${visual.main_cn}"></p>
@@ -55,7 +55,7 @@
                         </div>
                         <div class="swiper-slide" th:each="list : ${selectList}" th:if="${list.main_file_name != null}">
                             <div class="background">
-                                <img class="item" th:src="${list.main_path + list.main_file_name}" alt="">
+                                <img class="item" th:src="|\kbinnovationhub_devadm${list.main_path + list.main_file_name}|" alt="">
                             </div>
                             <div class="context">
                                 <p class="text" data-split th:utext="${list.main_cn}"></p>

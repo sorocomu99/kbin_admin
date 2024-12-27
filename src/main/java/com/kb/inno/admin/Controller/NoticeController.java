@@ -33,7 +33,15 @@ public class NoticeController {
     @Value("/notice")
     public String directory;
 
-    // 공지사항 리스트 조회
+    /**
+     * @param menuId
+     * @param model
+     * @param type
+     * @param keyword
+     * @param page
+     * @return
+     * 공지사항 리스트 조회
+     */
     @RequestMapping("/list/{menuId}")
     public String selectList(@PathVariable int menuId, Model model,
                              @RequestParam(value = "type", required = false, defaultValue = "") String type,
@@ -43,7 +51,13 @@ public class NoticeController {
         return directory + "/notice";
     }
 
-    // 공지사항 미리보기 페이지 이동
+    /**
+     * @param notice
+     * @param model
+     * @param request
+     * @return
+     * 공지사항 미리보기 페이지 이동
+     */
     @PostMapping("/preview")
     public String preview(NoticeDTO notice, Model model, HttpServletRequest request) {
         HttpSession session = request.getSession(false);
@@ -54,14 +68,23 @@ public class NoticeController {
         return directory + "/notice_preview";
     }
 
-    // 공지사항 등록 페이지 이동
+    /**
+     * @param menuId
+     * @param model
+     * @return
+     * 공지사항 등록 페이지 이동
+     */
     @RequestMapping("/insert/{menuId}")
     public String insert(@PathVariable int menuId, Model model) {
         model.addAttribute("menuId", menuId);
         return directory + "/notice_insert";
     }
 
-    // 이미지 업로드
+    /**
+     * @param file
+     * @return
+     * 이미지 업로드
+     */
     @ResponseBody
     @PostMapping("/upload/image")
     public ResponseEntity<?> uploadImage(@RequestParam MultipartFile file) {
@@ -69,7 +92,13 @@ public class NoticeController {
         return ResponseEntity.ok(fileUploader.summernoteInsertImage(file));
     }
 
-    // 공지사항 등록
+    /**
+     * @param redirectAttributes
+     * @param noticeDTO
+     * @param request
+     * @return
+     * 공지사항 등록
+     */
     @PostMapping("/insert")
     public String insert(RedirectAttributes redirectAttributes, NoticeDTO noticeDTO, HttpServletRequest request) {
         // 로그인한 아이디 가져오기
@@ -93,7 +122,13 @@ public class NoticeController {
         }
     }
 
-    // 공지사항 수정 페이지 이동
+    /**
+     * @param menuId
+     * @param ntc_sn
+     * @param model
+     * @return
+     * 공지사항 수정 페이지 이동
+     */
     @PostMapping("/detail")
     public String detail(@RequestParam int menuId, @RequestParam int ntc_sn, Model model) {
         NoticeDTO notice = noticeService.select(ntc_sn);
@@ -102,7 +137,13 @@ public class NoticeController {
         return directory + "/notice_update";
     }
 
-    // 공지사항 수정
+    /**
+     * @param redirectAttributes
+     * @param noticeDTO
+     * @param request
+     * @return
+     * 공지사항 수정
+     */
     @PostMapping("/update")
     public String update(RedirectAttributes redirectAttributes, NoticeDTO noticeDTO, HttpServletRequest request) {
         // 로그인한 아이디 가져오기
@@ -130,8 +171,12 @@ public class NoticeController {
             return directory + "/notice_update";
         }
     }
-    
-    // 공지사항 삭제
+
+    /**
+     * @param ntc_sn
+     * @return
+     * 공지사항 삭제
+     */
     @ResponseBody
     @PostMapping("/delete")
     public String delete(@RequestParam("ntc_sn") int ntc_sn) {

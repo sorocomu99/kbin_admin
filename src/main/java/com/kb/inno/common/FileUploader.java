@@ -82,9 +82,9 @@ public class FileUploader {
         List<FileDTO> fileList = new ArrayList<>();
 
         // 파일 Array 길이만큼 반복
-        for(int i = 0; i < files.size(); i++) {
+        for (int i = 0; i < files.size(); i++) {
             // 파일이 null 이면 패스, 아니면 파일 저장 실행
-            if(files.get(i).getSize() == 0) {
+            if (files.get(i).getSize() == 0) {
                 continue;
             } else {
                 // 오리지널 파일 이름
@@ -138,13 +138,13 @@ public class FileUploader {
         String fileName = UUID.randomUUID().toString() + fileExtension;
 
         // 경로 설정
-        /*Path path = Paths.get("D:\\fsfile\\dev_kbinnovation\\").toAbsolutePath().normalize();
+        /*
+        Path path = Paths.get("D:\\fsfile\\dev_kbinnovation\\").toAbsolutePath().normalize();
         //String uploadPath = "D:/fsfile/dev_kbinnovation/";
         //Path path = Paths.get("/fsfile").toAbsolutePath().normalize();
         //String savePath = path + "\\dev_kbinnovation\\";
-        String savePath = path.toString();*/
         //String savePath = path + "/dev_kbinnovation/";
-
+        */
         Path path = Paths.get("D:\\fsfile").toAbsolutePath().normalize();
         //Path path = Paths.get("/fsfile").toAbsolutePath().normalize();
         String savePath = path + "\\dev_kbinnovation\\";

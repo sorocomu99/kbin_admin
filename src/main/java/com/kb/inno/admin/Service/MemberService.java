@@ -42,6 +42,7 @@ public class MemberService {
      */
     public MemberDTO detail(int memberId) {
         MemberDTO memberDTO = memberDAO.select(memberId);
+
         if(memberDTO == null) {
             return null;
         }

@@ -35,7 +35,7 @@
                                                 <div class="d-flex align-items-center">
                                                     <input class="form-control w-auto" type="file" name="affiliate_file" onchange="preview()">
                                                 </div>
-                                                <img id="previewFrame" th:src="${affiliate?.affiliate_path == null ? '' : affiliate?.affiliate_path + affiliate?.affiliate_file_name}" width="200" class="img-fluid mt-2" />
+                                                <img id="previewFrame" th:src="${affiliate?.affiliate_path == null ? '' : '\kbinnovationhub_devadm' + affiliate?.affiliate_path + affiliate?.affiliate_file_name}" width="200" class="img-fluid mt-2" />
                                                 <p class="mb-0 mt-2">
                                                     * 권장 사이즈 : 458x328px
                                                 </p>

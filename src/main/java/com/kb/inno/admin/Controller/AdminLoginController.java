@@ -127,6 +127,8 @@ public class AdminLoginController {
         session.setAttribute("mngrId", dbMngrId);    //아이디
         session.setAttribute("mngrNm", dbMngrNm);    //이름
         session.setAttribute("mngrEml", dbMngrEml);  //이메일
+
+        session.setMaxInactiveInterval(3600);  //세션타임 1시간
         
         System.out.println("================여기9");
 

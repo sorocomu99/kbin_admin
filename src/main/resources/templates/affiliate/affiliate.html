@@ -55,7 +55,7 @@
                   </tr>
                   <tr th:unless="${selectList == null or selectList.isEmpty()}" th:each="list : ${selectList}">
                     <td th:text="${list.rownumber}"></td>
-                    <td><img th:src="${list.affiliate_path == null ? '' : list.affiliate_path + list.affiliate_file_name}" width="200" alt=""></td>
+                    <td><img th:src="${list.affiliate_path == null ? '' : '\kbinnovationhub_devadm' + list.affiliate_path + list.affiliate_file_name}" width="200" alt=""></td>
                     <td th:text="${list.srvc_nm}"></td>
                     <td th:text="${list.expsr_yn == 'Y' ? '노출' : '미노출'}">노출</td>
                     <td th:text="${list.sort_no}"></td>

@@ -1,3 +1,13 @@
+/**
+ * 파일명     : NoticeService.java
+ * 화면명     : 공지사항 서비스
+ * 설명       : 공지사항 조회 / 등록 / 수정 / 삭제
+ * 최초개발일  : 2024.10.24
+ * 최초개발자  : 양윤지
+ * ==========================================================
+ *   수정일            수정자           설명
+ * ==========================================================
+ */
 package com.kb.inno.admin.Service;
 
 import com.kb.inno.admin.DAO.NoticeDAO;
@@ -275,7 +285,7 @@ public class NoticeService {
 
         MultipartFile file = notice.getNtc_file();
 
-        if(file.getSize() > 0) {
+        if (file.getSize() > 0) {
             // 파일 저장 후 조회
             FileUploader fileUploader = new FileUploader();
             FileDTO fileSave = fileUploader.insertFile(file, loginId);
@@ -284,7 +294,7 @@ public class NoticeService {
             int result = noticeDAO.insertFile(fileSave);
 
             // 게시글 저장
-            if(fileSave != null && result == 1) {
+            if (fileSave != null && result == 1) {
                 // 파일 일련번호 대입
                 notice.setNtc_path(fileSave.getFile_path());
                 notice.setNtc_file_name(fileSave.getFile_nm());

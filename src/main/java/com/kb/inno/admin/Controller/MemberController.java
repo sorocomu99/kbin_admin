@@ -50,7 +50,12 @@ public class MemberController {
         return directory + "/member";
     }
 
-    // 관리자 등록 페이지 이동
+    /**
+     * @param menuId
+     * @param model
+     * @return
+     * 관리자 등록 페이지 이동
+     */
     @GetMapping("/insert/{menuId}")
     public String insert(@PathVariable int menuId, Model model) {
         // 수정 페이지와 같이 쓰고 있으므로 빈 DTO를 만들어 보내어 사용
