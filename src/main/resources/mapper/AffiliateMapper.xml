@@ -125,6 +125,14 @@
              , LAST_MDFCN_DT = SYSDATE
          WHERE AFFILIATE_SN  = #{affiliate_sn}
     </update>
+    <!-- 제휴 사례 정렬 순서 업데이트 -->
+    <update id="sortUpdate" parameterType="com.kb.inno.admin.DTO.AffiliateDTO">
+        /* 정렬 순서 업데이트 */
+        UPDATE KB_AFFILIATE_INFO
+           SET SORT_NO = SORT_NO + 1
+         WHERE SORT_NO <![CDATA[>]]>= #{sort_no}
+           AND AFFILIATE_SN  NOT IN (#{affiliate_sn})
+    </update>
     <!-- 국내 프로그램 - 제휴 사례 삭제 -->
     <delete id="delete" parameterType="int">
         /* 국내 프로그램 - 제휴 사례 삭제 */

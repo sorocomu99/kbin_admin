@@ -23,6 +23,7 @@ public interface CooperationDAO {
     void deleteFile(int file_sn);
     // 협력 기관 수정
     int update(CooperationDTO cooperationDTO);
+    int sortUpdate(CooperationDTO cooperationDTO);
     // 협력 기관 삭제
     void delete(int coope_sn);
     // 협력 기관 리스트 조회 (미리보기용)

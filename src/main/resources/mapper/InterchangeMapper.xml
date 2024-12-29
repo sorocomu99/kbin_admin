@@ -116,6 +116,13 @@
              , LAST_MDFCN_DT = SYSDATE
          WHERE EXCH_SN       = #{exch_sn}
     </update>
+    <update id="sortUpdate" parameterType="com.kb.inno.admin.DTO.AffiliateDTO">
+        /* 정렬 순서 업데이트 */
+        UPDATE KB_EXCH_INFO
+        SET SORT_NO = SORT_NO + 1
+        WHERE SORT_NO <![CDATA[>]]>= #{sort_no}
+          AND EXCH_SN  NOT IN (#{exch_sn})
+    </update>
     <!-- 글로벌 – 현지교류 파일 삭제 -->
     <delete id="deleteFile" parameterType="int">
         /* 글로벌 – 현지교류 파일 삭제 */

@@ -33,6 +33,7 @@ public interface AffiliateDAO {
     void deleteFile(int file_sn);
     // 국내 프로그램 - 제휴 사례 수정
     int update(AffiliateDTO affiliateDTO);
+    int sortUpdate(AffiliateDTO affiliateDTO);
     // 국내 프로그램 - 제휴 사례 삭제
     void delete(int affiliate_sn);
     // 국내 프로그램 - 제휴 사례 리스트 조회 (미리보기용)

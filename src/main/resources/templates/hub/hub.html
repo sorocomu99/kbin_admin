@@ -72,7 +72,7 @@
                                             <td th:text="${list.hub_sn}"></td>
                                             <td>
                                                 <div class="list-iamge-wrap" th:if="${list.hub_path_img != null}">
-                                                    <img th:src="${list.hub_path_img == null ? '' : list.hub_path_img + list.hub_img_name}" alt="">
+                                                    <img th:src="${list.hub_path_img == null ? '' : '\kbinnovationhub_devadm'+list.hub_path_img + list.hub_img_name}" alt="">
                                                 </div>
                                             </td>
                                             <td th:text="${list.hub_ttl}">HUB Day 게시글 제목입니다.</td>

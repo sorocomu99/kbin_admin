@@ -42,7 +42,7 @@
                                                     <div class="d-flex">
                                                         <input class="form-control w-auto" type="file" name="hub_img" onchange="preview()">
                                                     </div>
-                                                    <img id="previewFrame" th:src="${hub.hub_path_img == null ? '' : hub.hub_path_img + hub.hub_img_name}" width="200" class="img-fluid mt-2" style="display:none" />
+                                                    <img id="previewFrame" th:src="${hub.hub_path_img == null ? '' : '\kbinnovationhub_devadm'+hub.hub_path_img + hub.hub_img_name}" width="200" class="img-fluid mt-2" style="display:none" />
                                                     <p class="mb-0 mt-2">
                                                         * 권장 사이즈 : 500x320px
                                                     </p>

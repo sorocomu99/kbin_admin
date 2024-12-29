@@ -304,5 +304,6 @@ public class NoticeService {
         }
 
         model.addAttribute("notice", notice);
+        System.out.println("notice======================"+notice);
     }
 }

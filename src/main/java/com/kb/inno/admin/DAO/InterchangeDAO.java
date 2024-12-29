@@ -33,6 +33,7 @@ public interface InterchangeDAO {
     void deleteFile(int fileSn);
     // 글로벌 – 현지교류 수정
     int update(InterchangeDTO interchangeDTO);
+    int sortUpdate(InterchangeDTO interchangeDTO);
     // 글로벌 – 현지교류 삭제
     void delete(int exch_sn);
     // 글로벌 - 현지교류 리스트 조회 (미리보기용)

@@ -39,7 +39,10 @@ public class CooperationService {
     @Value("src/main/resources/static/")
     private String staticPath;
 
-    // 협력 기관 리스트 조회
+    /**
+     * @return
+     * 협력 기관 리스트 조회
+     */
     public List<CooperationDTO> selectList() {
          return cooperationDAO.selectList();
     }
@@ -111,7 +114,7 @@ public class CooperationService {
         // 파일을 등록했는 지 확인
         int fileYn = cooperationDTO.getFile_yn();
 
-        if(fileYn == 1) {
+        if (fileYn == 1) {
             // 파일 저장
              MultipartFile file = cooperationDTO.getCoope_file();
 
@@ -137,6 +140,7 @@ public class CooperationService {
 
     // 협력 기관 수정
     public int update(CooperationDTO cooperationDTO, int loginId) {
+        int resultUpd = 1;
         // 파일을 새로 등록했는 지 확인
         int fileYn = cooperationDTO.getFile_yn();
 
@@ -170,8 +174,10 @@ public class CooperationService {
 
         // 최종 수정자 대입
         cooperationDTO.setLast_mdfr(loginId);
-
-        return cooperationDAO.update(cooperationDTO);
+        resultUpd = cooperationDAO.update(cooperationDTO);
+        cooperationDAO.sortUpdate(cooperationDTO);
+        //return cooperationDAO.update(cooperationDTO);
+        return resultUpd;
     }
 
     // 협력 기관 삭제

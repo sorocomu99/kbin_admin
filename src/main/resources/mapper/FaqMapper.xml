@@ -83,6 +83,7 @@
        , FAQ_QSTN
        , FAQ_ANS
        , SORT_NO
+       , EXPSR_YN
        , FRST_RGTR
        , FRST_REG_DT
        , LAST_MDFR
@@ -95,6 +96,7 @@
        , #{faq_qstn}
        , #{faq_ans}
        , #{sort_no}
+       , #{expsr_yn}
        , #{frst_rgtr}
        , SYSDATE
        , #{last_mdfr}
@@ -125,6 +127,7 @@
              , FAQ_QSTN      = #{faq_qstn}
              , FAQ_ANS       = #{faq_ans}
              , SORT_NO       = #{sort_no}
+             , EXPSR_YN      = #{expsr_yn}
              , LAST_MDFR     = #{last_mdfr}
              , LAST_MDFCN_DT = SYSDATE
          WHERE FAQ_SN        = #{faq_sn}

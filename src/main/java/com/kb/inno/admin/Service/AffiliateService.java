@@ -37,12 +37,20 @@ public class AffiliateService {
     // DAO 연결
     private final AffiliateDAO affiliateDAO;
 
-    // 국내 프로그램 - 제휴 사례 리스트 조회
+    /**
+     * 국내 프로그램 - 제휴 사례 리스트 조회
+     * @return
+     */
     public List<AffiliateDTO> selectList() {
         return affiliateDAO.selectList();
     }
 
-    // 국내 프로그램 - 제휴 사례 등록
+    /**
+     * 국내 프로그램 - 제휴 사례 등록
+     * @param affiliateDTO
+     * @param loginId
+     * @return
+     */
     public int insert(AffiliateDTO affiliateDTO, int loginId) {
         // 로그인 한 사람 대입
         affiliateDTO.setFrst_rgtr(loginId);
@@ -71,14 +79,23 @@ public class AffiliateService {
         return affiliateDAO.insert(affiliateDTO);
     }
 
-    // 국내 프로그램 - 제휴 사례 상세 조회
+    /**
+     * 국내 프로그램 - 제휴 사례 상세 조회
+     * @param affiliate_sn
+     * @return
+     */
     public AffiliateDTO select(int affiliate_sn) {
         return affiliateDAO.select(affiliate_sn);
     }
 
-    // 국내 프로그램 - 제휴 사례 수정
+    /**
+     * 국내 프로그램 - 제휴 사례 수정
+     * @param affiliateDTO
+     * @param loginId
+     * @return
+     */
     public int update(AffiliateDTO affiliateDTO, int loginId) {
-
+        int resultUpd = 1;
         // 파일을 새로 등록했는 지 확인
         int fileYn = affiliateDTO.getFile_yn();
 
@@ -112,11 +129,15 @@ public class AffiliateService {
 
         // 최종 수정자 대입
         affiliateDTO.setLast_mdfr(loginId);
-
-        return affiliateDAO.update(affiliateDTO);
+        resultUpd = affiliateDAO.update(affiliateDTO);
+        affiliateDAO.sortUpdate(affiliateDTO);
+        return resultUpd;
     }
 
-    // 국내 프로그램 - 제휴 사례 삭제
+    /**
+     * 국내 프로그램 - 제휴 사례 삭제
+     * @param affiliate_sn
+     */
     public void delete(int affiliate_sn) {
         // 0. 국내 프로그램 - 제휴 사례 상세 조회
         AffiliateDTO selectInfo = affiliateDAO.select(affiliate_sn);
@@ -141,7 +162,11 @@ public class AffiliateService {
         affiliateDAO.delete(affiliate_sn);
     }
 
-    // 국내 프로그램 - 제휴 사례 리스트 조회 (미리보기용)
+    /**
+     * 국내 프로그램 - 제휴 사례 리스트 조회 (미리보기용)
+     * @param model
+     * @param affiliateDTO
+     */
     public void selectListAll(Model model, AffiliateDTO affiliateDTO) {
         int affiliate_sn = affiliateDTO.getAffiliate_sn();
         //List<VisualDTO> selectList = affiliateDAO.selectListAll(affiliate_sn);

@@ -93,13 +93,24 @@ public class FileUploader {
                 String fileExtension = originalFilename.substring(originalFilename.lastIndexOf("."));
                 // 파일 이름 설정
                 String fileName = UUID.randomUUID().toString() + fileExtension;
+                //String fileName = UUID.randomUUID() + fileExtension;
+
+                File targetFile = new File(savePath + fileName);
+
                 // 파일 저장
+                try (InputStream fileStream = files.get(i).getInputStream()) {
+                    // 파일 복사
+                    Files.copy(fileStream, targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                /*
                 try {
                     files.get(i).transferTo(new File(savePath, fileName));
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-
+                */
                 // 파일 사이즈 구하기
                 int bytes = (int) files.get(i).getSize();
 

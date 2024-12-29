@@ -106,6 +106,9 @@
 
         // 프리뷰 페이지로 이동
         function previewPage() {
+            var summernote_value = $("#summernote").summernote('code');
+            $("#ntc_cn").val(summernote_value);
+
             const form = document.forms['notice_form'];
             form.action = '/kbinnovationhub_devadm/notice/preview'; // 전송할 URL
             form.method = 'POST';            // 전송 방식

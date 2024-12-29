@@ -81,11 +81,11 @@
                                 <li class="swiper-slide category-item category-item--active">
                                     <span class="category-button category-button--selected">전체보기</span>
                                 </li>
-                                <li class="swiper-slide category-item">
-                                    <span th:id="${#ids.next('tabs')}" class="category-button"th:text="${faqCategory.ctgry_nm}"></span>
-                                </li>
                                 <li class="swiper-slide category-item" th:each="category : ${selectList}">
                                     <span th:id="${#ids.next('tabs')}" class="category-button"th:text="${category.ctgry_nm}"></span>
+                                </li>
+                                <li class="swiper-slide category-item">
+                                    <span th:id="${#ids.next('tabs')}" class="category-button"th:text="${faqCategory.ctgry_nm}"></span>
                                 </li>
                             </ul>
                         </div>

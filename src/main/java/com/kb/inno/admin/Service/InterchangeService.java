@@ -84,6 +84,7 @@ public class InterchangeService {
 
     // 글로벌 – 현지교류 수정
     public int update(InterchangeDTO interchangeDTO, int loginId) {
+        int resultUpd = 1;
         // 파일을 새로 등록했는 지 확인
         int fileYn = interchangeDTO.getFile_yn1();
 
@@ -116,8 +117,10 @@ public class InterchangeService {
 
         // 최종 수정자 대입
         interchangeDTO.setLast_mdfr(loginId);
-
-        return interchangeDAO.update(interchangeDTO);
+        resultUpd = interchangeDAO.update(interchangeDTO);
+        interchangeDAO.sortUpdate(interchangeDTO);
+        //return interchangeDAO.update(interchangeDTO);
+        return resultUpd;
     }
 
     // 글로벌 – 현지교류 삭제
