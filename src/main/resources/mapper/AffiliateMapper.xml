@@ -163,9 +163,10 @@
              , KB_FILE_INFO FILES
          WHERE 1=1
            AND AFFI.ATCH_FILE_SN = FILES.FILE_SN(+)
+           AND AFFI.EXPSR_YN = 'Y'
          <if test="affiliate_sn != 0">
            AND NOT AFFI.AFFILIATE_SN IN (#{affiliate_sn})
          </if>
-         ORDER BY AFFI.SORT_NO DESC
+         ORDER BY AFFI.SORT_NO ASC
     </select>
 </mapper>

@@ -36,8 +36,13 @@ public class ResultController {
 
     // 서비스 연결
     private final ResultService resultService;
-    
-    // 육성 현황 조회
+
+    /**
+     * 육성 현황 조회
+     * @param menuId
+     * @param model
+     * @return
+     */
     @RequestMapping("/info/{menuId}")
     public String select(@PathVariable int menuId, Model model) {
         ResultDTO result = resultService.select();
@@ -46,14 +51,25 @@ public class ResultController {
         return directory + "/result";
     }
 
-    // 육성 현황 미리보기
+    /**
+     * 육성 현황 미리보기
+     * @param resultDTO
+     * @param model
+     * @return
+     */
     @PostMapping("/preview")
     public String preview(ResultDTO resultDTO, Model model) {
         resultService.preview(resultDTO, model);
         return directory + "/result_preview";
     }
 
-    // 육성 현황 저장
+    /**
+     * 육성 현황 저장
+     * @param redirectAttributes
+     * @param resultDTO
+     * @param request
+     * @return
+     */
     @PostMapping("/save")
     public String save(RedirectAttributes redirectAttributes, ResultDTO resultDTO, HttpServletRequest request) {
         // 로그인한 아이디 가져오기

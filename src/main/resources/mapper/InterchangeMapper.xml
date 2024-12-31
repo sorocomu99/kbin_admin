@@ -153,6 +153,6 @@
         </if>
           AND EXCH.ATCH_FILE_SN1 = FILES.FILE_SN(+)
           AND EXCH.EXPSR_YN = 'Y'
-        ORDER BY EXCH.EXCH_SN DESC
+        ORDER BY EXCH.EXCH_SN ASC
     </select>
 </mapper>

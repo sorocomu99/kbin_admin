@@ -146,8 +146,13 @@
                 return false;
             } else {
                 // 폼 태그 서브밋 보내기
-                f=document.cooperation_form;
-                f.submit();
+                //f=document.cooperation_form;
+                //f.submit();
+                const form = document.forms['cooperation_form'];
+                form.action = '/kbinnovationhub_devadm/cooperation/update'; // 전송할 URL
+                form.method = 'POST';            // 전송 방식
+                form.target = '';          // 새 창에서 열기
+                form.submit();                   // 폼 제출
             }
         }
     </script>

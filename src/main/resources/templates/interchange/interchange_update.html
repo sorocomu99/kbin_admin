@@ -149,7 +149,7 @@
         // 컨펌 메시지 띄우는 함수
         function confirmMsg() {
             // 썸네일 이미지 등록 확인
-            var previewFrame = $('#previewFrame')[0].src;
+            var previewFrame = $('#previewFrame1')[0].src;
             if(previewFrame == null || previewFrame == "") {
                 alert("파일을 선택 해 주세요.");
                 return false;
@@ -164,7 +164,7 @@
 
             // 내용 입력 확인
             var exch_cn = $('input[name=exch_cn]').val();
-            if(exch_cn.trim() == "") {
+            if(exch_cn == "") {
                 alert("내용을 입력하세요.");
                 return false;
             }

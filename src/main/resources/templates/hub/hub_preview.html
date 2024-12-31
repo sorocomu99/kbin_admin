@@ -61,7 +61,7 @@
             <div class="contents">
                 <!-- mp4 영상 -->
                 <video class="video" preload="auto" playsinline controls th:if="${hub.hub_mov_name != null}">
-                    <source th:src="${hub.hub_path_mov + hub.hub_mov_name}" type='video/mp4'>
+                    <source th:src="|\kbinnovationhub_devadm${hub.hub_path_mov + hub.hub_mov_name}|" type='video/mp4'>
                 </video>
                 <!-- 에디터 작성 -->
                 <p th:utext="${hub.hub_cn}"></p>

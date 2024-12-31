@@ -65,12 +65,14 @@
                                 <div class="cases-body">
                                     <div class="swiper cases-slider">
                                         <div class="swiper-wrapper">
-                                            <div class="swiper-slide">
-                                                <div class="thumbnail"><img th:src="|\kbinnovationhub_devadm${affiliate.affiliate_path + affiliate.affiliate_file_name}|" alt=""></div>
-                                                <p class="sub"><b th:text="${affiliate.affiliate_nm}"></b> X <span th:text="${affiliate.starter_nm}"></span></p>
-                                                <p class="title" th:text="${affiliate.srvc_nm}"></p>
-                                                <div class="chips"><span class="chip" th:text="${affiliate.ctgry_nm}"></span></div>
-                                            </div>
+                                            <th:block th:if="${affiliate.expsr_yn == 'Y'}">
+                                                <div class="swiper-slide">
+                                                    <div class="thumbnail"><img th:src="|\kbinnovationhub_devadm${affiliate.affiliate_path + affiliate.affiliate_file_name}|" alt=""></div>
+                                                    <p class="sub"><b th:text="${affiliate.affiliate_nm}"></b> X <span th:text="${affiliate.starter_nm}"></span></p>
+                                                    <p class="title" th:text="${affiliate.srvc_nm}"></p>
+                                                    <div class="chips"><span class="chip" th:text="${affiliate.ctgry_nm}"></span></div>
+                                                </div>
+                                            </th:block>
                                             <div class="swiper-slide" th:each="list : ${selectList}" th:if="${list.affiliate_path != null}">
                                                 <div class="thumbnail"><img th:src="|\kbinnovationhub_devadm${list.affiliate_path + list.affiliate_file_name}|" alt=""></div>
                                                 <p class="sub">

@@ -125,8 +125,10 @@ public class HubService {
         }
 
         // 파일 경로 설정
-        Path path = Paths.get("D:\\fsfile");
-        String savePath = path + "\\dev_kbinnovation\\";
+        //Path path = Paths.get("D:\\fsfile");
+        //String savePath = path + "\\dev_kbinnovation\\";
+        Path path = Paths.get("/fsfile");
+        String savePath = path + "/dev_kbinnovation/";
 
         // 파일 디렉토리 생성(없으면)
         File directory = new File(savePath);

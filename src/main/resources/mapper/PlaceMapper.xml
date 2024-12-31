@@ -158,6 +158,6 @@
           AND PLC.ATCH_FILE_SN1 = FILES1.FILE_SN(+)
           AND PLC.ATCH_FILE_SN2 = FILES2.FILE_SN(+)
           AND PLC.ATCH_FILE_SN3 = FILES3.FILE_SN(+)
-        ORDER BY PLC.SORT_NO DESC
+        ORDER BY PLC.SORT_NO ASC
     </select>
 </mapper>

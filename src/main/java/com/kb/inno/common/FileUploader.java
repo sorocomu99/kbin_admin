@@ -28,10 +28,10 @@ public class FileUploader {
         Map<String, Object> resultMap = new HashMap<>();
 
         // 경로 설정
-        Path path = Paths.get("D:\\fsfile").toAbsolutePath().normalize();
-        //Path path = Paths.get("/fsfile").toAbsolutePath().normalize();
-        String savePath = path + "\\dev_kbinnovation\\";
-        //String savePath = path + "/dev_kbinnovation/";
+        //Path path = Paths.get("D:\\fsfile").toAbsolutePath().normalize();
+        //String savePath = path + "\\dev_kbinnovation\\";
+        Path path = Paths.get("/fsfile").toAbsolutePath().normalize();
+        String savePath = path + "/dev_kbinnovation/";
 
         File directory = new File(savePath);
 
@@ -67,10 +67,11 @@ public class FileUploader {
     public List<FileDTO> insertFiles(List<MultipartFile> files, int loginId) {
 
         // 경로 설정
-    	Path path = Paths.get("D:\\fsfile").toAbsolutePath().normalize();
-        //Path path = Paths.get("/fsfile").toAbsolutePath().normalize();
-        String savePath = path + "\\dev_kbinnovation\\";
-        //String savePath = path + "/dev_kbinnovation/";
+    	//Path path = Paths.get("D:\\fsfile").toAbsolutePath().normalize();
+        //String savePath = path + "\\dev_kbinnovation\\";
+
+        Path path = Paths.get("/fsfile").toAbsolutePath().normalize();
+        String savePath = path + "/dev_kbinnovation/";
 
         // 디렉토리 없으면 생성
         File directory = new File(savePath);
@@ -156,10 +157,11 @@ public class FileUploader {
         //String savePath = path + "\\dev_kbinnovation\\";
         //String savePath = path + "/dev_kbinnovation/";
         */
-        Path path = Paths.get("D:\\fsfile").toAbsolutePath().normalize();
-        //Path path = Paths.get("/fsfile").toAbsolutePath().normalize();
-        String savePath = path + "\\dev_kbinnovation\\";
-        //String savePath = path + "/dev_kbinnovation/";
+        //Path path = Paths.get("D:\\fsfile").toAbsolutePath().normalize();
+        //String savePath = path + "\\dev_kbinnovation\\";
+
+        Path path = Paths.get("/fsfile").toAbsolutePath().normalize();
+        String savePath = path + "/dev_kbinnovation/";
 
         File directory = new File(savePath);
 
@@ -216,8 +218,8 @@ public class FileUploader {
 
     // 파일 삭제
     public boolean deleteFile(String realPath, String fileName) {
-    	//Path path = Paths.get("D:\\").toAbsolutePath().normalize();
-        Path path = Paths.get("/fsfile").toAbsolutePath().normalize();
+    	//Path path = Paths.get("D:\\fsfile\\dev_kbinnovation\\").toAbsolutePath().normalize();
+        Path path = Paths.get("/fsfile/dev_kbinnovation/").toAbsolutePath().normalize();
         File deleteFile = new File(path + realPath + fileName);
         return deleteFile.delete();
     }
