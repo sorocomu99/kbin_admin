@@ -1,0 +1,608 @@
+<!doctype html>
+<html lang="ko">
+<head th:replace="fragment/config :: configFragment"></head>
+
+<body>
+    <div class="wrap">
+        <div th:replace="fragment/header :: headerFragment"></div>
+    
+        <main class="main">
+            <div class="container">
+                <form id="history_form" name="history_form" th:action="@{/history/update}" onsubmit="return insertBefore()" method="post">
+                    <input type="hidden" id="menu_id" name="menu_id" th:value="${menuId}"/>
+                    <div class="row">
+                        <div class="col">
+                            <div class="paper">
+                                <h2 class="h4">연혁 관리</h2>
+                                <div class="mt-4">
+                                    <table class="table table-bordered align-middle">
+                                        <tbody>
+                                            <tr>
+                                                <th class="bg-light" width="20%">연도</th>
+                                                <td>
+                                                    <input type="number" class="form-control w-auto" id="hstry_yr" name="hstry_yr" th:value="${hstry_yr}" maxlength="4" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="question">
+                                <!-- 항목 리스트 -->
+                                <th:block th:if="${selectDetail != null and selectDetail != ''}" th:each="list : ${selectDetail}">
+                                    <div class="question-list" th:if="${list.display_yn == 0}">
+                                        <th:block th:if="${list.display_yn == 0}">
+                                            <div class="question-head">
+                                                <h3 class="heading h5" th:text="${list.h_title}">항목 1</h3>
+                                            </div>
+                                        </th:block>
+                                        <th:block th:if="${list.display_yn == 0}">
+                                        <div class="question-body on" data-question-type="1">
+                                            <div class="row" th:if="${list.display_yn == 0}">
+                                                <div class="col">
+                                                    <input type="text" class="form-control" th:value="${list.hstry_lclsf_ttl}" th:id="${list.main_id_name}" th:name="${list.main_id_name}" placeholder="메인텍스트를 입력해 주세요.">
+                                                </div>
+                                            </div>
+                                            <div class="row" th:if="${list.display_yn == 0}">
+                                                <div class="col" th:each="listDet, detStat : ${selectDetail}">
+                                                    <div class="item-list">
+                                                        <div class="item">
+                                                            <div class="column">
+                                                                <input type="text" class="form-control form-control-sm" th:id="${listDet.sub_id}" th:name="${listDet.sub_name}" th:value="${listDet.hstry_sclsf_ttl}" placeholder="서브텍스트를 입력해 주세요.">
+                                                            </div>
+                                                            <div class="column">
+                                                                <button type="button" class="btn remove-item" onclick="removeItem(this)"><i data-feather="x-circle"></i></button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!--<button type="button" class="btn btn-sm btn-dark add-item" onclick="addItem(this, 1)" th:attr="data-idx=${list.hstry_slcsf_sn}">-->
+                                                    <th:block th:if="${listDet.hstry_sclsf_sn == listDet.cnt_over}">
+                                                        <button type="button" class="btn btn-sm btn-dark add-item" th:onclick="|javascript:addItem(this, '${listDet.hstry_lclsf_sn}');|" th:attr="data-idx=${listDet.hstry_sclsf_sn + 1}">
+                                                            <i class="me-0" data-feather="plus"></i>
+                                                            서브텍스트 추가
+                                                        </button>
+                                                    </th:block>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        </th:block>
+                                        <div class="question-foot" th:if="${list.display_yn == 0}">
+                                            <button type="button" class="btn btn-sm btn-dark" onclick="removeList(this)" th:attr="data-idx=${list.hstry_lclsf_sn}"><i data-feather="trash-2"></i>항목 삭제</button>
+                                        </div>
+                                    </div>
+                                </th:block>
+
+                                <th:block th:if="${selectDetail2 != null and selectDetail2 != ''}" th:each="list : ${selectDetail2}">
+                                    <div class="question-list" th:if="${list.display_yn == 0}">
+                                        <th:block th:if="${list.display_yn == 0}">
+                                            <div class="question-head">
+                                                <h3 class="heading h5" th:text="${list.h_title}">항목 1</h3>
+                                            </div>
+                                        </th:block>
+                                        <th:block th:if="${list.display_yn == 0}">
+                                            <div class="question-body on" data-question-type="1">
+                                                <div class="row" th:if="${list.display_yn == 0}">
+                                                    <div class="col">
+                                                        <input type="text" class="form-control" th:value="${list.hstry_lclsf_ttl}" th:id="${list.main_id_name}" th:name="${list.main_id_name}" placeholder="메인텍스트를 입력해 주세요.">
+                                                    </div>
+                                                </div>
+                                                <div class="row" th:if="${list.display_yn == 0}">
+                                                    <div class="col" th:each="listDet, detStat : ${selectDetail2}">
+                                                        <div class="item-list">
+                                                            <div class="item">
+                                                                <div class="column">
+                                                                    <input type="text" class="form-control form-control-sm" th:id="${listDet.sub_id}" th:name="${listDet.sub_name}" th:value="${listDet.hstry_sclsf_ttl}" placeholder="서브텍스트를 입력해 주세요.">
+                                                                </div>
+                                                                <div class="column">
+                                                                    <button type="button" class="btn remove-item" onclick="removeItem(this)"><i data-feather="x-circle"></i></button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <!--<button type="button" class="btn btn-sm btn-dark add-item" onclick="addItem(this, 1)" th:attr="data-idx=${list.hstry_slcsf_sn}">-->
+                                                        <th:block th:if="${listDet.hstry_sclsf_sn == listDet.cnt_over}">
+                                                            <button type="button" class="btn btn-sm btn-dark add-item" th:onclick="|javascript:addItem(this, '${listDet.hstry_lclsf_sn}');|" th:attr="data-idx=${listDet.hstry_sclsf_sn + 1}">
+                                                                <i class="me-0" data-feather="plus"></i>
+                                                                서브텍스트 추가
+                                                            </button>
+                                                        </th:block>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </th:block>
+                                        <div class="question-foot" th:if="${list.display_yn == 0}">
+                                            <button type="button" class="btn btn-sm btn-dark" onclick="removeList(this)" th:attr="data-idx=${list.hstry_lclsf_sn}"><i data-feather="trash-2"></i>항목 삭제</button>
+                                        </div>
+                                    </div>
+                                </th:block>
+
+                                <th:block th:if="${selectDetail3 != null and selectDetail3 != ''}" th:each="list : ${selectDetail3}">
+                                    <div class="question-list" th:if="${list.display_yn == 0}">
+                                        <th:block th:if="${list.display_yn == 0}">
+                                            <div class="question-head">
+                                                <h3 class="heading h5" th:text="${list.h_title}">항목 1</h3>
+                                            </div>
+                                        </th:block>
+                                        <th:block th:if="${list.display_yn == 0}">
+                                            <div class="question-body on" data-question-type="1">
+                                                <div class="row" th:if="${list.display_yn == 0}">
+                                                    <div class="col">
+                                                        <input type="text" class="form-control" th:value="${list.hstry_lclsf_ttl}" th:id="${list.main_id_name}" th:name="${list.main_id_name}" placeholder="메인텍스트를 입력해 주세요.">
+                                                    </div>
+                                                </div>
+                                                <div class="row" th:if="${list.display_yn == 0}">
+                                                    <div class="col" th:each="listDet, detStat : ${selectDetail3}">
+                                                        <div class="item-list">
+                                                            <div class="item">
+                                                                <div class="column">
+                                                                    <input type="text" class="form-control form-control-sm" th:id="${listDet.sub_id}" th:name="${listDet.sub_name}" th:value="${listDet.hstry_sclsf_ttl}" placeholder="서브텍스트를 입력해 주세요.">
+                                                                </div>
+                                                                <div class="column">
+                                                                    <button type="button" class="btn remove-item" onclick="removeItem(this)"><i data-feather="x-circle"></i></button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <!--<button type="button" class="btn btn-sm btn-dark add-item" onclick="addItem(this, 1)" th:attr="data-idx=${list.hstry_slcsf_sn}">-->
+                                                        <th:block th:if="${listDet.hstry_sclsf_sn == listDet.cnt_over}">
+                                                            <button type="button" class="btn btn-sm btn-dark add-item" th:onclick="|javascript:addItem(this, '${listDet.hstry_lclsf_sn}');|" th:attr="data-idx=${listDet.hstry_sclsf_sn + 1}">
+                                                                <i class="me-0" data-feather="plus"></i>
+                                                                서브텍스트 추가
+                                                            </button>
+                                                        </th:block>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </th:block>
+                                        <div class="question-foot" th:if="${list.display_yn == 0}">
+                                            <button type="button" class="btn btn-sm btn-dark" onclick="removeList(this)" th:attr="data-idx=${list.hstry_lclsf_sn}"><i data-feather="trash-2"></i>항목 삭제</button>
+                                        </div>
+                                    </div>
+                                </th:block>
+
+                                <th:block th:if="${selectDetail4 != null and selectDetail4 != ''}" th:each="list : ${selectDetail4}">
+                                    <div class="question-list" th:if="${list.display_yn == 0}">
+                                        <th:block th:if="${list.display_yn == 0}">
+                                            <div class="question-head">
+                                                <h3 class="heading h5" th:text="${list.h_title}">항목 1</h3>
+                                            </div>
+                                        </th:block>
+                                        <th:block th:if="${list.display_yn == 0}">
+                                            <div class="question-body on" data-question-type="1">
+                                                <div class="row" th:if="${list.display_yn == 0}">
+                                                    <div class="col">
+                                                        <input type="text" class="form-control" th:value="${list.hstry_lclsf_ttl}" th:id="${list.main_id_name}" th:name="${list.main_id_name}" placeholder="메인텍스트를 입력해 주세요.">
+                                                    </div>
+                                                </div>
+                                                <div class="row" th:if="${list.display_yn == 0}">
+                                                    <div class="col" th:each="listDet, detStat : ${selectDetail4}">
+                                                        <div class="item-list">
+                                                            <div class="item">
+                                                                <div class="column">
+                                                                    <input type="text" class="form-control form-control-sm" th:id="${listDet.sub_id}" th:name="${listDet.sub_name}" th:value="${listDet.hstry_sclsf_ttl}" placeholder="서브텍스트를 입력해 주세요.">
+                                                                </div>
+                                                                <div class="column">
+                                                                    <button type="button" class="btn remove-item" onclick="removeItem(this)"><i data-feather="x-circle"></i></button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <!--<button type="button" class="btn btn-sm btn-dark add-item" onclick="addItem(this, 1)" th:attr="data-idx=${list.hstry_slcsf_sn}">-->
+                                                        <th:block th:if="${listDet.hstry_sclsf_sn == listDet.cnt_over}">
+                                                            <button type="button" class="btn btn-sm btn-dark add-item" th:onclick="|javascript:addItem(this, '${listDet.hstry_lclsf_sn}');|" th:attr="data-idx=${listDet.hstry_sclsf_sn + 1}">
+                                                                <i class="me-0" data-feather="plus"></i>
+                                                                서브텍스트 추가
+                                                            </button>
+                                                        </th:block>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </th:block>
+                                        <div class="question-foot" th:if="${list.display_yn == 0}">
+                                            <button type="button" class="btn btn-sm btn-dark" onclick="removeList(this)" th:attr="data-idx=${list.hstry_lclsf_sn}"><i data-feather="trash-2"></i>항목 삭제</button>
+                                        </div>
+                                    </div>
+                                </th:block>
+
+                                <th:block th:if="${selectDetail5 != null and selectDetail5 != ''}" th:each="list : ${selectDetail5}">
+                                    <div class="question-list" th:if="${list.display_yn == 0}">
+                                        <th:block th:if="${list.display_yn == 0}">
+                                            <div class="question-head">
+                                                <h3 class="heading h5" th:text="${list.h_title}">항목 1</h3>
+                                            </div>
+                                        </th:block>
+                                        <th:block th:if="${list.display_yn == 0}">
+                                            <div class="question-body on" data-question-type="1">
+                                                <div class="row" th:if="${list.display_yn == 0}">
+                                                    <div class="col">
+                                                        <input type="text" class="form-control" th:value="${list.hstry_lclsf_ttl}" th:id="${list.main_id_name}" th:name="${list.main_id_name}" placeholder="메인텍스트를 입력해 주세요.">
+                                                    </div>
+                                                </div>
+                                                <div class="row" th:if="${list.display_yn == 0}">
+                                                    <div class="col" th:each="listDet, detStat : ${selectDetail5}">
+                                                        <div class="item-list">
+                                                            <div class="item">
+                                                                <div class="column">
+                                                                    <input type="text" class="form-control form-control-sm" th:id="${listDet.sub_id}" th:name="${listDet.sub_name}" th:value="${listDet.hstry_sclsf_ttl}" placeholder="서브텍스트를 입력해 주세요.">
+                                                                </div>
+                                                                <div class="column">
+                                                                    <button type="button" class="btn remove-item" onclick="removeItem(this)"><i data-feather="x-circle"></i></button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <!--<button type="button" class="btn btn-sm btn-dark add-item" onclick="addItem(this, 1)" th:attr="data-idx=${list.hstry_slcsf_sn}">-->
+                                                        <th:block th:if="${listDet.hstry_sclsf_sn == listDet.cnt_over}">
+                                                            <button type="button" class="btn btn-sm btn-dark add-item" th:onclick="|javascript:addItem(this, '${listDet.hstry_lclsf_sn}');|" th:attr="data-idx=${listDet.hstry_sclsf_sn + 1}">
+                                                                <i class="me-0" data-feather="plus"></i>
+                                                                서브텍스트 추가
+                                                            </button>
+                                                        </th:block>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </th:block>
+                                        <div class="question-foot" th:if="${list.display_yn == 0}">
+                                            <button type="button" class="btn btn-sm btn-dark" onclick="removeList(this)" th:attr="data-idx=${list.hstry_lclsf_sn}"><i data-feather="trash-2"></i>항목 삭제</button>
+                                        </div>
+                                    </div>
+                                </th:block>
+
+                                <th:block th:if="${selectDetail6 != null and selectDetail6 != ''}" th:each="list : ${selectDetail6}">
+                                    <div class="question-list" th:if="${list.display_yn == 0}">
+                                        <th:block th:if="${list.display_yn == 0}">
+                                            <div class="question-head">
+                                                <h3 class="heading h5" th:text="${list.h_title}">항목 1</h3>
+                                            </div>
+                                        </th:block>
+                                        <th:block th:if="${list.display_yn == 0}">
+                                            <div class="question-body on" data-question-type="1">
+                                                <div class="row" th:if="${list.display_yn == 0}">
+                                                    <div class="col">
+                                                        <input type="text" class="form-control" th:value="${list.hstry_lclsf_ttl}" th:id="${list.main_id_name}" th:name="${list.main_id_name}" placeholder="메인텍스트를 입력해 주세요.">
+                                                    </div>
+                                                </div>
+                                                <div class="row" th:if="${list.display_yn == 0}">
+                                                    <div class="col" th:each="listDet, detStat : ${selectDetail6}">
+                                                        <div class="item-list">
+                                                            <div class="item">
+                                                                <div class="column">
+                                                                    <input type="text" class="form-control form-control-sm" th:id="${listDet.sub_id}" th:name="${listDet.sub_name}" th:value="${listDet.hstry_sclsf_ttl}" placeholder="서브텍스트를 입력해 주세요.">
+                                                                </div>
+                                                                <div class="column">
+                                                                    <button type="button" class="btn remove-item" onclick="removeItem(this)"><i data-feather="x-circle"></i></button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <!--<button type="button" class="btn btn-sm btn-dark add-item" onclick="addItem(this, 1)" th:attr="data-idx=${list.hstry_slcsf_sn}">-->
+                                                        <th:block th:if="${listDet.hstry_sclsf_sn == listDet.cnt_over}">
+                                                            <button type="button" class="btn btn-sm btn-dark add-item" th:onclick="|javascript:addItem(this, '${listDet.hstry_lclsf_sn}');|" th:attr="data-idx=${listDet.hstry_sclsf_sn + 1}">
+                                                                <i class="me-0" data-feather="plus"></i>
+                                                                서브텍스트 추가
+                                                            </button>
+                                                        </th:block>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </th:block>
+                                        <div class="question-foot" th:if="${list.display_yn == 0}">
+                                            <button type="button" class="btn btn-sm btn-dark" onclick="removeList(this)" th:attr="data-idx=${list.hstry_lclsf_sn}"><i data-feather="trash-2"></i>항목 삭제</button>
+                                        </div>
+                                    </div>
+                                </th:block>
+
+                                <th:block th:if="${selectDetail7 != null and selectDetail7 != ''}" th:each="list : ${selectDetail7}">
+                                    <div class="question-list" th:if="${list.display_yn == 0}">
+                                        <th:block th:if="${list.display_yn == 0}">
+                                            <div class="question-head">
+                                                <h3 class="heading h5" th:text="${list.h_title}">항목 1</h3>
+                                            </div>
+                                        </th:block>
+                                        <th:block th:if="${list.display_yn == 0}">
+                                            <div class="question-body on" data-question-type="1">
+                                                <div class="row" th:if="${list.display_yn == 0}">
+                                                    <div class="col">
+                                                        <input type="text" class="form-control" th:value="${list.hstry_lclsf_ttl}" th:id="${list.main_id_name}" th:name="${list.main_id_name}" placeholder="메인텍스트를 입력해 주세요.">
+                                                    </div>
+                                                </div>
+                                                <div class="row" th:if="${list.display_yn == 0}">
+                                                    <div class="col" th:each="listDet, detStat : ${selectDetail7}">
+                                                        <div class="item-list">
+                                                            <div class="item">
+                                                                <div class="column">
+                                                                    <input type="text" class="form-control form-control-sm" th:id="${listDet.sub_id}" th:name="${listDet.sub_name}" th:value="${listDet.hstry_sclsf_ttl}" placeholder="서브텍스트를 입력해 주세요.">
+                                                                </div>
+                                                                <div class="column">
+                                                                    <button type="button" class="btn remove-item" onclick="removeItem(this)"><i data-feather="x-circle"></i></button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <!--<button type="button" class="btn btn-sm btn-dark add-item" onclick="addItem(this, 1)" th:attr="data-idx=${list.hstry_slcsf_sn}">-->
+                                                        <th:block th:if="${listDet.hstry_sclsf_sn == listDet.cnt_over}">
+                                                            <button type="button" class="btn btn-sm btn-dark add-item" th:onclick="|javascript:addItem(this, '${listDet.hstry_lclsf_sn}');|" th:attr="data-idx=${listDet.hstry_sclsf_sn + 1}">
+                                                                <i class="me-0" data-feather="plus"></i>
+                                                                서브텍스트 추가
+                                                            </button>
+                                                        </th:block>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </th:block>
+                                        <div class="question-foot" th:if="${list.display_yn == 0}">
+                                            <button type="button" class="btn btn-sm btn-dark" onclick="removeList(this)" th:attr="data-idx=${list.hstry_lclsf_sn}"><i data-feather="trash-2"></i>항목 삭제</button>
+                                        </div>
+                                    </div>
+                                </th:block>
+
+                                <th:block th:if="${selectDetail8 != null and selectDetail8 != ''}" th:each="list : ${selectDetail8}">
+                                    <div class="question-list" th:if="${list.display_yn == 0}">
+                                        <th:block th:if="${list.display_yn == 0}">
+                                            <div class="question-head">
+                                                <h3 class="heading h5" th:text="${list.h_title}">항목 1</h3>
+                                            </div>
+                                        </th:block>
+                                        <th:block th:if="${list.display_yn == 0}">
+                                            <div class="question-body on" data-question-type="1">
+                                                <div class="row" th:if="${list.display_yn == 0}">
+                                                    <div class="col">
+                                                        <input type="text" class="form-control" th:value="${list.hstry_lclsf_ttl}" th:id="${list.main_id_name}" th:name="${list.main_id_name}" placeholder="메인텍스트를 입력해 주세요.">
+                                                    </div>
+                                                </div>
+                                                <div class="row" th:if="${list.display_yn == 0}">
+                                                    <div class="col" th:each="listDet, detStat : ${selectDetail8}">
+                                                        <div class="item-list">
+                                                            <div class="item">
+                                                                <div class="column">
+                                                                    <input type="text" class="form-control form-control-sm" th:id="${listDet.sub_id}" th:name="${listDet.sub_name}" th:value="${listDet.hstry_sclsf_ttl}" placeholder="서브텍스트를 입력해 주세요.">
+                                                                </div>
+                                                                <div class="column">
+                                                                    <button type="button" class="btn remove-item" onclick="removeItem(this)"><i data-feather="x-circle"></i></button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <!--<button type="button" class="btn btn-sm btn-dark add-item" onclick="addItem(this, 1)" th:attr="data-idx=${list.hstry_slcsf_sn}">-->
+                                                        <th:block th:if="${listDet.hstry_sclsf_sn == listDet.cnt_over}">
+                                                            <button type="button" class="btn btn-sm btn-dark add-item" th:onclick="|javascript:addItem(this, '${listDet.hstry_lclsf_sn}');|" th:attr="data-idx=${listDet.hstry_sclsf_sn + 1}">
+                                                                <i class="me-0" data-feather="plus"></i>
+                                                                서브텍스트 추가
+                                                            </button>
+                                                        </th:block>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </th:block>
+                                        <div class="question-foot" th:if="${list.display_yn == 0}">
+                                            <button type="button" class="btn btn-sm btn-dark" onclick="removeList(this)" th:attr="data-idx=${list.hstry_lclsf_sn}"><i data-feather="trash-2"></i>항목 삭제</button>
+                                        </div>
+                                    </div>
+                                </th:block>
+
+                                <th:block th:if="${selectDetail9 != null and selectDetail9 != ''}" th:each="list : ${selectDetail9}">
+                                    <div class="question-list" th:if="${list.display_yn == 0}">
+                                        <th:block th:if="${list.display_yn == 0}">
+                                            <div class="question-head">
+                                                <h3 class="heading h5" th:text="${list.h_title}">항목 1</h3>
+                                            </div>
+                                        </th:block>
+                                        <th:block th:if="${list.display_yn == 0}">
+                                            <div class="question-body on" data-question-type="1">
+                                                <div class="row" th:if="${list.display_yn == 0}">
+                                                    <div class="col">
+                                                        <input type="text" class="form-control" th:value="${list.hstry_lclsf_ttl}" th:id="${list.main_id_name}" th:name="${list.main_id_name}" placeholder="메인텍스트를 입력해 주세요.">
+                                                    </div>
+                                                </div>
+                                                <div class="row" th:if="${list.display_yn == 0}">
+                                                    <div class="col" th:each="listDet, detStat : ${selectDetail9}">
+                                                        <div class="item-list">
+                                                            <div class="item">
+                                                                <div class="column">
+                                                                    <input type="text" class="form-control form-control-sm" th:id="${listDet.sub_id}" th:name="${listDet.sub_name}" th:value="${listDet.hstry_sclsf_ttl}" placeholder="서브텍스트를 입력해 주세요.">
+                                                                </div>
+                                                                <div class="column">
+                                                                    <button type="button" class="btn remove-item" onclick="removeItem(this)"><i data-feather="x-circle"></i></button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <!--<button type="button" class="btn btn-sm btn-dark add-item" onclick="addItem(this, 1)" th:attr="data-idx=${list.hstry_slcsf_sn}">-->
+                                                        <th:block th:if="${listDet.hstry_sclsf_sn == listDet.cnt_over}">
+                                                            <button type="button" class="btn btn-sm btn-dark add-item" th:onclick="|javascript:addItem(this, '${listDet.hstry_lclsf_sn}');|" th:attr="data-idx=${listDet.hstry_sclsf_sn + 1}">
+                                                                <i class="me-0" data-feather="plus"></i>
+                                                                서브텍스트 추가
+                                                            </button>
+                                                        </th:block>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </th:block>
+                                        <div class="question-foot" th:if="${list.display_yn == 0}">
+                                            <button type="button" class="btn btn-sm btn-dark" onclick="removeList(this)" th:attr="data-idx=${list.hstry_lclsf_sn}"><i data-feather="trash-2"></i>항목 삭제</button>
+                                        </div>
+                                    </div>
+                                </th:block>
+
+                                <th:block th:if="${selectDetail10 != null and selectDetail10 != ''}" th:each="list : ${selectDetail10}">
+                                    <div class="question-list" th:if="${list.display_yn == 0}">
+                                        <th:block th:if="${list.display_yn == 0}">
+                                            <div class="question-head">
+                                                <h3 class="heading h5" th:text="${list.h_title}">항목 1</h3>
+                                            </div>
+                                        </th:block>
+                                        <th:block th:if="${list.display_yn == 0}">
+                                            <div class="question-body on" data-question-type="1">
+                                                <div class="row" th:if="${list.display_yn == 0}">
+                                                    <div class="col">
+                                                        <input type="text" class="form-control" th:value="${list.hstry_lclsf_ttl}" th:id="${list.main_id_name}" th:name="${list.main_id_name}" placeholder="메인텍스트를 입력해 주세요.">
+                                                    </div>
+                                                </div>
+                                                <div class="row" th:if="${list.display_yn == 0}">
+                                                    <div class="col" th:each="listDet, detStat : ${selectDetail10}">
+                                                        <div class="item-list">
+                                                            <div class="item">
+                                                                <div class="column">
+                                                                    <input type="text" class="form-control form-control-sm" th:id="${listDet.sub_id}" th:name="${listDet.sub_name}" th:value="${listDet.hstry_sclsf_ttl}" placeholder="서브텍스트를 입력해 주세요.">
+                                                                </div>
+                                                                <div class="column">
+                                                                    <button type="button" class="btn remove-item" onclick="removeItem(this)"><i data-feather="x-circle"></i></button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <!--<button type="button" class="btn btn-sm btn-dark add-item" onclick="addItem(this, 1)" th:attr="data-idx=${list.hstry_slcsf_sn}">-->
+                                                        <th:block th:if="${listDet.hstry_sclsf_sn == listDet.cnt_over}">
+                                                            <button type="button" class="btn btn-sm btn-dark add-item" th:onclick="|javascript:addItem(this, '${listDet.hstry_lclsf_sn}');|" th:attr="data-idx=${listDet.hstry_sclsf_sn + 1}">
+                                                                <i class="me-0" data-feather="plus"></i>
+                                                                서브텍스트 추가
+                                                            </button>
+                                                        </th:block>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </th:block>
+                                        <div class="question-foot" th:if="${list.display_yn == 0}">
+                                            <button type="button" class="btn btn-sm btn-dark" onclick="removeList(this)" th:attr="data-idx=${list.hstry_lclsf_sn}"><i data-feather="trash-2"></i>항목 삭제</button>
+                                        </div>
+                                    </div>
+                                </th:block>
+                            </div>
+                            <div class="button-container">
+                                <button type="button" class="btn btn-outline-primary">미리보기</button>
+                                <a th:href="@{/history/list/{menuId}(menuId=${menuId})}" class="btn btn-outline-primary">목록보기</a>
+                                <!--<a href="javascript:" class="btn btn-outline-primary" onclick="history.back();">목록보기</a>-->
+                                <!--<button type="submit" class="btn btn-primary">등록하기</button>-->
+                                <button type="button" class="btn btn-primary" onclick="javascript:historyUpdate();">수정하기</button>
+                                <button id="buttonAddList" type="button" class="btn btn-dark add-list"><i data-feather="plus"></i> 항목 추가</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <script th:inline="javascript">
+        var listIndex = [[${maxLcl}]], itemIndex = [];
+
+        //var listIndex = 2, itemIndex = [];
+
+        // 페이지 로드 시 실행
+        window.onload = function () {
+            // 페이지 로드 시 메시지 확인 및 알림 표시
+            // 수정 및 등록 시 띄울 알림창
+            const msg = /*[[${msg}]]*/ '';
+            if (msg) alert(msg);
+        }
+
+        $(function(){
+            $('#buttonAddList').click(addList);
+            $('.select-type').on('change', changeType);
+        });
+
+        // 항목 추가
+        function addList() {
+            if (listIndex > 10) {
+                alert("항목은 10개 이상 추가 할 수 없습니다.");
+                return false;
+            }
+            const dom = 
+                '<div class="question-list">' +
+                    '<div class="question-head">' +
+                        '<h3 class="heading h5"><i data-feather="check-circle"></i> 항목 '+ listIndex +'</h3>' +
+                    '</div>' +
+                    '<div class="question-body on" data-question-type="1">' +
+                        '<div class="row">' +
+                            '<div class="col">' +
+                                '<input type="text" class="form-control" value="" id="main_input'+ listIndex +'" name="main_input'+ listIndex +'" placeholder="메인텍스트를 입력해 주세요.">' +
+                            '</div>' +
+                        '</div>' +
+                        '<div class="row">' +
+                            '<div class="col">' +
+                                '<div class="item-list">' +
+                                    '<div class="item">' +
+                                        '<div class="column">' +
+                                            '<input type="text" class="form-control form-control-sm" id="sub_input'+ listIndex +'_1" name="sub_input'+ listIndex +'" value="" placeholder="서브텍스트를 입력해 주세요.">' +
+                                        '</div>' +
+                                        '<div class="column">' +
+                                            '<button type="button" class="btn remove-item" onclick="removeItem(this)"><i data-feather="x-circle"></i></button>' +
+                                        '</div>' +
+                                    '</div>' +
+                                '</div>' +
+                                '<button type="button" class="btn btn-sm btn-dark add-item" onclick="addItem(this, listIndex)" data-idx="2">' +
+                                    '<i class="me-0" data-feather="plus"></i>' +
+                                    '서브텍스트 추가' +
+                                '</button>' +
+                            '</div>' +
+                        '</div>' +
+                    '</div>' +
+                    '<div class="question-foot">' +
+                        '<button type="button" class="btn btn-sm btn-dark" onclick="removeList(this)"><i data-feather="trash-2"></i>항목 삭제</button>' +
+                    '</div>' +
+                '</div>';
+
+            $('.question').append(dom);
+            
+            feather.replace();
+
+            listIndex++;
+        }
+
+        // 항목 삭제
+        function removeList(e) {
+            const element = $(e);
+
+            if (parseInt(e.dataset.idx) == 1) {
+                alert("항목 1은 삭제할 수 없습니다.");
+                return false;
+            }
+
+            element.closest('.question-list').remove();
+        }
+
+        // 질문 유형 선택
+        function changeType() {
+            const type = $(this).val();
+
+            $(this).closest('.question-list').find('.question-body').removeClass('on');
+            $(this).closest('.question-list').find('[data-question-type="'+ type +'"]').addClass('on');
+        }
+
+        // 보기 추가
+        function addItem(e, index) {
+            const element = $(e);
+
+            if (parseInt(e.dataset.idx) > 10) {
+                alert("서브텍스트 항목은 10개 이상 추가 할 수 없습니다.");
+                return false;
+            }
+            
+            element.closest('.col').find('.item-list').append(
+                '<div class="item">' +
+                    '<div class="column">' +
+                        '<input type="text" class="form-control form-control-sm" id="sub_input'+index+'_'+e.dataset.idx+'" name="sub_input'+index+'" value="" placeholder="서브텍스트를 입력해 주세요.">' +
+                    '</div>' +
+                    '<div class="column">' +
+                        '<button type="button" class="btn remove-item" onclick="removeItem(this)"><i data-feather="x-circle"></i></button>' +
+                    '</div>' +
+                '</div>'
+            );
+
+            e.dataset.idx = parseInt(e.dataset.idx) + 1;
+
+            feather.replace();
+        }
+
+        // 보기 삭제
+        function removeItem(e) {
+            e.dataset.idx = parseInt(e.dataset.idx) - 1;
+            e.closest('.item').remove();
+        }
+    </script>
+    <script language="javascript">
+        function historyUpdate() {
+            let result = confirm("수정 하시겠습니까?");
+            if (result) {
+                const form = document.forms['history_form'];
+                form.action = '/kbinnovationhub_devadm/history/update'; // 전송할 URL
+                form.method = 'POST';            // 전송 방식
+                form.target = '';          // 새 창에서 열기
+                form.submit();                   // 폼 제출
+            }
+        }
+    </script>
+    <script th:src="@{/js/admin.js}"></script>
+</body>
+</html>

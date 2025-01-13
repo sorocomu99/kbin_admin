@@ -38,7 +38,12 @@ public class VisualController {
     @Value("/visual")
     private String directory;
 
-    // 메인 비주얼 미리보기
+    /**
+     * 메인 비주얼 미리보기
+     * @param params
+     * @param model
+     * @return
+     */
     @GetMapping("/preview")
     @ResponseBody
     public String preview(@RequestParam Map<String, String> params, Model model) {

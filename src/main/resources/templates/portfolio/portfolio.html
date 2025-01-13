@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="ko">
+<head th:replace="fragment/config :: configFragment"></head>
+
+<body>
+    <div class="wrap">
+        <div th:replace="fragment/header :: headerFragment"></div>
+    
+        <main class="main">
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        <div class="paper">
+                            <h2 class="h4">포트폴리오 관리</h2>
+                            <div class="mt-4">
+                                <div class="top-search d-flex mt-4">
+                                    <div class="col">
+                                        <form th:action="@{/portfolio/portList/{menuId}(menuId=${menuId})}" method="get">
+                                            <input type="hidden" name="menu_id" th:value="${menuId}"/>
+                                            <input type="hidden" name="port_yr" th:value="${port_yr}"/>
+                                            <div class="d-flex align-items-center">
+                                                <div class="input-group">
+                                                    <select class="form-select" aria-label="" name="type">
+                                                        <option value="title" th:selected="${type} == 'title'">업체명</option>
+                                                      </select>
+                                                    <input type="text" class="form-control" name="keyword" placeholder="검색어를 입력해주세요." aria-label="" th:value="${keyword}">
+                                                    <button class="btn btn-dark">
+                                                        <span data-feather="search"></span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="col-auto">
+                                        <div class="button-wrap d-flex justify-content-end">
+                                            <a th:href="@{/portfolio/list/{menuId}(menuId=${menuId})}" class="btn btn-outline-dark me-1">
+                                            <!--<a href="starters_list.html" class="btn btn-outline-dark me-1">-->
+                                                <i data-feather="list"></i> 목록
+                                            </a>
+                                            <!--<a href="starters_input.html" class="btn btn-primary">-->
+                                            <a th:href="@{|/portfolio/portInsert/${menuId}?port_yr=${port_yr}|}" class="btn btn-primary">
+                                                <i data-feather="edit"></i> 신규 등록
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-4">
+                                <table class="table text-center align-middle">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:25%">로고 이미지</th>
+                                            <th style="width:20%">업체명</th>
+                                            <th style="width:35%">소개내용</th>
+                                            <th style="width:20%">관리</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:if="${selectPortList == null or selectPortList.isEmpty()}">
+                                            <td class="py-5" colspan="4">
+                                                검색 결과가 없습니다.
+                                            </td>
+                                        </tr>
+                                        <tr th:unless="${selectPortList == null or selectPortList.isEmpty()}" th:each="list : ${selectPortList}">
+                                            <td>
+                                                <div class="list-iamge-wrap">
+                                                    <th:block th:if="${list.file_path != null}">
+                                                        <img th:src="${list.file_path == null ? '' : '\kbinnovationhub_devadm'+list.file_path + list.file_nm}" alt="">
+                                                        <!--<img src="/images/dummy/visual-slide-image-1.png" alt="">-->
+                                                    </th:block>
+                                                </div>
+                                            </td>
+                                            <td th:text="${list.bzenty_nm}">업체명</td>
+                                            <td th:text="${list.intro_cn}">소개 텍스트입니다.</td>
+                                            <td>
+                                                <!--<a href="starters_input.html" class="btn btn-outline-dark btn-sm">수정</a>-->
+                                                <button th:onclick="|updatePage('${list.port_sn}', '${menuId}', '${list.port_yr}')|" class="btn btn-outline-dark btn-sm">수정</button>
+                                                <button type="button" class="btn btn-outline-danger btn-sm" th:onclick="|deleteAlert('${list.port_sn}', '${menuId}', '${list.port_yr}')|">삭제</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <!-- 페이지네이션 -->
+                            <nav class="bottom-pagination" aria-label="navigation">
+                                <ul class="pagination">
+                                    <!-- 맨 앞페이지 이동 버튼 -->
+                                    <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled' : ''">
+                                        <a class="page-link" th:href="@{|/portfolio/portList/${menuId}?page=1&port_yr=${port_yr}|}" aria-label="Previous">
+                                            <span data-feather="chevrons-left" aria-hidden="true"></span>
+                                        </a>
+                                    </li>
+                                    <!-- 이전으로 이동하는 버튼 -->
+                                    <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled' : ''">
+                                        <a class="page-link" th:href="@{|/portfolio/portList/${menuId}?page=${currentPage - 1 < 1 ? 1 : currentPage - 1}&port_yr=${port_yr}|}" aria-label="Previous">
+                                            <span data-feather="chevron-left" aria-hidden="true"></span>
+                                        </a>
+                                    </li>
+                                    <th:block th:if="${repeat != null}" th:each="num : ${#numbers.sequence(1, repeat)}">
+                                        <li class="page-item" aria-current="page" th:classappend="${currentPage != null ? num == currentPage : num == 1} ? 'active' : ''">
+                                            <a th:id="${'page' + num}" class="page-link" th:href="@{|/portfolio/portList/${menuId}?page=${num}&port_yr=${port_yr}|}" th:text="${num}"></a>
+                                        </li>
+                                    </th:block>
+                                    <!-- 다음으로 이동하는 버튼 -->
+                                    <li class="page-item" th:classappend="${currentPage == repeat} ? 'disabled' : ''">
+                                        <a class="page-link" th:href="@{|/portfolio/portList/${menuId}?page=${currentPage + 1 > repeat ? repeat : currentPage + 1}&port_yr=${port_yr}|}" aria-label="Next">
+                                            <span data-feather="chevron-right" aria-hidden="true"></span>
+                                        </a>
+                                    </li>
+                                    <!-- 맨 끝페이지 이동 버튼 -->
+                                    <li class="page-item" th:classappend="${currentPage == repeat} ? 'disabled' : ''">
+                                        <a class="page-link" th:href="@{|/portfolio/portList/${menuId}?page=${repeat}&port_yr=${port_yr}|}" aria-label="Next">
+                                            <span data-feather="chevrons-right" aria-hidden="true"></span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script th:src="@{/js/admin.js}"></script>
+    <script th:inline="javascript">
+        // 수정 페이지 이동
+        function updatePage(port_sn, menuId, port_yr) {
+            // 빈 form 전달
+            let pageMoveForm = document.createElement('form');
+            // 인수 값 전달
+            let obj = document.createElement('input');
+            obj.setAttribute('type', 'hidden');
+            obj.setAttribute('name', 'port_sn');
+            obj.setAttribute('value', port_sn);
+            pageMoveForm.appendChild(obj);
+
+            let obj2 = document.createElement('input');
+            obj2.setAttribute('type', 'hidden');
+            obj2.setAttribute('name', 'menuId');
+            obj2.setAttribute('value', menuId);
+            pageMoveForm.appendChild(obj2);
+
+            let obj3 = document.createElement('input');
+            obj3.setAttribute('type', 'hidden');
+            obj3.setAttribute('name', 'port_yr');
+            obj3.setAttribute('value', port_yr);
+            pageMoveForm.appendChild(obj3);
+
+            pageMoveForm.setAttribute('method', 'post');
+            pageMoveForm.setAttribute('action', '/kbinnovationhub_devadm/portfolio/portListDet');
+            document.body.appendChild(pageMoveForm);
+            pageMoveForm.submit();
+        }
+
+        function deleteAlert(port_sn, menuId, port_yr) {
+            let result = confirm("정말 삭제 하시겠습니까?");
+            if (result) {
+                $.ajax({
+                    url: /*[[@{/portfolio/portListDel}]]*/, // 요청 URL
+                    type: 'POST', // HTTP 메서드
+                    data: { port_sn: port_sn, menuId:menuId, port_yr:port_yr }, // 보내는 데이터
+                    success: function(response) {
+                        alert("삭제에 성공하였습니다.");
+                        window.location.reload();
+                    },
+                    error: function(xhr, status, error) {
+                        alert("삭제를 실패하였습니다.");
+                        console.error('Error:', error);
+                    }
+                });
+            }
+        }
+    </script>
+</body>
+</html>

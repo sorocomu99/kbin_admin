@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="ko">
+<head th:replace="fragment/config :: configFragment"></head>
+
+<body>
+    <div class="wrap">
+        <div th:replace="fragment/header :: headerFragment"></div>
+    
+        <main class="main">
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        <div class="paper">
+                            <h2 class="h4">포트폴리오 관리 <span id="helpStarters" class="help"><i class="mb-1" data-feather="help-circle"></i></span></h2>
+                            <input type="hidden" name="menu_id" th:value="${menuId}"/>
+                            <div class="mt-4">
+                                <div class="d-flex mt-4">
+                                    <div class="col">
+                                    </div>
+                                    <div class="col-auto">
+                                        <div class="button-wrap d-flex justify-content-end">
+                                            <a th:href="@{/portfolio/insert/{menuId}(menuId=${menuId})}" class="btn btn-primary">
+                                            <!--<a href="starters_year.html" class="btn btn-primary">-->
+                                                <i data-feather="edit"></i> 신규 등록
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-4">
+                                <table class="table text-center align-middle">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:30%">년도</th>
+                                            <th style="width:50%">정보 수</th>
+                                            <th style="width:20%">관리</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:if="${selectListYear == null or selectListYear.isEmpty()}">
+                                            <td class="py-5" colspan="3">
+                                                검색 결과가 없습니다.
+                                            </td>
+                                        </tr>
+                                        <tr th:unless="${selectListYear == null or selectListYear.isEmpty()}" th:each="list : ${selectListYear}">
+                                            <td th:text="${list.port_yr}">2024</td>
+                                            <td th:text="${list.cnt}">56</td>
+                                            <td>
+                                                <!--<a href="starters.html" class="btn btn-outline-dark btn-sm">보기</a>-->
+                                                <!--<a th:href="@{/portfolio/portList/{menuId}/port_yr/{port_yr}(menuId=${menuId}, port_yr=${list.port_yr})}" class="btn btn-outline-dark btn-sm">보기</a>-->
+                                                <button th:onclick="|portListPage('${list.port_yr}', '${menuId}')|" class="btn btn-outline-dark btn-sm">보기</button>
+                                                <!--<a href="starters_year.html" class="btn btn-outline-dark btn-sm">수정</a>-->
+                                                <button th:onclick="|updatePage('${list.port_yr}', '${menuId}')|" class="btn btn-outline-dark btn-sm">수정</button>
+                                                <button type="button" class="btn btn-outline-danger btn-sm" th:onclick="|deleteAlert('${list.port_yr}')|">삭제</button>
+                                            </td>
+                                        </tr>
+                                        <!--<tr>
+                                            <td>2023</td>
+                                            <td>34</td>
+                                            <td>
+                                                <a href="starters.html" class="btn btn-outline-dark btn-sm">보기</a>
+                                                <a href="starters_year.html" class="btn btn-outline-dark btn-sm">수정</a>
+                                                <button type="button" class="btn btn-outline-danger btn-sm">삭제</button>
+                                            </td>
+                                        </tr>-->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script th:src="@{/js/admin.js}"></script>
+    <script th:inline="javascript">
+        // 페이지 로드 시 실행
+        window.onload = function () {
+            // 페이지 로드 시 메시지 확인 및 알림 표시
+            // 수정 및 등록 시 띄울 알림창
+            const msg = /*[[${msg}]]*/ '';
+            if (msg) alert(msg);
+        }
+
+        function deleteAlert(port_yr) {
+            let result = confirm("해당년도에 포함된 모든 포트폴리가 삭제됩니다.\n정말 삭제 하시겠습니까?");
+            if (result) {
+                $.ajax({
+                    url: /*[[@{/portfolio/portYrDelete}]]*/, // 요청 URL
+                    type: 'POST', // HTTP 메서드
+                    data: { port_yr: port_yr }, // 보내는 데이터
+                    success: function(response) {
+                        alert("삭제에 성공하였습니다.");
+                        window.location.reload();
+                    },
+                    error: function(xhr, status, error) {
+                        alert("삭제를 실패하였습니다.");
+                        console.error('Error:', error);
+                    }
+                });
+            }
+        }
+
+        //수정하기 버튼 클릭시 수정페이지 이동
+        function updatePage(port_yr, menuId) {
+            let pageMoveForm = document.createElement('form');
+
+            let obj = document.createElement('input');
+            obj.setAttribute('type', 'hidden');
+            obj.setAttribute('name', 'port_yr');
+            obj.setAttribute('value', port_yr);
+            pageMoveForm.appendChild(obj);
+
+            let obj2 = document.createElement('input');
+            obj2.setAttribute('type', 'hidden');
+            obj2.setAttribute('name', 'menuId');
+            obj2.setAttribute('value', menuId);
+            pageMoveForm.appendChild(obj2);
+
+            pageMoveForm.setAttribute('method', 'post');
+            pageMoveForm.setAttribute('action', '/kbinnovationhub_devadm/portfolio/yearDetail');
+            document.body.appendChild(pageMoveForm);
+            pageMoveForm.submit();
+        }
+
+        //수정하기 버튼 클릭시 수정페이지 이동
+        function portListPage(port_yr, menuId) {
+            let pageMoveForm = document.createElement('form');
+
+            let obj = document.createElement('input');
+            obj.setAttribute('type', 'hidden');
+            obj.setAttribute('name', 'port_yr');
+            obj.setAttribute('value', port_yr);
+            pageMoveForm.appendChild(obj);
+
+            let obj2 = document.createElement('input');
+            obj2.setAttribute('type', 'hidden');
+            obj2.setAttribute('name', 'menuId');
+            obj2.setAttribute('value', menuId);
+            pageMoveForm.appendChild(obj2);
+
+            pageMoveForm.setAttribute('method', 'get');
+            pageMoveForm.setAttribute('action', '/kbinnovationhub_devadm/portfolio/portList/'+menuId);
+            document.body.appendChild(pageMoveForm);
+            pageMoveForm.submit();
+        }
+    </script>
+</body>
+</html>

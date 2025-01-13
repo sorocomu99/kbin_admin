@@ -36,4 +36,11 @@ public class AdminLoginService {
 
         return adminLoginDTO;
     }
+
+    public int findPw(String userId, String pw) {
+        AdminLoginDTO adminLoginDTO = new AdminLoginDTO();
+        adminLoginDTO.setMngr_id(userId);
+        adminLoginDTO.setMngr_pswd(pw);
+        return adminLoginDAO.findPw(adminLoginDTO);
+    }
 }

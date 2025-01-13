@@ -24,6 +24,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
+import javax.mail.*;
+import javax.mail.internet.*;
+import java.util.Properties;
+import java.util.Random;
 
 @Controller
 public class AdminLoginController {
@@ -137,6 +141,87 @@ public class AdminLoginController {
         resultMap.put("message", "환영합니다. "+ dbMngrNm + " 님");
         
         System.out.println("================여기10");
+
+        return resultMap;
+    }
+
+    @RequestMapping("/findPw")
+    @ResponseBody
+    public HashMap<String, Object> findPw(@RequestParam Map<String, Object> params, HttpServletRequest request) {
+        HashMap<String, Object> resultMap = new HashMap<>();
+
+        //AdminLoginDTO adminLoginDTO = new AdminLoginDTO();
+        //adminLoginDTO.setFind_id((String)params.get("pwdMailId"));
+        //adminLoginDTO.setFind_email((String)params.get("pwdMailAddr"));
+
+        //임시비밀번호 생성
+        Random random = new Random();
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < 6; i++) {
+            sb.append(random.nextInt(10));
+        }
+
+        String randomPw = sb.toString();
+
+        try {
+            String shaPw = Sha256.encrypt(randomPw);  //입력받은 비밀번호 암호화
+            int pwSave = adminLoginService.findPw((String)params.get("pwdMailId"), shaPw);
+            if (pwSave != 1) {
+                resultMap.put("success", "fail");
+                resultMap.put("message", "임시 비밀번호 발급 중 오류가 발생했습니다.");
+
+                return resultMap;
+            }
+        } catch (Exception e) {
+            resultMap.put("success", "fail");
+            resultMap.put("message", "비밀번호 검증 중 시스템 오류가 발생했습니다.");
+
+            return resultMap;
+        }
+
+        String title = "KB Innovation Hub 입니다.";
+        String content = "임시 비밀번호 입니다.\n접속 후 반드시 비밀번호를 변경해서 사용해 주세요.\n임시비밀번호는 "+randomPw+" 입니다.";
+        String host = "smtp.fmcity.com";
+        String port = "587";
+        //String host = "10.200.85.102";  //비밀번호는 내부 메일로 보냄
+        //String port = "25";  //고객사 메일 포트
+        String to = (String)params.get("pwdMailAddr");
+        final String from = "hunhee@soroweb.co.kr";  //고객사 메일로 변경
+        final String pw = "1q2w3e4r!@";  //고객사 비밀번호로 변경
+
+        Properties props = new Properties();
+        props.setProperty("mail.smtp.host", host);
+        props.setProperty("mail.smtp.port", port);
+        props.setProperty("mail.smtp.auth", "false");
+        props.setProperty("mail.smtp.starttls.enable", "false");
+
+        //Session session = Session.getDefaultInstance(props);
+
+        Session session = Session.getInstance(props, new Authenticator() {
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(from, pw);
+            }
+        });
+
+        try {
+            // 메일 메시지 생성
+            MimeMessage message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(from)); // 발신자 이메일 주소
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(to)); // 수신자 이메일 주소
+            message.setSubject(title); // 이메일 제목
+            message.setText(content); // 이메일 내용
+
+            // 메일 보내기
+            Transport.send(message);
+            resultMap.put("success", "success");
+            resultMap.put("message", "입력하신 이메일로 임시 비밀번호를 보냈습니다.");
+        } catch (MessagingException e) {
+            e.printStackTrace();
+            resultMap.put("success", "falie");
+            resultMap.put("message", "메일 발송에 실패 하였습니다.");
+
+            return resultMap;
+        }
 
         return resultMap;
     }

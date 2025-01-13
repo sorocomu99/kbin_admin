@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="ko">
+<head th:replace="fragment/config :: configFragment"></head>
+
+<body>
+    <div class="wrap">
+        <div th:replace="fragment/header :: headerFragment"></div>
+    
+        <main class="main">
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        <div class="paper">
+                            <h2 class="h4">지원서 설문 관리</h2>
+                            <div class="mt-4">
+                                <form id="survey_form" name="survey_form" th:action="@{/survey/insert}" method="post" onsubmit="return checkInput();" enctype="multipart/form-data">
+                                    <input type="hidden" id="menu_id" name="menu_id" th:value="${menuId}"/>
+                                    <input type="hidden" id="file_yn" name="file_yn" value="0">
+                                    <table class="table table-bordered align-middle">
+                                        <tbody>
+                                            <tr>
+                                                <th class="bg-light">이미지</th>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <input class="form-control w-auto" type="file" id="survey_file" name="survey_file" onchange="preview()">
+                                                    </div>
+                                                    <img id="previewFrame" src="" width="200" class="img-fluid mt-2" style="display:none" />
+                                                    <p class="mb-0 mt-2">
+                                                        * 권장 사이즈 : 960x980px 
+                                                        <!-- 업로드 가능한 파일: <span class="fw-bold">mp4</span> / <span class="fw-bold text-danger">10MB 미만</span> -->
+                                                    </p>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th class="bg-light">설문 제목</th>
+                                                <td>
+                                                    <input type="text" class="form-control" value="" id="srvy_ttl" name="srvy_ttl">
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div class="button-container">
+                                        <button type="button" class="btn btn-primary" onclick="surveyInsert()">등록하기</button>
+                                        <a href="javascript:" class="btn btn-outline-primary">미리보기</a>
+                                        <a th:href="@{/survey/list/{menuId}(menuId=${menuId})}" class="btn btn-outline-primary">목록보기</a>
+                                        <!--<a href="javascript:" class="btn btn-outline-primary" onclick="history.back();">목록보기</a>-->
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script th:src="@{/js/admin.js}"></script>
+    <script th:inline="javascript">
+        // 페이지 로드 시 실행
+        window.onload = function () {
+            // 페이지 로드 시 메시지 확인 및 알림 표시
+            // 수정 및 등록 시 띄울 알림창
+            const msg = /*[[${msg}]]*/ '';
+            if (msg) alert(msg);
+        }
+        //섬네일 미리 보기
+        function preview() {
+            // 파일 추가 시 상태 값 변경
+            document.querySelector('#file_yn').value = 1;
+            previewFrame.src = URL.createObjectURL(event.target.files[0]);
+            document.querySelector('#previewFrame').style.display = "block";
+        }
+
+        function surveyInsert() {
+            var srvyTtl = $("#srvy_ttl").val();
+            if (srvyTtl === null || srvyTtl === '') {
+                alert("설문 제목을 입력하세요.")
+                $("#srvy_ttl").focus();
+                return false;
+            }
+
+            let result = confirm("등록 하시겠습니까?");
+            if (result) {
+                const form = document.forms['survey_form'];
+                form.action = '/kbinnovationhub_devadm/survey/insert';   //전송할 URL
+                form.method = 'POST';                                    //전송 방식
+                form.target = '';                                        //새 창에서 열기
+                form.submit();                                           //폼 제출
+            }
+        }
+    </script>
+</body>
+</html>

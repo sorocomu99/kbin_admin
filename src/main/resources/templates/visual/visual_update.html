@@ -87,68 +87,68 @@
   </main>
 </div>
 <script th:inline="javascript">
-  // 썸네일 미리보기
-  // 게시글 수정 시, 썸네일이 등록되어있으면 다음 두개 태그에 인라인 스타일을 제거해주세요.
-  // #previewFrame, #deleteThumbnail
-  // ex)
-  // 수정 전: <button onclick="clearImage()" id="deleteThumbnail" class="btn btn-secondary ms-2" style="display: none;">삭제</button>
-  // 수정 후: <button onclick="clearImage()" id="deleteThumbnail" class="btn btn-secondary ms-2">삭제</button>
+    // 썸네일 미리보기
+    // 게시글 수정 시, 썸네일이 등록되어있으면 다음 두개 태그에 인라인 스타일을 제거해주세요.
+    // #previewFrame, #deleteThumbnail
+    // ex)
+    // 수정 전: <button onclick="clearImage()" id="deleteThumbnail" class="btn btn-secondary ms-2" style="display: none;">삭제</button>
+    // 수정 후: <button onclick="clearImage()" id="deleteThumbnail" class="btn btn-secondary ms-2">삭제</button>
 
-  window.onload = function () {
-    // 페이지 로드 시 메시지 확인 및 알림 표시
-    // 수정 및 등록 시 띄울 알림창
-    const msg = /*[[${msg}]]*/ '';
-    if (msg) alert(msg);
+    window.onload = function () {
+        // 페이지 로드 시 메시지 확인 및 알림 표시
+        // 수정 및 등록 시 띄울 알림창
+        const msg = /*[[${msg}]]*/ '';
+        if (msg) alert(msg);
 
-    var img = document.querySelector('#previewFrame').src;
-    if(img != null) {
-      document.querySelector('#previewFrame').style.display = "block";
-    }
-  }
-
-  function preview() {
-    previewFrame.src = URL.createObjectURL(event.target.files[0]);
-    document.querySelector("#file_yn").value = 1;
-    document.querySelector('#previewFrame').style.display = "block";
-  }
-
-  // 프리뷰 페이지로 이동
-  function previewPage() {
-    const form = document.forms['main_form'];
-    form.action = '/kbinnovationhub_devadm/visual/preview'; // 전송할 URL
-    form.method = 'POST';            // 전송 방식
-    form.target = '_blank';          // 새 창에서 열기
-    form.submit();                   // 폼 제출
-  }
-
-  // 컨펌 메시지 띄우는 함수
-  function confirmMsg(type) {
-    // 파일 첨부 확인
-    var previewFrame = $('#previewFrame')[0].src;
-    if(previewFrame == null || previewFrame == "") {
-      alert("파일을 선택 해 주세요.");
-      return false;
+        var img = document.querySelector('#previewFrame').src;
+        if(img != null) {
+          document.querySelector('#previewFrame').style.display = "block";
+        }
     }
 
-    // sort_no를 비웠을 경우 1을 대입
-    if($("input[name=sort_no]").val() == '') {
-      $("input[name=sort_no]").val(1)
+    function preview() {
+        previewFrame.src = URL.createObjectURL(event.target.files[0]);
+        document.querySelector("#file_yn").value = 1;
+        document.querySelector('#previewFrame').style.display = "block";
     }
 
-    // 줄 바꿈 기능
-    $('#main_cn').val($('#main_cn').val().replaceAll(/\n/g, "<br />"));
-
-    let result = confirm("수정 하시겠습니까?");
-    if(result) {
-      // 폼 태그 서브밋 보내기
-      // 폼 태그 서브밋 보내기
-      const form = document.forms['main_form'];
-      form.action = '/kbinnovationhub_devadm/visual/update'; // 전송할 URL
-      form.method = 'POST';            // 전송 방식
-      form.target = '';          // 새 창에서 열기
-      form.submit();                   // 폼 제출
+      // 프리뷰 페이지로 이동
+    function previewPage() {
+        const form = document.forms['main_form'];
+        form.action = '/kbinnovationhub_devadm/visual/preview'; // 전송할 URL
+        form.method = 'POST';            // 전송 방식
+        form.target = '_blank';          // 새 창에서 열기
+        form.submit();                   // 폼 제출
     }
-  }
+
+      // 컨펌 메시지 띄우는 함수
+    function confirmMsg(type) {
+        // 파일 첨부 확인
+        var previewFrame = $('#previewFrame')[0].src;
+        if(previewFrame == null || previewFrame == "") {
+          alert("파일을 선택 해 주세요.");
+          return false;
+        }
+
+        // sort_no를 비웠을 경우 1을 대입
+        if($("input[name=sort_no]").val() == '') {
+          $("input[name=sort_no]").val(1)
+        }
+
+        // 줄 바꿈 기능
+        $('#main_cn').val($('#main_cn').val().replaceAll(/\n/g, "<br />"));
+
+        let result = confirm("수정 하시겠습니까?");
+        if(result) {
+          // 폼 태그 서브밋 보내기
+          // 폼 태그 서브밋 보내기
+          const form = document.forms['main_form'];
+          form.action = '/kbinnovationhub_devadm/visual/update'; // 전송할 URL
+          form.method = 'POST';            // 전송 방식
+          form.target = '';          // 새 창에서 열기
+          form.submit();                   // 폼 제출
+        }
+    }
 </script>
 <script th:src="@{/js/admin.js}"></script>
 </body>

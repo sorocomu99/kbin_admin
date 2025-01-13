@@ -20,4 +20,8 @@ public class AdminLoginDTO {
     private String mngr_pswd;
     private String mngr_nm;
     private String mngr_eml;
+
+    //비밀번호 찾기 변수
+    private String find_id;
+    private String find_email;
 }

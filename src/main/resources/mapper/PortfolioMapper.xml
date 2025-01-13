@@ -1,0 +1,279 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kb.inno.admin.DAO.PortfolioDAO">
+    <select id="selectListYear" resultType="com.kb.inno.admin.DTO.PortfolioDTO">
+        /* 포트폴리오 년도별 갯수 리스트 조회 */
+        SELECT PORT_YR
+             , CNT
+             , ROWNUM RNUM
+          FROM (
+                SELECT A.PORT_YR
+                     , COUNT(B.PORT_YR) CNT
+                  FROM KB_PORT_YR_INFO A
+                     , KB_PORT_INFO B
+                  WHERE A.PORT_YR = B.PORT_YR(+)
+                  GROUP BY A.PORT_YR
+                  ORDER BY A.PORT_YR ASC
+               )
+         ORDER BY RNUM DESC
+    </select>
+
+    <insert id="yearInsert" parameterType="com.kb.inno.admin.DTO.PortfolioDTO">
+        /* 포트폴리오 년도 등록 */
+        INSERT INTO KB_PORT_YR_INFO
+        (
+          PORT_YR
+        , FRST_RGTR
+        , FRST_REG_DT
+        , LAST_MDFR
+        , LAST_MDFCN_DT
+        )
+        VALUES
+        (
+          #{port_yr}
+        , #{frst_rgtr}
+        , SYSDATE
+        , #{last_mdfr}
+        , SYSDATE
+        )
+    </insert>
+
+    <select id="selectYearDetail" parameterType="com.kb.inno.admin.DTO.PortfolioDTO" resultType="com.kb.inno.admin.DTO.PortfolioDTO">
+        /* 포트폴리오 년도 상세 */
+        SELECT PORT_YR FROM KB_PORT_YR_INFO WHERE PORT_YR = #{port_yr}
+    </select>
+
+    <update id="yearUpdate" parameterType="com.kb.inno.admin.DTO.PortfolioDTO">
+        /* 포트폴리오 년도 수정 */
+        UPDATE KB_PORT_YR_INFO
+           SET PORT_YR = #{port_yr}
+             , LAST_MDFR = #{last_mdfr}
+             , LAST_MDFCN_DT = SYSDATE
+         WHERE PORT_YR = #{beforeYr}
+    </update>
+
+    <select id="selectPortListCount" parameterType="com.kb.inno.admin.DTO.PortfolioDTO" resultType="int">
+        /* 포트폴리오 년도별 리스트 건수 */
+        SELECT COUNT(PORT_SN) TOTCNT
+        FROM (
+              SELECT ROWNUM ROWNUMBER
+                   , Z.PORT_YR
+                   , Z.PORT_SN
+                   , Z.BZENTY_NM
+                   , Z.INTRO_CN
+                   , Z.HMPG_LINK
+                   , Z.ATCH_FILE_SN
+                   , Z.FILE_NM
+                   , Z.FILE_PATH
+                   , Z.RNUM
+                FROM (
+                      SELECT A.PORT_YR
+                           , A.PORT_SN
+                           , A.BZENTY_NM
+                           , A.INTRO_CN
+                           , A.HMPG_LINK
+                           , A.ATCH_FILE_SN
+                           , B.FILE_NM
+                           , B.FILE_PATH
+                           , ROW_NUMBER() OVER(ORDER BY A.PORT_SN DESC) RNUM
+                        FROM KB_PORT_INFO A
+                           , KB_FILE_INFO B
+                       WHERE 1 = 1
+                         AND A.ATCH_FILE_SN = B.FILE_SN(+)
+                         AND A.PORT_YR = #{port_yr}
+                        <if test='keyword != null and keyword != ""'>
+                            <choose>
+                                <when test="type == 'title'">
+                                    AND A.BZENTY_NM LIKE '%'|| #{keyword} ||'%'
+                                </when>
+                            </choose>
+                        </if>
+                       ORDER BY A.PORT_SN ASC
+                     ) Z
+               ORDER BY ROWNUMBER DESC
+             )
+    </select>
+
+    <select id="selectPortList" parameterType="com.kb.inno.admin.DTO.PortfolioDTO" resultType="com.kb.inno.admin.DTO.PortfolioDTO">
+        /* 포트폴리오 년도별 리스트 */
+        SELECT PORT_YR
+             , PORT_SN
+             , BZENTY_NM
+             , INTRO_CN
+             , HMPG_LINK
+             , ATCH_FILE_SN
+             , FILE_NM
+             , FILE_PATH
+             , RNUM
+          FROM (
+                SELECT ROWNUM ROWNUMBER
+                     , Z.PORT_YR
+                     , Z.PORT_SN
+                     , Z.BZENTY_NM
+                     , Z.INTRO_CN
+                     , Z.HMPG_LINK
+                     , Z.ATCH_FILE_SN
+                     , Z.FILE_NM
+                     , Z.FILE_PATH
+                     , Z.RNUM
+                  FROM (
+                        SELECT A.PORT_YR
+                             , A.PORT_SN
+                             , A.BZENTY_NM
+                             , A.INTRO_CN
+                             , A.HMPG_LINK
+                             , A.ATCH_FILE_SN
+                             , B.FILE_NM
+                             , B.FILE_PATH
+                             , ROW_NUMBER() OVER(ORDER BY A.PORT_SN DESC) RNUM
+                          FROM KB_PORT_INFO A
+                             , KB_FILE_INFO B
+                         WHERE 1 = 1
+                           AND A.ATCH_FILE_SN = B.FILE_SN(+)
+                           AND A.PORT_YR = #{port_yr}
+                            <if test='keyword != null and keyword != ""'>
+                                <choose>
+                                    <when test="type == 'title'">
+                                        AND A.BZENTY_NM LIKE '%'|| #{keyword} ||'%'
+                                    </when>
+                                </choose>
+                            </if>
+                         ORDER BY A.PORT_SN ASC
+                       ) Z
+                 ORDER BY ROWNUMBER DESC
+               )
+         WHERE RNUM BETWEEN #{start} AND #{end}
+    </select>
+
+    <insert id="portListInsert" parameterType="com.kb.inno.admin.DTO.PortfolioDTO">
+        /* 포트폴리오 년도별 등록 */
+        INSERT INTO KB_PORT_INFO
+        (
+          PORT_SN
+        , PORT_YR
+        , BZENTY_NM
+        , INTRO_CN
+        , HMPG_LINK
+        , ATCH_FILE_SN
+        , SORT_NO
+        , FRST_RGTR
+        , FRST_REG_DT
+        , LAST_MDFR
+        , LAST_MDFCN_DT
+        )
+        VALUES
+        (
+          #{port_sn}
+        , #{port_yr}
+        , #{bzenty_nm}
+        , #{intro_cn}
+        , #{hmpg_link}
+        , #{atch_file_sn}
+        , #{sort_no}
+        , #{frst_rgtr}
+        , SYSDATE
+        , #{last_mdfr}
+        , SYSDATE
+        )
+    </insert>
+    <select id="selectMaxSn" parameterType="com.kb.inno.admin.DTO.PortfolioDTO" resultType="int">
+        /* 포트폴리오 년도별 일련번호 구하기 */
+        SELECT NVL(MAX(PORT_SN), 0) + 1
+          FROM KB_PORT_INFO
+         WHERE PORT_YR = #{port_yr}
+    </select>
+
+    <insert id="insertFile" parameterType="com.kb.inno.admin.DTO.FileDTO" useGeneratedKeys="true" keyProperty="file_sn">
+        /* 포트폴리오 년도별 첨부파일 등록 */
+        INSERT INTO KB_FILE_INFO
+        (
+        FILE_SN
+        , FILE_NM
+        , ORGNL_FILE_NM
+        , FILE_SZ
+        , FILE_EXTN
+        , FILE_PATH
+        , FRST_RGTR
+        , FRST_REG_DT
+        , LAST_MDFR
+        , LAST_MDFCN_DT
+        )
+        VALUES
+        (
+        FILE_SN_SEQ.NEXTVAL
+        , #{file_nm}
+        , #{orgnl_file_nm}
+        , #{file_sz}
+        , #{file_extn}
+        , #{file_path}
+        , #{frst_rgtr}
+        , SYSDATE
+        , #{last_mdfr}
+        , SYSDATE
+        )
+        <selectKey keyProperty="file_sn" resultType="int" order="AFTER">
+            /* 저장한 파일 중 제일 큰 것 조회(키 조회) */
+            SELECT MAX(FILE_SN) AS FILE_SN
+            FROM KB_FILE_INFO
+        </selectKey>
+    </insert>
+
+    <delete id="portListDel" parameterType="com.kb.inno.admin.DTO.PortfolioDTO">
+        /* 포트폴리오 년도별 리스트 삭제 */
+        DELETE
+        FROM KB_PORT_INFO
+        WHERE 1 = 1
+          AND PORT_SN = #{port_sn}
+          AND PORT_YR = #{port_yr}
+    </delete>
+
+    <delete id="portYrListDelete" parameterType="com.kb.inno.admin.DTO.PortfolioDTO">
+        /* 포트폴리오 년도별 전체 삭제 */
+        DELETE
+        FROM KB_PORT_INFO
+        WHERE 1 = 1
+          AND PORT_YR = #{port_yr}
+    </delete>
+
+    <delete id="portYrDelete" parameterType="com.kb.inno.admin.DTO.PortfolioDTO">
+        /* 포트폴리오 년도 삭제 */
+        DELETE
+        FROM KB_PORT_YR_INFO
+        WHERE 1 = 1
+          AND PORT_YR = #{port_yr}
+    </delete>
+
+    <select id="portListDet" parameterType="com.kb.inno.admin.DTO.PortfolioDTO" resultType="com.kb.inno.admin.DTO.PortfolioDTO">
+        /* 포트폴리오 년도별 상세 */
+        SELECT A.PORT_YR
+             , A.PORT_SN
+             , A.BZENTY_NM
+             , A.INTRO_CN
+             , A.HMPG_LINK
+             , A.ATCH_FILE_SN
+             , B.FILE_NM
+             , B.FILE_PATH
+             , A.SORT_NO
+        FROM KB_PORT_INFO A
+           , KB_FILE_INFO B
+        WHERE 1 = 1
+          AND A.ATCH_FILE_SN = B.FILE_SN(+)
+          AND A.PORT_YR = #{port_yr}
+          AND A.PORT_SN = #{port_sn}
+    </select>
+
+    <update id="portListUpdate" parameterType="com.kb.inno.admin.DTO.PortfolioDTO">
+        /* 포트폴리오 상세 수정 */
+        UPDATE KB_PORT_INFO
+           SET BZENTY_NM = #{bzenty_nm}
+             , INTRO_CN = #{intro_cn}
+             , HMPG_LINK = #{hmpg_link}
+             , ATCH_FILE_SN = #{atch_file_sn}
+             , SORT_NO = #{sort_no}
+             , LAST_MDFR = #{last_mdfr}
+             , LAST_MDFCN_DT = SYSDATE
+         WHERE PORT_YR = #{port_yr}
+           AND PORT_SN = #{port_sn}
+    </update>
+</mapper>

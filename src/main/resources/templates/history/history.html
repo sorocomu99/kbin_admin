@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="ko">
+<head th:replace="fragment/config :: configFragment"></head>
+
+<body>
+    <div class="wrap">
+        <div th:replace="fragment/header :: headerFragment"></div>
+    
+        <main class="main">
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        <div class="paper">
+                            <h2 class="h4">연혁 관리 <span id="helpHistory" class="help"><i class="mb-1" data-feather="help-circle"></i></span></h2>
+                            <div class="mt-4">
+                                <input type="hidden" name="menu_id" th:value="${menuId}"/>
+                                <div class="top-search d-flex mt-4">
+                                    <div class="col">
+                                    </div>
+                                    <div class="col">
+                                        <div class="button-wrap d-flex justify-content-end">
+                                            <a th:href="@{/history/insert/{menuId}(menuId=${menuId})}" class="btn btn-primary">
+                                            <!--<a href="input.html" class="btn btn-primary">-->
+                                                <i data-feather="edit"></i> 신규 등록
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-4">
+                                <table class="table text-center align-middle">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:5%">NO</th>
+                                            <th style="width:25%">연도</th>
+                                            <th style="width:20%">관리</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:if="${selectList == null or selectList.isEmpty()}">
+                                            <td class="py-5" colspan="3">
+                                                검색 결과가 없습니다.
+                                            </td>
+                                        </tr>
+                                        <tr th:unless="${selectList == null or selectList.isEmpty()}" th:each="list : ${selectList}">
+                                            <td th:utext="${list.rownumber}">2</td>
+                                            <td th:utext="${list.hstry_yr}">2024</td>
+                                            <td>
+                                                <!--<a href="input.html" class="btn btn-outline-dark btn-sm">수정</a>-->
+                                                <button th:onclick="|updatePage('${list.hstry_yr}', '${menuId}')|" class="btn btn-outline-dark btn-sm">수정</button>
+                                                <button th:onclick="|deleteAlert('${list.hstry_yr}')|" type="button" class="btn btn-outline-danger btn-sm">삭제</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <!-- 페이지네이션 -->
+                            <nav class="bottom-pagination" aria-label="navigation">
+                                <ul class="pagination">
+                                    <!-- 맨 앞페이지 이동 버튼 -->
+                                    <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled' : ''">
+                                        <a class="page-link" th:href="@{|/history/list/${menuId}?page=1|}" aria-label="Previous">
+                                            <span data-feather="chevrons-left" aria-hidden="true"></span>
+                                        </a>
+                                    </li>
+                                    <!-- 이전으로 이동하는 버튼 -->
+                                    <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled' : ''">
+                                        <a class="page-link" th:href="@{|/history/list/${menuId}?page=${currentPage - 1 < 1 ? 1 : currentPage - 1}|}" aria-label="Previous">
+                                            <span data-feather="chevron-left" aria-hidden="true"></span>
+                                        </a>
+                                    </li>
+                                    <th:block th:if="${repeat != null}" th:each="num : ${#numbers.sequence(1, repeat)}">
+                                        <li class="page-item" aria-current="page" th:classappend="${currentPage != null ? num == currentPage : num == 1} ? 'active' : ''">
+                                            <a th:id="${'page' + num}" class="page-link" th:href="@{|/history/list/${menuId}?page=${num}|}" th:text="${num}"></a>
+                                        </li>
+                                    </th:block>
+                                    <!-- 다음으로 이동하는 버튼 -->
+                                    <li class="page-item" th:classappend="${currentPage == repeat} ? 'disabled' : ''">
+                                        <a class="page-link" th:href="@{|/history/list/${menuId}?page=${currentPage + 1 > repeat ? repeat : currentPage + 1}|}" aria-label="Next">
+                                            <span data-feather="chevron-right" aria-hidden="true"></span>
+                                        </a>
+                                    </li>
+                                    <!-- 맨 끝페이지 이동 버튼 -->
+                                    <li class="page-item" th:classappend="${currentPage == repeat} ? 'disabled' : ''">
+                                        <a class="page-link" th:href="@{|/history/list/${menuId}?page=${repeat}|}" aria-label="Next">
+                                            <span data-feather="chevrons-right" aria-hidden="true"></span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script th:inline="javascript">
+        // 페이지 로드 시 실행
+        window.onload = function () {
+            // 페이지 로드 시 메시지 확인 및 알림 표시
+            // 수정 및 등록 시 띄울 알림창
+            const msg = /*[[${msg}]]*/ '';
+            if (msg) alert(msg);
+        }
+
+        //수정하기 버튼 클릭시 수정페이지 이동
+        function updatePage(hstry_yr, menuId) {
+            let pageMoveForm = document.createElement('form');
+
+            let obj = document.createElement('input');
+            obj.setAttribute('type', 'hidden');
+            obj.setAttribute('name', 'hstry_yr');
+            obj.setAttribute('value', hstry_yr);
+            pageMoveForm.appendChild(obj);
+
+            let obj2 = document.createElement('input');
+            obj2.setAttribute('type', 'hidden');
+            obj2.setAttribute('name', 'menuId');
+            obj2.setAttribute('value', menuId);
+            pageMoveForm.appendChild(obj2);
+
+            pageMoveForm.setAttribute('method', 'post');
+            pageMoveForm.setAttribute('action', '/kbinnovationhub_devadm/history/detail');
+            document.body.appendChild(pageMoveForm);
+            pageMoveForm.submit();
+        }
+
+        //삭제 성공/실패 알림창 띄우기
+        function deleteAlert(hstry_yr) {
+            let result = confirm("정말 삭제 하시겠습니까?");
+            if(result) {
+                $.ajax({
+                    url: /*[[@{/history/delete}]]*/, // 요청 URL
+                    type: 'POST', // HTTP 메서드
+                    data: { hstry_yr: hstry_yr }, // 보내는 데이터
+                    success: function(response) {
+                        alert("삭제에 성공하였습니다.");
+                        window.location.reload();
+                    },
+                    error: function(xhr, status, error) {
+                        alert("삭제를 실패하였습니다.");
+                        console.error('Error:', error);
+                    }
+                });
+            }
+        }
+    </script>
+    <script th:src="@{/js/admin.js}"></script>
+</body>
+</html>

@@ -23,8 +23,8 @@ public class ImageController {
     public ResponseEntity<Resource> getImage(@PathVariable String imageName) {
 		//System.out.println("imageName==================="+imageName);
         //Path path = Paths.get("D:/fsfile/dev_kbinnovation/").resolve(imageName).normalize();
-        //String imagePath = "D:/fsfile/dev_kbinnovation/" + imageName;
-        String imagePath = "/fsfile/dev_kbinnovation/" + imageName;
+        String imagePath = "D:/fsfile/dev_kbinnovation/" + imageName;
+        //String imagePath = "/fsfile/dev_kbinnovation/" + imageName;
         //System.out.println("imagePath==================="+imagePath);
         //Resource resource = new FileSystemResource(path.toString());
         Resource resource = new FileSystemResource(imagePath);
@@ -41,8 +41,8 @@ public class ImageController {
     @RequestMapping("/summernoteimages/{imageName:.+}")
     @ResponseBody
     public ResponseEntity<Resource> getNoteImage(@PathVariable String imageName) {
-    	//String imagePath = "D:/fsfile/dev_kbinnovation/" + imageName;
-        String imagePath = "/fsfile/dev_kbinnovation/" + imageName;
+    	String imagePath = "D:/fsfile/dev_kbinnovation/" + imageName;
+        //String imagePath = "/fsfile/dev_kbinnovation/" + imageName;
     	Resource resource = new FileSystemResource(imagePath);
 
         if (resource.exists()) {

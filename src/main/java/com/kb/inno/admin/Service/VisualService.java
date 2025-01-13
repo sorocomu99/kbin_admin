@@ -53,7 +53,7 @@ public class VisualService {
         // 파일을 등록했는 지 확인
         int fileYn = visualDTO.getFile_yn();
 
-        if(fileYn == 1) {
+        if (fileYn == 1) {
             // 파일 저장
             MultipartFile file = visualDTO.getMain_file();
 

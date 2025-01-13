@@ -1,4 +1,25 @@
 @font-face {
+    font-family: 'KBFG Text';
+    src: url('../fonts/KBFGText-Bold.woff2') format('woff2'), url('../fonts/KBFGText-Bold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'KBFG Text';
+    src: url('../fonts/KBFGText-Light.woff2') format('woff2'), url('../fonts/KBFGText-Light.woff') format('woff');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'KBFG Text';
+    src: url('../fonts/KBFGText-Medium.woff2') format('woff2'), url('../fonts/KBFGText-Medium.woff') format('woff');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
     font-family: 'Pretendard';
     font-weight: 900;
     font-display: swap;
@@ -52,7 +73,7 @@
     font-display: swap;
     src: local('Pretendard Thin'), url('../fonts/woff2-subset/Pretendard-Thin.subset.woff2') format('woff2'), url('../fonts/woff-subset/Pretendard-Thin.subset.woff') format('woff');
 }
-body { font-family: Pretendard; font-size: .875rem; background: #f7f7f7;  }
+body { font-family: 'Pretendard'; font-size: .875rem; background: #f7f7f7; }
 
 /* ------- help ------- */
 .tippy-box { padding: 16px; max-width: none !important; width: 800px; line-height: 1.65; font-size: 16px; color: var(--bs-body-color); background-color: #fff; border: 1px solid #e6e6e6; box-shadow: 0 4px 14px 0 rgba(0, 0, 0 , 0.15); }
@@ -109,6 +130,8 @@ body { font-family: Pretendard; font-size: .875rem; background: #f7f7f7;  }
 
 
 /* ------- Editor ------- */
+.note-editor,
+.note-editable { font-family: 'KBFG Text' !important; }
 .note-editor.note-airframe.fullscreen, .note-editor.note-frame.fullscreen { background: #fff; }
 
 

@@ -73,12 +73,14 @@
     <update id="update" parameterType="com.kb.inno.admin.DTO.MemberDTO">
         /* 관리자 계정 수정 */
         UPDATE KB_MNGR_MBR_INFO
-           SET MNGR_PSWD     = #{mngr_pswd},
-               MNGR_NM       = #{mngr_nm},
+           SET MNGR_NM       = #{mngr_nm},
                MNGR_EML      = #{mngr_eml},
                LAST_CNTN_DT  = #{last_cntn_dt},
                LAST_MDFR     = #{last_mdfr},
                LAST_MDFCN_DT = SYSDATE
+           <if test="mngr_pswd != null and mngr_pswd != ''">
+               , MNGR_PSWD = #{mngr_pswd}
+           </if>
          WHERE MNGR_SN       = #{mngr_sn}
     </update>
     <!-- 관리자 계정 삭제 -->

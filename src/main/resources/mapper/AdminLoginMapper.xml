@@ -12,4 +12,10 @@
           FROM KB_MNGR_MBR_INFO
          WHERE MNGR_ID = #{mngrId}
     </select>
+
+    <update id="findPw" parameterType="com.kb.inno.admin.DTO.AdminLoginDTO">
+        UPDATE KB_MNGR_MBR_INFO
+           SET MNGR_PSWD = #{mngr_pswd}
+         WHERE MNGR_ID = #{mngr_id}
+    </update>
 </mapper>

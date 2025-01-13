@@ -18,4 +18,5 @@ import org.apache.ibatis.annotations.Mapper;
 public interface AdminLoginDAO {
     //입력한 아이디로 관리자 정보 조회
     AdminLoginDTO adminSelectOne(String mngrId);
+    int findPw(AdminLoginDTO adminLoginDTO);
 }

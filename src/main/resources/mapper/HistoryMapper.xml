@@ -1,0 +1,126 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kb.inno.admin.DAO.HistoryDAO">
+    <select id="selectPageCount" parameterType="String" resultType="int">
+        /* 연혁 갯수 조회 */
+        SELECT COUNT(DISTINCT HSTRY_YR)
+          FROM KB_CO_HSTRY_INFO
+         WHERE 1 = 1
+    </select>
+
+    <select id="selectListOne" resultType="com.kb.inno.admin.DTO.HistoryDTO">
+        /* 해당년도 연혁 리스트 한건만 조회 */
+        SELECT HSTRY_YR
+             , ROWNUM ROWNUMBER
+          FROM (SELECT HSTRY_YR
+                  FROM KB_CO_HSTRY_INFO
+                 GROUP BY HSTRY_YR
+                 ORDER BY HSTRY_YR DESC
+               )
+         WHERE ROWNUM BETWEEN #{start} AND #{end}
+    </select>
+
+    <!-- 관리자 계정 리스트 조회 -->
+    <select id="selectList" resultType="com.kb.inno.admin.DTO.HistoryDTO">
+        /* 연혁 리스트 조회 */
+        SELECT HSTRY_YR
+             , HSTRY_LCLSF_SN
+             , HSTRY_LCLSF_TTL
+             , HSTRY_LCLSF_SORT_NO
+             , HSTRY_SCLSF_SN
+             , HSTRY_SCLSF_TTL
+             , HSTRY_SCLSF_SORT_NO
+             , HSTRY_SCLSF_UP_LCLSF_SN
+             , FRST_RGTR
+             , FRST_REG_DT
+             , LAST_MDFR
+             , LAST_MDFCN_DT
+             , ROWNUM ROWNUMBER
+          FROM KB_CO_HSTRY_INFO
+         ORDER BY HSTRY_YR DESC
+    </select>
+
+    <select id="selectCount" parameterType="com.kb.inno.admin.DTO.HistoryDTO" resultType="int">
+        /* 해당년도 데이터 존재여부 확인 */
+        SELECT COUNT(*) CNT
+          FROM KB_CO_HSTRY_INFO
+         WHERE 1 = 1
+           AND HSTRY_YR = #{hstry_yr}
+    </select>
+
+    <select id="selectMaxLcl" parameterType="com.kb.inno.admin.DTO.HistoryDTO" resultType="int">
+        SELECT MAX(HSTRY_LCLSF_SN) MAX_LCL_SN
+          FROM KB_CO_HSTRY_INFO
+         WHERE 1 = 1
+           AND HSTRY_YR = #{hstry_yr}
+         GROUP BY HSTRY_YR
+    </select>
+
+    <insert id="insert" parameterType="com.kb.inno.admin.DTO.HistoryDTO">
+        /* 연혁 등록 */
+        INSERT INTO KB_CO_HSTRY_INFO
+        ( HSTRY_YR
+        , HSTRY_LCLSF_SN
+        , HSTRY_LCLSF_TTL
+        , HSTRY_LCLSF_SORT_NO
+        , HSTRY_SCLSF_SN
+        , HSTRY_SCLSF_TTL
+        , HSTRY_SCLSF_SORT_NO
+        , HSTRY_SCLSF_UP_LCLSF_SN
+        , FRST_RGTR
+        , FRST_REG_DT
+        , LAST_MDFR
+        , LAST_MDFCN_DT
+        )
+        VALUES
+        ( #{hstry_yr}
+        , #{hstry_lclsf_sn}
+        , #{hstry_lclsf_ttl}
+        , #{hstry_lclsf_sort_no}
+        , #{hstry_sclsf_sn}
+        , #{hstry_sclsf_ttl}
+        , #{hstry_sclsf_sort_no}
+        , #{hstry_sclsf_up_lclsf_sn}
+        , #{frst_rgtr}
+        , SYSDATE
+        , #{last_mdfr}
+        , SYSDATE
+        )
+    </insert>
+
+    <select id="selectDetail" parameterType="com.kb.inno.admin.DTO.HistoryDTO" resultType="com.kb.inno.admin.DTO.HistoryDTO">
+        /* 연혁 상세 내용 조회 */
+        SELECT HSTRY_YR
+             , HSTRY_LCLSF_SN
+             , HSTRY_LCLSF_TTL
+             , HSTRY_LCLSF_SORT_NO
+             , HSTRY_SCLSF_SN
+             , HSTRY_SCLSF_TTL
+             , HSTRY_SCLSF_SORT_NO
+             , HSTRY_SCLSF_UP_LCLSF_SN
+             , 'main_input' || HSTRY_LCLSF_SN AS MAIN_ID_NAME
+             , 'sub_input' || HSTRY_LCLSF_SN || '_' || HSTRY_SCLSF_SN AS SUB_ID
+             , 'sub_input' || HSTRY_LCLSF_SN AS SUB_NAME
+             , CASE WHEN LAG(HSTRY_LCLSF_SN) OVER (PARTITION BY HSTRY_LCLSF_SN ORDER BY HSTRY_LCLSF_SN ASC, HSTRY_SCLSF_SN ASC) IS NULL THEN 0
+               ELSE LAG(HSTRY_LCLSF_SN) OVER (PARTITION BY HSTRY_LCLSF_SN ORDER BY HSTRY_LCLSF_SN ASC, HSTRY_SCLSF_SN ASC)
+               END AS DISPLAY_YN
+             , '항목 ' || HSTRY_LCLSF_SN AS H_TITLE
+             , 'main_sn' || HSTRY_LCLSF_SN AS MAIN_SN
+             , 'sub_sn' || HSTRY_SCLSF_SN AS SUB_SN
+             , COUNT(HSTRY_LCLSF_SN) OVER (PARTITION BY HSTRY_LCLSF_SN ORDER BY HSTRY_LCLSF_SN ASC) CNT_OVER
+          FROM KB_CO_HSTRY_INFO
+         WHERE 1 = 1
+           AND HSTRY_YR = #{hstry_yr}
+           AND HSTRY_LCLSF_SN = ${hstry_lclsf_sn}
+         ORDER BY HSTRY_LCLSF_SN ASC, HSTRY_SCLSF_SN ASC
+    </select>
+
+    <delete id="delete" parameterType="com.kb.inno.admin.DTO.HistoryDTO">
+        /* 등록 중 오류발생시 해당년도 삭제 */
+        DELETE
+          FROM KB_CO_HSTRY_INFO
+         WHERE 1 = 1
+          AND HSTRY_YR = #{hstry_yr}
+    </delete>
+</mapper>
