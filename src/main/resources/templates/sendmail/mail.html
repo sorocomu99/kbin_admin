@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="ko">
+<head th:replace="fragment/config :: configFragment"></head>
+
+<body>
+    <div class="wrap">
+        <div th:replace="fragment/header :: headerFragment"></div>
+    
+        <main class="main">
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        <div class="paper">
+                            <h2 class="h4">보낸메일함 관리</h2>
+                            <div class="mt-4">
+                                <input type="hidden" name="menu_id" th:value="${menuId}"/>
+                                <div class="top-search d-flex mt-4">
+                                    <div class="col">
+                                        <form th:action="@{/mail/list/{menuId}(menuId=${menuId})}" method="get">
+                                            <div class="d-flex align-items-center">
+                                                <div class="input-group">
+                                                    <select class="form-select" aria-label="" name="type">
+                                                        <option value="all" th:selected="${type} == 'all'">전체</option>
+                                                        <option value="title" th:selected="${type} == 'title'">제목</option>
+                                                    </select>
+                                                    <input type="text" class="form-control" placeholder="검색어를 입력해주세요." aria-label="" name="keyword" th:value="${keyword}">
+                                                    <button class="btn btn-dark" type="submit">
+                                                        <span data-feather="search"></span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="col-auto">
+                                        <div class="button-wrap d-flex justify-content-end">
+                                            <a href="javascript:" class="btn btn-outline-danger">
+                                                <i data-feather="trash-2"></i> 선택 삭제
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-4">
+                                <div class="table-scroll">
+                                    <table class="table text-center align-middle">
+                                        <thead>
+                                            <tr>
+                                                <th style="width:10%">
+                                                    <input class="form-check-input" type="checkbox" value="" id="checkAll">
+                                                </th>
+                                                <th style="width:10%">No</th>
+                                                <th style="width:20%">받는사람</th>
+                                                <th style="width:30%">제목</th>
+                                                <th style="width:30%">관리</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!-- 검색 결과 없을 때 -->
+                                            <tr th:if="${selectListMail == null or selectListMail.isEmpty()}">
+                                                <td class="py-5" colspan="5">
+                                                    검색 결과가 없습니다.
+                                                </td>
+                                            </tr>
+                                            <tr th:unless="${selectListMail == null or selectListMail.isEmpty()}" th:each="list : ${selectListMail}">
+                                                <td>
+                                                    <input class="form-check-input" type="checkbox" value="" id="idx1">
+                                                </td>
+                                                <td th:text="${list.rownumber}">115</td>
+                                                <td th:text="${list.mail_rcvr}">abc@abc.com</td>
+                                                <td th:text="${list.mail_ttl}">제목입니다.</td>
+                                                <td>
+                                                    <button type="button" th:onclick="|detailPage('${list.send_ymd}', '${menuId}', '${list.send_mail_sn}')|" class="btn btn-outline-dark btn-sm">보기</button>
+                                                    <button type="button" class="btn btn-outline-danger btn-sm" th:onclick="|deleteAlert('${list.send_ymd}', '${menuId}', '${list.send_mail_sn}')|">삭제</button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <!-- 페이지네이션 -->
+                                <nav class="bottom-pagination" aria-label="navigation">
+                                    <ul class="pagination">
+                                        <!-- 맨 앞페이지 이동 버튼 -->
+                                        <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled' : ''">
+                                            <a class="page-link" th:href="@{|/mail/list/${menuId}?page=1|}" aria-label="Previous">
+                                                <span data-feather="chevrons-left" aria-hidden="true"></span>
+                                            </a>
+                                        </li>
+                                        <!-- 이전으로 이동하는 버튼 -->
+                                        <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled' : ''">
+                                            <a class="page-link" th:href="@{|/mail/list/${menuId}?page=${currentPage - 1 < 1 ? 1 : currentPage - 1}|}" aria-label="Previous">
+                                                <span data-feather="chevron-left" aria-hidden="true"></span>
+                                            </a>
+                                        </li>
+                                        <th:block th:if="${repeat != null}" th:each="num : ${#numbers.sequence(1, repeat)}">
+                                            <li class="page-item" aria-current="page" th:classappend="${currentPage != null ? num == currentPage : num == 1} ? 'active' : ''">
+                                                <a th:id="${'page' + num}" class="page-link" th:href="@{|/mail/list/${menuId}?page=${num}|}" th:text="${num}"></a>
+                                            </li>
+                                        </th:block>
+                                        <!-- 다음으로 이동하는 버튼 -->
+                                        <li class="page-item" th:classappend="${currentPage == repeat} ? 'disabled' : ''">
+                                            <a class="page-link" th:href="@{|/mail/list/${menuId}?page=${currentPage + 1 > repeat ? repeat : currentPage + 1}|}" aria-label="Next">
+                                                <span data-feather="chevron-right" aria-hidden="true"></span>
+                                            </a>
+                                        </li>
+                                        <!-- 맨 끝페이지 이동 버튼 -->
+                                        <li class="page-item" th:classappend="${currentPage == repeat} ? 'disabled' : ''">
+                                            <a class="page-link" th:href="@{|/mail/list/${menuId}?page=${repeat}|}" aria-label="Next">
+                                                <span data-feather="chevrons-right" aria-hidden="true"></span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script th:src="@{/js/admin.js}"></script>
+    <script th:inline="javascript">
+        $('#checkAll').click(function () {
+            var checked = $(this).is(':checked');
+
+            $('.form-check-input').prop('checked', checked);
+        });
+
+        $('.form-check-input').not('#checkAll').click(function () {
+            if (!$(this).is(':checked')) {
+                $('#checkAll').prop('checked', false);
+            }
+
+            if ($('.form-check-input:checked').not('#checkAll').length === $('.form-check-input').not('#checkAll')) {
+                $('.form-check-input').prop('checked', true);
+            }
+        });
+
+        function detailPage(send_ymd, menuId, send_mail_sn) {
+            // 빈 form 전달
+            let pageMoveForm = document.createElement('form');
+            // 인수 값 전달
+            let obj = document.createElement('input');
+            obj.setAttribute('type', 'hidden');
+            obj.setAttribute('name', 'send_ymd');
+            obj.setAttribute('value', send_ymd);
+            pageMoveForm.appendChild(obj);
+
+            let obj2 = document.createElement('input');
+            obj2.setAttribute('type', 'hidden');
+            obj2.setAttribute('name', 'menuId');
+            obj2.setAttribute('value', menuId);
+            pageMoveForm.appendChild(obj2);
+
+            let obj3 = document.createElement('input');
+            obj3.setAttribute('type', 'hidden');
+            obj3.setAttribute('name', 'send_mail_sn');
+            obj3.setAttribute('value', send_mail_sn);
+            pageMoveForm.appendChild(obj3);
+
+            pageMoveForm.setAttribute('method', 'post');
+            pageMoveForm.setAttribute('action', '/kbinnovationhub_devadm/mail/detail');
+            document.body.appendChild(pageMoveForm);
+            pageMoveForm.submit();
+        }
+
+        //삭제
+        function deleteAlert(send_ymd, menuId, send_mail_sn) {
+            let result = confirm("정말 삭제 하시겠습니까?");
+            if (result) {
+                $.ajax({
+                    url: /*[[@{/portfolio/portListDel}]]*/, // 요청 URL
+                    type: 'POST', // HTTP 메서드
+                    data: {send_ymd: send_ymd, menuId: menuId, send_mail_sn: send_mail_sn}, // 보내는 데이터
+                    success: function (response) {
+                        alert("삭제에 성공하였습니다.");
+                        window.location.reload();
+                    },
+                    error: function (xhr, status, error) {
+                        alert("삭제를 실패하였습니다.");
+                        console.error('Error:', error);
+                    }
+                });
+            }
+        }
+    </script>
+</body>
+</html>
