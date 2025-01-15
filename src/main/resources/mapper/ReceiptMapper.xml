@@ -1,0 +1,196 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kb.inno.admin.DAO.ReceiptDAO">
+    <select id="selectPageCount" parameterType="String" resultType="int">
+        /* 설문조사 갯수 조회 */
+        SELECT COUNT(DISTINCT SRVY_SN)
+          FROM KB_SRVY_EXMN_INFO
+         WHERE 1 = 1
+        <if test='keyword != null and keyword != ""'>
+            <choose>
+                <when test="type == 'title'">
+                    AND SRVY_TTL LIKE '%'|| #{keyword} ||'%'
+                </when>
+            </choose>
+        </if>
+    </select>
+
+    <select id="selectList" resultType="com.kb.inno.admin.DTO.ReceiptDTO">
+        /* 설문조사 리스트 */
+        SELECT SRVY_SN
+             , SRVY_TTL
+             , BANE_FILE_SN
+             , TMPR_DEL_YN
+             , FILE_NM
+             , FILE_PATH
+             , ROWNUM ROWNUMBER
+          FROM (SELECT A.SRVY_SN
+                     , A.SRVY_TTL
+                     , A.BANE_FILE_SN
+                     , A.TMPR_DEL_YN
+                     , B.FILE_SN
+                     , B.FILE_NM
+                     , B.FILE_PATH
+                  FROM KB_SRVY_EXMN_INFO A
+                     , KB_FILE_INFO B
+                 WHERE 1 = 1
+                   AND A.BANE_FILE_SN = B.FILE_SN(+)
+                <if test='keyword != null and keyword != ""'>
+                    <choose>
+                        <when test="type == 'title'">
+                            AND SRVY_TTL LIKE '%'|| #{keyword} ||'%'
+                        </when>
+                    </choose>
+                </if>
+                 ORDER BY SRVY_SN DESC
+               )
+         WHERE ROWNUM BETWEEN #{start} AND #{end}
+    </select>
+
+    <select id="selectMaxSn" resultType="int">
+        /* 설문조사 일련번호 구하기 */
+        SELECT NVL(MAX(SRVY_SN), 0) + 1
+          FROM KB_SRVY_EXMN_INFO
+    </select>
+
+   <!--  <insert id="insertFile" parameterType="com.kb.inno.admin.DTO.FileDTO" useGeneratedKeys="true" keyProperty="file_sn">
+        /* 설문조사 파일 추가 */
+        INSERT INTO KB_FILE_INFO
+        (
+          FILE_SN
+        , FILE_NM
+        , ORGNL_FILE_NM
+        , FILE_SZ
+        , FILE_EXTN
+        , FILE_PATH
+        , FRST_RGTR
+        , FRST_REG_DT
+        , LAST_MDFR
+        , LAST_MDFCN_DT
+        )
+        VALUES
+        (
+          FILE_SN_SEQ.NEXTVAL
+        , #{file_nm}
+        , #{orgnl_file_nm}
+        , #{file_sz}
+        , #{file_extn}
+        , #{file_path}
+        , #{frst_rgtr}
+        , SYSDATE
+        , #{last_mdfr}
+        , SYSDATE
+        )
+        <selectKey keyProperty="file_sn" resultType="int" order="AFTER">
+            /* 저장한 파일 중 제일 큰 것 조회(키 조회) */
+            SELECT MAX(FILE_SN) AS FILE_SN
+              FROM KB_FILE_INFO
+        </selectKey>
+    </insert>
+
+    <insert id="exmnInsert" parameterType="com.kb.inno.admin.DTO.SurveyDTO">
+        /* 설문조사정보(KB_SRVY_EXMN_INFO) 등록 */
+        INSERT INTO KB_SRVY_EXMN_INFO
+        ( SRVY_SN
+        , SRVY_TTL
+        , BANE_FILE_SN
+        , TMPR_DEL_YN
+        , FRST_RGTR
+        , FRST_REG_DT
+        , LAST_MDFR
+        , LAST_MDFCN_DT
+        )
+        VALUES
+        ( #{srvy_sn}
+        , #{srvy_ttl}
+        , #{bane_file_sn}
+        , 'N'
+        , #{frst_rgtr}
+        , SYSDATE
+        , #{last_mdfr}
+        , SYSDATE
+        )
+    </insert>
+
+    <select id="selectGuide" parameterType="com.kb.inno.admin.DTO.SurveyDTO" resultType="com.kb.inno.admin.DTO.SurveyDTO">
+        SELECT SPRT_EXPLN_SN
+             , RECRU_SE
+             , RECRU_TRGT_M
+             , RECRU_TRGT_S
+             , RECRU_FLD_M
+             , RECRU_FLD_S
+             , SLCTN_BENEF_CN1
+             , SLCTN_BENEF_CN2
+             , SLCTN_BENEF_CN3
+             , SLCTN_BENEF_CN4
+             , RECRU_SCHDL
+             , SLCTN_PRCS
+          FROM KB_SPRT_EXPLN_INFO
+         WHERE SPRT_EXPLN_SN = #{sprt_expln_sn}
+    </select>
+
+    <update id="guideInsert" parameterType="com.kb.inno.admin.DTO.SurveyDTO">
+        MERGE INTO KB_SPRT_EXPLN_INFO A
+            USING DUAL ON (A.SPRT_EXPLN_SN = #{sprt_expln_sn})
+        WHEN MATCHED THEN
+            UPDATE
+               SET LAST_MDFCN_DT = SYSDATE
+                 , RECRU_SE = #{recru_se}
+                 , RECRU_TRGT_M = #{recru_trgt_m}
+                 , RECRU_TRGT_S = #{recru_trgt_s}
+                 , RECRU_FLD_M = #{recru_fld_m}
+                 , RECRU_FLD_S = #{recru_fld_s}
+                 , SLCTN_BENEF_CN1 = #{slctn_benef_cn1}
+                 , SLCTN_BENEF_CN2 = #{slctn_benef_cn2}
+                 , SLCTN_BENEF_CN3 = #{slctn_benef_cn3}
+                 , SLCTN_BENEF_CN4 = #{slctn_benef_cn4}
+                 , LAST_MDFR = #{last_mdfr}
+                 , RECRU_SCHDL = #{recru_schdl}
+                 , SLCTN_PRCS = #{slctn_prcs}
+             WHERE SPRT_EXPLN_SN = #{sprt_expln_sn}
+        WHEN NOT MATCHED THEN
+            INSERT ( SPRT_EXPLN_SN
+                   , RECRU_SE
+                   , RECRU_TRGT_M
+                   , RECRU_TRGT_S
+                   , RECRU_FLD_M
+                   , RECRU_FLD_S
+                   , SLCTN_BENEF_CN1
+                   , SLCTN_BENEF_CN2
+                   , SLCTN_BENEF_CN3
+                   , SLCTN_BENEF_CN4
+                   , RECRU_SCHDL
+                   , SLCTN_PRCS
+                   , FRST_RGTR
+                   , FRST_REG_DT
+                   , LAST_MDFR
+                   , LAST_MDFCN_DT
+                   )
+            VALUES ( #{sprt_expln_sn}
+                   , #{recru_se}
+                   , #{recru_trgt_m}
+                   , #{recru_trgt_s}
+                   , #{recru_fld_m}
+                   , #{recru_fld_s}
+                   , #{slctn_benef_cn1}
+                   , #{slctn_benef_cn2}
+                   , #{slctn_benef_cn3}
+                   , #{slctn_benef_cn4}
+                   , #{recru_schdl}
+                   , #{slctn_prcs}
+                   , #{frst_rgtr}
+                   , SYSDATE
+                   , #{last_mdfr}
+                   , SYSDATE
+                   )
+    </update>
+
+    <delete id="exmnDelete" parameterType="com.kb.inno.admin.DTO.SurveyDTO">
+        /* 설문조사 삭제 */
+        DELETE
+          FROM KB_SRVY_EXMN_INFO
+         WHERE 1 = 1
+           AND SRVY_SN = #{srvy_sn}
+    </delete> -->
+</mapper>
