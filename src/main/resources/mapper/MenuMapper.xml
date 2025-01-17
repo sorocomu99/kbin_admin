@@ -11,7 +11,7 @@
              , MENU_UP_SN
              , MENU_SORT
              , USE_YN
-          FROM KB_MENU_INFO
+          FROM KB_USER_MENU
          START WITH MENU_UP_SN IS NULL
        CONNECT BY PRIOR MENU_SN = MENU_UP_SN
          ORDER BY MENU_SN, MENU_SORT
@@ -35,12 +35,12 @@
     <select id="select" parameterType="int" resultType="com.kb.inno.admin.DTO.MenuDTO">
         SELECT MENU_NM
              , USE_YN
-         FROM KB_MENU_INFO
+         FROM KB_USER_MENU
         WHERE MENU_SN = #{menu_sn}
     </select>
     <!-- 메뉴 수정 -->
     <update id="update" parameterType="com.kb.inno.admin.DTO.MenuDTO">
-        UPDATE KB_MENU_INFO
+        UPDATE KB_USER_MENU
            SET MENU_NM = #{menu_nm}
              , USE_YN  = #{use_yn}
          WHERE MENU_SN = #{menu_sn}
