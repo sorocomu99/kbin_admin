@@ -22,9 +22,12 @@ public interface SendMailDAO {
     //보낸 메일함 갯수 조회
     int selectPageCount();
     //보낸 메일함 조회
-    List<SendMailDTO> selectList(SendMailDTO sendMailDTO);
+    List<SendMailDTO> selectListMail(SendMailDTO sendMailDTO);
     //메일 상세 내용 조회
     SendMailDTO selectDetailMail(SendMailDTO sendMailDTO);
+    SendMailDTO selectMailSendName(SendMailDTO sendMailDTO);
+    int deleteOne(SendMailDTO sendMailDTO);
+    int deleteDetail(SendMailDTO sendMailDTO);
     //보낸 메일함 보낸사람 조회
     List<SendMailDTO> selectDetailMailList(SendMailDTO sendMailDTO);
 }

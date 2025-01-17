@@ -17,6 +17,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -27,10 +29,12 @@ public class SendMailService {
     private final SendMailDAO sendMailDAO;
 
     /**
-     * 설문 조회
+     * 보낸 메일함 조회
      * @param menuId
-     * @param page
      * @param model
+     * @param type
+     * @param keyword
+     * @param page
      */
     public void selectListMail(int menuId, Model model, String type, String keyword, int page) {
         SendMailDTO sendMailDTO = new SendMailDTO();
@@ -72,7 +76,7 @@ public class SendMailService {
         int start = end + 1 - pageLetter;
         sendMailDTO.setStart(start);
 
-        List<SendMailDTO> selectListMail = sendMailDAO.selectList(sendMailDTO);
+        List<SendMailDTO> selectListMail = sendMailDAO.selectListMail(sendMailDTO);
         model.addAttribute("repeat", repeat);
         model.addAttribute("currentPage", page);
         model.addAttribute("selectListMail", selectListMail);
@@ -81,15 +85,64 @@ public class SendMailService {
         model.addAttribute("keyword", sendMailDTO.getKeyword());
     }
 
+    /**
+     * 보낸 메일함 상세 조회
+     * @param send_ymd
+     * @param send_mail_sn
+     * @param model
+     */
     public void selectMailDetail(String send_ymd, int send_mail_sn, Model model) {
         SendMailDTO sendMailDTO = new SendMailDTO();
         sendMailDTO.setSend_ymd(send_ymd);
         sendMailDTO.setSend_mail_sn(send_mail_sn);
 
-        //SendMailDTO selectDetailMail = sendMailDAO.selectDetailMail(sendMailDTO);
+        SendMailDTO selectDetailMail = sendMailDAO.selectDetailMail(sendMailDTO);
+        SendMailDTO selectMailSendName = sendMailDAO.selectMailSendName(sendMailDTO);
 
         model.addAttribute("send_ymd", send_ymd);
         model.addAttribute("send_mail_sn", send_mail_sn);
-        //model.addAttribute("selectDetailMail", selectDetailMail);
+        model.addAttribute("selectDetailMail", selectDetailMail);
+        model.addAttribute("selectMailSendName", selectMailSendName);
+    }
+
+    /**
+     * 보낸 메일함 삭제(단건)
+     * @param sendMailDTO
+     * @return
+     */
+    public int sendMailDel(SendMailDTO sendMailDTO) {
+        //이력 삭제
+        sendMailDAO.deleteDetail(sendMailDTO);
+        //마스터 삭제
+        int result = sendMailDAO.deleteOne(sendMailDTO);
+        return result;
+    }
+
+    public int chkMailDel(String chkDel) {
+        int result = 0;
+        List<String> checkDelList = new ArrayList<>();
+        SendMailDTO sendMailDTO = new SendMailDTO();
+
+        if (chkDel == null || chkDel.isEmpty()) {
+        } else {
+            checkDelList = Arrays.asList(chkDel.split(","));
+        }
+
+        String sendYmd = "";
+        int sendMailSn = 0;
+        int length = 0;
+        for (int i = 0; i < checkDelList.size(); i++) {
+            length = checkDelList.get(i).length();
+            sendYmd = checkDelList.get(i).substring(0, 8);
+            sendMailSn = Integer.parseInt(checkDelList.get(i).substring(9, length));
+            sendMailDTO.setSend_ymd(sendYmd);
+            sendMailDTO.setSend_mail_sn(sendMailSn);
+
+            sendMailDAO.deleteDetail(sendMailDTO);
+            //마스터 삭제
+            result = sendMailDAO.deleteOne(sendMailDTO);
+        }
+
+        return result;
     }
 }

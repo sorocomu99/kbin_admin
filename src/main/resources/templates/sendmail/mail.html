@@ -33,7 +33,7 @@
                                     </div>
                                     <div class="col-auto">
                                         <div class="button-wrap d-flex justify-content-end">
-                                            <a href="javascript:" class="btn btn-outline-danger">
+                                            <a href="#" onclick="checkDel()" class="btn btn-outline-danger">
                                                 <i data-feather="trash-2"></i> 선택 삭제
                                             </a>
                                         </div>
@@ -63,7 +63,7 @@
                                             </tr>
                                             <tr th:unless="${selectListMail == null or selectListMail.isEmpty()}" th:each="list : ${selectListMail}">
                                                 <td>
-                                                    <input class="form-check-input" type="checkbox" value="" id="idx1">
+                                                    <input class="form-check-input" type="checkbox" th:value="${list.mail_ymd_sn}" id="idx1" name="rowCheck">
                                                 </td>
                                                 <td th:text="${list.rownumber}">115</td>
                                                 <td th:text="${list.mail_rcvr}">abc@abc.com</td>
@@ -136,6 +136,7 @@
             }
         });
 
+        //보기
         function detailPage(send_ymd, menuId, send_mail_sn) {
             // 빈 form 전달
             let pageMoveForm = document.createElement('form');
@@ -169,19 +170,90 @@
             let result = confirm("정말 삭제 하시겠습니까?");
             if (result) {
                 $.ajax({
-                    url: /*[[@{/portfolio/portListDel}]]*/, // 요청 URL
+                    url: /*[[@{/mail/sendMailDel}]]*/, // 요청 URL
                     type: 'POST', // HTTP 메서드
                     data: {send_ymd: send_ymd, menuId: menuId, send_mail_sn: send_mail_sn}, // 보내는 데이터
+                    success: function(data) {
+                        if (data.errorCd === "00") {
+                            alert(data.errorMsg);
+                            window.location.reload();
+                        } else if (data.errorCd === "99") {
+                            alert(data.errorMsg);
+                            window.location.reload();
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        alert("삭제 중 오류가 발생했습니다.");
+                        console.error('Error:', error);
+                    }
+                    /*
                     success: function (response) {
-                        alert("삭제에 성공하였습니다.");
+                        alert(response.errorMsg);
                         window.location.reload();
                     },
                     error: function (xhr, status, error) {
-                        alert("삭제를 실패하였습니다.");
+                        //alert("삭제를 실패하였습니다.");
+                        alert(response.errorMsg);
+                        console.error('Error:', error);
+                    }
+                    */
+                });
+            }
+        }
+
+        //선택 삭제
+        function checkDel() {
+            var sendYmd = "";
+            var sendSn = "";
+            var sendChk = document.getElementsByName("rowCheck");
+            var chked = false;
+            var indexid = false;
+            for (i = 0; i < sendChk.length; i++) {
+                if (sendChk[i].checked) {
+                    if (indexid) {
+                        sendYmd = sendYmd + ',';
+                    }
+                    sendYmd = sendYmd + sendChk[i].value;
+                    indexid = true;
+                }
+            }
+            if (!indexid) {
+                alert("삭제할 항목을 체크해 주세요.");
+                return false;
+            }
+
+            let result = confirm("선택된 항목을 정말 삭제 하시겠습니까?");
+            if (result) {
+                $.ajax({
+                    url: /*[[@{/mail/chkMailDel}]]*/, // 요청 URL
+                    type: 'POST', // HTTP 메서드
+                    data: {chkDel:sendYmd}, // 보내는 데이터
+                    success: function(data) {
+                        if (data.errorCd === "00") {
+                            alert(data.errorMsg);
+                            window.location.reload();
+                        } else if (data.errorCd === "99") {
+                            alert(data.errorMsg);
+                            window.location.reload();
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        alert("삭제 중 오류가 발생했습니다.");
                         console.error('Error:', error);
                     }
                 });
             }
+
+            /*
+            let groupList = "";
+            $('.form-check-input').each(function(idx, item) {
+                if (idx === 0) {
+                    groupList += item.value;
+                } else {
+                    groupList += "|" + item.value;
+                }
+            })
+            */
         }
     </script>
 </body>

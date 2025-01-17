@@ -16,30 +16,84 @@
         </if>
     </select>
 
-    <select id="selectList" resultType="com.kb.inno.admin.DTO.SendMailDTO">
+    <select id="selectListMail" resultType="com.kb.inno.admin.DTO.SendMailDTO">
         /* 보낸 메일함 리스트 */
         SELECT SEND_YMD
              , SEND_MAIL_SN
              , MAIL_RCVR
              , MAIL_TTL
              , MAIL_CN
-             , ROWNUM ROWNUMBER
-          FROM (SELECT SEND_YMD
+             , ROWNUMBER
+             , RNUM
+             , MAIL_YMD_SN
+          FROM (
+                SELECT SEND_YMD
                      , SEND_MAIL_SN
                      , MAIL_RCVR
                      , MAIL_TTL
                      , MAIL_CN
-                  FROM KB_SEND_MAIL A
-                 WHERE 1 = 1
-                <if test='keyword != null and keyword != ""'>
-                    <choose>
-                        <when test="type == 'title'">
-                            AND MAIL_TTL LIKE '%'|| #{keyword} ||'%'
-                        </when>
-                    </choose>
-                </if>
-                 ORDER BY SEND_YMD DESC, SEND_MAIL_SN ASC
+                     , ROWNUM ROWNUMBER
+                     , RNUM
+                     , MAIL_YMD_SN
+                  FROM (SELECT SEND_YMD
+                             , SEND_MAIL_SN
+                             , MAIL_RCVR
+                             , MAIL_TTL
+                             , MAIL_CN
+                             , ROW_NUMBER() OVER(ORDER BY SEND_YMD DESC, SEND_MAIL_SN DESC) AS RNUM
+                             , SEND_YMD || '-' || SEND_MAIL_SN AS MAIL_YMD_SN
+                          FROM KB_SEND_MAIL A
+                         WHERE 1 = 1
+                        <if test='keyword != null and keyword != ""'>
+                            <choose>
+                                <when test="type == 'title'">
+                                    AND MAIL_TTL LIKE '%'|| #{keyword} ||'%'
+                                </when>
+                            </choose>
+                        </if>
+                         ORDER BY SEND_YMD ASC, SEND_MAIL_SN ASC
+                       )
+                 ORDER BY ROWNUM DESC
                )
-         WHERE ROWNUM BETWEEN #{start} AND #{end}
+         WHERE RNUM BETWEEN #{start} AND #{end}
     </select>
+
+    <select id="selectDetailMail" parameterType="com.kb.inno.admin.DTO.SendMailDTO" resultType="com.kb.inno.admin.DTO.SendMailDTO">
+        /* 보낸 메일함 상세 조회 */
+        SELECT SEND_YMD
+             , SEND_MAIL_SN
+             , MAIL_RCVR
+             , MAIL_TTL
+             , MAIL_CN
+             , TO_CHAR(FRST_REG_DT, 'YYYY-MM-DD HH24:MI') AS REG_DATE
+          FROM KB_SEND_MAIL
+         WHERE 1 = 1
+           AND SEND_YMD = #{send_ymd}
+           AND SEND_MAIL_SN = #{send_mail_sn}
+    </select>
+
+    <select id="selectMailSendName" parameterType="com.kb.inno.admin.DTO.SendMailDTO" resultType="com.kb.inno.admin.DTO.SendMailDTO">
+        SELECT SEND_YMD
+             , SEND_MAIL_SN
+             , LISTAGG(MAIL_RCVR, ', ') WITHIN GROUP(ORDER BY SEND_YMD, SEND_MAIL_SN) AS MAIL_SEND_NAME
+          FROM KB_SEND_MAIL_HIST
+         WHERE 1 = 1
+           AND SEND_YMD = #{send_ymd}
+           AND SEND_MAIL_SN = #{send_mail_sn}
+         GROUP BY SEND_YMD, SEND_MAIL_SN
+    </select>
+
+    <delete id="deleteOne" parameterType="com.kb.inno.admin.DTO.SendMailDTO">
+        DELETE
+          FROM KB_SEND_MAIL
+         WHERE SEND_YMD = ${send_ymd}
+           AND SEND_MAIL_SN = ${send_mail_sn}
+    </delete>
+
+    <delete id="deleteDetail" parameterType="com.kb.inno.admin.DTO.SendMailDTO">
+        DELETE
+          FROM KB_SEND_MAIL_HIST
+         WHERE SEND_YMD = ${send_ymd}
+           AND SEND_MAIL_SN = ${send_mail_sn}
+    </delete>
 </mapper>

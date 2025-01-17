@@ -92,39 +92,32 @@ public class HistoryController {
         //항목 1 세팅
         resMap.put("main_input1", historyDTO.getMain_input1());
         List<String> subInputList1 = new ArrayList<>();
-        if (historyDTO.getSub_input1() == null || historyDTO.getSub_input1()
-                                                            .isEmpty()) {
+        if (historyDTO.getSub_input1() == null || historyDTO.getSub_input1().isEmpty()) {
         } else {
-            subInputList1 = Arrays.asList(historyDTO.getSub_input1()
-                                                    .split(","));
+            subInputList1 = Arrays.asList(historyDTO.getSub_input1().split(","));
             //System.out.println("subInputList1===================="+subInputList1);
             resMap.put("subInputList1", subInputList1);
         }
 
         //항목 2 세팅
-        if (historyDTO.getMain_input2() == null || historyDTO.getMain_input2()
-                                                             .isEmpty()) {
+        if (historyDTO.getMain_input2() == null || historyDTO.getMain_input2().isEmpty()) {
         } else {
             resMap.put("main_input2", historyDTO.getMain_input2());
         }
         List<String> subInputList2 = new ArrayList<>();
-        if (historyDTO.getSub_input2() == null || historyDTO.getSub_input2()
-                                                            .isEmpty()) {
+        if (historyDTO.getSub_input2() == null || historyDTO.getSub_input2().isEmpty()) {
         } else {
-            subInputList2 = Arrays.asList(historyDTO.getSub_input2()
-                                                    .split(","));
+            subInputList2 = Arrays.asList(historyDTO.getSub_input2().split(","));
             resMap.put("subInputList2", subInputList2);
         }
 
         //항목 3 세팅
-        if (historyDTO.getMain_input3() == null || historyDTO.getMain_input3()
-                                                             .isEmpty()) {
+        if (historyDTO.getMain_input3() == null || historyDTO.getMain_input3().isEmpty()) {
         } else {
             resMap.put("main_input3", historyDTO.getMain_input3());
         }
         List<String> subInputList3 = new ArrayList<>();
-        if (historyDTO.getSub_input3() == null || historyDTO.getSub_input3()
-                                                            .isEmpty()) {
+        if (historyDTO.getSub_input3() == null || historyDTO.getSub_input3().isEmpty()) {
         } else {
             subInputList3 = Arrays.asList(historyDTO.getSub_input3()
                                                     .split(","));

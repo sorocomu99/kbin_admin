@@ -21,20 +21,20 @@
                                         <tbody>
                                             <tr>
                                                 <th class="bg-light">보낸날짜</th>
-                                                <td>2024.11.15 12:39:57</td>
+                                                <td th:text="${selectDetailMail.reg_date}">2024.11.15 12:39:57</td>
                                             </tr>
                                             <tr>
                                                 <th>받는 사람</th>
-                                                <td>test@kbfg.com</td>
+                                                <td th:text="${selectMailSendName.mail_send_name}">test@kbfg.com</td>
                                             </tr>
                                             <tr>
                                                 <th>제목</th>
-                                                <td>KB이노베이션 허브 2024년 상반기 결과 안내 드립니다.</td>
+                                                <td th:text="${selectDetailMail.mail_ttl}">KB이노베이션 허브 2024년 상반기 결과 안내 드립니다.</td>
                                             </tr>
                                             <tr>
                                                 <th class="bg-light">메일 내용</th>
                                                 <td>
-                                                    <textarea class="form-control" id="formText" rows="5"></textarea>
+                                                    <textarea class="form-control" id="formText" rows="5" th:text="${selectDetailMail.mail_cn}" readonly></textarea>
                                                 </td>
                                             </tr>
                                             <!--
@@ -50,7 +50,7 @@
                                         </tbody>
                                     </table>
                                     <div class="button-container">
-                                        <button type="submit" class="btn btn-primary">등록하기</button>
+                                        <!--<button type="submit" class="btn btn-primary">등록하기</button>-->
                                         <a th:href="@{/mail/list/{menuId}(menuId=${menuId})}" class="btn btn-outline-primary">목록보기</a>
                                     </div>
                                 </form>

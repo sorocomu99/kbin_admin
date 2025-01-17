@@ -25,6 +25,8 @@ public class SendMailDTO implements Serializable {
     private String mail_ttl;             //메일 제목
     private String mail_cn;              //메일 내용
     private String reg_date;             //보낸 일시
+    private String mail_send_name;
+    private String mail_ymd_sn;
     //이력정보
     private int send_mail_hist_sn;       //보낸메일 이력 일련번호
     //공통
@@ -34,6 +36,7 @@ public class SendMailDTO implements Serializable {
     private Date last_mdfcn_dt;          //최종 수정 일시
     private int menu_id;                 //메뉴 ID
     private int rownumber;               //순번
+    private int rnum;
     //검색 조건
     private String type;
     private String keyword;
