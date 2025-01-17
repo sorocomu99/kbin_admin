@@ -2,6 +2,70 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kb.inno.admin.DAO.SurveyDAO">
+
+	<select id="selectQstnMaxSn" resultType="int">
+        /* 설문조사 일련번호 구하기 */
+        SELECT NVL(MAX(SRVY_QSTN_SN), 0) + 1
+          FROM KB_SRVY_QSTN_INFO
+    </select>
+
+    <insert id="qstnInsert" parameterType="com.kb.inno.admin.DTO.SurveyDTO">
+        /* 설문 조사 문항 정보 (KB_SRVY_QSTN_INFO) 등록 */
+        INSERT INTO KB_SRVY_QSTN_INFO
+        ( SRVY_QSTN_SN
+        , SRVY_SN
+        , QSTN_TYPE
+        , SRVY_QSTN
+        , SRVY_DTL_QSTN
+        , ESNTL_VL_YN
+        , FRST_RGTR
+        , FRST_REG_DT
+        , LAST_MDFR
+        , LAST_MDFCN_DT
+        )
+        VALUES
+        ( #{srvy_qstn_sn}
+        , #{srvy_sn1}
+        , #{qstn_type}
+        , #{srvy_qstn}
+        , #{srvy_dtl_qstn}
+        , 'N'
+        , #{frst_rgtr}
+        , SYSDATE
+        , #{last_mdfr}
+        , SYSDATE
+        )
+    </insert>
+    
+    <insert id="ansInsert" parameterType="com.kb.inno.admin.DTO.SurveyDTO">
+        /* 설문 조사 보기 정보 (KB_SRVY_ANS_INFO) 등록 */
+        INSERT INTO KB_SRVY_ANS_INFO
+        ( 
+          SRVY_ANS_SN
+        , SRVY_QSTN_SN
+        , ANS_CN
+        , AFTR_MVMN
+        , FRST_RGTR
+        , FRST_REG_DT
+        , LAST_MDFR
+        , LAST_MDFCN_DT
+        
+        ) VALUES (
+         
+          #{srvy_ans_sn}
+        , #{srvy_qstn_sn}
+        , #{ans_cn}
+        , #{aftr_mvmn}
+        , #{frst_rgtr}
+        , SYSDATE
+        , #{last_mdfr}
+        , SYSDATE
+        )
+    </insert>
+    
+    
+    
+
     <select id="selectPageCount" parameterType="String" resultType="int">
         /* 설문조사 갯수 조회 */
         SELECT COUNT(DISTINCT SRVY_SN)
@@ -193,4 +257,13 @@
          WHERE 1 = 1
            AND SRVY_SN = #{srvy_sn}
     </delete>
+    
+
+    
+    
+    
+    
+    
+    
+    
 </mapper>

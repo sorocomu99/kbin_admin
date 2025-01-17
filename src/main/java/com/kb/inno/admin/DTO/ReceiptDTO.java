@@ -91,5 +91,10 @@ public class ReceiptDTO implements Serializable {
     //페이징 변수
     private int start;
     private int end;
-
+    
+    //지원서 접수 관리
+    private String rspns_ymd;
+    private String prgrs_stts;
+    private String conm;
+    
 }

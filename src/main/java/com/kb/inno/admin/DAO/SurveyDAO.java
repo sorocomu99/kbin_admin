@@ -21,6 +21,12 @@ import java.util.List;
 @Mapper
 @Repository
 public interface SurveyDAO {
+	//항목 일련번호 구해오기
+    int selectQstnMaxSn();
+    //
+    int qstnInsert(SurveyDTO surveyDTO);
+    int ansInsert(SurveyDTO surveyDTO);
+    
     //설문조사 갯수 조회
     int selectPageCount();
     //설문조사 리스트 조회
@@ -39,4 +45,7 @@ public interface SurveyDAO {
     List<SurveyDTO> selectDetail(SurveyDTO surveyDTO);
     //설문조사 삭제
     int exmnDelete(SurveyDTO surveyDTO);
+    
+
+    
 }

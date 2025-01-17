@@ -34,6 +34,7 @@ public class ReceiptController {
      */
     @GetMapping("/list/{menuId}")
     public String receiptMainList(@PathVariable int menuId, Model model, @RequestParam(value = "page", required = false, defaultValue = "1") int page) {
+    	
     	receiptService.selectList(menuId, page, model);
     		
         return directory + "/receipt";
@@ -44,8 +45,9 @@ public class ReceiptController {
     public String receiptList(@PathVariable int menuId, Model model, 
     						  @RequestParam(value = "page", required = false, defaultValue = "1") int page,
     						  @RequestParam(value = "srvy_sn" , required = false, defaultValue = "1") int srvy_sn) {
-    	//receiptService.selectList(menuId, page, model);
-    		System.out.println("***********************>>"+srvy_sn);
+    	
+    	receiptService.receiptList(menuId, page, model, srvy_sn);
+    	System.out.println("================================");
         return directory + "/receipt_list";
     }
 
@@ -56,6 +58,19 @@ public class ReceiptController {
         return directory + "/receipt_trash";
     }
     
+
+    @RequestMapping("/sendMail/{menuId}")
+    public String insert(@PathVariable int menuId, Model model) {
+        model.addAttribute("menuId", menuId);
+        return directory + "/receipt_mail";
+    }
+
+    @GetMapping("/receiptMail/{menuId}")
+    public String receiptMailList(@PathVariable int menuId, Model model, @RequestParam(value = "page", required = false, defaultValue = "1") int page) {
+    	receiptService.selectList(menuId, page, model);
+    		
+        return directory + "/receipt_mail";
+    }
     
     
     

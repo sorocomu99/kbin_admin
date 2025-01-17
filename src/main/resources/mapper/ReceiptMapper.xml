@@ -17,33 +17,29 @@
     </select>
 
     <select id="selectList" resultType="com.kb.inno.admin.DTO.ReceiptDTO">
-        /* 설문조사 리스트 */
+        /* 지원서 접수 관리 리스트 */
         SELECT SRVY_SN
              , SRVY_TTL
              , BANE_FILE_SN
              , TMPR_DEL_YN
-             , FILE_NM
-             , FILE_PATH
              , ROWNUM ROWNUMBER
-          FROM (SELECT A.SRVY_SN
-                     , A.SRVY_TTL
-                     , A.BANE_FILE_SN
-                     , A.TMPR_DEL_YN
-                     , B.FILE_SN
-                     , B.FILE_NM
-                     , B.FILE_PATH
-                  FROM KB_SRVY_EXMN_INFO A
-                     , KB_FILE_INFO B
-                 WHERE 1 = 1
-                   AND A.BANE_FILE_SN = B.FILE_SN(+)
-                <if test='keyword != null and keyword != ""'>
-                    <choose>
-                        <when test="type == 'title'">
-                            AND SRVY_TTL LIKE '%'|| #{keyword} ||'%'
-                        </when>
-                    </choose>
-                </if>
-                 ORDER BY SRVY_SN DESC
+          FROM (SELECT SRVY_SN
+                     , SRVY_TTL
+                     , BANE_FILE_SN
+                     , TMPR_DEL_YN
+                  FROM KB_SRVY_EXMN_INFO
+                 WHERE SRVY_SN in(
+                 	SELECT SRVY_SN FROM KB_SRVY_QSTN_INFO
+                 	WHERE 1=1
+					<if test='keyword != null and keyword != ""'>
+	                    <choose>
+	                        <when test="type == 'title'">
+	                            AND SRVY_TTL LIKE '%'|| #{keyword} ||'%'
+	                        </when>
+	                    </choose>
+	                </if>
+					GROUP BY SRVY_SN
+                 	)
                )
          WHERE ROWNUM BETWEEN #{start} AND #{end}
     </select>
@@ -53,6 +49,70 @@
         SELECT NVL(MAX(SRVY_SN), 0) + 1
           FROM KB_SRVY_EXMN_INFO
     </select>
+
+    <select id="receiptList" resultType="com.kb.inno.admin.DTO.ReceiptDTO">
+        /* 지원서 접수 관리 상세 보기 리스트 */
+        SELECT 
+			  SRVY_QSTN_SN
+			, SRVY_SN
+			, QSTN_TYPE
+			, SRVY_QSTN
+			, SRVY_DTL_QSTN
+			, ESNTL_VL_YN
+			, SRVY_ANS_SN
+			, ANS_CN
+			, AFTR_MVMN
+			, RSPNS_YMD
+			, PRGRS_STTS
+			, CONM
+			, ROWNUM ROWNUMBER
+		FROM (SELECT 
+					 A.SRVY_QSTN_SN
+					,A.SRVY_SN
+					,A.QSTN_TYPE
+					,A.SRVY_QSTN
+					,A.SRVY_DTL_QSTN
+					,A.ESNTL_VL_YN
+					,B.SRVY_ANS_SN
+					,B.ANS_CN
+					,B.AFTR_MVMN
+					,B.RSPNS_YMD
+					,B.PRGRS_STTS
+					,B.CONM
+				FROM  KB_SRVY_QSTN_INFO A, KB_SRVY_ANS_INFO B
+				WHERE A.SRVY_QSTN_SN = B.SRVY_QSTN_SN
+				AND A.SRVY_SN = #{srvy_sn}
+				<if test='keyword != null and keyword != ""'>
+                    <choose>
+                        <when test="type == 'title'">
+                            AND B.PRGRS_STTS LIKE '%'|| #{keyword} ||'%'
+                        </when>
+                    </choose>
+                </if>
+				ORDER BY  A.SRVY_QSTN_SN
+               )
+         WHERE ROWNUM BETWEEN #{start} AND #{end}
+    </select>
+    
+    <select id="receiptPageCount" parameterType="String" resultType="int">
+        /* 지원서 접수 관리 상세 보기 리스트 */
+		SELECT COUNT(DISTINCT a.srvy_qstn_sn)
+			FROM  KB_SRVY_QSTN_INFO A, KB_SRVY_ANS_INFO B
+			WHERE A.SRVY_QSTN_SN = B.SRVY_QSTN_SN
+			AND A.SRVY_SN = #{srvy_sn}
+		<!-- 	
+        <if test='keyword != null and keyword != ""'>
+            <choose>
+                <when test="type == 'title'">
+                    AND SRVY_TTL LIKE '%'|| #{keyword} ||'%'
+                </when>
+            </choose>
+        </if>
+        -->
+    </select>
+
+
+
 
    <!--  <insert id="insertFile" parameterType="com.kb.inno.admin.DTO.FileDTO" useGeneratedKeys="true" keyProperty="file_sn">
         /* 설문조사 파일 추가 */

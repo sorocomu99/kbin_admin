@@ -15,6 +15,7 @@
                         </div>
                         <form id="qstn_form" name="qstn_form" th:action="@{/survey/qstnInsert}" method="post">
                             <input type="hidden" id="menu_id" name="menu_id" th:value="${menuId}"/>
+                            <input type="hidden" id="srvy_sn1" name="srvy_sn1" th:value="${srvy_sn1}"/>
                             <div class="question">
                                 <!-- 문항 리스트 -->
                                 <div class="question-list">
@@ -30,52 +31,29 @@
                                     <div class="question-body on" data-question-type="1">
                                         <div class="row">
                                             <div class="col">
-                                                <input type="text" class="form-control" name="srvy_qstn1" value="" placeholder="질문을 입력해 주세요.">
+                                                <input type="text" class="form-control" id="srvy_qstn1" name="srvy_qstn1" value="" placeholder="질문을 입력해 주세요.">
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col">
-                                                <textarea class="form-control" id="questionTextType1-1" rows="5" name="srvy_dtl_qstn1" placeholder="질문에 대한 상세내용을 입력해 주세요."></textarea>
+                                                <textarea class="form-control" id="questionTextType1-1" rows="5" name="srvy_dtl_qstn11" placeholder="질문에 대한 상세내용을 입력해 주세요."></textarea>
                                             </div>
                                         </div>
+                                        
                                         <div class="row">
                                             <div class="col">
                                                 <div class="item-list">
-                                                    <div class="item">
-                                                        <div class="column">
-                                                            <input type="text" class="form-control form-control-sm" name="ans_cn1" value="" placeholder="보기 1">
-                                                            <!-- 점프 기능 -->
-                                                            <select class="form-select form-select-sm">
-                                                                <option value="1">다음 문항으로 이동</option>
-                                                                <option value="2">n번 문항으로 이동</option>
-                                                                <option value="3">지원서 제출</option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="column">
-                                                            <button type="button" class="btn remove-item" onclick="removeItem(this)"><i data-feather="x-circle"></i></button>
-                                                        </div>
-                                                    </div>
-                                                    <div class="item">
-                                                        <div class="column">
-                                                            <input type="text" class="form-control form-control-sm" name="ans_cn1" value="" placeholder="보기 2">
-                                                            <!-- 점프 기능 -->
-                                                            <select class="form-select form-select-sm">
-                                                                <option value="1">다음 문항으로 이동</option>
-                                                                <option value="2">n번 문항으로 이동</option>
-                                                                <option value="3">지원서 제출</option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="column">
-                                                            <button type="button" class="btn remove-item" onclick="removeItem(this)"><i data-feather="x-circle"></i></button>
-                                                        </div>
-                                                    </div>
+                                                
+
+                                                    
                                                 </div>
-                                                <button type="button" class="btn btn-sm btn-dark add-item" onclick="addItem(this, 1)" data-idx="3">
+                                                <button type="button" class="btn btn-sm btn-dark add-item" onclick="addItem(this, 1)" data-idx="1">
                                                     <i class="me-0" data-feather="plus"></i>
                                                     보기 추가
                                                 </button>
                                             </div>
                                         </div>
+                                        
                                     </div>
                                     <div class="question-body" data-question-type="2">
                                         <div class="row">
@@ -85,7 +63,7 @@
                                         </div>
                                         <div class="row">
                                             <div class="col">
-                                                <textarea class="form-control" id="questionTextType2-1" name="srvy_dtl_qstn1" rows="5" placeholder="질문에 대한 상세내용을 입력해 주세요."></textarea>
+                                                <textarea class="form-control" id="questionTextType2-1" name="srvy_dtl_qstn21" rows="5" placeholder="질문에 대한 상세내용을 입력해 주세요."></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -97,7 +75,7 @@
                                         </div>
                                         <div class="row">
                                             <div class="col">
-                                                <textarea class="form-control" id="questionTextType3-1" name="srvy_dtl_qstn1" rows="5" placeholder="질문에 대한 상세내용을 입력해 주세요."></textarea>
+                                                <textarea class="form-control" id="questionTextType3-1" name="srvy_dtl_qstn31" rows="5" placeholder="질문에 대한 상세내용을 입력해 주세요."></textarea>
                                             </div>
                                         </div>
                                         <div class="row">
@@ -123,7 +101,7 @@
                                             <label class="form-check-label" for="required1">필수 값 설정</label>
                                         </div>
                                         <div class="form-check form-switch">
-                                            <input class="form-check-input" type="checkbox" role="switch" id="move1" name="aftr_mvmn1" onclick="toggleMove(this)">
+                                            <input class="form-check-input" type="checkbox" role="switch" id="aftr_mvmn1" name="aftr_mvmn1" onclick="toggleMove(this)">
                                             <label class="form-check-label" for="move1">문항 이동</label>
                                         </div>
                                         <button type="button" class="btn btn-sm btn-dark" onclick="removeList(this)"><i data-feather="trash-2"></i>문항 삭제</button>
@@ -131,9 +109,9 @@
                                 </div>
                             </div>
                             <div class="button-container">
-                                <button type="submit" class="btn btn-primary">등록하기</button>
+                                <button type="button" class="btn btn-primary" onclick="surveyQuestionInsert()">등록하기</button>
                                 <!--<a href="javascript:" class="btn btn-outline-primary" onclick="history.back();">목록보기</a>-->
-                                <a th:href="@{/history/list/{menuId}(menuId=${menuId})}" class="btn btn-outline-primary">목록보기</a>
+                                <a th:href="@{/survey/list/{menuId}(menuId=${menuId})}" class="btn btn-outline-primary">목록보기</a>
                                 <button id="buttonAddList" type="button" class="btn btn-dark add-list"><i data-feather="plus"></i> 문항 추가</button>
                             </div>
                         </form>
@@ -143,7 +121,27 @@
         </main>
     </div>
     <script>
+    
+    function surveyQuestionInsert() {
+        var qstn = $("#srvy_qstn1").val();
+        if (qstn === null || qstn === '') {
+            alert("질문을 입력해 주세요.")
+            $("#srvy_qstn1").focus();
+            return false;
+        }
+
+        let result = confirm("등록 하시겠습니까?");
+        if (result) {
+            const form = document.forms['qstn_form'];
+            form.action = '/kbinnovationhub_devadm/survey/qstnInsert';   //전송할 URL
+            form.method = 'POST';                                    //전송 방식
+            form.target = '';                                        //새 창에서 열기
+            form.submit();                                           //폼 제출
+        }
+    }
+    
         var listIndex = 2, itemIndex = [];
+        var encIndex = 1;
 
         $(function(){
             $('#buttonAddList').click(addList);
@@ -152,6 +150,11 @@
 
         // 문항 추가
         function addList() {
+        	if(listIndex > 10){
+        		alert("문항 추가는 10개 까지 가능 합니다");
+        		return true;
+        	}
+        	
             const dom = 
                 '<div class="question-list">' +
                     '<div class="question-head">' +
@@ -171,12 +174,13 @@
                         '</div>' +
                         '<div class="row">' +
                             '<div class="col">' +
-                                '<textarea class="form-control" id="questionTextType1-'+ listIndex +'" name="srvy_dtl_qstn'+listIndex+'" rows="5" placeholder="질문에 대한 상세내용을 입력해 주세요."></textarea>' +
+                                '<textarea class="form-control" id="questionTextType1-'+ listIndex +'" name="srvy_dtl_qstn1'+listIndex+'" rows="5" placeholder="질문에 대한 상세내용을 입력해 주세요."></textarea>' +
                             '</div>' +
                         '</div>' +
                         '<div class="row">' +
                             '<div class="col">' +
                                 '<div class="item-list">' +
+                                /* 
                                     '<div class="item">' +
                                         '<div class="column">' +
                                             '<input type="text" class="form-control form-control-sm" name="ans_cn'+listIndex+'" value="" placeholder="보기 1">' +
@@ -206,7 +210,8 @@
                                         '</div>' +
                                     '</div>' +
                                 '</div>' +
-                                '<button type="button" class="btn btn-sm btn-dark add-item" onclick="addItem(this, listIndex)" data-idx="3">' +
+                                 */
+                                '<button type="button" class="btn btn-sm btn-dark add-item" onclick="addItem(this, listIndex)" data-idx="1">' +
                                     '<i class="me-0" data-feather="plus"></i>' +
                                     '보기 추가' +
                                 '</button>' +
@@ -221,7 +226,7 @@
                         '</div>' +
                         '<div class="row">' +
                             '<div class="col">' +
-                                '<textarea class="form-control" id="questionTextType2-'+ listIndex +'" name="srvy_dtl_qstn'+listIndex+'" rows="5" placeholder="질문에 대한 상세내용을 입력해 주세요."></textarea>' +
+                                '<textarea class="form-control" id="questionTextType2-'+ listIndex +'" name="srvy_dtl_qstn2'+listIndex+'" rows="5" placeholder="질문에 대한 상세내용을 입력해 주세요."></textarea>' +
                             '</div>' +
                         '</div>' +
                     '</div>' +
@@ -233,7 +238,7 @@
                         '</div>' +
                         '<div class="row">' +
                             '<div class="col">' +
-                                '<textarea class="form-control" id="questionTextType3-'+ listIndex +'" name="srvy_dtl_qstn'+listIndex+'" rows="5" placeholder="질문에 대한 상세내용을 입력해 주세요."></textarea>' +
+                                '<textarea class="form-control" id="questionTextType3-'+ listIndex +'" name="srvy_dtl_qstn3'+listIndex+'" rows="5" placeholder="질문에 대한 상세내용을 입력해 주세요."></textarea>' +
                             '</div>' +
                         '</div>' +
                         '<div class="row">' +
@@ -274,6 +279,7 @@
             });
 
             listIndex++;
+            encIndex++;
         }
 
         // 문항 삭제
@@ -281,6 +287,8 @@
             const element = $(e);
 
             element.closest('.question-list').remove();
+            
+            listIndex-1;
         }
 
         // 질문 유형 선택
@@ -298,12 +306,19 @@
 
         // 보기 추가
         function addItem(e, index) {
+        	
+        	if(e.dataset.idx > 10){
+        		alert("보기 추가는 10개 까지 가능 합니다");
+        		
+        		return true;
+        	}
+        	
             const element = $(e);
             
             element.closest('.col').find('.item-list').append(
                 '<div class="item">' +
                     '<div class="column">' +
-                        '<input type="text" class="form-control form-control-sm" name="ans_cn'+index+'" value="" placeholder="보기 '+ e.dataset.idx +'">' +
+                        '<input type="text" class="form-control form-control-sm" name="ans_cn'+ encIndex + e.dataset.idx+'" value="" placeholder="보기 '+ encIndex +  e.dataset.idx +'">' +
                         '<select class="form-select form-select-sm">' +
                             '<option value="1">다음 문항으로 이동</option>' +
                             '<option value="2">n번 문항으로 이동</option>' +
@@ -317,7 +332,7 @@
             );
 
             e.dataset.idx = parseInt(e.dataset.idx) + 1
-
+            
             feather.replace();
         }
 

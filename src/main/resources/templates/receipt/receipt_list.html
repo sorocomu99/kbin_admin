@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="ko">
 <head th:replace="fragment/config :: configFragment"></head>
-
+<script lang="javascript" src="dist/xlsx.full.min.js"></script>
 <body>
     <div class="wrap">
         <div th:replace="fragment/header :: headerFragment"></div>
@@ -22,6 +22,7 @@
                                                     <div class="title">처리상태</div>
                                                     <select class="form-select" aria-label="">
                                                         <option value="1" selected>전체</option>
+                                                        <option value="2" selected>처리상태</option>
                                                     </select>
                                                     <button type="button" class="btn btn-dark"><i data-feather="search"></i></button>
                                                 </div>
@@ -33,7 +34,7 @@
                                             <a href="javascript:" class="btn btn-outline-danger">
                                                 <i data-feather="trash-2"></i> 선택 삭제
                                             </a>
-                                            <a href="receipt_mail.html" class="btn btn-outline-dark">
+                                            <a th:href="@{/receipt/sendMail/{menuId}(menuId=${menuId})}" class="btn btn-outline-dark">
                                                 <i data-feather="mail"></i> 선택 메일 발송
                                             </a>
                                             <a href="javascript:" class="btn btn-outline-dark">
@@ -45,7 +46,7 @@
                             </div>
                             <div class="mt-4">
                                 <div class="table-scroll">
-                                    <table class="table table-min table-small text-center align-middle">
+                                    <table  id="mytable" class="table table-min table-small text-center align-middle">
                                         <thead>
                                             <tr>
                                                 <th style="width:60px">
@@ -67,350 +68,113 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>
-                                                    <input class="form-check-input" type="checkbox" value="" id="idx1">
-                                                </td>
-                                                <td><small>회사명입니다</small></td>
-                                                <td>
-                                                    <select class="form-select form-select-sm">
-                                                        <option value="1">접수</option>
-                                                        <option value="2">1차 심사</option>
-                                                        <option value="3">2차 심사</option>
-                                                        <option value="4">3차 심사</option>
-                                                        <option value="5">4차 심사</option>
-                                                        <option value="6">5차 심사</option>
-                                                        <option value="7">합격</option>
-                                                        <option value="8">불합격</option>
-                                                    </select> 
-                                                </td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td>
-                                                    <button type="button" class="btn btn-outline-danger btn-sm">삭제</button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <input class="form-check-input" type="checkbox" value="" id="idx1">
-                                                </td>
-                                                <td><small>회사명입니다</small></td>
-                                                <td>
-                                                    <select class="form-select form-select-sm">
-                                                        <option value="1">접수</option>
-                                                        <option value="2">1차 심사</option>
-                                                        <option value="3">2차 심사</option>
-                                                        <option value="4">3차 심사</option>
-                                                        <option value="5">4차 심사</option>
-                                                        <option value="6">5차 심사</option>
-                                                        <option value="7">합격</option>
-                                                        <option value="8">불합격</option>
-                                                    </select> 
-                                                </td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td>
-                                                    <button type="button" class="btn btn-outline-danger btn-sm">삭제</button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <input class="form-check-input" type="checkbox" value="" id="idx1">
-                                                </td>
-                                                <td><small>회사명입니다</small></td>
-                                                <td>
-                                                    <select class="form-select form-select-sm">
-                                                        <option value="1">접수</option>
-                                                        <option value="2">1차 심사</option>
-                                                        <option value="3">2차 심사</option>
-                                                        <option value="4">3차 심사</option>
-                                                        <option value="5">4차 심사</option>
-                                                        <option value="6">5차 심사</option>
-                                                        <option value="7">합격</option>
-                                                        <option value="8">불합격</option>
-                                                    </select> 
-                                                </td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td>
-                                                    <button type="button" class="btn btn-outline-danger btn-sm">삭제</button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <input class="form-check-input" type="checkbox" value="" id="idx1">
-                                                </td>
-                                                <td><small>회사명입니다</small></td>
-                                                <td>
-                                                    <select class="form-select form-select-sm">
-                                                        <option value="1">접수</option>
-                                                        <option value="2">1차 심사</option>
-                                                        <option value="3">2차 심사</option>
-                                                        <option value="4">3차 심사</option>
-                                                        <option value="5">4차 심사</option>
-                                                        <option value="6">5차 심사</option>
-                                                        <option value="7">합격</option>
-                                                        <option value="8">불합격</option>
-                                                    </select> 
-                                                </td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td>
-                                                    <button type="button" class="btn btn-outline-danger btn-sm">삭제</button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <input class="form-check-input" type="checkbox" value="" id="idx1">
-                                                </td>
-                                                <td><small>회사명입니다</small></td>
-                                                <td>
-                                                    <select class="form-select form-select-sm">
-                                                        <option value="1">접수</option>
-                                                        <option value="2">1차 심사</option>
-                                                        <option value="3">2차 심사</option>
-                                                        <option value="4">3차 심사</option>
-                                                        <option value="5">4차 심사</option>
-                                                        <option value="6">5차 심사</option>
-                                                        <option value="7">합격</option>
-                                                        <option value="8">불합격</option>
-                                                    </select> 
-                                                </td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td>
-                                                    <button type="button" class="btn btn-outline-danger btn-sm">삭제</button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <input class="form-check-input" type="checkbox" value="" id="idx1">
-                                                </td>
-                                                <td><small>회사명입니다</small></td>
-                                                <td>
-                                                    <select class="form-select form-select-sm">
-                                                        <option value="1">접수</option>
-                                                        <option value="2">1차 심사</option>
-                                                        <option value="3">2차 심사</option>
-                                                        <option value="4">3차 심사</option>
-                                                        <option value="5">4차 심사</option>
-                                                        <option value="6">5차 심사</option>
-                                                        <option value="7">합격</option>
-                                                        <option value="8">불합격</option>
-                                                    </select> 
-                                                </td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td>
-                                                    <button type="button" class="btn btn-outline-danger btn-sm">삭제</button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <input class="form-check-input" type="checkbox" value="" id="idx1">
-                                                </td>
-                                                <td><small>회사명입니다</small></td>
-                                                <td>
-                                                    <select class="form-select form-select-sm">
-                                                        <option value="1">접수</option>
-                                                        <option value="2">1차 심사</option>
-                                                        <option value="3">2차 심사</option>
-                                                        <option value="4">3차 심사</option>
-                                                        <option value="5">4차 심사</option>
-                                                        <option value="6">5차 심사</option>
-                                                        <option value="7">합격</option>
-                                                        <option value="8">불합격</option>
-                                                    </select> 
-                                                </td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td>
-                                                    <button type="button" class="btn btn-outline-danger btn-sm">삭제</button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <input class="form-check-input" type="checkbox" value="" id="idx1">
-                                                </td>
-                                                <td><small>회사명입니다</small></td>
-                                                <td>
-                                                    <select class="form-select form-select-sm">
-                                                        <option value="1">접수</option>
-                                                        <option value="2">1차 심사</option>
-                                                        <option value="3">2차 심사</option>
-                                                        <option value="4">3차 심사</option>
-                                                        <option value="5">4차 심사</option>
-                                                        <option value="6">5차 심사</option>
-                                                        <option value="7">합격</option>
-                                                        <option value="8">불합격</option>
-                                                    </select> 
-                                                </td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td>
-                                                    <button type="button" class="btn btn-outline-danger btn-sm">삭제</button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <input class="form-check-input" type="checkbox" value="" id="idx1">
-                                                </td>
-                                                <td><small>회사명입니다</small></td>
-                                                <td>
-                                                    <select class="form-select form-select-sm">
-                                                        <option value="1">접수</option>
-                                                        <option value="2">1차 심사</option>
-                                                        <option value="3">2차 심사</option>
-                                                        <option value="4">3차 심사</option>
-                                                        <option value="5">4차 심사</option>
-                                                        <option value="6">5차 심사</option>
-                                                        <option value="7">합격</option>
-                                                        <option value="8">불합격</option>
-                                                    </select> 
-                                                </td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td>
-                                                    <button type="button" class="btn btn-outline-danger btn-sm">삭제</button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <input class="form-check-input" type="checkbox" value="" id="idx1">
-                                                </td>
-                                                <td><small>회사명입니다</small></td>
-                                                <td>
-                                                    <select class="form-select form-select-sm">
-                                                        <option value="1">접수</option>
-                                                        <option value="2">1차 심사</option>
-                                                        <option value="3">2차 심사</option>
-                                                        <option value="4">3차 심사</option>
-                                                        <option value="5">4차 심사</option>
-                                                        <option value="6">5차 심사</option>
-                                                        <option value="7">합격</option>
-                                                        <option value="8">불합격</option>
-                                                    </select> 
-                                                </td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td>
-                                                    <button type="button" class="btn btn-outline-danger btn-sm">삭제</button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <input class="form-check-input" type="checkbox" value="" id="idx2">
-                                                </td>
-                                                <td><small>회사명입니다</small></td>
-                                                <td>
-                                                    <select class="form-select form-select-sm">
-                                                        <option value="1">접수</option>
-                                                        <option value="2">1차 심사</option>
-                                                        <option value="3">2차 심사</option>
-                                                        <option value="4">3차 심사</option>
-                                                        <option value="5">4차 심사</option>
-                                                        <option value="6">5차 심사</option>
-                                                        <option value="7">합격</option>
-                                                        <option value="8">불합격</option>
-                                                    </select> 
-                                                </td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td><small>답변_전체 텍스트가 노출 여기에 노출됩니다.</small></td>
-                                                <td>
-                                                    <button type="button" class="btn btn-outline-danger btn-sm">삭제</button>
-                                                </td>
-                                            </tr>
+                                        <!-- 검색 결과 없을 때 -->
+                                        <tr th:if="${selectList == null or selectList.isEmpty()}">
+                                            <td class="py-5" colspan="14">
+                                                검색 결과가 없습니다.
+                                            </td>
+                                        </tr>
+                                        
+                                        <!-- 리스팅 -->
+                                        <tr th:unless="${selectList == null or selectList.isEmpty()}" th:each="list : ${selectList}">
+											<td>
+                                            	<input class="form-check-input" type="checkbox" value="${list.srvy_qstn_sn}" id="${list.srvy_qstn_sn}">
+                                            </td>
+                                            <td th:text="${list.conm}">-</td>
+											<td>
+											
+ 										
+											<select name="prgrs_stts" class="form-select form-select-sm">
+											<option th:selected="${list.prgrs_stts}=='0'">접수</option>
+											<option th:selected="${list.prgrs_stts}=='1'">1차</option>
+											<option th:selected="${list.prgrs_stts}=='2'">2차</option>
+											<option th:selected="${list.prgrs_stts}=='3'">3차</option>
+											<option th:selected="${list.prgrs_stts}=='4'">4차</option>
+											<option th:selected="${list.prgrs_stts}=='5'">5차</option>
+											<option th:selected="${list.prgrs_stts}=='6'">합격</option>
+											<option th:selected="${list.prgrs_stts}=='7'">불합격</option>
+											
+											
+											    
+<!-- 												<option th:selected="${list.prgrs_stts}=='0'">접수</option>    
+												<option th:selected="${list.prgrs_stts}=='1'">1차</option>
+												<option th:selected="${list.prgrs_stts}=='2'">2차</option>
+												<option th:selected="${list.prgrs_stts}=='3'">2차</option>
+												<option th:selected="${list.prgrs_stts}=='4'">2차</option>
+												<option th:selected="${list.prgrs_stts}=='5'">2차</option>
+												<option th:selected="${list.prgrs_stts}=='6'">2차</option>
+												<option th:selected="${list.prgrs_stts}=='7'">2차</option>
+ -->											</select>
+ 
+ <!-- 
+												<select th:switch="${list.prgrs_stts}" class="form-select form-select-sm">
+ 													<option th:case="">접수</option>
+ 													<option th:case="1">1차</option>
+ 													<option th:case="2">2차</option>
+ 													<option th:case="3">3차</option>
+                                                 </select> 
+                                                 --> 
+											</td>
+                                            <td th:text="${list.srvy_qstn_sn}">11</td>
+                                            <td th:text="${list.srvy_sn}">12</td>
+                                            <td th:text="${list.srvy_sn}">13</td>
+                                            <td th:text="${list.srvy_sn}">14</td>
+                                            <td th:text="${list.srvy_sn}">15</td>
+                                            <td th:text="${list.srvy_sn}">16</td>
+                                            <td th:text="${list.srvy_sn}">17</td>
+                                            <td th:text="${list.srvy_sn}">18</td>
+                                            <td th:text="${list.srvy_sn}">19</td>
+                                            <td th:text="${list.srvy_sn}">20</td>
+											<td>
+                                                <button type="button" th:onclick="|deleteAlert('${list.srvy_sn}')|" class="btn btn-outline-danger btn-sm">삭제</button>
+                                            </td>
+
+                                            <!-- 
+                                            	<button type="button" th:onclick="|deleteAlert('${list.srvy_sn}')|" class="btn btn-outline-danger btn-sm">삭제</button>
+                                                <a th:href="@{/survey/qstnInsert/{menuId}(menuId=${menuId})}" class="btn btn-outline-dark btn-sm">문항관리</a>
+                                                <button th:onclick="|guidePage('${list.srvy_sn}', '${menuId}')|" class="btn btn-outline-dark btn-sm">모집개요관리</button>
+                                                <button type="button" th:onclick="|copyAlert('${list.srvy_sn}')|" class="btn btn-outline-danger btn-sm">복사</button>
+                                                 -->
+                                        </tr>
+                                        
+                                            
                                         </tbody>
                                     </table>
                                 </div>
+                            <!-- 페이지네이션 -->
+                            <nav class="bottom-pagination" aria-label="navigation">
+                                <ul class="pagination">
+                                    <!-- 맨 앞페이지 이동 버튼 -->
+                                    <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled' : ''">
+                                        <a class="page-link" th:href="@{|/survey/list/${menuId}?page=1|}" aria-label="Previous">
+                                            <span data-feather="chevrons-left" aria-hidden="true"></span>
+                                        </a>
+                                    </li>
+                                    <!-- 이전으로 이동하는 버튼 -->
+                                    <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled' : ''">
+                                        <a class="page-link" th:href="@{|/survey/list/${menuId}?page=${currentPage - 1 < 1 ? 1 : currentPage - 1}|}" aria-label="Previous">
+                                            <span data-feather="chevron-left" aria-hidden="true"></span>
+                                        </a>
+                                    </li>
+                                    <th:block th:if="${repeat != null}" th:each="num : ${#numbers.sequence(1, repeat)}">
+                                        <li class="page-item" aria-current="page" th:classappend="${currentPage != null ? num == currentPage : num == 1} ? 'active' : ''">
+                                            <a th:id="${'page' + num}" class="page-link" th:href="@{|/survey/list/${menuId}?page=${num}|}" th:text="${num}"></a>
+                                        </li>
+                                    </th:block>
+                                    <!-- 다음으로 이동하는 버튼 -->
+                                    <li class="page-item" th:classappend="${currentPage == repeat} ? 'disabled' : ''">
+                                        <a class="page-link" th:href="@{|/survey/list/${menuId}?page=${currentPage + 1 > repeat ? repeat : currentPage + 1}|}" aria-label="Next">
+                                            <span data-feather="chevron-right" aria-hidden="true"></span>
+                                        </a>
+                                    </li>
+                                    <!-- 맨 끝페이지 이동 버튼 -->
+                                    <li class="page-item" th:classappend="${currentPage == repeat} ? 'disabled' : ''">
+                                        <a class="page-link" th:href="@{|/survey/list/${menuId}?page=${repeat}|}" aria-label="Next">
+                                            <span data-feather="chevrons-right" aria-hidden="true"></span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
                             </div>
                         </div>
                     </div>
@@ -421,6 +185,10 @@
     
     <script th:src="@{/js/admin.js}"></script>
     <script th:inline="javascript">
+    
+    var wb = XLSX.utils.table_to_book(document.getElementById('mytable'), {sheet:"지원서 접수 관리",raw:true});
+    XLSX.writeFile(wb, ('지원서 접수 관리.xlsx'));
+    
         // 페이지 로드 시 실행
         window.onload = function () {
             // 페이지 로드 시 메시지 확인 및 알림 표시
@@ -428,6 +196,11 @@
             const msg = /*[[${msg}]]*/ '';
             if (msg) alert(msg);
         }
+        
+
+        
+        
+        
         // 수정 페이지 이동
         function guidePage(srvy_sn, menuId) {
             // 빈 form 전달

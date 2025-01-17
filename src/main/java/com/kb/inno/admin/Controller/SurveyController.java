@@ -90,11 +90,44 @@ public class SurveyController {
     }
 
     @RequestMapping("/qstnInsert/{menuId}")
-    public String qstnInsert(@PathVariable int menuId, Model model) {
+    public String qstnInsert(@PathVariable int menuId, Model model,@RequestParam(value = "srvy_sn" , required = false, defaultValue = "1") int srvy_sn) {
         model.addAttribute("menuId", menuId);
+        model.addAttribute("srvy_sn1", srvy_sn);
         return directory + "/survey_question_ins";
     }
 
+    @RequestMapping("/qstnInsert")
+    public String qstnInsert(SurveyDTO surveyDTO, RedirectAttributes redirectAttributes, HttpServletRequest request) {
+        HashMap<String, Object> resultMap = new HashMap<>();
+
+        //로그인 세션 정보 가져오기
+        int loginId = 0;
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            loginId = (int) session.getAttribute("mngrSn");
+        }
+        
+        System.out.println("===========================================================================================");
+       	System.out.println("["+ surveyDTO +"]");
+        System.out.println("===========================================================================================");
+        
+        //문항 등록
+        resultMap = surveyService.qstnInsert(surveyDTO, loginId);
+
+        
+        
+        
+        /**
+        if (resultMap.get("errorCd").equals("00")) {
+            redirectAttributes.addFlashAttribute("msg", resultMap.get("errorMsg"));
+            return "redirect:" + directory + "/list/" + surveyDTO.getMenu_id();
+        } else {  //등록 중 오류 발생시 등록 화면 유지
+            redirectAttributes.addFlashAttribute("msg", resultMap.get("errorMsg"));
+            return directory + "/history_insert";
+        }
+        */
+        return "redirect:" + directory + "/list/" + surveyDTO.getMenu_id();
+    }
     /**
      * 가이드 페이지 이동
      * @param surveyDTO

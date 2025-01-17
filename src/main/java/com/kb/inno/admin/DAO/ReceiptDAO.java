@@ -15,4 +15,8 @@ public interface ReceiptDAO {
     int selectPageCount();
     //설문조사 리스트 조회
     List<ReceiptDTO> selectList(ReceiptDTO receiptDTO);
+    
+    int receiptPageCount(String srvy_sn);
+    
+    List<ReceiptDTO> receiptList(ReceiptDTO receiptDTO);
 }
