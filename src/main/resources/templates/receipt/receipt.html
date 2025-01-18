@@ -53,24 +53,11 @@
                                         </tr>
                                         <!-- 리스팅 -->
                                         <tr th:unless="${selectList == null or selectList.isEmpty()}" th:each="list : ${selectList}">
-                                            <td th:text="${list.srvy_sn}">1</td>
-                                                <!--<img src="/kbinnovationhub_devadm/images/dummy/visual-slide-image-1.png" width="200" alt="">-->
-<!--                                                 <th:block th:if="${list.file_path != null}">
-                                                    <img th:src="${list.file_path == null ? '' : '\kbinnovationhub_devadm'+list.file_path + list.file_nm}" width="200" alt="">
-                                                    <img src="/kbinnovationhub_devadm/images/dummy/visual-slide-image-1.png" width="200" alt="">
-                                                </th:block> -->
+                                            <td th:text="${list.rownumber}">1</td>
                                             <td th:text="${list.srvy_ttl}">2024 하반기 모집</td>
                                             <td>
-                                                <!-- <a th:href="@{/receipt/receiptList/{menuId}(menuId=${menuId})}" class="btn btn-outline-dark btn-sm">지원서 상세보기</a> -->
                                                 <a th:href="@{|/receipt/receiptList/${menuId}?srvy_sn=${list.srvy_sn}|}" class="btn btn-outline-dark btn-sm">지원서 상세보기</a>
-                                                <button type="button" class="btn btn-dark btn-sm">임시 삭제</button>                                            
-                                            
-                                            <!-- 
-                                            	<button type="button" th:onclick="|deleteAlert('${list.srvy_sn}')|" class="btn btn-outline-danger btn-sm">삭제</button>
-                                                <a th:href="@{/survey/qstnInsert/{menuId}(menuId=${menuId})}" class="btn btn-outline-dark btn-sm">문항관리</a>
-                                                <button th:onclick="|guidePage('${list.srvy_sn}', '${menuId}')|" class="btn btn-outline-dark btn-sm">모집개요관리</button>
-                                                <button type="button" th:onclick="|copyAlert('${list.srvy_sn}')|" class="btn btn-outline-danger btn-sm">복사</button>
-                                                 -->
+                                                <button type="button" th:onclick="|deleteAlert('${list.srvy_sn}')|" class="btn btn-dark btn-sm">임시 삭제</button>                                            
                                             </td>
                                         </tr>
                                     </tbody>
@@ -151,42 +138,25 @@
         }
 
         function deleteAlert(srvy_sn) {
-            let result = confirm("정말 삭제 하시겠습니까?");
+            let result = confirm("정말 임시 삭제 하시겠습니까?");
             if (result) {
                 $.ajax({
-                    url: /*[[@{/survey/exmnDelete}]]*/, // 요청 URL
+                    url: /*[[@{/receipt/tempDelete}]]*/, // 요청 URL
                     type: 'POST', // HTTP 메서드
                     data: { srvy_sn: srvy_sn }, // 보내는 데이터
                     success: function(response) {
-                        alert("삭제에 성공하였습니다.");
+                        alert("임시 삭제에 성공하였습니다.");
                         window.location.reload();
                     },
                     error: function(xhr, status, error) {
-                        alert("삭제를 실패하였습니다.");
+                        alert("임시 삭제를 실패하였습니다.");
                         console.error('Error:', error);
                     }
                 });
             }
         }
 
-        function copyAlert(srvy_sn) {
-            let result = confirm("정말 삭제 하시겠습니까?");
-            if (result) {
-                $.ajax({
-                    url: /*[[@{/survey/exmnDelete}]]*/, // 요청 URL
-                    type: 'POST', // HTTP 메서드
-                    data: { srvy_sn: srvy_sn }, // 보내는 데이터
-                    success: function(response) {
-                        alert("삭제에 성공하였습니다.");
-                        window.location.reload();
-                    },
-                    error: function(xhr, status, error) {
-                        alert("삭제를 실패하였습니다.");
-                        console.error('Error:', error);
-                    }
-                });
-            }
-        }
+
     </script>
 
 </body>

@@ -2,6 +2,77 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kb.inno.admin.DAO.ReceiptDAO">
+
+
+    <delete id="receiptDelete" parameterType="com.kb.inno.admin.DTO.ReceiptDTO">
+        /* 지원서 임시 보관함 영구 삭제 */
+        DELETE
+			FROM KB_SRVY_EXMN_INFO
+		WHERE 1 = 1
+		AND SRVY_SN = #{srvy_sn}
+    </delete>
+
+    <update id="deleteCancel" parameterType="com.kb.inno.admin.DTO.ReceiptDTO">
+        /* 지원서 임시 보관함 삭제 취소*/
+		UPDATE KB_SRVY_EXMN_INFO
+		SET    TMPR_DEL_YN = 'N'
+		WHERE  SRVY_SN = #{srvy_sn}
+    </update>
+    
+    <update id="tempDelete" parameterType="com.kb.inno.admin.DTO.ReceiptDTO">
+        /* 지원서 접수 임시 삭제 */
+		UPDATE KB_SRVY_EXMN_INFO
+		SET    TMPR_DEL_YN = 'Y'
+		WHERE  SRVY_SN = #{srvy_sn}
+    </update>
+
+    <select id="selectTrmpPageCount" parameterType="String" resultType="int">
+        /* 지원서 임시 보관 카운터 */
+        SELECT COUNT(DISTINCT SRVY_SN)
+          FROM KB_SRVY_EXMN_INFO
+         WHERE TMPR_DEL_YN = 'Y'
+        <if test='keyword != null and keyword != ""'>
+            <choose>
+                <when test="type == 'title'">
+                    AND SRVY_TTL LIKE '%'|| #{keyword} ||'%'
+                </when>
+            </choose>
+        </if>
+    </select>
+    
+    <select id="selecTemptList" resultType="com.kb.inno.admin.DTO.ReceiptDTO">
+        /* 지원서 임시 보관 리스트 */
+		SELECT SRVY_SN,
+		       SRVY_TTL,
+		       BANE_FILE_SN,
+		       TMPR_DEL_YN,
+		       FILE_NM,
+		       FILE_PATH,
+		       ROWNUMBER
+		FROM   (SELECT SRVY_SN,
+		               SRVY_TTL,
+		               BANE_FILE_SN,
+		               TMPR_DEL_YN,
+		               FILE_NM,
+		               FILE_PATH,
+		               ROWNUM ROWNUMBER
+		        FROM   (SELECT A.SRVY_SN,
+		                       A.SRVY_TTL,
+		                       A.BANE_FILE_SN,
+		                       A.TMPR_DEL_YN,
+		                       B.FILE_SN,
+		                       B.FILE_NM,
+		                       B.FILE_PATH
+		                FROM   KB_SRVY_EXMN_INFO A,
+		                       KB_FILE_INFO B
+		                WHERE  1 = 1
+		                       AND A.BANE_FILE_SN = B.FILE_SN(+)
+		                       AND A.TMPR_DEL_YN = 'Y'
+		                ORDER  BY SRVY_SN)
+		        ORDER  BY ROWNUM DESC)
+		WHERE ROWNUM BETWEEN #{start} AND #{end}
+    </select>
+
     <select id="selectPageCount" parameterType="String" resultType="int">
         /* 설문조사 갯수 조회 */
         SELECT COUNT(DISTINCT SRVY_SN)
@@ -18,30 +89,42 @@
 
     <select id="selectList" resultType="com.kb.inno.admin.DTO.ReceiptDTO">
         /* 지원서 접수 관리 리스트 */
-        SELECT SRVY_SN
-             , SRVY_TTL
-             , BANE_FILE_SN
-             , TMPR_DEL_YN
-             , ROWNUM ROWNUMBER
-          FROM (SELECT SRVY_SN
-                     , SRVY_TTL
-                     , BANE_FILE_SN
-                     , TMPR_DEL_YN
-                  FROM KB_SRVY_EXMN_INFO
-                 WHERE SRVY_SN in(
-                 	SELECT SRVY_SN FROM KB_SRVY_QSTN_INFO
-                 	WHERE 1=1
-					<if test='keyword != null and keyword != ""'>
-	                    <choose>
-	                        <when test="type == 'title'">
-	                            AND SRVY_TTL LIKE '%'|| #{keyword} ||'%'
-	                        </when>
-	                    </choose>
-	                </if>
-					GROUP BY SRVY_SN
-                 	)
-               )
-         WHERE ROWNUM BETWEEN #{start} AND #{end}
+		SELECT SRVY_SN,
+		       SRVY_TTL,
+		       BANE_FILE_SN,
+		       TMPR_DEL_YN,
+		       FILE_NM,
+		       FILE_PATH,
+		       ROWNUMBER
+		FROM   (SELECT SRVY_SN,
+		               SRVY_TTL,
+		               BANE_FILE_SN,
+		               TMPR_DEL_YN,
+		               FILE_NM,
+		               FILE_PATH,
+		               ROWNUM ROWNUMBER
+		        FROM   (SELECT A.SRVY_SN,
+		                       A.SRVY_TTL,
+		                       A.BANE_FILE_SN,
+		                       A.TMPR_DEL_YN,
+		                       B.FILE_SN,
+		                       B.FILE_NM,
+		                       B.FILE_PATH
+		                FROM   KB_SRVY_EXMN_INFO A,
+		                       KB_FILE_INFO B
+		                WHERE  1 = 1
+						AND A.BANE_FILE_SN = B.FILE_SN(+)
+		                AND A.TMPR_DEL_YN = 'N'
+		                <if test='keyword != null and keyword != ""'>
+		                    <choose>
+		                        <when test="type == 'title'">
+		                            AND SRVY_TTL LIKE '%'|| #{keyword} ||'%'
+		                        </when>
+		                    </choose>
+		                </if>
+		                ORDER  BY SRVY_SN)
+		        ORDER  BY ROWNUM DESC)
+		WHERE ROWNUM BETWEEN #{start} AND #{end}
     </select>
 
     <select id="selectMaxSn" resultType="int">

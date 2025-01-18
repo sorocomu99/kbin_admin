@@ -100,6 +100,7 @@
                      , KB_FILE_INFO B
                  WHERE 1 = 1
                    AND A.BANE_FILE_SN = B.FILE_SN(+)
+                   AND A.TMPR_DEL_YN = 'N'
                 <if test='keyword != null and keyword != ""'>
                     <choose>
                         <when test="type == 'title'">
