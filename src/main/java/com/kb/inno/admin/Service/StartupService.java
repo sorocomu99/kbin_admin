@@ -22,12 +22,12 @@ public class StartupService {
     // 스타트업 리스트 조회
     public void selectList(int menuId, Model model, String type, String keyword, int page) {
         // Search DTO에 담기
-        SearchDTO search = new SearchDTO();
-        search.setType(type);
-        search.setKeyword(keyword);
+        StartupDTO startupDTO = new StartupDTO();
+        startupDTO.setType(type);
+        startupDTO.setKeyword(keyword);
 
         // 페이지의 전체 글 갯수
-        int allCount = startupDAO.selectPageCount(search);
+        int allCount = startupDAO.selectPageCount(startupDTO);
 
         // 한 페이지당 글 갯수
         int pageLetter = 10;
@@ -57,19 +57,21 @@ public class StartupService {
 
         // 끝 페이지
         int end = page * pageLetter;
-        search.setEnd(end);
+        startupDTO.setEnd(end);
         // 시작 페이지
         int start = end + 1 - pageLetter;
 
-        search.setStart(start);
+        startupDTO.setStart(start);
 
         // 리스트 조회
-        List<StartupDTO> selectList = startupDAO.selectList(search);
+        List<StartupDTO> selectList = startupDAO.selectList(startupDTO);
 
         model.addAttribute("repeat", repeat);
         model.addAttribute("currentPage", page);
         model.addAttribute("selectList", selectList);
         model.addAttribute("menuId", menuId);
+        model.addAttribute("type", startupDTO.getType());
+        model.addAttribute("keyword", startupDTO.getKeyword());
     } 
     
     /**

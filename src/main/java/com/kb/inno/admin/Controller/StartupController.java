@@ -26,12 +26,15 @@ public class StartupController {
     // 공통 경로 설정
     @Value("/startup")
     private String directory;
-    
+
     /**
+     * KB 스타터스 조회
      * @param menuId
      * @param model
+     * @param type
+     * @param keyword
+     * @param page
      * @return
-     * KB 스타터스 조회
      */
     @GetMapping("/list/{menuId}")
     public String selectList(@PathVariable int menuId, Model model,
@@ -41,45 +44,10 @@ public class StartupController {
     	startupService.selectList(menuId, model, type, keyword, page);
         return directory + "/startup";
     }
-    
-    /**
-    // KB 스타터스 조회
-    @RequestMapping("/info")
-    public String select(Model model) {
-    	List<StartersDTO> result = startersService.select();
-        model.addAttribute("result", result);
-        return directory + "/starters";
+
+    @RequestMapping("/insert/{menuId}")
+    public String insert(@PathVariable int menuId, Model model) {
+        model.addAttribute("menuId", menuId);
+        return directory + "/startup_insert";
     }
-
-    // KB 스타터스 저장
-    @PostMapping("/save")
-    public String save(RedirectAttributes redirectAttributes, StartersDTO startersDTO) {
-        // 로그인 기능 구현 전 : loginId에 session 값 추가 할 것
-        // 수정 요망 : 임시 아이디 값
-        int loginId = 1;
-
-        int result;
-
-        // 추가, 수정 처리
-        if (startersDTO.getStar_sn() == 0) {
-            result = startersService.insert(startersDTO, loginId);
-        } else {
-            result = startersService.update(startersDTO, loginId);
-        }
-
-        if(result == 1) {
-            redirectAttributes.addFlashAttribute("msg", "저장이 완료되었습니다.");
-            return "redirect:" + directory + "/info";
-        } else {
-            redirectAttributes.addFlashAttribute("msg", "저장이 실패했습니다.");
-            return directory + "/starters";
-        }
-    }
-	
-	*/
-	
-	
-	
-	
-	
 }

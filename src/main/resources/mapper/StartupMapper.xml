@@ -4,21 +4,22 @@
 <mapper namespace="com.kb.inno.admin.DAO.StartupDAO">
 
     <select id="selectPageCount" parameterType="String" resultType="int">
-        /* 공지사항 리스트 갯수 조회(전체) */
+        /* 리스트 갯수 조회(전체) */
         SELECT COUNT(*)
-          FROM KB_STARTUP_INFO
-         WHERE 1=1
+          FROM KB_API_STARTER_INFO
+         WHERE 1 = 1
+           AND KB_STARTERS_YN = 'Y'
         <if test='keyword != null and keyword != ""'>
            <choose>
                <when test="type == 'all'">
-                   AND NTC_TTL LIKE '%'|| #{keyword} ||'%'
-                    OR NTC_CN   LIKE '%'|| #{keyword} ||'%'
+                   AND ENT_NM LIKE '%'|| #{keyword} ||'%'
+                    OR MAIN_BIZ LIKE '%'|| #{keyword} ||'%'
                </when>
-               <when test="type == 'title'">
-                   AND NTC_TTL LIKE '%'|| #{keyword} ||'%'
+               <when test="type == 'ent_nm'">
+                   AND ENT_NM LIKE '%'|| #{keyword} ||'%'
                </when>
-               <when test="type == 'content'">
-                   AND NTC_CN   LIKE '%'|| #{keyword} ||'%'
+               <when test="type == 'main_biz'">
+                   AND MAIN_BIZ LIKE '%'|| #{keyword} ||'%'
                </when>
            </choose>
         </if>
@@ -26,52 +27,49 @@
     <!-- KB 스타터스 리스트 조회 -->
     <select id="selectList" resultType="com.kb.inno.admin.DTO.StartupDTO">
         /* KB 스타트업 리스트 조회 */
-        /* 공지사항 리스트 조회 */
-        SELECT STARTUP_PAGE.ROWNUMBER
-             , STARTUP_PAGE.STAR_SN
-             , STARTUP_PAGE.SLCTN_PRCS
-             , STARTUP_PAGE.STARTER_STTS
-             , STARTUP_PAGE.SPRT
-             , STARTUP_PAGE.FRST_RGTR
-             , STARTUP_PAGE.FRST_REG_DT
-             , STARTUP_PAGE.LAST_MDFR
-             , STARTUP_PAGE.LAST_MDFCN_DT
+        SELECT ROWNUMBER
+             , ENT_CD
+             , ENT_NM
+             , MAIN_BIZ
+             , RNUM
+             , SRVC_NM
           FROM
               (
                /* 순번 매기기 */
                SELECT ROWNUM ROWNUMBER
-                    , STARTUP.*
+                    , ENT_CD
+                    , ENT_NM
+                    , MAIN_BIZ
+                    , RNUM
+                    , SRVC_NM
                  FROM (
                        /* 리스트 조회 */
-				       SELECT STAR_SN
-				            , SLCTN_PRCS
-				            , STARTER_STTS
-				            , SPRT
-				            , FRST_RGTR
-				            , FRST_REG_DT
-				            , LAST_MDFR
-							, LAST_MDFCN_DT
-							, ROW_NUMBER() OVER(ORDER BY STAR_SN DESC) RNUM
-                         FROM KB_STARTUP_INFO
-                        WHERE 1=1
+				       SELECT ENT_CD
+				            , ENT_NM
+				            , MAIN_BIZ
+				            , ROW_NUMBER() OVER(ORDER BY ENT_CD DESC) RNUM
+				            , NVL((SELECT DISTINCT SRVC_NM FROM KB_API_BIZ_SRVC_INFO Z WHERE Z.ENT_CD = A.ENT_CD), '-') SRVC_NM
+                         FROM KB_API_STARTER_INFO A
+                        WHERE 1 = 1
+                          AND KB_STARTERS_YN = 'Y'
                         <if test='keyword != null and keyword != ""'>
                             <choose>
                                 <when test="type == 'all'">
-                                    AND STARTER_STTS LIKE '%'|| #{keyword} ||'%'
-                                    OR STAR_SN   LIKE '%'|| #{keyword} ||'%'
+                                    AND ENT_NM LIKE '%'|| #{keyword} ||'%'
+                                    OR MAIN_BIZ LIKE '%'|| #{keyword} ||'%'
                                 </when>
-                                <when test="type == 'title'">
-                                    AND STARTER_STTS LIKE '%'|| #{keyword} ||'%'
+                                <when test="type == 'ent_nm'">
+                                    AND ENT_NM LIKE '%'|| #{keyword} ||'%'
                                 </when>
-                                <when test="type == 'content'">
-                                    AND STAR_SN   LIKE '%'|| #{keyword} ||'%'
+                                <when test="type == 'main_biz'">
+                                    AND MAIN_BIZ LIKE '%'|| #{keyword} ||'%'
                                 </when>
                             </choose>
                         </if>
-                        ORDER BY STAR_SN ASC
-                       ) STARTUP
+                        ORDER BY ENT_CD ASC
+                       )
                  ORDER BY ROWNUMBER DESC
-              ) STARTUP_PAGE
+              )
          WHERE RNUM BETWEEN #{start} AND #{end}
     </select>
     <!-- KB 스타터스 조회 -->

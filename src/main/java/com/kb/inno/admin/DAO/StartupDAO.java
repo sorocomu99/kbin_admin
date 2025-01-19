@@ -5,16 +5,15 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
-import com.kb.inno.admin.DTO.SearchDTO;
 import com.kb.inno.admin.DTO.StartupDTO;
 
 @Mapper
 @Repository
 public interface StartupDAO {
     // 공지사항 리스트 갯수 조회
-    int selectPageCount(SearchDTO search);
+    int selectPageCount(StartupDTO startupDTO);
     // KB 스타터스 리스트 조회
-    List<StartupDTO> selectList(SearchDTO search);
+    List<StartupDTO> selectList(StartupDTO startupDTO);
     /**
     // KB 스타터스 조회
     List<StartersDTO> select();
