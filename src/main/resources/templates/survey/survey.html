@@ -171,18 +171,18 @@
         }
 
         function copyAlert(srvy_sn) {
-            let result = confirm("정말 삭제 하시겠습니까?");
+            let result = confirm("정말 복사 하시겠습니까?");
             if (result) {
                 $.ajax({
-                    url: /*[[@{/survey/exmnDelete}]]*/, // 요청 URL
+                    url: /*[[@{/survey/surverCopy}]]*/, // 요청 URL
                     type: 'POST', // HTTP 메서드
                     data: { srvy_sn: srvy_sn }, // 보내는 데이터
                     success: function(response) {
-                        alert("삭제에 성공하였습니다.");
+                        alert("복사에 성공하였습니다.");
                         window.location.reload();
                     },
                     error: function(xhr, status, error) {
-                        alert("삭제를 실패하였습니다.");
+                        alert("복사를 실패하였습니다.");
                         console.error('Error:', error);
                     }
                 });

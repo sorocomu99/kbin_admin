@@ -122,6 +122,44 @@ public class SurveyService {
         return resultMap;
     }
 
+    /**
+     * 복사
+     * @param surveyDTO
+     * @param loginId
+     * @return
+     */
+    public HashMap<String, Object> surverCopy(SurveyDTO surveyDTO, int loginId) {
+        HashMap<String, Object> resultMap = new HashMap<>();
+
+        surveyDTO.setFrst_rgtr(loginId);  //최초등록자 세팅
+        surveyDTO.setLast_mdfr(loginId);  //최종수정자 세팅
+// 화면에서 가져온 복사 srvy_sn
+        //1. 카피할 대상을 가져온다
+        SurveyDTO selectTarget = surveyDAO.selectTarget(surveyDTO);
+        //파일 FILE_NM
+        
+        int srvySn = surveyDAO.selectMaxSn();
+
+        SurveyDTO surveyCopy = new SurveyDTO();
+        surveyCopy.setSrvy_sn(srvySn);
+        surveyCopy.setSrvy_ttl(selectTarget.getSrvy_ttl());
+        surveyCopy.setBane_file_sn(selectTarget.getBane_file_sn());
+        surveyCopy.setFrst_rgtr(selectTarget.getFrst_rgtr());
+        surveyCopy.setLast_mdfr(selectTarget.getLast_mdfr());
+
+        int exminIns = surveyDAO.exmnInsert(surveyCopy);
+
+        if (exminIns == 1) {
+            resultMap.put("errorCd", "00");
+            resultMap.put("errorMsg", "설문정보가 정상적으로 등록되었습니다.");
+        } else {
+            resultMap.put("errorCd", "99");
+            resultMap.put("errorMsg", "설문정보가 등록 중 오류가 발생되었습니다.");
+        }
+
+        return resultMap;
+    }
+ 
     public void selectGuide(SurveyDTO surveyDTO, Model model) {
         surveyDTO.setSprt_expln_sn(surveyDTO.getSrvy_sn());
         SurveyDTO selectGuide = surveyDAO.selectGuide(surveyDTO);

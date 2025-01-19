@@ -5,7 +5,9 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
+import com.kb.inno.admin.DTO.ReceiptConmDTO;
 import com.kb.inno.admin.DTO.ReceiptDTO;
+import com.kb.inno.admin.DTO.ReceiptListDTO;
 import com.kb.inno.admin.DTO.SurveyDTO;
 
 
@@ -17,6 +19,8 @@ public interface ReceiptDAO {
     int receiptDelete(ReceiptDTO receiptDTO);
     //지원서 임시 보관함 삭제 취소
     int deleteCancel(ReceiptDTO receiptDTO);
+    
+    int updateAlert(ReceiptListDTO receiptListDTO);
 	
     // 지원서 임시 보관 카운터
     int selectTrmpPageCount();
@@ -34,4 +38,9 @@ public interface ReceiptDAO {
     int receiptPageCount(String srvy_sn);
     
     List<ReceiptDTO> receiptList(ReceiptDTO receiptDTO);
+    
+    List<String> selectConm(String srvy_sn);
+    
+    List<ReceiptConmDTO> selectConmList(String conm);
+    
 }

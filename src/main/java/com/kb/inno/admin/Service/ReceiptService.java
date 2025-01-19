@@ -1,12 +1,17 @@
 package com.kb.inno.admin.Service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
 import com.kb.inno.admin.DAO.ReceiptDAO;
+import com.kb.inno.admin.DTO.ReceiptConmDTO;
 import com.kb.inno.admin.DTO.ReceiptDTO;
+import com.kb.inno.admin.DTO.ReceiptListDTO;
 import com.kb.inno.admin.DTO.SurveyDTO;
 
 import lombok.RequiredArgsConstructor;
@@ -40,6 +45,11 @@ public class ReceiptService {
     public int tempDelete(ReceiptDTO receiptDTO) {
         return receiptDAO.tempDelete(receiptDTO);
     }
+
+    public int updateAlert(ReceiptListDTO receiptListDTO) {
+        return receiptDAO.updateAlert(receiptListDTO);
+    }
+    
 
     /**
      * 지원서 임시 보관함 조회
@@ -189,5 +199,90 @@ public class ReceiptService {
     
     }
     
+    public void receiptTenList(int menuId, String type, Model model, int srvy_sn) {
+System.out.println("ReceiptService : receiptTenList--------------type["+type+"] srvy_sn["+srvy_sn+"]");
+    	//List<ReceiptDTO> selectConmList = new List<ReceiptDTO>();
+    	List<String> conm = receiptDAO.selectConm(srvy_sn+"");
+    	System.out.println("-----------------------------------conm.size()["+conm.size()+"]");
+
+    	List<ReceiptConmDTO> selectList;
+    	ReceiptListDTO receiptListDTO = null;
+    	List<ReceiptListDTO> list = new ArrayList<>(conm.size());
+    	
+		for(int i=0 ; i < conm.size() ; i++){
+			System.out.println("----------------------------------- 1 for start[[["+conm.get(i)+"]]]]");
+			selectList = receiptDAO.selectConmList(conm.get(i));
+			receiptListDTO = new ReceiptListDTO();
+			//receiptListDTO.setType(type);
+			
+			for(int n =0 ; n < selectList.size() ; n++) {
+				System.out.println("------------------------------------------------------ 2 for start");
+				System.out.println("["+n+"]  ["+ selectList.get(n)  +"]");
+				System.out.println("------------------------------------------------------");
+				System.out.println("======================================================");
+				System.out.println(selectList.get(n).getSrvy_sn());
+				System.out.println(selectList.get(n).getSrvy_ttl());
+				System.out.println(selectList.get(n).getQstn_type());
+				System.out.println(selectList.get(n).getSrvy_qstn());
+				System.out.println(selectList.get(n).getSrvy_qstn_sn());
+				System.out.println(selectList.get(n).getRspns_cn());
+				System.out.println(selectList.get(n).getConm());
+				System.out.println(selectList.get(n).getPrgrs_stts());
+				System.out.println(selectList.get(n).getRownumber());
+				System.out.println("======================================================");
+				if(n == 0) {
+					receiptListDTO.setSrvy_sn(selectList.get(n).getSrvy_sn());
+					receiptListDTO.setConm(selectList.get(n).getConm());
+					receiptListDTO.setPrgrs_stts(selectList.get(n).getPrgrs_stts());
+					receiptListDTO.setRspns_cn1(selectList.get(n).getRspns_cn());
+				} else if(n == 1) {
+					receiptListDTO.setRspns_cn2(selectList.get(n).getRspns_cn());
+				} else if(n == 2) {
+					receiptListDTO.setRspns_cn3(selectList.get(n).getRspns_cn());
+				} else if(n == 3) {
+					receiptListDTO.setRspns_cn4(selectList.get(n).getRspns_cn());
+				} else if(n == 4) {
+					receiptListDTO.setRspns_cn5(selectList.get(n).getRspns_cn());
+				} else if(n == 5) {
+					receiptListDTO.setRspns_cn6(selectList.get(n).getRspns_cn());
+				} else if(n == 6) {
+					receiptListDTO.setRspns_cn7(selectList.get(n).getRspns_cn());
+				} else if(n == 7) {
+					receiptListDTO.setRspns_cn8(selectList.get(n).getRspns_cn());
+				} else if(n == 8) {
+					receiptListDTO.setRspns_cn9(selectList.get(n).getRspns_cn());
+				} else if(n == 9) {
+					receiptListDTO.setRspns_cn10(selectList.get(n).getRspns_cn());
+				}
+				System.out.println("------------------------------------------------------ 2 for end");
+			}
+			receiptListDTO.setAddRow(i);
+
+			System.out.println("----------------------------------- receiptListDTO.getAddRow() ["+receiptListDTO.getAddRow()+"]");
+			
+			System.out.println("----------------------------------- ADD    type ["+type+"]receiptListDTO.getPrgrs_stts()["+receiptListDTO.getPrgrs_stts()+"]");
+			if("all".equals(type)) {
+				System.out.println("all true ["+type+"]");
+				list.add(receiptListDTO);
+			} else {
+				System.out.println("all false ["+type+"]");
+				if(type.equals(receiptListDTO.getPrgrs_stts())) {
+					System.out.println("all false ["+type+"] receiptListDTO.getPrgrs_stts()["+receiptListDTO.getPrgrs_stts()+"]");
+					list.add(receiptListDTO);	
+				}
+			}
+			System.out.println("----------------------------------- 1 for start end");
+		}
+        //receiptDTO.setStart(start);
+		System.out.println("-------------------------------------------list.size()["+list.size()+"]");
+        
+       // model.addAttribute("repeat", repeat);
+		model.addAttribute("srvy_sn", srvy_sn);
+        model.addAttribute("type", type);
+        model.addAttribute("selectList", list);
+        model.addAttribute("menuId", menuId);
+    
+
+    }
     
 }

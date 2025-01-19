@@ -21,6 +21,10 @@ import java.util.List;
 @Mapper
 @Repository
 public interface SurveyDAO {
+	
+	//복사 대상
+	SurveyDTO selectTarget(SurveyDTO surveyDTO);
+	
 	//항목 일련번호 구해오기
     int selectQstnMaxSn();
     //

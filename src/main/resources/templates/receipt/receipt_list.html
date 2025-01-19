@@ -16,21 +16,33 @@
                             	<input type="hidden" name="menu_id" th:value="${menuId}"/>
                                 <div class="top-search d-flex mt-4">
                                     <div class="col">
-                                        <form action="">
+                                        <form th:action="@{/receipt/receiptList/{menuId}(menuId=${menuId})}" method="get">
+										<input type="hidden" name="srvy_sn" th:value="${srvy_sn}"/>
                                             <div class="d-flex align-items-center">
-                                                <div class="input-group-small">
+                                                <div class="input-group">
                                                     <div class="title">처리상태</div>
-                                                    <select class="form-select" aria-label="">
-                                                        <option value="1" selected>전체</option>
-                                                        <option value="2" selected>처리상태</option>
+                                                    <select class="form-select" aria-label="" name="type">
+                                                        <option value="all" th:selected="${type} == 'all'">전체</option>
+                                                        <option value="0"   th:selected="${type} == '0'">접수</option>
+                                                        <option value="1"   th:selected="${type} == '1'">1차</option>
+                                                        <option value="2"   th:selected="${type} == '2'">2차</option>
+                                                        <option value="3"   th:selected="${type} == '3'">3차</option>
+                                                        <option value="4"   th:selected="${type} == '4'">4차</option>
+                                                        <option value="5"   th:selected="${type} == '5'">5차</option>
+                                                        <option value="6"   th:selected="${type} == '6'">합격</option>
+                                                        <option value="7"   th:selected="${type} == '7'">불합격</option>
                                                     </select>
-                                                    <button type="button" class="btn btn-dark"><i data-feather="search"></i></button>
+                                                    <button type="submit" class="btn btn-dark"><span data-feather="search"></span></button>
                                                 </div>
                                             </div>
                                         </form>
                                     </div>
                                     <div class="col-auto">
                                         <div class="button-wrap d-flex justify-content-end">
+                                        
+                                        <a th:href="@{/receipt/list/{menuId}(menuId=${menuId})}" class="btn btn-outline-primary">목록보기</a>
+                                        
+                                        <!-- 
                                             <a href="javascript:" class="btn btn-outline-danger">
                                                 <i data-feather="trash-2"></i> 선택 삭제
                                             </a>
@@ -40,6 +52,7 @@
                                             <a href="javascript:" class="btn btn-outline-dark">
                                                 <i data-feather="download"></i> 선택 엑셀 다운로드
                                             </a>
+                                             -->
                                         </div>
                                     </div>
                                 </div>
@@ -49,11 +62,14 @@
                                     <table  id="mytable" class="table table-min table-small text-center align-middle">
                                         <thead>
                                             <tr>
+                                                <!-- 
                                                 <th style="width:60px">
                                                     <input class="form-check-input" type="checkbox" value="" id="checkAll">
                                                 </th>
+                                                 -->
                                                 <th style="width:200px">회사명</th>
                                                 <th style="width:120px">처리상태</th>
+                                                <th style="width:100px">상태변경</th>
                                                 <th style="">질문1</th>
                                                 <th style="">질문2</th>
                                                 <th style="">질문3</th>
@@ -77,54 +93,38 @@
                                         
                                         <!-- 리스팅 -->
                                         <tr th:unless="${selectList == null or selectList.isEmpty()}" th:each="list : ${selectList}">
+                                            <!-- 
 											<td>
-                                            	<input class="form-check-input" type="checkbox" value="${list.srvy_qstn_sn}" id="${list.srvy_qstn_sn}">
+                                            	<input class="form-check-input" type="checkbox" value="${list.srvy_sn}" id="${list.conm}">
                                             </td>
+                                             -->
                                             <td th:text="${list.conm}">-</td>
 											<td>
-											
- 										
-											<select name="prgrs_stts" class="form-select form-select-sm">
-											<option th:selected="${list.prgrs_stts}=='0'">접수</option>
-											<option th:selected="${list.prgrs_stts}=='1'">1차</option>
-											<option th:selected="${list.prgrs_stts}=='2'">2차</option>
-											<option th:selected="${list.prgrs_stts}=='3'">3차</option>
-											<option th:selected="${list.prgrs_stts}=='4'">4차</option>
-											<option th:selected="${list.prgrs_stts}=='5'">5차</option>
-											<option th:selected="${list.prgrs_stts}=='6'">합격</option>
-											<option th:selected="${list.prgrs_stts}=='7'">불합격</option>
-											
-											
-											    
-<!-- 												<option th:selected="${list.prgrs_stts}=='0'">접수</option>    
-												<option th:selected="${list.prgrs_stts}=='1'">1차</option>
-												<option th:selected="${list.prgrs_stts}=='2'">2차</option>
-												<option th:selected="${list.prgrs_stts}=='3'">2차</option>
-												<option th:selected="${list.prgrs_stts}=='4'">2차</option>
-												<option th:selected="${list.prgrs_stts}=='5'">2차</option>
-												<option th:selected="${list.prgrs_stts}=='6'">2차</option>
-												<option th:selected="${list.prgrs_stts}=='7'">2차</option>
- -->											</select>
- 
- <!-- 
-												<select th:switch="${list.prgrs_stts}" class="form-select form-select-sm">
- 													<option th:case="">접수</option>
- 													<option th:case="1">1차</option>
- 													<option th:case="2">2차</option>
- 													<option th:case="3">3차</option>
-                                                 </select> 
-                                                 --> 
+												<select id="prgrs_stts'+${list.addRow}' " name="prgrs_stts" class="form-select form-select-sm">
+													<option value="0" th:selected="${list.prgrs_stts}=='0'">접수</option>
+													<option value="1" th:selected="${list.prgrs_stts}=='1'">1차</option>
+													<option value="2" th:selected="${list.prgrs_stts}=='2'">2차</option>
+													<option value="3" th:selected="${list.prgrs_stts}=='3'">3차</option>
+													<option value="4" th:selected="${list.prgrs_stts}=='4'">4차</option>
+													<option value="5" th:selected="${list.prgrs_stts}=='5'">5차</option>
+													<option value="6" th:selected="${list.prgrs_stts}=='6'">합격</option>
+													<option value="7" th:selected="${list.prgrs_stts}=='7'">불합격</option>
+												</select>
 											</td>
-                                            <td th:text="${list.srvy_qstn_sn}">11</td>
-                                            <td th:text="${list.srvy_sn}">12</td>
-                                            <td th:text="${list.srvy_sn}">13</td>
-                                            <td th:text="${list.srvy_sn}">14</td>
-                                            <td th:text="${list.srvy_sn}">15</td>
-                                            <td th:text="${list.srvy_sn}">16</td>
-                                            <td th:text="${list.srvy_sn}">17</td>
-                                            <td th:text="${list.srvy_sn}">18</td>
-                                            <td th:text="${list.srvy_sn}">19</td>
-                                            <td th:text="${list.srvy_sn}">20</td>
+											<td>
+												
+                                                <button type="button" th:onclick="|updateAlert('${list.conm}','${list.addRow}')|" class="btn btn-outline-warning btn-sm">변경</button>
+                                            </td>
+                                            <td th:text="${list.rspns_cn1}">---</td>
+                                            <td th:text="${list.rspns_cn2}">---</td>
+                                            <td th:text="${list.rspns_cn3}">---</td>
+                                            <td th:text="${list.rspns_cn4}">---</td>
+                                            <td th:text="${list.rspns_cn5}">---</td>
+                                            <td th:text="${list.rspns_cn6}">---</td>
+                                            <td th:text="${list.rspns_cn7}">---</td>
+                                            <td th:text="${list.rspns_cn8}">---</td>
+                                            <td th:text="${list.rspns_cn9}">---</td>
+                                            <td th:text="${list.rspns_cn10}">---</td>
 											<td>
                                                 <button type="button" th:onclick="|deleteAlert('${list.srvy_sn}')|" class="btn btn-outline-danger btn-sm">삭제</button>
                                             </td>
@@ -141,40 +141,7 @@
                                         </tbody>
                                     </table>
                                 </div>
-                            <!-- 페이지네이션 -->
-                            <nav class="bottom-pagination" aria-label="navigation">
-                                <ul class="pagination">
-                                    <!-- 맨 앞페이지 이동 버튼 -->
-                                    <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled' : ''">
-                                        <a class="page-link" th:href="@{|/survey/list/${menuId}?page=1|}" aria-label="Previous">
-                                            <span data-feather="chevrons-left" aria-hidden="true"></span>
-                                        </a>
-                                    </li>
-                                    <!-- 이전으로 이동하는 버튼 -->
-                                    <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled' : ''">
-                                        <a class="page-link" th:href="@{|/survey/list/${menuId}?page=${currentPage - 1 < 1 ? 1 : currentPage - 1}|}" aria-label="Previous">
-                                            <span data-feather="chevron-left" aria-hidden="true"></span>
-                                        </a>
-                                    </li>
-                                    <th:block th:if="${repeat != null}" th:each="num : ${#numbers.sequence(1, repeat)}">
-                                        <li class="page-item" aria-current="page" th:classappend="${currentPage != null ? num == currentPage : num == 1} ? 'active' : ''">
-                                            <a th:id="${'page' + num}" class="page-link" th:href="@{|/survey/list/${menuId}?page=${num}|}" th:text="${num}"></a>
-                                        </li>
-                                    </th:block>
-                                    <!-- 다음으로 이동하는 버튼 -->
-                                    <li class="page-item" th:classappend="${currentPage == repeat} ? 'disabled' : ''">
-                                        <a class="page-link" th:href="@{|/survey/list/${menuId}?page=${currentPage + 1 > repeat ? repeat : currentPage + 1}|}" aria-label="Next">
-                                            <span data-feather="chevron-right" aria-hidden="true"></span>
-                                        </a>
-                                    </li>
-                                    <!-- 맨 끝페이지 이동 버튼 -->
-                                    <li class="page-item" th:classappend="${currentPage == repeat} ? 'disabled' : ''">
-                                        <a class="page-link" th:href="@{|/survey/list/${menuId}?page=${repeat}|}" aria-label="Next">
-                                            <span data-feather="chevrons-right" aria-hidden="true"></span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </nav>
+         
                             </div>
                         </div>
                     </div>
@@ -185,10 +152,10 @@
     
     <script th:src="@{/js/admin.js}"></script>
     <script th:inline="javascript">
-    
+    /* 
     var wb = XLSX.utils.table_to_book(document.getElementById('mytable'), {sheet:"지원서 접수 관리",raw:true});
     XLSX.writeFile(wb, ('지원서 접수 관리.xlsx'));
-    
+     */
         // 페이지 로드 시 실행
         window.onload = function () {
             // 페이지 로드 시 메시지 확인 및 알림 표시
@@ -197,10 +164,29 @@
             if (msg) alert(msg);
         }
         
+        function updateAlert(conm,row) {
+        	//var stts = $("#prgrs_stts0 option:selected").val();
+        	alert(row);
+        	
+            let result = confirm("처리 상태를 변경 하시겠습니까?");
+            if (result) {
+                $.ajax({
+                    url: /*[[@{/receipt/updateAlert}]]*/, // 요청 URL
+                    type: 'POST', // HTTP 메서드
+                    data: { conm: conm , stts: stts }, // 보내는 데이터
+                    success: function(response) {
+                        alert("처리 상태 변경에 성공하였습니다.");
+                        window.location.reload();
+                    },
+                    error: function(xhr, status, error) {
+                        alert("처리 상태 변경에 실패하였습니다.");
+                        console.error('Error:', error);
+                    }
+                });
+            }
+        }
+        
 
-        
-        
-        
         // 수정 페이지 이동
         function guidePage(srvy_sn, menuId) {
             // 빈 form 전달
@@ -243,24 +229,7 @@
             }
         }
 
-        function copyAlert(srvy_sn) {
-            let result = confirm("정말 삭제 하시겠습니까?");
-            if (result) {
-                $.ajax({
-                    url: /*[[@{/survey/exmnDelete}]]*/, // 요청 URL
-                    type: 'POST', // HTTP 메서드
-                    data: { srvy_sn: srvy_sn }, // 보내는 데이터
-                    success: function(response) {
-                        alert("삭제에 성공하였습니다.");
-                        window.location.reload();
-                    },
-                    error: function(xhr, status, error) {
-                        alert("삭제를 실패하였습니다.");
-                        console.error('Error:', error);
-                    }
-                });
-            }
-        }
+
     </script>
 
 </body>

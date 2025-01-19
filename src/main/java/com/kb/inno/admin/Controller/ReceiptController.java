@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.kb.inno.admin.DTO.ReceiptDTO;
+import com.kb.inno.admin.DTO.ReceiptListDTO;
+import com.kb.inno.admin.DTO.SurveyDTO;
 import com.kb.inno.admin.Service.ReceiptService;
 
 import lombok.RequiredArgsConstructor;
@@ -75,11 +77,21 @@ public class ReceiptController {
         return "success";
     }
 
-    
-    
-    
-    
-    
+    @ResponseBody
+    @PostMapping("/updateAlert")
+    public String updateAlert(@RequestParam("stts") String stts,
+    						 @RequestParam("conm") String conm) {
+    	ReceiptListDTO receiptListDTO = new ReceiptListDTO();
+    	receiptListDTO.setPrgrs_stts(stts);
+    	receiptListDTO.setConm(conm);
+    	
+    	System.out.println("/updateAlert : prgrs_stts ["+stts+"]  conm ["+conm+"]");
+    	System.out.println("/updateAlert : prgrs_stts ["+receiptListDTO.getPrgrs_stts()+"]  conm ["+receiptListDTO.getConm()+"]");
+    	
+    	receiptService.updateAlert(receiptListDTO);
+        return "success";
+    }
+
     /**
      * 설문 조회
      * @param menuId
@@ -101,14 +113,25 @@ public class ReceiptController {
      * @param model
      * @param page
      * @return
+     *     @GetMapping("/list/{menuId}")
+    public String mailList(@PathVariable int menuId, Model model,
+                           @RequestParam(value = "type", required = false, defaultValue = "") String type,
+                           @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
+                           @RequestParam(value = "page", required = false, defaultValue = "1") int page) {
+        sendMailService.selectListMail(menuId, model, type, keyword, page);
+        model.addAttribute("menuId", menuId);
+        return directory + "/mail";
+    }
      */
     @GetMapping("/receiptList/{menuId}")
     public String receiptList(@PathVariable int menuId, Model model, 
-    						  @RequestParam(value = "page", required = false, defaultValue = "1") int page,
+    						  @RequestParam(value = "type", required = false, defaultValue = "all") String type,
     						  @RequestParam(value = "srvy_sn" , required = false, defaultValue = "1") int srvy_sn) {
     	
-    	receiptService.receiptList(menuId, page, model, srvy_sn);
-    	System.out.println("================================");
+    	System.out.println("================================receiptList type["+type+"]   srvy_sn["+srvy_sn+"]");
+    	receiptService.receiptTenList(menuId, type, model, srvy_sn);
+    	
+        model.addAttribute("menuId", menuId);
         return directory + "/receipt_list";
     }
 

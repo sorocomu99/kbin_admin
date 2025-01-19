@@ -26,6 +26,15 @@
 		WHERE  SRVY_SN = #{srvy_sn}
     </update>
 
+    <update id="updateAlert" parameterType="com.kb.inno.admin.DTO.ReceiptListDTO">
+        /* 지원서 접수 상태 변경 */
+		UPDATE KB_SRVY_RSPNS_INFO
+		SET    PRGRS_STTS = #{prgrs_stts}
+		WHERE  CONM = #{conm}
+    </update>    
+    
+    
+
     <select id="selectTrmpPageCount" parameterType="String" resultType="int">
         /* 지원서 임시 보관 카운터 */
         SELECT COUNT(DISTINCT SRVY_SN)
@@ -194,7 +203,38 @@
         -->
     </select>
 
+    <select id="selectConm" parameterType="String" resultType="String">
+        /* 지원서 접수 관리 상세 보기 리스트 */
+		SELECT
+			C.CONM
+		FROM KB_SRVY_EXMN_INFO A, KB_SRVY_QSTN_INFO B, KB_SRVY_RSPNS_INFO C
+		WHERE A.SRVY_SN = B.SRVY_SN
+		AND B.SRVY_QSTN_SN = C.SRVY_QSTN_SN
+		AND A.SRVY_SN = #{srvy_sn}
+		AND A.TMPR_DEL_YN = 'N'
+		GROUP BY C.CONM
+    </select>
 
+    <select id="selectConmList" parameterType="String" resultType="com.kb.inno.admin.DTO.ReceiptConmDTO">
+        /* 지원서 접수 관리 상세 보기 리스트 */
+			SELECT 
+			 A.SRVY_SN -- 지원 일련번호
+			,A.SRVY_TTL -- 지원 제목
+			,B.QSTN_TYPE -- 항목 타입
+			,B.SRVY_QSTN -- 질문 제목
+			,B.SRVY_QSTN_SN -- 질문 시퀀스(낮은 순자가 1번)
+			,C.RSPNS_CN --답변
+			,C.CONM    -- 회사명
+			,C.PRGRS_STTS -- 진행 상태(0 : 접수, 1 : 1차 심사, 2 : 2차 심사, 3 : 3차 심사, 4 : 4차 심사, 5 : 5차 심사, 6 : 합격, 9 : 불합격)
+			,ROWNUM ROWNUMBER 
+			FROM KB_SRVY_EXMN_INFO A, KB_SRVY_QSTN_INFO B, KB_SRVY_RSPNS_INFO C
+			WHERE A.SRVY_SN = B.SRVY_SN
+			AND B.SRVY_QSTN_SN = C.SRVY_QSTN_SN
+			--AND A.SRVY_SN = '12'
+			AND C.CONM = #{conm}
+			AND A.TMPR_DEL_YN = 'N'
+			ORDER by ROWNUMBER
+    </select>
 
 
    <!--  <insert id="insertFile" parameterType="com.kb.inno.admin.DTO.FileDTO" useGeneratedKeys="true" keyProperty="file_sn">
