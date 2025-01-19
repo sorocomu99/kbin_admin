@@ -100,7 +100,7 @@
                                              -->
                                             <td th:text="${list.conm}">-</td>
 											<td>
-												<select id="prgrs_stts'+${list.addRow}' " name="prgrs_stts" class="form-select form-select-sm">
+												<select id="prgrs_stts" name="prgrs_stts" class="form-select form-select-sm" onchange="changeType(this.value)">
 													<option value="0" th:selected="${list.prgrs_stts}=='0'">접수</option>
 													<option value="1" th:selected="${list.prgrs_stts}=='1'">1차</option>
 													<option value="2" th:selected="${list.prgrs_stts}=='2'">2차</option>
@@ -111,10 +111,12 @@
 													<option value="7" th:selected="${list.prgrs_stts}=='7'">불합격</option>
 												</select>
 											</td>
+											
 											<td>
-												
-                                                <button type="button" th:onclick="|updateAlert('${list.conm}','${list.addRow}')|" class="btn btn-outline-warning btn-sm">변경</button>
+                                                <button type="button" th:onclick="|updateAlert('${list.conm}')|" class="btn btn-outline-warning btn-sm">변경</button>
                                             </td>
+                                            
+                                            
                                             <td th:text="${list.rspns_cn1}">---</td>
                                             <td th:text="${list.rspns_cn2}">---</td>
                                             <td th:text="${list.rspns_cn3}">---</td>
@@ -164,10 +166,13 @@
             if (msg) alert(msg);
         }
         
-        function updateAlert(conm,row) {
-        	//var stts = $("#prgrs_stts0 option:selected").val();
-        	alert(row);
-        	
+	var stts;
+	function changeType(e) {
+		stts = e;
+     }
+     
+	function updateAlert(conm) {
+
             let result = confirm("처리 상태를 변경 하시겠습니까?");
             if (result) {
                 $.ajax({

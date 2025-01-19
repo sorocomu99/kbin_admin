@@ -211,7 +211,7 @@ public class SurveyService {
             System.out.println("=======================================    16 [" + surveyDTO.getQstn_type()+ "]["+ surveyDTO.getQstn_type1()+"]");
             System.out.println("=======================================    16 [" + surveyDTO.getSrvy_qstn()+ "]["+ surveyDTO.getSrvy_qstn1()+"]");
             System.out.println("=======================================    16 [" + surveyDTO.getSrvy_dtl_qstn()+ "]["+ surveyDTO.getSrvy_dtl_qstn11()+"]");
-            System.out.println("=======================================    17 [" + surveyDTO.getAftr_mvmn1());
+            
 
             surveyDAO.qstnInsert(surveyDTO);
             
@@ -306,7 +306,7 @@ public class SurveyService {
             System.out.println("=======================================    26 [" + surveyDTO.getQstn_type()+ "]["+ surveyDTO.getQstn_type2()+"]");
             System.out.println("=======================================    26 [" + surveyDTO.getSrvy_qstn()+ "]["+ surveyDTO.getSrvy_qstn2()+"]");
             System.out.println("=======================================    26 [" + surveyDTO.getSrvy_dtl_qstn()+ "]["+ surveyDTO.getSrvy_dtl_qstn21()+"]");
-            System.out.println("=======================================    27 [" + surveyDTO.getAftr_mvmn2());
+            
             
             surveyDAO.qstnInsert(surveyDTO);
             
@@ -390,7 +390,7 @@ public class SurveyService {
             
             System.out.println("=======================================    35 [" + surveyDTO.getSrvy_qstn_sn());
             System.out.println("=======================================    36 [" + surveyDTO.getRequired3());
-            System.out.println("=======================================    37 [" + surveyDTO.getAftr_mvmn3());
+            
             
             surveyDAO.qstnInsert(surveyDTO);
             
@@ -474,7 +474,7 @@ public class SurveyService {
             
             System.out.println("=======================================    45 [" + surveyDTO.getSrvy_qstn_sn());
             System.out.println("=======================================    46 [" + surveyDTO.getRequired4());
-            System.out.println("=======================================    47 [" + surveyDTO.getAftr_mvmn4());
+            
             
             surveyDAO.qstnInsert(surveyDTO);
             
@@ -557,7 +557,7 @@ public class SurveyService {
             
             System.out.println("=======================================    55 [" + surveyDTO.getSrvy_qstn_sn());
             System.out.println("=======================================    56 [" + surveyDTO.getRequired5());
-            System.out.println("=======================================    57 [" + surveyDTO.getAftr_mvmn5());
+            
             
             surveyDAO.qstnInsert(surveyDTO);
             
@@ -641,7 +641,7 @@ public class SurveyService {
             
             System.out.println("=======================================    65 [" + surveyDTO.getSrvy_qstn_sn());
             System.out.println("=======================================    66 [" + surveyDTO.getRequired6());
-            System.out.println("=======================================    67 [" + surveyDTO.getAftr_mvmn6());
+            
             
             surveyDAO.qstnInsert(surveyDTO);
             
@@ -724,7 +724,7 @@ public class SurveyService {
             
             System.out.println("=======================================    75 [" + surveyDTO.getSrvy_qstn_sn());
             System.out.println("=======================================    76 [" + surveyDTO.getRequired7());
-            System.out.println("=======================================    77 [" + surveyDTO.getAftr_mvmn7());
+            
             
             surveyDAO.qstnInsert(surveyDTO);
             
@@ -807,7 +807,7 @@ public class SurveyService {
             
             System.out.println("=======================================    85 [" + surveyDTO.getSrvy_qstn_sn());
             System.out.println("=======================================    86 [" + surveyDTO.getRequired8());
-            System.out.println("=======================================    87 [" + surveyDTO.getAftr_mvmn8());
+            
             
             surveyDAO.qstnInsert(surveyDTO);
             
@@ -889,7 +889,7 @@ public class SurveyService {
             
             System.out.println("=======================================    95 [" + surveyDTO.getSrvy_qstn_sn());
             System.out.println("=======================================    96 [" + surveyDTO.getRequired9());
-            System.out.println("=======================================    97 [" + surveyDTO.getAftr_mvmn9());
+            
             
             surveyDAO.qstnInsert(surveyDTO);
             
@@ -972,7 +972,7 @@ public class SurveyService {
             
             System.out.println("=======================================    105 [" + surveyDTO.getSrvy_qstn_sn());
             System.out.println("=======================================    106 [" + surveyDTO.getRequired10());
-            System.out.println("=======================================    107 [" + surveyDTO.getAftr_mvmn10());
+            
             
             surveyDAO.qstnInsert(surveyDTO);
             
@@ -1048,8 +1048,8 @@ public class SurveyService {
             
         }
         
-      
-
+        resultMap.put("errorCd", "00");
+        resultMap.put("errorMsg", "정상적으로 등록되었습니다.");
 
         
         //파일을 첨부했는지 확인
@@ -1065,7 +1065,8 @@ public class SurveyService {
 		
         
 		 */
-    	
+
+        
     	return resultMap;
     }
     
