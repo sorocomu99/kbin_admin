@@ -360,11 +360,11 @@
         // $('.select-type').on('change', changeType);
     });
 
-    let questionCount = $(".question-list").length;
-
     // 문항 추가
     function addList() {
-        if (questionCount > 10) {
+        let questionCount = $(".question-list").length;
+
+        if (questionCount >= 10) {
             alert("문항 추가는 10개 까지 가능 합니다");
             return true;
         }
@@ -505,7 +505,7 @@
         const moveYn = $element.parent().parent().parent().parent().find(".move-question-switch").prop("checked");
         $element.parent().find(".item-list").append(`<div class="item">
                                                         <div class="column">
-                                                            <input type="text" class="form-control form-control-sm" name="choice_content" th:placeholder="보기 ${itemListCount}">
+                                                            <input type="text" class="form-control form-control-sm" name="choice_content" placeholder="보기 ${itemListCount}">
                                                             <select class="form-select form-select-sm move-question-type ${moveYn ? 'on' : ''}">
                                                                 <option value="0">다음 문항</option>
                                                                 <option value="1">문항 번호 선택</option>
