@@ -160,11 +160,11 @@ public class SurveyService {
         return resultMap;
     }
  
-    public void selectGuide(SurveyDTO surveyDTO, Model model) {
+    public void selectGuide(SurveyDTO surveyDTO, Model model, int menuId) {
         surveyDTO.setSprt_expln_sn(surveyDTO.getSrvy_sn());
         SurveyDTO selectGuide = surveyDAO.selectGuide(surveyDTO);
         model.addAttribute("selectGuide", selectGuide);
-        model.addAttribute("menuId", surveyDTO.getMenu_id());
+        model.addAttribute("menuId", menuId);
         model.addAttribute("srvy_sn", surveyDTO.getSrvy_sn());
     }
 

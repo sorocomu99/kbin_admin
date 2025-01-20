@@ -162,10 +162,10 @@ public class SurveyController {
      * @param model
      * @return
      */
-    @RequestMapping("/guide")
-    public String guide(SurveyDTO surveyDTO, Model model) {
-        surveyService.selectGuide(surveyDTO, model);
-        model.addAttribute("menuId", surveyDTO.getMenu_id());
+    @RequestMapping("/guide/{menuId}")
+    public String guide(@PathVariable int menuId, SurveyDTO surveyDTO, Model model) {
+        surveyService.selectGuide(surveyDTO, model, menuId);
+        model.addAttribute("menuId", menuId);
         model.addAttribute("srvy_sn", surveyDTO.getSrvy_sn());
         return directory + "/survey_guide";
     }

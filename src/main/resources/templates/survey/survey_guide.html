@@ -16,7 +16,7 @@
                             <h3 class="h5">모집개요 관리</h3>
                             <div class="mt-4">
                                 <form id="guide_form" name="guide_form" th:action="@{/survey/guideIns}" method="post" onsubmit="return validateForm()">
-                                    <input type="hidden" id="menu_id" name="menu_id" th:value="${menuId}"/>
+                                    <input type="hidden" name="menu_id" th:value="${menuId}"/>
                                     <input type="hidden" id="srvy_sn" name="srvy_sn" th:value="${srvy_sn}"/>
                                     <input type="hidden" id="sprt_expln_sn" name="sprt_expln_sn" th:value="${srvy_sn}"/>
                                     <table class="table table-bordered align-middle">

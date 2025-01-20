@@ -192,8 +192,8 @@ public class AdminLoginController {
         Properties props = new Properties();
         props.setProperty("mail.smtp.host", host);
         props.setProperty("mail.smtp.port", port);
-        props.setProperty("mail.smtp.auth", "false");
-        props.setProperty("mail.smtp.starttls.enable", "false");
+        props.setProperty("mail.smtp.auth", "true");
+        props.setProperty("mail.smtp.starttls.enable", "true");
 
         //Session session = Session.getDefaultInstance(props);
 

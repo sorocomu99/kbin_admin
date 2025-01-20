@@ -48,7 +48,7 @@
 				            , ENT_NM
 				            , MAIN_BIZ
 				            , ROW_NUMBER() OVER(ORDER BY ENT_CD DESC) RNUM
-				            , NVL((SELECT DISTINCT SRVC_NM FROM KB_API_BIZ_SRVC_INFO Z WHERE Z.ENT_CD = A.ENT_CD), '-') SRVC_NM
+				            , NVL((SELECT DISTINCT SRVC_NM FROM KB_API_BIZ_SRVC_INFO Z WHERE Z.ENT_CD = A.ENT_CD AND ROWNUM = 1), '-') SRVC_NM
                          FROM KB_API_STARTER_INFO A
                         WHERE 1 = 1
                           AND KB_STARTERS_YN = 'Y'
@@ -72,54 +72,365 @@
               )
          WHERE RNUM BETWEEN #{start} AND #{end}
     </select>
-    <!-- KB 스타터스 조회 -->
-    <select id="select" resultType="com.kb.inno.admin.DTO.StartupDTO">
-        /* KB 스타터스 조회 */
-        SELECT STAR_SN
-             , SLCTN_PRCS
-             , STARTER_STTS
-             , SPRT
-             , FRST_RGTR
-             , FRST_REG_DT
-             , LAST_MDFR
-             , LAST_MDFCN_DT
-          FROM KB_STARTUP_INFO
-    </select>
-    <!-- KB 스타터스 등록 -->
-    <insert id="insert" parameterType="com.kb.inno.admin.DTO.StartupDTO">
-        /* KB 스타터스 등록 */
-        INSERT INTO KB_STARTUP_INFO
-        (
-         STAR_SN
-       , SLCTN_PRCS
-       , STARTER_STTS
-       , SPRT
-       , FRST_RGTR
-       , FRST_REG_DT
-       , LAST_MDFR
-       , LAST_MDFCN_DT
+
+    <insert id="insertStarterInfo" parameterType="com.kb.inno.admin.DTO.StartupDTO">
+        /* KB_API_STARTER_INFO 등록 */
+        INSERT INTO KB_API_STARTER_INFO
+        ( ENT_CD
+        , ENT_NM
+        , MAIN_BIZ
+        , TPBIZ
+        , NOW_WRKR_NOCS
+        , RPRSV_NM
+        , FNDN_YMD
+        , BRNO
+        , CORP_NO
+        , CPTL_AMT
+        , ENT_SHAPE
+        , EXTERNAL_AUDIT_YN
+        , VENTURE_CERT_YN
+        , ADDR
+        , ENT_SCALE
+        , PRDCT
+        , HMPG
+        , MM12_JNCMP_NOCS
+        , MM12_RSGNTN_NOCS
+        , MM12_RSGNTN_RT
+        , KB_STARTERS_YN
+        , FRST_REG_DT
+        , LAST_MDFCN_DT
         )
         VALUES
-        (
-         STAR_SN_SEQ.NEXTVAL
-       , #{slctn_prcs}
-       , #{starter_stts}
-       , #{sprt}
-       , #{frst_rgtr}
-       , SYSDATE
-       , #{last_mdfr}
-       , SYSDATE
+        ( #{ent_cd}
+        , #{ent_nm}
+        , #{main_biz}
+        , #{tpbiz}
+        , #{now_wrkr_nocs}
+        , #{rprsv_nm}
+        , #{fndn_ymd}
+        , REPLACE(#{brno}, '-', '')
+        , REPLACE(#{corp_no}, '-', '')
+        , #{cptl_amt}
+        , #{ent_shape}
+        , #{external_audit_yn}
+        , #{venture_cert_yn}
+        , #{addr}
+        , #{ent_scale}
+        , #{prdct}
+        , #{hmpg}
+        , #{mm12_jncmp_nocs}
+        , #{mm12_rsgntn_nocs}
+        , #{mm12_rsgntn_rt}
+        , 'Y'
+        , SYSDATE
+        , SYSDATE
         )
     </insert>
-    <!-- KB 스타터스 수정 -->
-    <update id="update" parameterType="com.kb.inno.admin.DTO.StartupDTO">
-        /* KB 스타터스 수정 */
-        UPDATE KB_STARTUP_INFO
-           SET SLCTN_PRCS    = #{slctn_prcs}
-             , STARTER_STTS  = #{starter_stts}
-             , SPRT          = #{sprt}
-             , LAST_MDFR     = #{last_mdfr}
-             , LAST_MDFCN_DT = SYSDATE
-         WHERE STAR_SN       = #{star_sn}
-    </update>
+
+    <insert id="insertBizSrvcInfo" parameterType="com.kb.inno.admin.DTO.StartupDTO">
+        INSERT INTO KB_API_BIZ_SRVC_INFO
+        ( ENT_CD
+        , SRVC_NM
+        , GOOGLE_APP_LINK
+        , APPLE_APP_LINK
+        , WEB_SRVC_LINK
+        , FRST_REG_DT
+        , LAST_MDFCN_DT
+        )
+        VALUES
+        ( #{ent_cd}
+        , REPLACE(#{srvc_nm}, '|', ',')
+        , #{google_app_link}
+        , #{apple_app_link}
+        , #{web_srvc_link}
+        , SYSDATE
+        , SYSDATE
+        )
+    </insert>
+
+    <insert id="insertInvestInfo" parameterType="com.kb.inno.admin.DTO.StartupDTO">
+        INSERT INTO KB_API_INVEST_INFO
+        ( ENT_CD
+        , INVESTOR
+        , SERIES_NM
+        , INVEST_AMT
+        , INVEST_YMD
+        , FRST_REG_DT
+        , LAST_MDFCN_DT
+        )
+        VALUES
+        ( #{ent_cd}
+        , REPLACE(#{investor}, '|', ',')
+        , #{series_nm}
+        , #{invest_amt}
+        , #{invest_ymd}
+        , SYSDATE
+        , SYSDATE
+        )
+    </insert>
+
+    <insert id="insertEmploInfo" parameterType="com.kb.inno.admin.DTO.StartupDTO">
+        INSERT INTO KB_API_EMPLO_INFO
+        ( ENT_CD
+        , CRTR_YM
+        , JNCMP_NOCS
+        , RSGNTN_NOCS
+        , HDOF_NOCS
+        , FRST_REG_DT
+        , LAST_MDFCN_DT
+        )
+        VALUES
+        ( #{ent_cd}
+        , #{crtr_ym}
+        , #{jncmp_nocs}
+        , #{rsgntn_nocs}
+        , #{hdof_nocs}
+        , SYSDATE
+        , SYSDATE
+        )
+    </insert>
+
+    <insert id="insertSlsInfo" parameterType="com.kb.inno.admin.DTO.StartupDTO">
+        INSERT INTO KB_API_SLS_INFO
+        ( ENT_CD
+        , YR
+        , SLS_AMT
+        , SLS_COST_AMT
+        , SLS_GRAMT
+        , SGA_AMT
+        , OPERATING_PROFIT
+        , NET_PROFIT
+        , FRST_REG_DT
+        , LAST_MDFCN_DT
+        )
+        VALUES
+        ( #{ent_cd}
+        , #{sls_yr}
+        , #{sls_amt}
+        , #{sls_cost_amt}
+        , #{sls_gramt}
+        , #{sga_amt}
+        , #{operating_profit}
+        , #{net_profit}
+        , SYSDATE
+        , SYSDATE
+        )
+    </insert>
+
+    <insert id="insertAstInfo" parameterType="com.kb.inno.admin.DTO.StartupDTO">
+        INSERT INTO KB_API_AST_INFO
+        ( ENT_CD
+        , YR
+        , CURRENT_ASSETS
+        , NON_CURRENT_ASSETS
+        , AST_GRAMT
+        , DEBT_GRAMT
+        , CPTL
+        , CPTL_GRAMT
+        , FRST_REG_DT
+        , LAST_MDFCN_DT
+        )
+        VALUES
+        ( #{ent_cd}
+        , #{ast_yr}
+        , #{current_assets}
+        , #{non_current_assets}
+        , #{ast_gramt}
+        , #{debt_gramt}
+        , #{cptl}
+        , #{cptl_gramt}
+        , SYSDATE
+        , SYSDATE
+        )
+    </insert>
+
+    <insert id="insertNewsInfo" parameterType="com.kb.inno.admin.DTO.StartupDTO">
+        INSERT INTO KB_API_NEWS_INFO
+        ( ENT_CD
+        , NEWS_ID
+        , PROVIDER
+        , NEWS_TTL
+        , NEWS_LINK
+        , THUMB_URL
+        , FRST_REG_DT
+        , LAST_MDFCN_DT
+        )
+        VALUES
+        ( #{ent_cd}
+        , #{news_id}
+        , #{provider}
+        , #{news_ttl}
+        , #{news_link}
+        , #{thumb_url}
+        , SYSDATE
+        , SYSDATE
+        )
+    </insert>
+
+    <insert id="insertKeywdInfo" parameterType="com.kb.inno.admin.DTO.StartupDTO">
+        INSERT INTO KB_API_KEYWD_INFO
+        ( ENT_CD
+        , KEYWD
+        , NOCS
+        , FRST_REG_DT
+        , LAST_MDFCN_DT
+        )
+        VALUES
+        ( #{ent_cd}
+        , #{keywd}
+        , #{nocs}
+        , SYSDATE
+        , SYSDATE
+        )
+    </insert>
+
+    <delete id="deleteStarterInfo" parameterType="com.kb.inno.admin.DTO.StartupDTO">
+        DELETE
+          FROM KB_API_STARTER_INFO
+         WHERE ENT_CD = #{ent_cd}
+           AND KB_STARTERS_YN = 'Y'
+    </delete>
+
+    <delete id="deleteBizSrvcInfo" parameterType="com.kb.inno.admin.DTO.StartupDTO">
+        DELETE
+          FROM KB_API_BIZ_SRVC_INFO
+         WHERE ENT_CD = #{ent_cd}
+    </delete>
+
+    <delete id="deleteInvestInfo" parameterType="com.kb.inno.admin.DTO.StartupDTO">
+        DELETE
+          FROM KB_API_INVEST_INFO
+         WHERE ENT_CD = #{ent_cd}
+    </delete>
+
+    <delete id="deleteEmploInfo" parameterType="com.kb.inno.admin.DTO.StartupDTO">
+        DELETE
+          FROM KB_API_EMPLO_INFO
+         WHERE ENT_CD = #{ent_cd}
+    </delete>
+
+    <delete id="deleteSlsInfo" parameterType="com.kb.inno.admin.DTO.StartupDTO">
+        DELETE
+          FROM KB_API_SLS_INFO
+         WHERE ENT_CD = #{ent_cd}
+    </delete>
+
+    <delete id="deleteAstInfo" parameterType="com.kb.inno.admin.DTO.StartupDTO">
+        DELETE
+          FROM KB_API_AST_INFO
+         WHERE ENT_CD = #{ent_cd}
+    </delete>
+
+    <delete id="deleteNewsInfo" parameterType="com.kb.inno.admin.DTO.StartupDTO">
+        DELETE
+          FROM KB_API_NEWS_INFO
+         WHERE ENT_CD = #{ent_cd}
+    </delete>
+
+    <delete id="deleteKeywdInfo" parameterType="com.kb.inno.admin.DTO.StartupDTO">
+        DELETE
+          FROM KB_API_KEYWD_INFO
+         WHERE ENT_CD = #{ent_cd}
+    </delete>
+
+    <select id="selectStarterInfo" parameterType="com.kb.inno.admin.DTO.StartupDTO" resultType="com.kb.inno.admin.DTO.StartupDTO">
+        SELECT ENT_CD
+             , ENT_NM
+             , MAIN_BIZ
+             , TPBIZ
+             , NOW_WRKR_NOCS
+             , RPRSV_NM
+             , FNDN_YMD
+             , BRNO
+             , CORP_NO
+             , CPTL_AMT
+             , ENT_SHAPE
+             , EXTERNAL_AUDIT_YN
+             , VENTURE_CERT_YN
+             , ADDR
+             , ENT_SCALE
+             , PRDCT
+             , HMPG
+             , MM12_JNCMP_NOCS
+             , MM12_RSGNTN_NOCS
+             , MM12_RSGNTN_RT
+             , KB_STARTERS_YN
+          FROM KB_API_STARTER_INFO
+         WHERE ENT_CD = #{ent_cd}
+    </select>
+
+    <select id="selectBizSrvcInfo" parameterType="com.kb.inno.admin.DTO.StartupDTO" resultType="com.kb.inno.admin.DTO.StartupDTO">
+        SELECT ENT_CD
+             , SRVC_NM
+             , GOOGLE_APP_LINK
+             , APPLE_APP_LINK
+             , WEB_SRVC_LINK
+          FROM KB_API_BIZ_SRVC_INFO
+         WHERE ENT_CD = #{ent_cd}
+    </select>
+
+    <select id="selectInvestInfo" parameterType="com.kb.inno.admin.DTO.StartupDTO" resultType="com.kb.inno.admin.DTO.StartupDTO">
+        SELECT ENT_CD
+             , INVESTOR
+             , SERIES_NM
+             , INVEST_AMT
+             , INVEST_YMD
+          FROM KB_API_INVEST_INFO
+         WHERE ENT_CD = #{ent_cd}
+    </select>
+
+    <select id="selectEmploInfo" parameterType="com.kb.inno.admin.DTO.StartupDTO" resultType="com.kb.inno.admin.DTO.StartupDTO">
+        SELECT ENT_CD
+             , CRTR_YM
+             , JNCMP_NOCS
+             , RSGNTN_NOCS
+             , HDOF_NOCS
+          FROM KB_API_EMPLO_INFO
+         WHERE ENT_CD = #{ent_cd}
+    </select>
+
+    <select id="selectSlsInfo" parameterType="com.kb.inno.admin.DTO.StartupDTO" resultType="com.kb.inno.admin.DTO.StartupDTO">
+        SELECT ENT_CD
+             , YR
+             , SLS_AMT
+             , SLS_COST_AMT
+             , SLS_GRAMT
+             , SGA_AMT
+             , OPERATING_PROFIT
+             , NET_PROFIT
+          FROM KB_API_SLS_INFO
+         WHERE ENT_CD = #{ent_cd}
+    </select>
+
+    <select id="selectAstInfo" parameterType="com.kb.inno.admin.DTO.StartupDTO" resultType="com.kb.inno.admin.DTO.StartupDTO">
+        SELECT ENT_CD
+             , YR
+             , CURRENT_ASSETS
+             , NON_CURRENT_ASSETS
+             , AST_GRAMT
+             , DEBT_GRAMT
+             , CPTL
+             , CPTL_GRAMT
+          FROM KB_API_AST_INFO
+         WHERE ENT_CD = #{ent_cd}
+    </select>
+
+    <select id="selectNewsInfo" parameterType="com.kb.inno.admin.DTO.StartupDTO" resultType="com.kb.inno.admin.DTO.StartupDTO">
+        SELECT ENT_CD
+             , NEWS_ID
+             , PROVIDER
+             , NEWS_TTL
+             , NEWS_LINK
+             , THUMB_URL
+          FROM KB_API_NEWS_INFO
+         WHERE ENT_CD = #{ent_cd}
+    </select>
+
+    <select id="selectKeywdInfo" parameterType="com.kb.inno.admin.DTO.StartupDTO" resultType="com.kb.inno.admin.DTO.StartupDTO">
+        SELECT ENT_CD
+             , KEYWD
+             , NOCS
+          FROM KB_API_KEYWD_INFO
+         WHERE ENT_CD = #{ent_cd}
+    </select>
 </mapper>

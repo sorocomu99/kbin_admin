@@ -64,8 +64,9 @@
                                             <td th:text="${list.srvc_nm}">-</td>
                                             <!--<td>1</td>-->
                                             <td>
-                                                <a href="startup_input.html" class="btn btn-outline-dark btn-sm">수정</a>
-                                                <button type="button" class="btn btn-outline-danger btn-sm">삭제</button>
+                                                <!--<a href="startup_input.html" class="btn btn-outline-dark btn-sm">수정</a>-->
+                                                <button th:onclick="|updatePage('${list.ent_cd}', '${menuId}')|" class="btn btn-outline-dark btn-sm">수정</button>
+                                                <button type="button" class="btn btn-outline-danger btn-sm" th:onclick="|deleteAlert('${list.ent_cd}')|">삭제</button>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -113,5 +114,54 @@
         </main>
     </div>
     <script th:src="@{/js/admin.js}"></script>
+    <script th:inline="javascript">
+        // 페이지 로드 시 실행
+        window.onload = function () {
+            // 페이지 로드 시 메시지 확인 및 알림 표시
+            // 수정 및 등록 시 띄울 알림창
+            const msg = /*[[${msg}]]*/ '';
+            if (msg) alert(msg);
+        }
+
+        function updatePage(ent_cd, menuId) {
+            let pageMoveForm = document.createElement('form');
+
+            let obj = document.createElement('input');
+            obj.setAttribute('type', 'hidden');
+            obj.setAttribute('name', 'ent_cd');
+            obj.setAttribute('value', ent_cd);
+            pageMoveForm.appendChild(obj);
+
+            let obj2 = document.createElement('input');
+            obj2.setAttribute('type', 'hidden');
+            obj2.setAttribute('name', 'menuId');
+            obj2.setAttribute('value', menuId);
+            pageMoveForm.appendChild(obj2);
+
+            pageMoveForm.setAttribute('method', 'post');
+            pageMoveForm.setAttribute('action', '/kbinnovationhub_devadm/startup/detail');
+            document.body.appendChild(pageMoveForm);
+            pageMoveForm.submit();
+        }
+
+        function deleteAlert(ent_cd) {
+            let result = confirm("정말 삭제 하시겠습니까?");
+            if (result) {
+                $.ajax({
+                    url: /*[[@{/startup/delete}]]*/, // 요청 URL
+                    type: 'POST', // HTTP 메서드
+                    data: {ent_cd: ent_cd}, // 보내는 데이터
+                    success: function (response) {
+                        alert("삭제에 성공하였습니다.");
+                        window.location.reload();
+                    },
+                    error: function (xhr, status, error) {
+                        alert("삭제를 실패하였습니다.");
+                        console.error('Error:', error);
+                    }
+                });
+            }
+        }
+    </script>
 </body>
 </html>
