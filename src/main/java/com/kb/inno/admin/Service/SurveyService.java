@@ -10,9 +10,9 @@
  */
 package com.kb.inno.admin.Service;
 
+import com.kb.inno.admin.DAO.KbStartersSurvey;
 import com.kb.inno.admin.DAO.SurveyDAO;
-import com.kb.inno.admin.DTO.FileDTO;
-import com.kb.inno.admin.DTO.SurveyDTO;
+import com.kb.inno.admin.DTO.*;
 import com.kb.inno.common.FileUploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,12 +21,15 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
 public class SurveyService {
     // DAO 연결
     private final SurveyDAO surveyDAO;
+
+	private final KbStartersSurvey surveyRepository;
 
     /**
      * 설문 조회
@@ -1511,4 +1514,61 @@ public class SurveyService {
         //KB_SRVY_EXMN_INFO(설문조사정보), KB_SRBVY_QSTN_INFO(설문질문정보), KB_SRVY_ANS_INFO(설문답변정보), KB_SRVY_RSPNS_INFO(설문응답정보) 모두 삭제
         return surveyDAO.exmnDelete(surveyDTO);
     }
+
+	public List<KbStartersSurveyDTO> getSurveyList(SearchDTO searchDTO) {
+		return surveyRepository.getSurveyList(searchDTO);
+	}
+
+	public int getSurveyListCnt(SearchDTO searchDTO) {
+		return surveyRepository.countSurvey(searchDTO);
+	}
+
+	public List<KbStartersQuestionDTO> getQuestionList(int surveyNo) {
+		KbStartersQuestionDTO question = new KbStartersQuestionDTO();
+		question.setSurvey_no(surveyNo);
+		return surveyRepository.getQuestion(question);
+	}
+
+	public Map<String, Object> saveSurvey(KbStartersSurveyDTO survey, MultipartFile bannerFile, int loginId) {
+		Map<String, Object> result = new HashMap<>();
+		try {
+			FileUploader fileUploader = new FileUploader();
+			if(bannerFile != null && bannerFile.getSize() != 0){
+				FileDTO fileSave = fileUploader.insertFile(bannerFile, loginId);
+				survey.setBanner_file_path(fileSave.getFile_path());
+				survey.setBanner_filename(fileSave.getFile_nm());
+			}
+
+			survey.setLast_mdfr(loginId);
+
+			if (survey.getSurvey_no() == 0) {
+				survey.setFrst_rgtr(loginId);
+				int maxSurveyNo = surveyRepository.getMaxSurveyNo();
+				survey.setSurvey_no(maxSurveyNo);
+				surveyRepository.insertSurvey(survey);
+			} else {
+				surveyRepository.updateSurvey(survey);
+			}
+
+			result.put("result", "success");
+		} catch (Exception e) {
+			result.put("result", "fail");
+			result.put("message", e.getMessage());
+		}
+		return result;
+	}
+
+	public Map<String, Object> deleteSurvey(int surveyNo) {
+		Map<String, Object> result = new HashMap<>();
+		try {
+			KbStartersSurveyDTO survey = new KbStartersSurveyDTO();
+			survey.setSurvey_no(surveyNo);
+			surveyRepository.deleteSurvey(survey);
+			result.put("result", "success");
+		} catch (Exception e) {
+			result.put("result", "fail");
+			result.put("message", e.getMessage());
+		}
+		return result;
+	}
 }

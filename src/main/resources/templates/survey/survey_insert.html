@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragment/config :: configFragment"></head>
 
 <body>
@@ -14,7 +14,7 @@
                             <h2 class="h4">지원서 설문 관리</h2>
                             <div class="mt-4">
                                 <form id="survey_form" name="survey_form" th:action="@{/survey/insert}" method="post" onsubmit="return checkInput();" enctype="multipart/form-data">
-                                    <input type="hidden" id="menu_id" name="menu_id" th:value="${menuId}"/>
+                                    <input type="hidden" id="menu_id" name="menuId" th:value="${menuId}"/>
                                     <input type="hidden" id="file_yn" name="file_yn" value="0">
                                     <table class="table table-bordered align-middle">
                                         <tbody>
@@ -22,7 +22,7 @@
                                                 <th class="bg-light">이미지</th>
                                                 <td>
                                                     <div class="d-flex align-items-center">
-                                                        <input class="form-control w-auto" type="file" id="survey_file" name="survey_file" onchange="preview()">
+                                                        <input class="form-control w-auto" type="file" id="survey_file" name="surveyBannerFile" onchange="preview()">
                                                     </div>
                                                     <img id="previewFrame" src="" width="200" class="img-fluid mt-2" style="display:none" />
                                                     <p class="mb-0 mt-2">
@@ -34,7 +34,7 @@
                                             <tr>
                                                 <th class="bg-light">설문 제목</th>
                                                 <td>
-                                                    <input type="text" class="form-control" value="" id="srvy_ttl" name="srvy_ttl">
+                                                    <input type="text" class="form-control" value="" id="srvy_ttl" name="survey_title">
                                                 </td>
                                             </tr>
                                         </tbody>

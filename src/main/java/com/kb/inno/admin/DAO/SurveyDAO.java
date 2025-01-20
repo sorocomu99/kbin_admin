@@ -10,9 +10,7 @@
  */
 package com.kb.inno.admin.DAO;
 
-import com.kb.inno.admin.DTO.FileDTO;
-import com.kb.inno.admin.DTO.HistoryDTO;
-import com.kb.inno.admin.DTO.SurveyDTO;
+import com.kb.inno.admin.DTO.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 

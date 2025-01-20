@@ -1,0 +1,162 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kb.inno.admin.DAO.KbStartersSurvey">
+    <select id="getSurveyList" parameterType="com.kb.inno.admin.DTO.SearchDTO"
+            resultType="com.kb.inno.admin.DTO.KbStartersSurveyDTO">
+        SELECT * FROM KB_STARTERS_SURVEY WHERE 1=1
+        <if test="type != null and type != ''">
+            <choose>
+                <when test="type == 'all'">
+                    AND (SURVEY_TITLE 'like' '%' || #{keyword} || '%')
+                </when>
+                <when test="type == 'title'">
+                    AND (SURVEY_TITLE 'like' '%' || #{keyword} || '%')
+                </when>
+            </choose>
+        </if>
+        ORDER BY FRST_REG_DT DESC
+        OFFSET #{start} ROWS FETCH NEXT 10 ROWS ONLY
+    </select>
+
+    <select id="countSurvey" parameterType="com.kb.inno.admin.DTO.SearchDTO"
+            resultType="int">
+        SELECT COUNT(*)
+        FROM KB_STARTERS_SURVEY
+        WHERE 1=1
+        <if test="type != null and type != ''">
+            <choose>
+                <when test="type == 'all'">
+                    AND (SURVEY_TITLE 'like' '%' || #{keyword} || '%')
+                </when>
+                <when test="type == 'title'">
+                    AND (SURVEY_TITLE 'like' '%' || #{keyword} || '%')
+                </when>
+            </choose>
+        </if>
+    </select>
+
+    <select id="getMaxSurveyNo" resultType="int">
+        SELECT NVL(MAX(SURVEY_NO), 0) + 1
+        FROM KB_STARTERS_SURVEY
+    </select>
+
+    <insert id="insertSurvey" parameterType="com.kb.inno.admin.DTO.KbStartersSurveyDTO">
+        INSERT INTO KB_STARTERS_SURVEY
+        (SURVEY_NO, SURVEY_TITLE, BANNER_FILE_PATH, BANNER_FILENAME, FRST_RGTR, FRST_REG_DT, LAST_MDFR, LAST_MDFCN_DT)
+        VALUES
+        (#{survey_no}, #{survey_title}, #{banner_file_path}, #{banner_filename}, #{frst_rgtr}, SYSDATE, #{last_mdfr}, SYSDATE)
+    </insert>
+
+    <update id="updateSurvey" parameterType="com.kb.inno.admin.DTO.KbStartersSurveyDTO">
+        UPDATE KB_STARTERS_SURVEY
+        SET SURVEY_TITLE = #{survey_title},
+            <if test="banner_file_path != null and banner_file_path != ''">
+                BANNER_FILE_PATH = #{banner_file_path},
+            </if>
+            <if test="banner_filename != null and banner_filename != ''">
+                BANNER_FILENAME = #{banner_filename},
+            </if>
+            LAST_MDFR = #{last_mdfr},
+            LAST_MDFCN_DT = SYSDATE
+        WHERE SURVEY_NO = #{survey_no}
+    </update>
+
+    <delete id="deleteSurvey" parameterType="com.kb.inno.admin.DTO.KbStartersSurveyDTO">
+        DELETE FROM KB_STARTERS_SURVEY WHERE SURVEY_NO = #{survey_no}
+    </delete>
+
+    <select id="getSurveyInfo" parameterType="com.kb.inno.admin.DTO.KbStartersSurveyDTO"
+            resultType="com.kb.inno.admin.DTO.KbStartersSurveyDTO">
+        SELECT *
+        FROM KB_STARTERS_SURVEY_INFO
+        WHERE SURVEY_NO = #{survey_no}
+    </select>
+
+
+    <insert id="insertSurveyInfo" parameterType="com.kb.inno.admin.DTO.KbStartersSurveyDTO">
+        INSERT INTO KB_STARTERS_SURVEY_INFO
+        (SURVEY_INFO_NO, SURVEY_NO, SURVEY_CATEGORY, SURVEY_DATE_RANGE, SURVEY_TARGET_HEADING, SURVEY_TARGET_SUB, SURVEY_FIELD_HEADING, SURVEY_FIELD_SUB, SURVEY_SELECT_PROCESS, SURVEY_BENEFIT1, SURVEY_BENEFIT2, SURVEY_BENEFIT3, SURVEY_BENEFIT4, FRST_RGTR, FRST_REG_DT, LAST_MDFR, LAST_MDFCN_DT)
+        VALUES
+        (#{survey_info_no}, #{survey_no}, #{survey_category}, #{survey_date_range}, #{survey_target_heading}, #{survey_target_sub}, #{survey_field_heading}, #{survey_field_sub}, #{survey_select_process}, #{survey_benefit1}, #{survey_benefit2}, #{survey_benefit3}, #{survey_benefit4}, #{frst_rgtr}, SYSDATE, #{last_mdfr}, SYSDATE)
+    </insert>
+
+    <update id="updateSurveyInfo" parameterType="com.kb.inno.admin.DTO.KbStartersSurveyDTO">
+        UPDATE KB_STARTERS_SURVEY_INFO
+        SET SURVEY_CATEGORY = #{survey_category},
+            SURVEY_DATE_RANGE = #{survey_date_range},
+            SURVEY_TARGET_HEADING = #{survey_target_heading},
+            SURVEY_TARGET_SUB = #{survey_target_sub},
+            SURVEY_FIELD_HEADING = #{survey_field_heading},
+            SURVEY_FIELD_SUB = #{survey_field_sub},
+            SURVEY_SELECT_PROCESS = #{survey_select_process},
+            SURVEY_BENEFIT1 = #{survey_benefit1},
+            SURVEY_BENEFIT2 = #{survey_benefit2},
+            SURVEY_BENEFIT3 = #{survey_benefit3},
+            SURVEY_BENEFIT4 = #{survey_benefit4},
+            LAST_MDFR = #{last_mdfr},
+            LAST_MDFCN_DT = SYSDATE
+        WHERE SURVEY_NO = #{survey_no}
+    </update>
+
+    <delete id="deleteSurveyInfo" parameterType="com.kb.inno.admin.DTO.KbStartersSurveyDTO">
+        DELETE FROM KB_STARTERS_SURVEY_INFO WHERE SURVEY_NO = #{survey_no}
+    </delete>
+
+
+    <select id="getQuestion" parameterType="com.kb.inno.admin.DTO.KbStartersSurveyDTO"
+            resultType="com.kb.inno.admin.DTO.KbStartersSurveyDTO">
+        SELECT question.*, question_type.question_type_nm
+        FROM KB_STARTERS_QUESTION question,
+             KB_STARTERS_QUESTION_TYPE question_type
+        WHERE SURVEY_NO = #{survey_no}
+        ORDER BY question.question_order ASC
+    </select>
+
+    <select id="getOneQuestion" parameterType="com.kb.inno.admin.DTO.KbStartersQuestionDTO"
+            resultType="com.kb.inno.admin.DTO.KbStartersQuestionDTO">
+        SELECT *
+        FROM KB_STARTERS_QUESTION
+        WHERE QUESTION_NO = #{question_no}
+    </select>
+
+    <select id="getQuestionChoice" parameterType="com.kb.inno.admin.DTO.KbStartersQuestionDTO"
+            resultType="com.kb.inno.admin.DTO.KbStartersQuestionChoiceDTO">
+        SELECT *
+        FROM KB_STARTERS_QUESTION_CHOICE
+        WHERE QUESTION_NO = #{question_no}
+    </select>
+
+    <select id="getOneQuestionChoice" parameterType="com.kb.inno.admin.DTO.KbStartersQuestionChoiceDTO"
+            resultType="com.kb.inno.admin.DTO.KbStartersQuestionChoiceDTO">
+        SELECT *
+        FROM KB_STARTERS_QUESTION_CHOICE
+        WHERE QUESTION_CHOICE_NO = #{question_choice_no}
+    </select>
+
+    <select id="getApplyList" resultType="com.kb.inno.admin.DTO.KbStartersApplyDTO">
+        SELECT apply.*
+        FROM KB_STARTERS_APPLY apply, KB_STARTERS_SURVEY survey
+        WHERE apply.SURVEY_NO = survey.SURVEY_NO
+        AND apply.SURVEY_NO = #{survey_no}
+        <if test="search.type != null and search.type != ''">
+            <choose>
+                <when test="search.type == 'all'">
+                    AND (survey.SURVEY_TITLE 'like' '%' || #{search.keyword} || '%')
+                </when>
+                <when test="search.type == 'title'">
+                    AND (survey.SURVEY_TITLE 'like' '%' || #{search.keyword} || '%')
+                </when>
+            </choose>
+        </if>
+        ORDER BY apply.FRST_REG_DT DESC
+        OFFSET #{search.start} ROWS FETCH NEXT 10 ROWS ONLY
+    </select>
+
+    <select id="getApplyAnswers" parameterType="com.kb.inno.admin.DTO.KbStartersApplyDTO"
+            resultType="com.kb.inno.admin.DTO.KbStartersApplyAnswerDTO">
+        SELECT *
+        FROM KB_STARTERS_APPLY_ANSWER
+        WHERE APPLY_NO = #{apply_no}
+    </select>
+</mapper>
