@@ -58,4 +58,12 @@ public interface KbStartersSurvey {
 
     int deleteQuestionChoices(List<Integer> deleteChoiceNoList);
 
+    int deleteSurveyInfoBySurvey(KbStartersSurveyDTO survey);
+
+    int deleteQuestionBySurvey(KbStartersSurveyDTO survey);
+
+    int deleteQuestionChoiceByQuestion(KbStartersQuestionDTO question);
+
+    int deleteQuestionChoiceBySurvey(KbStartersSurveyDTO survey);
+
 }

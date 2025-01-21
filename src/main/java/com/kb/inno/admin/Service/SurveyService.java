@@ -1563,16 +1563,20 @@ public class SurveyService {
 		return result;
 	}
 
+	@Transactional
 	public Map<String, Object> deleteSurvey(int surveyNo) {
 		Map<String, Object> result = new HashMap<>();
 		try {
 			KbStartersSurveyDTO survey = new KbStartersSurveyDTO();
 			survey.setSurvey_no(surveyNo);
 			surveyRepository.deleteSurvey(survey);
+			surveyRepository.deleteSurveyInfoBySurvey(survey);
+			surveyRepository.deleteQuestionBySurvey(survey);
+			surveyRepository.deleteQuestionChoiceBySurvey(survey);
+
 			result.put("result", "success");
 		} catch (Exception e) {
-			result.put("result", "fail");
-			result.put("message", e.getMessage());
+			throw new RuntimeException(e);
 		}
 		return result;
 	}
@@ -1609,31 +1613,24 @@ public class SurveyService {
 					surveyRepository.updateQuestion(questionDTO);
 				}
 
+				surveyRepository.deleteQuestionChoiceByQuestion(questionDTO);
+
 				if(question.getChoices() != null && question.getChoices().size() > 0) {
 					for (KbStartersQuestionChoiceRequestDTO choice : question.getChoices()) {
 						KbStartersQuestionChoiceDTO choiceDTO = new KbStartersQuestionChoiceDTO();
 						choiceDTO.setQuestion_no(questionDTO.getQuestion_no());
 						choiceDTO.setChoice_content(choice.getChoice_content());
 						choiceDTO.setMove_question_no(choice.getMove_question_no());
-						if (choice.getQuestion_choice_no() == 0) {
-							choiceDTO.setQuestion_choice_no(surveyRepository.getMaxQuestionChoiceNo());
-							choiceDTO.setFrst_rgtr(loginId);
-							choiceDTO.setLast_mdfr(loginId);
-							surveyRepository.insertQuestionChoice(choiceDTO);
-						} else {
-							choiceDTO.setQuestion_choice_no(choice.getQuestion_choice_no());
-							choiceDTO.setLast_mdfr(loginId);
-							surveyRepository.updateQuestionChoice(choiceDTO);
-						}
+						choiceDTO.setQuestion_choice_no(surveyRepository.getMaxQuestionChoiceNo());
+						choiceDTO.setFrst_rgtr(loginId);
+						choiceDTO.setLast_mdfr(loginId);
+						surveyRepository.insertQuestionChoice(choiceDTO);
 					}
 				}
 			}
 
 			if(request.getDeleteQuestionNoList() != null && request.getDeleteQuestionNoList().size() > 0){
 				surveyRepository.deleteQuestions(request.getDeleteQuestionNoList());
-			}
-			if(request.getDeleteChoiceNoList() != null && request.getDeleteChoiceNoList().size() > 0){
-				surveyRepository.deleteQuestionChoices(request.getDeleteChoiceNoList());
 			}
 
 			result.put("result", "success");

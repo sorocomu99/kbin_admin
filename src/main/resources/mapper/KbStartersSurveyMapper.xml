@@ -260,4 +260,31 @@
         FROM KB_STARTERS_APPLY_ANSWER
         WHERE APPLY_NO = #{apply_no}
     </select>
+
+    <delete id="deleteSurveyInfoBySurvey" parameterType="com.kb.inno.admin.DTO.KbStartersSurveyDTO">
+        DELETE
+        FROM KB_STARTERS_SURVEY_INFO
+        WHERE SURVEY_NO = #{survey_no}
+    </delete>
+
+    <delete id="deleteQuestionBySurvey" parameterType="com.kb.inno.admin.DTO.KbStartersSurveyDTO">
+        DELETE
+        FROM KB_STARTERS_QUESTION
+        WHERE SURVEY_NO = #{survey_no}
+    </delete>
+
+    <delete id="deleteQuestionChoiceByQuestion" parameterType="com.kb.inno.admin.DTO.KbStartersQuestionDTO">
+        DELETE
+        FROM KB_STARTERS_QUESTION_CHOICE
+        WHERE QUESTION_NO = #{question_no}
+    </delete>
+
+    <delete id="deleteQuestionChoiceBySurvey" parameterType="com.kb.inno.admin.DTO.KbStartersSurveyDTO">
+        DELETE
+        FROM KB_STARTERS_QUESTION_CHOICE
+        WHERE QUESTION_NO IN
+        (SELECT QUESTION_NO
+        FROM KB_STARTERS_QUESTION
+        WHERE SURVEY_NO = #{survey_no})
+    </delete>
 </mapper>
