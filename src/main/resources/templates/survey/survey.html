@@ -189,16 +189,22 @@
         }
     }
 
-    function copyAlert(srvy_sn) {
+    function copyAlert(surveyNo) {
         let result = confirm("정말 복사 하시겠습니까?");
         if (result) {
             $.ajax({
                 url: /*[[@{/survey/surverCopy}]]*/, // 요청 URL
                 type: 'POST', // HTTP 메서드
-                data: {srvy_sn: srvy_sn}, // 보내는 데이터
+                data: {surveyNo: surveyNo}, // 보내는 데이터
+                dataType: "JSON",
                 success: function (response) {
-                    alert("복사에 성공하였습니다.");
-                    window.location.reload();
+                    if(response.result == 'success') {
+                        alert("복사에 성공하였습니다.");
+                        window.location.reload();
+                    }
+                    else{
+                        alert(response.message);
+                    }
                 },
                 error: function (xhr, status, error) {
                     alert("복사를 실패하였습니다.");

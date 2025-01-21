@@ -136,17 +136,9 @@ public class SurveyController {
         return mv;
     }
 
-    /**
-     * 지원서 설문 복사
-     * @param surveyDTO
-     * @param redirectAttributes
-     * @param request
-     * @return
-     */
-    @RequestMapping("/surverCopy")
-    public String surverCopy(SurveyDTO surveyDTO, RedirectAttributes redirectAttributes, HttpServletRequest request) {
-        HashMap<String, Object> resultMap = new HashMap<>();
-
+    @PostMapping("/surverCopy")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> surverCopy(int surveyNo, HttpServletRequest request) {
         //로그인 세션 정보 가져오기
         int loginId = 0;
         HttpSession session = request.getSession(false);
@@ -154,15 +146,9 @@ public class SurveyController {
             loginId = (int) session.getAttribute("mngrSn");
         }
 
-        resultMap = surveyService.surverCopy(surveyDTO, loginId);
+        Map<String, Object> resultMap = surveyService.copySurvey(surveyNo, loginId);
 
-        if (resultMap.get("errorCd").equals("00")) {
-            redirectAttributes.addFlashAttribute("msg", resultMap.get("errorMsg"));
-            return "redirect:" + directory + "/list/" + surveyDTO.getMenu_id();
-        } else {  //등록 중 오류 발생시 등록 화면 유지
-            redirectAttributes.addFlashAttribute("msg", resultMap.get("errorMsg"));
-            return directory + "/history_insert";
-        }
+        return ResponseEntity.ok(resultMap);
     }
 
     @RequestMapping("/manageSurvey/{menuId}")

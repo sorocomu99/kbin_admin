@@ -90,25 +90,25 @@
         (SURVEY_INFO_NO, SURVEY_NO, SURVEY_CATEGORY, SURVEY_DATE_RANGE, SURVEY_TARGET_HEADING, SURVEY_TARGET_SUB,
          SURVEY_FIELD_HEADING, SURVEY_FIELD_SUB, SURVEY_SELECT_PROCESS, SURVEY_BENEFIT1, SURVEY_BENEFIT2,
          SURVEY_BENEFIT3, SURVEY_BENEFIT4, FRST_RGTR, FRST_REG_DT, LAST_MDFR, LAST_MDFCN_DT)
-        VALUES (#{survey_info_no}, #{survey_no}, #{survey_category}, #{survey_date_range}, #{survey_target_heading},
-                #{survey_target_sub}, #{survey_field_heading}, #{survey_field_sub}, #{survey_select_process},
-                #{survey_benefit1}, #{survey_benefit2}, #{survey_benefit3}, #{survey_benefit4}, #{frst_rgtr}, SYSDATE,
+        VALUES (#{survey_info_no}, #{survey_no}, #{survey_category, jdbcType=VARCHAR}, #{survey_date_range, jdbcType=VARCHAR}, #{survey_target_heading, jdbcType=VARCHAR},
+                #{survey_target_sub, jdbcType=VARCHAR}, #{survey_field_heading, jdbcType=VARCHAR}, #{survey_field_sub, jdbcType=VARCHAR}, #{survey_select_process, jdbcType=VARCHAR},
+                #{survey_benefit1, jdbcType=VARCHAR}, #{survey_benefit2, jdbcType=VARCHAR}, #{survey_benefit3, jdbcType=VARCHAR}, #{survey_benefit4, jdbcType=VARCHAR}, #{frst_rgtr}, SYSDATE,
                 #{last_mdfr}, SYSDATE)
     </insert>
 
     <update id="updateSurveyInfo" parameterType="com.kb.inno.admin.DTO.KbStartersSurveyDTO">
         UPDATE KB_STARTERS_SURVEY_INFO
-        SET SURVEY_CATEGORY       = #{survey_category},
-            SURVEY_DATE_RANGE     = #{survey_date_range},
-            SURVEY_TARGET_HEADING = #{survey_target_heading},
-            SURVEY_TARGET_SUB     = #{survey_target_sub},
-            SURVEY_FIELD_HEADING  = #{survey_field_heading},
-            SURVEY_FIELD_SUB      = #{survey_field_sub},
-            SURVEY_SELECT_PROCESS = #{survey_select_process},
-            SURVEY_BENEFIT1       = #{survey_benefit1},
-            SURVEY_BENEFIT2       = #{survey_benefit2},
-            SURVEY_BENEFIT3       = #{survey_benefit3},
-            SURVEY_BENEFIT4       = #{survey_benefit4},
+        SET SURVEY_CATEGORY       = #{survey_category, jdbcType=VARCHAR},
+            SURVEY_DATE_RANGE     = #{survey_date_range, jdbcType=VARCHAR},
+            SURVEY_TARGET_HEADING = #{survey_target_heading, jdbcType=VARCHAR},
+            SURVEY_TARGET_SUB     = #{survey_target_sub, jdbcType=VARCHAR},
+            SURVEY_FIELD_HEADING  = #{survey_field_heading, jdbcType=VARCHAR},
+            SURVEY_FIELD_SUB      = #{survey_field_sub, jdbcType=VARCHAR},
+            SURVEY_SELECT_PROCESS = #{survey_select_process, jdbcType=VARCHAR},
+            SURVEY_BENEFIT1       = #{survey_benefit1, jdbcType=VARCHAR},
+            SURVEY_BENEFIT2       = #{survey_benefit2, jdbcType=VARCHAR},
+            SURVEY_BENEFIT3       = #{survey_benefit3, jdbcType=VARCHAR},
+            SURVEY_BENEFIT4       = #{survey_benefit4, jdbcType=VARCHAR},
             LAST_MDFR             = #{last_mdfr},
             LAST_MDFCN_DT         = SYSDATE
         WHERE SURVEY_NO = #{survey_no}

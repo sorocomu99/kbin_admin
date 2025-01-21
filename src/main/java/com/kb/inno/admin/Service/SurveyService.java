@@ -1661,6 +1661,7 @@ public class SurveyService {
 		if(dto.getSurvey_info_no() == 0){
 			dto.setFrst_rgtr(loginId);
 			dto.setLast_mdfr(loginId);
+			dto.setSurvey_info_no(surveyRepository.getMaxSurveyInfoNo());
 			surveyRepository.insertSurveyInfo(dto);
 		}
 		else{
@@ -1668,6 +1669,57 @@ public class SurveyService {
 			surveyRepository.updateSurveyInfo(dto);
 		}
 		result.put("result", "success");
+		return result;
+	}
+
+	@Transactional
+	public Map<String, Object> copySurvey(int surveyNo, int loginId) {
+		Map<String, Object> result = new HashMap<>();
+		try {
+			KbStartersSurveyDTO surveyParam = new KbStartersSurveyDTO();
+			surveyParam.setSurvey_no(surveyNo);
+
+			int insertSurveyNo = surveyRepository.getMaxSurveyNo();
+			KbStartersSurveyDTO survey = surveyRepository.getSurvey(surveyParam);
+			survey.setFrst_rgtr(loginId);
+			survey.setLast_mdfr(loginId);
+			survey.setSurvey_no(insertSurveyNo);
+			surveyRepository.insertSurvey(survey);
+
+			KbStartersSurveyDTO surveyInfo = surveyRepository.getSurveyInfo(surveyParam);
+			surveyInfo.setFrst_rgtr(loginId);
+			surveyInfo.setLast_mdfr(loginId);
+			surveyInfo.setSurvey_no(insertSurveyNo);
+			surveyInfo.setSurvey_info_no(surveyRepository.getMaxSurveyInfoNo());
+			surveyRepository.insertSurveyInfo(surveyInfo);
+
+			KbStartersQuestionDTO questionParam = new KbStartersQuestionDTO();
+			questionParam.setSurvey_no(surveyNo);
+			List<KbStartersQuestionDTO> questions = surveyRepository.getQuestion(questionParam);
+			for(KbStartersQuestionDTO question : questions){
+				question.setFrst_rgtr(loginId);
+				question.setLast_mdfr(loginId);
+				question.setSurvey_no(insertSurveyNo);
+
+				int insertQuestionNo = surveyRepository.getMaxQuestionNo();
+				question.setQuestion_no(insertQuestionNo);
+
+				surveyRepository.insertQuestion(question);
+
+				List<KbStartersQuestionChoiceDTO> choices = surveyRepository.getQuestionChoice(question);
+				for(KbStartersQuestionChoiceDTO choice : choices){
+					choice.setFrst_rgtr(loginId);
+					choice.setLast_mdfr(loginId);
+					choice.setQuestion_no(insertQuestionNo);
+					choice.setQuestion_choice_no(surveyRepository.getMaxQuestionChoiceNo());
+					surveyRepository.insertQuestionChoice(choice);
+				}
+			}
+
+			result.put("result", "success");
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 		return result;
 	}
 }
