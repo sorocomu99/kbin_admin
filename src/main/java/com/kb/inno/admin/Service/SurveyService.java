@@ -16,6 +16,7 @@ import com.kb.inno.admin.DTO.*;
 import com.kb.inno.common.FileUploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -1526,7 +1527,11 @@ public class SurveyService {
 	public List<KbStartersQuestionDTO> getQuestionList(int surveyNo) {
 		KbStartersQuestionDTO question = new KbStartersQuestionDTO();
 		question.setSurvey_no(surveyNo);
-		return surveyRepository.getQuestion(question);
+		List<KbStartersQuestionDTO> questionList = surveyRepository.getQuestion(question);
+		for(KbStartersQuestionDTO q : questionList){
+			q.setChoices(surveyRepository.getQuestionChoice(q));
+		}
+		return questionList;
 	}
 
 	public Map<String, Object> saveSurvey(KbStartersSurveyDTO survey, MultipartFile bannerFile, int loginId) {
@@ -1570,5 +1575,72 @@ public class SurveyService {
 			result.put("message", e.getMessage());
 		}
 		return result;
+	}
+
+	@Transactional
+	public Map<String, Object> saveSurveyQuestion(KbStartersSurveyRequestDTO request, int loginId){
+		try {
+			Map<String, Object> result = new HashMap<>();
+			List<KbStartersQuestionRequestDTO> questions = request.getData();
+			for(int i = 0; i < questions.size(); i++){
+				KbStartersQuestionRequestDTO question = questions.get(i);
+				KbStartersQuestionDTO questionDTO = new KbStartersQuestionDTO();
+				questionDTO.setQuestion_type_no(question.getQuestion_type_no());
+				if(question.getQuestion_title() != null) {
+					questionDTO.setQuestion_title(question.getQuestion_title());
+				}
+				if(question.getQuestion_description() != null) {
+					questionDTO.setQuestion_description(question.getQuestion_description());
+				}
+				questionDTO.setQuestion_order(i + 1);
+				questionDTO.setRequired_yn(question.getRequired_yn());
+
+				if(question.getQuestion_no() == 0) {
+					int maxQuestionNo = surveyRepository.getMaxQuestionNo();
+					questionDTO.setQuestion_no(maxQuestionNo);
+					questionDTO.setSurvey_no(question.getSurvey_no());
+					questionDTO.setFrst_rgtr(loginId);
+					questionDTO.setLast_mdfr(loginId);
+					surveyRepository.insertQuestion(questionDTO);
+				}
+				else{
+					questionDTO.setQuestion_no(question.getQuestion_no());
+					questionDTO.setLast_mdfr(loginId);
+					surveyRepository.updateQuestion(questionDTO);
+				}
+
+				if(question.getChoices() != null && question.getChoices().size() > 0) {
+					for (KbStartersQuestionChoiceRequestDTO choice : question.getChoices()) {
+						KbStartersQuestionChoiceDTO choiceDTO = new KbStartersQuestionChoiceDTO();
+						choiceDTO.setQuestion_no(questionDTO.getQuestion_no());
+						choiceDTO.setChoice_content(choice.getChoice_content());
+						choiceDTO.setMove_question_no(choice.getMove_question_no());
+						if (choice.getQuestion_choice_no() == 0) {
+							choiceDTO.setQuestion_choice_no(surveyRepository.getMaxQuestionChoiceNo());
+							choiceDTO.setFrst_rgtr(loginId);
+							choiceDTO.setLast_mdfr(loginId);
+							surveyRepository.insertQuestionChoice(choiceDTO);
+						} else {
+							choiceDTO.setQuestion_choice_no(choice.getQuestion_choice_no());
+							choiceDTO.setLast_mdfr(loginId);
+							surveyRepository.updateQuestionChoice(choiceDTO);
+						}
+					}
+				}
+			}
+
+			if(request.getDeleteQuestionNoList() != null && request.getDeleteQuestionNoList().size() > 0){
+				surveyRepository.deleteQuestions(request.getDeleteQuestionNoList());
+			}
+			if(request.getDeleteChoiceNoList() != null && request.getDeleteChoiceNoList().size() > 0){
+				surveyRepository.deleteQuestionChoices(request.getDeleteChoiceNoList());
+			}
+
+			result.put("result", "success");
+
+			return result;
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 }

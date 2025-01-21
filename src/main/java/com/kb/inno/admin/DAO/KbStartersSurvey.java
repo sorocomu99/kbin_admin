@@ -34,4 +34,20 @@ public interface KbStartersSurvey {
 
     List<KbStartersApplyAnswerDTO> getApplyAnswers(KbStartersApplyDTO apply);
 
+    int getMaxQuestionNo();
+
+    int insertQuestion(KbStartersQuestionDTO question);
+
+    int updateQuestion(KbStartersQuestionDTO question);
+
+    int deleteQuestions(List<Integer> deleteQuestionNoList);
+
+    int getMaxQuestionChoiceNo();
+
+    int insertQuestionChoice(KbStartersQuestionChoiceDTO choice);
+
+    int updateQuestionChoice(KbStartersQuestionChoiceDTO choice);
+
+    int deleteQuestionChoices(List<Integer> deleteChoiceNoList);
+
 }

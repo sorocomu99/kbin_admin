@@ -85,6 +85,18 @@ public class SurveyController {
         return mv;
     }
 
+    @PostMapping("/question/save")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> insertSurvey(@RequestBody KbStartersSurveyRequestDTO requestBody, HttpServletRequest request) {
+        int loginId = 0;
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            loginId = (int) session.getAttribute("mngrSn");
+        }
+
+        return ResponseEntity.ok(surveyService.saveSurveyQuestion(requestBody, loginId));
+    }
+
     /**
      * 설문 조사 등록 페이지 이동
      * @param menuId

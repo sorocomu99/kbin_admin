@@ -44,26 +44,28 @@
     <insert id="insertSurvey" parameterType="com.kb.inno.admin.DTO.KbStartersSurveyDTO">
         INSERT INTO KB_STARTERS_SURVEY
         (SURVEY_NO, SURVEY_TITLE, BANNER_FILE_PATH, BANNER_FILENAME, FRST_RGTR, FRST_REG_DT, LAST_MDFR, LAST_MDFCN_DT)
-        VALUES
-        (#{survey_no}, #{survey_title}, #{banner_file_path}, #{banner_filename}, #{frst_rgtr}, SYSDATE, #{last_mdfr}, SYSDATE)
+        VALUES (#{survey_no}, #{survey_title}, #{banner_file_path}, #{banner_filename}, #{frst_rgtr}, SYSDATE,
+                #{last_mdfr}, SYSDATE)
     </insert>
 
     <update id="updateSurvey" parameterType="com.kb.inno.admin.DTO.KbStartersSurveyDTO">
         UPDATE KB_STARTERS_SURVEY
         SET SURVEY_TITLE = #{survey_title},
-            <if test="banner_file_path != null and banner_file_path != ''">
-                BANNER_FILE_PATH = #{banner_file_path},
-            </if>
-            <if test="banner_filename != null and banner_filename != ''">
-                BANNER_FILENAME = #{banner_filename},
-            </if>
-            LAST_MDFR = #{last_mdfr},
-            LAST_MDFCN_DT = SYSDATE
+        <if test="banner_file_path != null and banner_file_path != ''">
+            BANNER_FILE_PATH = #{banner_file_path},
+        </if>
+        <if test="banner_filename != null and banner_filename != ''">
+            BANNER_FILENAME = #{banner_filename},
+        </if>
+        LAST_MDFR = #{last_mdfr},
+        LAST_MDFCN_DT = SYSDATE
         WHERE SURVEY_NO = #{survey_no}
     </update>
 
     <delete id="deleteSurvey" parameterType="com.kb.inno.admin.DTO.KbStartersSurveyDTO">
-        DELETE FROM KB_STARTERS_SURVEY WHERE SURVEY_NO = #{survey_no}
+        DELETE
+        FROM KB_STARTERS_SURVEY
+        WHERE SURVEY_NO = #{survey_no}
     </delete>
 
     <select id="getSurveyInfo" parameterType="com.kb.inno.admin.DTO.KbStartersSurveyDTO"
@@ -76,42 +78,102 @@
 
     <insert id="insertSurveyInfo" parameterType="com.kb.inno.admin.DTO.KbStartersSurveyDTO">
         INSERT INTO KB_STARTERS_SURVEY_INFO
-        (SURVEY_INFO_NO, SURVEY_NO, SURVEY_CATEGORY, SURVEY_DATE_RANGE, SURVEY_TARGET_HEADING, SURVEY_TARGET_SUB, SURVEY_FIELD_HEADING, SURVEY_FIELD_SUB, SURVEY_SELECT_PROCESS, SURVEY_BENEFIT1, SURVEY_BENEFIT2, SURVEY_BENEFIT3, SURVEY_BENEFIT4, FRST_RGTR, FRST_REG_DT, LAST_MDFR, LAST_MDFCN_DT)
-        VALUES
-        (#{survey_info_no}, #{survey_no}, #{survey_category}, #{survey_date_range}, #{survey_target_heading}, #{survey_target_sub}, #{survey_field_heading}, #{survey_field_sub}, #{survey_select_process}, #{survey_benefit1}, #{survey_benefit2}, #{survey_benefit3}, #{survey_benefit4}, #{frst_rgtr}, SYSDATE, #{last_mdfr}, SYSDATE)
+        (SURVEY_INFO_NO, SURVEY_NO, SURVEY_CATEGORY, SURVEY_DATE_RANGE, SURVEY_TARGET_HEADING, SURVEY_TARGET_SUB,
+         SURVEY_FIELD_HEADING, SURVEY_FIELD_SUB, SURVEY_SELECT_PROCESS, SURVEY_BENEFIT1, SURVEY_BENEFIT2,
+         SURVEY_BENEFIT3, SURVEY_BENEFIT4, FRST_RGTR, FRST_REG_DT, LAST_MDFR, LAST_MDFCN_DT)
+        VALUES (#{survey_info_no}, #{survey_no}, #{survey_category}, #{survey_date_range}, #{survey_target_heading},
+                #{survey_target_sub}, #{survey_field_heading}, #{survey_field_sub}, #{survey_select_process},
+                #{survey_benefit1}, #{survey_benefit2}, #{survey_benefit3}, #{survey_benefit4}, #{frst_rgtr}, SYSDATE,
+                #{last_mdfr}, SYSDATE)
     </insert>
 
     <update id="updateSurveyInfo" parameterType="com.kb.inno.admin.DTO.KbStartersSurveyDTO">
         UPDATE KB_STARTERS_SURVEY_INFO
-        SET SURVEY_CATEGORY = #{survey_category},
-            SURVEY_DATE_RANGE = #{survey_date_range},
+        SET SURVEY_CATEGORY       = #{survey_category},
+            SURVEY_DATE_RANGE     = #{survey_date_range},
             SURVEY_TARGET_HEADING = #{survey_target_heading},
-            SURVEY_TARGET_SUB = #{survey_target_sub},
-            SURVEY_FIELD_HEADING = #{survey_field_heading},
-            SURVEY_FIELD_SUB = #{survey_field_sub},
+            SURVEY_TARGET_SUB     = #{survey_target_sub},
+            SURVEY_FIELD_HEADING  = #{survey_field_heading},
+            SURVEY_FIELD_SUB      = #{survey_field_sub},
             SURVEY_SELECT_PROCESS = #{survey_select_process},
-            SURVEY_BENEFIT1 = #{survey_benefit1},
-            SURVEY_BENEFIT2 = #{survey_benefit2},
-            SURVEY_BENEFIT3 = #{survey_benefit3},
-            SURVEY_BENEFIT4 = #{survey_benefit4},
-            LAST_MDFR = #{last_mdfr},
-            LAST_MDFCN_DT = SYSDATE
+            SURVEY_BENEFIT1       = #{survey_benefit1},
+            SURVEY_BENEFIT2       = #{survey_benefit2},
+            SURVEY_BENEFIT3       = #{survey_benefit3},
+            SURVEY_BENEFIT4       = #{survey_benefit4},
+            LAST_MDFR             = #{last_mdfr},
+            LAST_MDFCN_DT         = SYSDATE
         WHERE SURVEY_NO = #{survey_no}
     </update>
 
     <delete id="deleteSurveyInfo" parameterType="com.kb.inno.admin.DTO.KbStartersSurveyDTO">
-        DELETE FROM KB_STARTERS_SURVEY_INFO WHERE SURVEY_NO = #{survey_no}
+        DELETE
+        FROM KB_STARTERS_SURVEY_INFO
+        WHERE SURVEY_NO = #{survey_no}
     </delete>
 
 
     <select id="getQuestion" parameterType="com.kb.inno.admin.DTO.KbStartersSurveyDTO"
-            resultType="com.kb.inno.admin.DTO.KbStartersSurveyDTO">
-        SELECT question.*, question_type.question_type_nm
-        FROM KB_STARTERS_QUESTION question,
+            resultType="com.kb.inno.admin.DTO.KbStartersQuestionDTO">
+        SELECT question.*,
+               question_type.question_type_nm
+        FROM KB_STARTERS_QUESTION question
+                 LEFT JOIN
              KB_STARTERS_QUESTION_TYPE question_type
-        WHERE SURVEY_NO = #{survey_no}
-        ORDER BY question.question_order ASC
+             ON
+                 question.question_type_no= question_type.question_type_no
+        WHERE question.SURVEY_NO = #{survey_no}
+        ORDER BY question.question_order ASC;
+
     </select>
+
+    <select id="getMaxQuestionNo" resultType="int">
+        SELECT NVL(MAX(QUESTION_NO), 0) + 1
+        FROM KB_STARTERS_QUESTION
+    </select>
+
+    <insert id="insertQuestion" parameterType="com.kb.inno.admin.DTO.KbStartersQuestionDTO" keyProperty="question_no">
+        INSERT INTO KB_STARTERS_QUESTION
+        (QUESTION_NO, SURVEY_NO, QUESTION_TYPE_NO,
+        <if test="question_title != null and question_title != ''">
+            QUESTION_TITLE,
+        </if>
+        <if test="question_description != null and question_description != ''">
+            QUESTION_DESCRIPTION,
+        </if>
+        QUESTION_ORDER, REQUIRED_YN, FRST_RGTR, FRST_REG_DT, LAST_MDFR, LAST_MDFCN_DT)
+        VALUES
+        (#{question_no}, #{survey_no}, #{question_type_no},
+        <if test="question_title != null and question_title != ''">
+            #{question_title},
+        </if>
+        <if test="question_description != null and question_description != ''">
+            #{question_description},
+        </if>
+        #{question_order}, #{required_yn}, #{frst_rgtr}, SYSDATE, #{last_mdfr}, SYSDATE)
+    </insert>
+
+    <delete id="deleteQuestions" parameterType="list">
+        DELETE FROM KB_STARTERS_QUESTION WHERE QUESTION_NO IN
+        <foreach collection="list" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+    <update id="updateQuestion" parameterType="com.kb.inno.admin.DTO.KbStartersQuestionDTO">
+        UPDATE KB_STARTERS_QUESTION
+        SET QUESTION_TYPE_NO = #{question_type_no},
+        <if test="question_title != null and question_title != ''">
+            QUESTION_TITLE = #{question_title},
+        </if>
+        <if test="question_description != null and question_description != ''">
+            QUESTION_DESCRIPTION = #{question_description},
+        </if>
+        QUESTION_ORDER = #{question_order},
+        REQUIRED_YN = #{required_yn},
+        LAST_MDFR = #{last_mdfr},
+        LAST_MDFCN_DT = SYSDATE
+        WHERE QUESTION_NO = #{question_no}
+    </update>
 
     <select id="getOneQuestion" parameterType="com.kb.inno.admin.DTO.KbStartersQuestionDTO"
             resultType="com.kb.inno.admin.DTO.KbStartersQuestionDTO">
@@ -133,6 +195,36 @@
         FROM KB_STARTERS_QUESTION_CHOICE
         WHERE QUESTION_CHOICE_NO = #{question_choice_no}
     </select>
+
+    <select id="getMaxQuestionChoiceNo" resultType="int">
+        SELECT NVL(MAX(QUESTION_CHOICE_NO), 0) + 1
+        FROM KB_STARTERS_QUESTION_CHOICE
+    </select>
+
+    <insert id="insertQuestionChoice" parameterType="com.kb.inno.admin.DTO.KbStartersQuestionChoiceDTO"
+            keyProperty="question_choice_no">
+        INSERT INTO KB_STARTERS_QUESTION_CHOICE
+        (QUESTION_CHOICE_NO, QUESTION_NO, CHOICE_CONTENT, MOVE_QUESTION_NO, FRST_RGTR, FRST_REG_DT, LAST_MDFR,
+         LAST_MDFCN_DT)
+        VALUES (#{question_choice_no}, #{question_no}, #{choice_content}, #{move_question_no}, #{frst_rgtr}, SYSDATE,
+                #{last_mdfr}, SYSDATE)
+    </insert>
+
+    <update id="updateQuestionChoice" parameterType="com.kb.inno.admin.DTO.KbStartersQuestionChoiceDTO">
+        UPDATE KB_STARTERS_QUESTION_CHOICE
+        SET CHOICE_CONTENT   = #{choice_content},
+            MOVE_QUESTION_NO = #{move_question_no},
+            LAST_MDFR        = #{last_mdfr},
+            LAST_MDFCN_DT    = SYSDATE
+        WHERE QUESTION_CHOICE_NO = #{question_choice_no}
+    </update>
+
+    <delete id="deleteQuestionChoices" parameterType="list">
+        DELETE FROM KB_STARTERS_QUESTION_CHOICE WHERE QUESTION_CHOICE_NO IN
+        <foreach collection="list" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </delete>
 
     <select id="getApplyList" resultType="com.kb.inno.admin.DTO.KbStartersApplyDTO">
         SELECT apply.*
