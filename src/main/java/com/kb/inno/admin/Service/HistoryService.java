@@ -67,12 +67,15 @@ public class HistoryService {
         int end = page * pageLetter;
         historyDTO.setEnd(end);
         int start = end + 1 - pageLetter;
-        historyDTO.setStart(start);
+
+
 
         List<HistoryDTO> selectList = historyDAO.selectListOne(historyDTO);
+        List<HistoryDTO> previewList = historyDAO.selectList();
         model.addAttribute("repeat", repeat);
         model.addAttribute("currentPage", page);
         model.addAttribute("selectList", selectList);
+        model.addAttribute("previewList", previewList);
         model.addAttribute("menuId", menuId);
         //return selectList;
     }

@@ -58,6 +58,8 @@ public class HistoryController {
      */
     @RequestMapping("/insert/{menuId}")
     public String insert(@PathVariable int menuId, Model model) {
+        historyService.selectList(menuId, 1, model);
+
         model.addAttribute("menuId", menuId);
         return directory + "/history_insert";
     }
@@ -267,6 +269,7 @@ public class HistoryController {
     @PostMapping("/detail")
     public String detail(@RequestParam int menuId, @RequestParam String hstry_yr, Model model) {
         historyService.selectDetail(hstry_yr, model);
+        historyService.selectList(menuId, 1, model);
 
         model.addAttribute("menuId", menuId);
         model.addAttribute("hstry_yr", hstry_yr);

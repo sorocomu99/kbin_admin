@@ -460,7 +460,7 @@
                                 </th:block>
                             </div>
                             <div class="button-container">
-                                <button type="button" class="btn btn-outline-primary">미리보기</button>
+                                <button type="button" class="btn btn-outline-primary" id="preview_open">미리보기</button>
                                 <a th:href="@{/history/list/{menuId}(menuId=${menuId})}" class="btn btn-outline-primary">목록보기</a>
                                 <!--<a href="javascript:" class="btn btn-outline-primary" onclick="history.back();">목록보기</a>-->
                                 <!--<button type="submit" class="btn btn-primary">등록하기</button>-->
@@ -472,7 +472,150 @@
                 </form>
             </div>
         </main>
+
+        <div class="preview_container">
+            <div class="preview_modal">
+                <div class="section-history">
+                    <div class="history">
+                        <div class="progress"><span class="bar"></span></div>
+                        <ol class="list">
+                        </ol>
+                    </div>
+                </div>
+            </div>
+            <div class="preview_button_wrap">
+                <button class="btn btn-primary" id="preview_close">닫기</button>
+            </div>
+        </div>
     </div>
+
+    <script th:inline="javascript">
+    const selectedYear = [[${hstry_yr}]];
+    const data = [[${previewList}]];
+    const modifyedData = data.reduce((acc, cur) => {
+        if(acc[cur.hstry_yr]) acc[cur.hstry_yr].push(cur)
+        else acc[cur.hstry_yr] = [cur];
+        return acc;
+    }, {})
+
+    Object.keys(modifyedData).forEach(dataKey => {
+        modifyedData[dataKey] = modifyedData[dataKey].reduce((acc,cur) => {
+            if(acc[cur.hstry_lclsf_ttl]) acc[cur.hstry_lclsf_ttl].push(cur.hstry_sclsf_ttl);
+            else acc[cur.hstry_lclsf_ttl] = [cur.hstry_sclsf_ttl];
+            return acc;
+        }, {})
+    })
+
+    const renderPreviewModal = (data) => {
+        const previewModal = document.querySelector('.preview_container');
+        const previewModalList = previewModal.querySelector('.list');
+
+        previewModalList.innerHTML = '';
+
+        Object.keys(data).sort((a,b) => b-a).forEach(dataKey => {
+            const li = document.createElement('li');
+            li.classList.add('item');
+            const side = document.createElement('div');
+            side.classList.add('side');
+            const contents = document.createElement('div');
+            contents.classList.add('contents');
+            const year = document.createElement('p');
+            year.classList.add('year');
+            year.innerText = dataKey;
+            const context = document.createElement('div');
+            context.classList.add('context');
+
+            contents.append(year, context);
+
+            const sub = Object.keys(data[dataKey]);
+            sub.forEach(el => {
+                const subTitle = document.createElement('h1');
+                subTitle.innerText = el;
+                context.append(subTitle);
+
+                const subList = document.createElement('ul');
+
+                data[dataKey][el].forEach(listItem => {
+                    const subLi = document.createElement('li');
+                    subLi.innerText = listItem;
+                    subList.append(subLi)
+                })
+
+                context.append(subList)
+            })
+
+            li.append(side, contents);
+            previewModalList.append(li);
+        })
+    }
+
+    function brandHistory() {
+        const item = gsap.utils.toArray('.section-history .history .item');
+        const tl = gsap.timeline();
+
+        for(let i = 0; i < item.length; i++) {
+            ScrollTrigger.create({
+                scroller: '.preview_modal',
+                trigger: item[i],
+                start: 'top 50%',
+                end: 'bottom bottom',
+                onEnter: () => item[i].classList.add('on'),
+                onLeaveBack: () => item[i].classList.remove('on'),
+                // markers: true
+            });
+        }
+
+        gsap.to('.section-history .history .progress .bar', {
+            ease: 'none',
+            height: '100%',
+            scrollTrigger: {
+                scroller: '.preview_modal',
+                animation: tl,
+                trigger: '.history',
+                start: 'top 60%',
+                end: 'bottom 60%',
+                scrub: 0.5,
+                // markers: true
+            }
+        });
+    }
+
+    const previewOpenBtn = document.querySelector('#preview_open');
+    const previewCLoseBtn = document.querySelector('#preview_close');
+
+    previewOpenBtn.addEventListener('click', () => {
+        document.querySelector('.preview_container').classList.add('show');
+
+        const getPageHistoryItem = () => {
+            const copyData = {...modifyedData};
+            delete copyData[selectedYear];
+
+            const pageData = {};
+            pageData[hstry_yr.value] = {};
+
+            document.querySelectorAll('.question-list').forEach(el => {
+                const rowArray = [...el.querySelectorAll('.row')];
+                const [title, lists] = rowArray;
+
+                pageData[hstry_yr.value][title.querySelector('input').value] = [];
+
+                lists.querySelectorAll('input').forEach(input => {
+                    pageData[hstry_yr.value][title.querySelector('input').value].push(input.value);
+                })
+            })
+
+            copyData[hstry_yr.value] = pageData[hstry_yr.value];
+            renderPreviewModal(copyData)
+        }
+        getPageHistoryItem()
+
+        brandHistory();
+    });
+    previewCLoseBtn.addEventListener('click', () => {
+        document.querySelector('.preview_container').classList.remove('show');
+    });
+
+    </script>
 
     <script th:inline="javascript">
         var listIndex = [[${maxLcl}]], itemIndex = [];
