@@ -1687,11 +1687,13 @@ public class SurveyService {
 			surveyRepository.insertSurvey(survey);
 
 			KbStartersSurveyDTO surveyInfo = surveyRepository.getSurveyInfo(surveyParam);
-			surveyInfo.setFrst_rgtr(loginId);
-			surveyInfo.setLast_mdfr(loginId);
-			surveyInfo.setSurvey_no(insertSurveyNo);
-			surveyInfo.setSurvey_info_no(surveyRepository.getMaxSurveyInfoNo());
-			surveyRepository.insertSurveyInfo(surveyInfo);
+			if(surveyInfo != null) {
+				surveyInfo.setFrst_rgtr(loginId);
+				surveyInfo.setLast_mdfr(loginId);
+				surveyInfo.setSurvey_no(insertSurveyNo);
+				surveyInfo.setSurvey_info_no(surveyRepository.getMaxSurveyInfoNo());
+				surveyRepository.insertSurveyInfo(surveyInfo);
+			}
 
 			KbStartersQuestionDTO questionParam = new KbStartersQuestionDTO();
 			questionParam.setSurvey_no(surveyNo);
