@@ -73,7 +73,8 @@
                                                         </select>
                                                         <input th:if="${choice.move_question_no != 0 and choice.move_question_no != 99}"
                                                                type="number" class="form-control form-control-sm w-25"
-                                                               name="move_question_no" style="display: none;" th:value="${choice.move_question_no}"
+                                                               name="move_question_no" style="display: none;"
+                                                               th:value="${choice.move_question_no}"
                                                                placeholder="이동할 문항 번호를 입력해 주세요.">
                                                     </div>
                                                     <div class="column">
@@ -170,7 +171,9 @@
                         </div>
                         <div class="button-container">
                             <button type="button" class="btn btn-primary" onclick="surveyQuestionInsert()">등록하기</button>
-                            <!--<a href="javascript:" class="btn btn-outline-primary" onclick="history.back();">목록보기</a>-->
+                            <button type="button" onclick="preview();"
+                                    class="btn btn-outline-primary">미리보기
+                            </button>
                             <a th:href="@{/survey/list/{menuId}(menuId=${menuId})}"
                                class="btn btn-outline-primary">목록보기</a>
                             <button id="buttonAddList" type="button" class="btn btn-dark add-list"><i
@@ -187,6 +190,24 @@
 
     let deleteQuestionList = [];
     let deleteChoiceList = [];
+
+    function preview() {
+        let questionData = makeQuestionList();
+        if (questionData === false) {
+            return false;
+        }
+        const newWindow = window.open('', '_blank');
+        $.ajax({
+            url: /*[[@{/survey/preview}]]*/,
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(questionData),
+            async: false,
+            success: function (data) {
+                newWindow.document.write(data);
+            },
+        });
+    }
 
     function makeQuestionList() {
         let errorMsg = "";
@@ -260,12 +281,20 @@
         question_data["data"] = question_object_list;
         question_data["deleteQuestionNoList"] = deleteQuestionList;
 
+        return question_data;
 
+    }
+
+    function surveyQuestionInsert() {
+        let questionData = makeQuestionList();
+        if (questionData === false) {
+            return false;
+        }
         $.ajax({
             url: /*[[@{/survey/question/save}]]*/,
             type: "POST",
             contentType: "application/json",
-            data: JSON.stringify(question_data),
+            data: JSON.stringify(questionData),
             dataType: "JSON",
             success: function (data) {
                 if (data.result == "success") {
@@ -275,26 +304,6 @@
                 }
             },
         });
-    }
-
-    function surveyQuestionInsert() {
-        makeQuestionList();
-        return;
-        var qstn = $("#srvy_qstn1").val();
-        if (qstn === null || qstn === '') {
-            alert("질문을 입력해 주세요.")
-            $("#srvy_qstn1").focus();
-            return false;
-        }
-
-        let result = confirm("등록 하시겠습니까?");
-        if (result) {
-            const form = document.forms['qstn_form'];
-            form.action = '/kbinnovationhub_devadm/survey/qstnInsert';   //전송할 URL
-            form.method = 'POST';                                    //전송 방식
-            form.target = '';                                        //새 창에서 열기
-            form.submit();                                           //폼 제출
-        }
     }
 
     $(function () {

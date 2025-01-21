@@ -97,6 +97,15 @@ public class SurveyController {
         return ResponseEntity.ok(surveyService.saveSurveyQuestion(requestBody, loginId));
     }
 
+    @PostMapping("/preview")
+    public ModelAndView preview(@RequestBody KbStartersSurveyRequestDTO requestBody) {
+        ModelAndView mv = new ModelAndView("survey/survey_preview");
+        mv.addObject("survey", requestBody);
+        KbStartersSurveyDTO surveyDTO = surveyService.getSurvey(requestBody.getData().get(0).getSurvey_no());
+        mv.addObject("surveyDefaultData", surveyDTO);
+        return mv;
+    }
+
     /**
      * 설문 조사 등록 페이지 이동
      * @param menuId
@@ -192,42 +201,42 @@ public class SurveyController {
             return directory + "/history_insert";
         }
     }
-    
 
-    
-    /**
-     * 가이드 페이지 이동
-     * @param surveyDTO
-     * @param model
-     * @return
-     */
-    @RequestMapping("/guide/{menuId}")
-    public String guide(@PathVariable int menuId, SurveyDTO surveyDTO, Model model) {
-        surveyService.selectGuide(surveyDTO, model, menuId);
-        model.addAttribute("menuId", menuId);
-        model.addAttribute("srvy_sn", surveyDTO.getSrvy_sn());
-        return directory + "/survey_guide";
+
+    @GetMapping("/guide/{menuId}")
+    public ModelAndView guide(@PathVariable int menuId, int surveyNo) {
+        ModelAndView mv = new ModelAndView("survey/survey_guide");
+        KbStartersSurveyDTO surveyDTO = surveyService.getSurveyInfo(surveyNo);
+        mv.addObject("menuId", menuId);
+        mv.addObject("surveyNo", surveyNo);
+        mv.addObject("surveyInfo", surveyDTO);
+        return mv;
     }
 
     @PostMapping("/guideIns")
-    public String guideIns(SurveyDTO surveyDTO, RedirectAttributes redirectAttributes, HttpServletRequest request) {
-        HashMap<String, Object> resultMap = new HashMap<>();
-
+    public ModelAndView guideIns(KbStartersSurveyDTO surveyDTO, int menuId, HttpServletRequest request) {
         int loginId = 0;
         HttpSession session = request.getSession(false);
         if (session != null) {
             loginId = (int) session.getAttribute("mngrSn");
         }
 
-        resultMap = surveyService.guideInsert(surveyDTO, loginId);
+        Map<String, Object> resultMap = surveyService.saveSurveyInfo(surveyDTO, loginId);
 
-        if (resultMap.get("errorCd").equals("00")) {
-            redirectAttributes.addFlashAttribute("msg", resultMap.get("errorMsg"));
-            return "redirect:" + directory + "/list/" + surveyDTO.getMenu_id();
-        } else {  //등록 중 오류 발생시 등록 화면 유지
-            redirectAttributes.addFlashAttribute("msg", resultMap.get("errorMsg"));
-            return directory + "/survey_guide";
+        ModelAndView mv = new ModelAndView("redirect:/survey/list/" + menuId);
+        if(!resultMap.get("result").equals("success")){
+            mv.setViewName("alertBack");
+            mv.addObject("message", resultMap.get("message"));
         }
+
+        return mv;
+    }
+
+    @PostMapping("/guidePreview")
+    public ModelAndView guidePreview(KbStartersSurveyDTO surveyDTO) {
+        ModelAndView mv = new ModelAndView("survey/survey_guide_preview");
+        mv.addObject("info", surveyDTO);
+        return mv;
     }
 
     @ResponseBody

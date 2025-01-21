@@ -12,6 +12,8 @@ public interface KbStartersSurvey {
 
     int countSurvey(SearchDTO search);
 
+    KbStartersSurveyDTO getSurvey(KbStartersSurveyDTO survey);
+
     int getMaxSurveyNo();
 
     int insertSurvey(KbStartersSurveyDTO survey);
@@ -21,6 +23,12 @@ public interface KbStartersSurvey {
     int deleteSurvey(KbStartersSurveyDTO survey);
 
     KbStartersSurveyDTO getSurveyInfo(KbStartersSurveyDTO survey);
+
+    int getMaxSurveyInfoNo();
+
+    int insertSurveyInfo(KbStartersSurveyDTO survey);
+
+    int updateSurveyInfo(KbStartersSurveyDTO survey);
 
     List<KbStartersQuestionDTO> getQuestion(KbStartersQuestionDTO question);
 

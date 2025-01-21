@@ -1643,4 +1643,31 @@ public class SurveyService {
 			throw new RuntimeException(e);
 		}
 	}
+
+	public KbStartersSurveyDTO getSurvey(int surveyNo){
+		KbStartersSurveyDTO survey = new KbStartersSurveyDTO();
+		survey.setSurvey_no(surveyNo);
+		return surveyRepository.getSurvey(survey);
+	}
+
+	public KbStartersSurveyDTO getSurveyInfo(int surveyNo) {
+		KbStartersSurveyDTO survey = new KbStartersSurveyDTO();
+		survey.setSurvey_no(surveyNo);
+		return surveyRepository.getSurveyInfo(survey);
+	}
+
+	public Map<String, Object> saveSurveyInfo(KbStartersSurveyDTO dto, int loginId) {
+		Map<String, Object> result = new HashMap<>();
+		if(dto.getSurvey_info_no() == 0){
+			dto.setFrst_rgtr(loginId);
+			dto.setLast_mdfr(loginId);
+			surveyRepository.insertSurveyInfo(dto);
+		}
+		else{
+			dto.setLast_mdfr(loginId);
+			surveyRepository.updateSurveyInfo(dto);
+		}
+		result.put("result", "success");
+		return result;
+	}
 }

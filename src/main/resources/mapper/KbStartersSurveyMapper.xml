@@ -19,6 +19,10 @@
         OFFSET #{start} ROWS FETCH NEXT 10 ROWS ONLY
     </select>
 
+    <select id="getSurvey" parameterType="com.kb.inno.admin.DTO.KbStartersSurveyDTO" resultType="com.kb.inno.admin.DTO.KbStartersSurveyDTO">
+        SELECT * FROM KB_STARTERS_SURVEY WHERE SURVEY_NO = #{survey_no}
+    </select>
+
     <select id="countSurvey" parameterType="com.kb.inno.admin.DTO.SearchDTO"
             resultType="int">
         SELECT COUNT(*)
@@ -73,6 +77,11 @@
         SELECT *
         FROM KB_STARTERS_SURVEY_INFO
         WHERE SURVEY_NO = #{survey_no}
+    </select>
+
+    <select id="getMaxSurveyInfoNo" resultType="int">
+        SELECT NVL(MAX(SURVEY_INFO_NO), 0) + 1
+        FROM KB_STARTERS_SURVEY_INFO
     </select>
 
 

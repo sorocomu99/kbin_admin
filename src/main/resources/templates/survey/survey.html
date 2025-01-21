@@ -65,7 +65,7 @@
                                 <tr th:each="row : ${surveyList}">
                                     <td>
                                         <th:block th:if="${row.banner_file_path != null}">
-                                            <img th:src="${'/kbinnovationhub_devadm/survey/banner?filename=' + row.banner_filename}"
+                                            <img th:src="@{/kbinnovationhub_devadm/survey/banner?filename=${row.banner_filename}}"
                                                  width="200" alt="">
                                         </th:block>
                                     </td>
@@ -76,10 +76,9 @@
                                         </button>
                                         <a th:href="@{|/survey/manageSurvey/${menuId}?surveyNo=${row.survey_no}|}"
                                            class="btn btn-outline-dark btn-sm">문항관리</a>
-                                        <!--<a href="survey_guide.html" class="btn btn-outline-dark btn-sm">모집개요관리</a>-->
-                                        <button th:onclick="|guidePage('${row.survey_no}', '${menuId}')|"
+                                        <a th:href="@{|/survey/guide/${menuId}?surveyNo=${row.survey_no}|}"
                                                 class="btn btn-outline-dark btn-sm">모집개요관리
-                                        </button>
+                                        </a>
                                         <button type="button" th:onclick="|copyAlert('${row.survey_no}')|"
                                                 class="btn btn-outline-danger btn-sm">복사
                                         </button>
@@ -163,29 +162,6 @@
         // 수정 및 등록 시 띄울 알림창
         const msg = /*[[${msg}]]*/ '';
         if (msg) alert(msg);
-    }
-
-    // 수정 페이지 이동
-    function guidePage(srvy_sn, menuId) {
-        // 빈 form 전달
-        let pageMoveForm = document.createElement('form');
-        // 인수 값 전달
-        let obj = document.createElement('input');
-        obj.setAttribute('type', 'hidden');
-        obj.setAttribute('name', 'srvy_sn');
-        obj.setAttribute('value', srvy_sn);
-        pageMoveForm.appendChild(obj);
-
-        let obj2 = document.createElement('input');
-        obj2.setAttribute('type', 'hidden');
-        obj2.setAttribute('name', 'menuId');
-        obj2.setAttribute('value', menuId);
-        pageMoveForm.appendChild(obj2);
-
-        pageMoveForm.setAttribute('method', 'post');
-        pageMoveForm.setAttribute('action', '/kbinnovationhub_devadm/survey/guide/' + menuId);
-        document.body.appendChild(pageMoveForm);
-        pageMoveForm.submit();
     }
 
     function deleteAlert(srvy_sn) {
