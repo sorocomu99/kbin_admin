@@ -149,7 +149,7 @@
                                 <div class="question-foot">
                                     <div class="form-check form-switch">
                                         <input class="form-check-input" type="checkbox" role="switch"
-                                               th:id="${'required' + (rowStat.index + 1)}" name="required_yn">
+                                               th:id="${'required' + (rowStat.index + 1)}" name="required_yn" th:checked="${row.required_yn == 'Y'}">
                                         <label class="form-check-label" th:for="${'required' + (rowStat.index + 1)}">필수
                                             값 설정</label>
                                     </div>
@@ -185,142 +185,163 @@
             </div>
         </div>
     </main>
-</div>
-<script th:inline="javascript">
+    <script th:inline="javascript">
 
-    let deleteQuestionList = [];
-    let deleteChoiceList = [];
+        let deleteQuestionList = [];
+        let deleteChoiceList = [];
 
-    function preview() {
-        let questionData = makeQuestionList();
-        if (questionData === false) {
-            return false;
-        }
-        const newWindow = window.open('', '_blank');
-        $.ajax({
-            url: /*[[@{/survey/preview}]]*/,
-            type: "POST",
-            contentType: "application/json",
-            data: JSON.stringify(questionData),
-            async: false,
-            success: function (data) {
-                newWindow.document.write(data);
-            },
-        });
-    }
-
-    function makeQuestionList() {
-        let errorMsg = "";
-        let question_data = {};
-        let question_object_list = [];
-        let questionCount = $(".question-list").length;
-        $(".question-body.on").each(function (idx) {
-            let question_object = {};
-            let question_no = 0;
-            let question_type_no = $(this).attr("data-question-type");
-            let $parent = $(this).parent();
-            question_object["question_type_no"] = question_type_no;
-            question_object["survey_no"] = $("input[name='survey_no']").val();
-            question_object["question_title"] = $(this).find("input[name='question_title']").val();
-            if (question_type_no == 4) {
-                question_object["question_description"] = $(this).find(".summernote-editor").summernote('code');
-            } else {
-                question_object["question_description"] = $(this).find("textarea[name='question_description']").val();
+        function preview() {
+            let questionData = makeQuestionList();
+            if (questionData === false) {
+                return false;
             }
-            question_object["required_yn"] = $(this).parent().find("input[name='required_yn']").prop("checked") ? "Y" : "N";
-            question_object["question_order"] = idx + 1;
-            if ($parent.find("input[name='question_no']").length > 0) {
-                question_no = $parent.find("input[name='question_no']").val();
-                question_object["question_no"] = question_no;
-            }
+            let form = document.createElement("form");
 
 
-            if (question_type_no == 1) {
-                let choice_list = [];
-                $(this).find(".item-list .item").each(function (choiceIdx) {
-                    let choice_object = {};
-                    choice_object["choice_content"] = $(this).find("input[name='choice_content']").val();
-
-                    if ($(this).find("input[name='question_choice_no']").length > 0) {
-                        choice_object["question_choice_no"] = $(this).find("input[name='question_choice_no']").val();
-                    }
-                    if (question_no != 0) {
-                        choice_object["question_no"] = question_no;
-                    }
-                    if ($(this).find(".move-question-type").val() == 1) {
-                        let move_question_no = $(this).find("input[name='move_question_no']").val();
-                        if (!move_question_no) {
-                            errorMsg = (idx + 1) + "번째 문항의 " + (choiceIdx + 1) + "번째 보기의 이동할 문항 번호를 입력해 주세요.";
-                        } else {
-                            if (move_question_no < (idx + 1)) {
-                                errorMsg = (idx + 1) + "번째 문항의 " + (choiceIdx + 1) + "번째 보기의 이동할 문항 번호는 현재 문항보다 높은 번호를 입력해 주세요.";
-                            }
-                            if (move_question_no > questionCount || move_question_no < 0) {
-                                errorMsg = (idx + 1) + "번째 문항의 " + (choiceIdx + 1) + "번째 보기의 이동할 문항 번호가 존재하지 않습니다.";
-                            }
-                            choice_object["move_question_no"] = move_question_no;
+            questionData.data.forEach(function (question, idx) {
+                form.appendChild(makeInput("data["+idx+"].survey_no", question.survey_no));
+                form.appendChild(makeInput("data["+idx+"].question_title", question.question_title));
+                form.appendChild(makeInput("data["+idx+"].question_description", question.question_description));
+                form.appendChild(makeInput("data["+idx+"].required_yn", question.required_yn));
+                form.appendChild(makeInput("data["+idx+"].question_order", question.question_order));
+                form.appendChild(makeInput("data["+idx+"].question_type_no", question.question_type_no));
+                if (question.question_type_no == 1) {
+                    question.choices.forEach(function (choice, choiceIdx) {
+                        form.appendChild(makeInput("data["+idx+"].choices["+choiceIdx+"].choice_content", choice.choice_content));
+                        if(!choice.move_question_no){
+                            choice.move_question_no = 0;
                         }
-                    } else if ($(this).find(".move-question-type").val() == 99) {
-                        choice_object["move_question_no"] = 99;
-                    }
-                    choice_list.push(choice_object);
-                });
-                if (choice_list.length == 0) {
-                    errorMsg = (idx + 1) + "번째 객관식 문항의 보기를 추가해 주세요.";
+                        form.appendChild(makeInput("data["+idx+"].choices["+choiceIdx+"].move_question_no", choice.move_question_no));
+                    });
                 }
-                question_object["choices"] = choice_list;
-            }
-            question_object_list.push(question_object);
-        });
+            });
 
-        if (errorMsg != "") {
-            alert(errorMsg);
-            return false;
+            form.action = /*[[@{/survey/preview}]]*/;
+            form.method = "POST";
+            document.body.appendChild(form);
+            form.submit();
         }
 
-        question_data["data"] = question_object_list;
-        question_data["deleteQuestionNoList"] = deleteQuestionList;
-
-        return question_data;
-
-    }
-
-    function surveyQuestionInsert() {
-        let questionData = makeQuestionList();
-        if (questionData === false) {
-            return false;
+        function makeInput(name, value) {
+            const input = document.createElement("input");
+            input.type = "hidden";
+            input.name = name;
+            input.value = value;
+            return input;
         }
-        $.ajax({
-            url: /*[[@{/survey/question/save}]]*/,
-            type: "POST",
-            contentType: "application/json",
-            data: JSON.stringify(questionData),
-            dataType: "JSON",
-            success: function (data) {
-                if (data.result == "success") {
-                    alert("등록되었습니다.");
+
+        function makeQuestionList() {
+            let errorMsg = "";
+            let question_data = {};
+            let question_object_list = [];
+            let questionCount = $(".question-list").length;
+            $(".question-body.on").each(function (idx) {
+                let question_object = {};
+                let question_no = 0;
+                let question_type_no = $(this).attr("data-question-type");
+                let $parent = $(this).parent();
+                question_object["question_type_no"] = question_type_no;
+                question_object["survey_no"] = $("input[name='survey_no']").val();
+                question_object["question_title"] = $(this).find("input[name='question_title']").val();
+                if (question_type_no == 4) {
+                    question_object["question_description"] = $(this).find(".summernote-editor").summernote('code');
                 } else {
-                    alert("등록에 실패하였습니다.");
+                    question_object["question_description"] = $(this).find("textarea[name='question_description']").val();
                 }
-            },
-        });
-    }
+                question_object["required_yn"] = $(this).parent().find("input[name='required_yn']").prop("checked") ? "Y" : "N";
+                question_object["question_order"] = idx + 1;
+                if ($parent.find("input[name='question_no']").length > 0) {
+                    question_no = $parent.find("input[name='question_no']").val();
+                    question_object["question_no"] = question_no;
+                }
 
-    $(function () {
-        $('#buttonAddList').click(addList);
-        // $('.select-type').on('change', changeType);
-    });
 
-    // 문항 추가
-    function addList() {
-        let questionCount = $(".question-list").length;
+                if (question_type_no == 1) {
+                    let choice_list = [];
+                    $(this).find(".item-list .item").each(function (choiceIdx) {
+                        let choice_object = {};
+                        choice_object["choice_content"] = $(this).find("input[name='choice_content']").val();
 
-        if (questionCount >= 10) {
-            alert("문항 추가는 10개 까지 가능 합니다");
-            return true;
+                        if ($(this).find("input[name='question_choice_no']").length > 0) {
+                            choice_object["question_choice_no"] = $(this).find("input[name='question_choice_no']").val();
+                        }
+                        if (question_no != 0) {
+                            choice_object["question_no"] = question_no;
+                        }
+                        if ($(this).find(".move-question-type").val() == 1) {
+                            let move_question_no = $(this).find("input[name='move_question_no']").val();
+                            if (!move_question_no) {
+                                errorMsg = (idx + 1) + "번째 문항의 " + (choiceIdx + 1) + "번째 보기의 이동할 문항 번호를 입력해 주세요.";
+                            } else {
+                                if (move_question_no < (idx + 1)) {
+                                    errorMsg = (idx + 1) + "번째 문항의 " + (choiceIdx + 1) + "번째 보기의 이동할 문항 번호는 현재 문항보다 높은 번호를 입력해 주세요.";
+                                }
+                                if (move_question_no > questionCount || move_question_no < 0) {
+                                    errorMsg = (idx + 1) + "번째 문항의 " + (choiceIdx + 1) + "번째 보기의 이동할 문항 번호가 존재하지 않습니다.";
+                                }
+                                choice_object["move_question_no"] = move_question_no;
+                            }
+                        } else if ($(this).find(".move-question-type").val() == 99) {
+                            choice_object["move_question_no"] = 99;
+                        }
+                        choice_list.push(choice_object);
+                    });
+                    if (choice_list.length == 0) {
+                        errorMsg = (idx + 1) + "번째 객관식 문항의 보기를 추가해 주세요.";
+                    }
+                    question_object["choices"] = choice_list;
+                }
+                question_object_list.push(question_object);
+            });
+
+            if (errorMsg != "") {
+                alert(errorMsg);
+                return false;
+            }
+
+            question_data["data"] = question_object_list;
+            question_data["deleteQuestionNoList"] = deleteQuestionList;
+
+            return question_data;
+
         }
 
-        $('.question').append(`<div class="question-list">
+        function surveyQuestionInsert() {
+            let questionData = makeQuestionList();
+            if (questionData === false) {
+                return false;
+            }
+            $.ajax({
+                url: /*[[@{/survey/question/save}]]*/,
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(questionData),
+                dataType: "JSON",
+                success: function (data) {
+                    if (data.result == "success") {
+                        alert("등록되었습니다.");
+                    } else {
+                        alert("등록에 실패하였습니다.");
+                    }
+                },
+            });
+        }
+
+        $(function () {
+            $('#buttonAddList').click(addList);
+            // $('.select-type').on('change', changeType);
+        });
+
+        // 문항 추가
+        function addList() {
+            let questionCount = $(".question-list").length;
+
+            if (questionCount >= 10) {
+                alert("문항 추가는 10개 까지 가능 합니다");
+                return true;
+            }
+
+            $('.question').append(`<div class="question-list">
                                 <div class="question-head">
                                     <h3 class="heading h5"><i data-feather="check-circle"></i> 문항 ${questionCount + 1}</h3>
                                     <select class="form-select select-type"
@@ -413,51 +434,51 @@
                                 </div>
                             </div>`);
 
-        feather.replace();
+            feather.replace();
 
-        $('#summernote' + (questionCount + 1)).summernote({
+            $('#summernote' + (questionCount + 1)).summernote({
+                lang: 'ko-KR',
+                height: 300
+            });
+        }
+
+        $(".summernote-editor").summernote({
             lang: 'ko-KR',
             height: 300
         });
-    }
-
-    $(".summernote-editor").summernote({
-        lang: 'ko-KR',
-        height: 300
-    });
 
 
-    // 문항 삭제
-    function removeList(e) {
-        const element = $(e);
-        const questionNo = element.data('question-no');
-        if (questionNo) {
-            deleteQuestionList.push(questionNo);
-        }
-        element.closest('.question-list').remove();
-    }
-
-    // 질문 유형 선택
-    function changeType(e) {
-        const type = e.value;
-
-        e.closest('.question-list').querySelectorAll('.question-body').forEach(el => {
-            el.classList.remove('on');
-        })
-
-        e.closest('.question-list').querySelector('[data-question-type="' + type + '"]').classList.add('on');
-    }
-
-    function addItem(el) {
-        const $element = $(el);
-        const itemListCount = $element.parent().find('.item-list').find(".item").length;
-        if (itemListCount >= 10) {
-            alert("보기는 10개까지 추가 가능합니다.");
-            return;
+        // 문항 삭제
+        function removeList(e) {
+            const element = $(e);
+            const questionNo = element.data('question-no');
+            if (questionNo) {
+                deleteQuestionList.push(questionNo);
+            }
+            element.closest('.question-list').remove();
         }
 
-        const moveYn = $element.parent().parent().parent().parent().find(".move-question-switch").prop("checked");
-        $element.parent().find(".item-list").append(`<div class="item">
+        // 질문 유형 선택
+        function changeType(e) {
+            const type = e.value;
+
+            e.closest('.question-list').querySelectorAll('.question-body').forEach(el => {
+                el.classList.remove('on');
+            })
+
+            e.closest('.question-list').querySelector('[data-question-type="' + type + '"]').classList.add('on');
+        }
+
+        function addItem(el) {
+            const $element = $(el);
+            const itemListCount = $element.parent().find('.item-list').find(".item").length;
+            if (itemListCount >= 10) {
+                alert("보기는 10개까지 추가 가능합니다.");
+                return;
+            }
+
+            const moveYn = $element.parent().parent().parent().parent().find(".move-question-switch").prop("checked");
+            $element.parent().find(".item-list").append(`<div class="item">
                                                         <div class="column">
                                                             <input type="text" class="form-control form-control-sm" name="choice_content" placeholder="보기 ${itemListCount + 1}">
                                                             <select class="form-select form-select-sm move-question-type ${moveYn ? 'on' : ''}">
@@ -471,49 +492,50 @@
                                                         </div>
                                                     </div>`);
 
-    }
-
-    $("body").on("change", ".move-question-type", function () {
-        const value = $(this).val();
-        if (value === "1") {
-            $(this).parent().append(`<input type="number" class="form-control form-control-sm w-25" name="move_question_no" placeholder="이동할 문항 번호를 입력해 주세요.">`);
-        } else {
-            $(this).parent().find("input[name='move_question_no']").remove();
         }
-    });
+
+        $("body").on("change", ".move-question-type", function () {
+            const value = $(this).val();
+            if (value === "1") {
+                $(this).parent().append(`<input type="number" class="form-control form-control-sm w-25" name="move_question_no" placeholder="이동할 문항 번호를 입력해 주세요.">`);
+            } else {
+                $(this).parent().find("input[name='move_question_no']").remove();
+            }
+        });
 
 
-    // 보기 삭제
-    function removeItem(e) {
-        const element = $(e);
-        const questionChoiceNo = element.data('question-choice-no');
-        if (questionChoiceNo) {
-            deleteChoiceList.push(questionChoiceNo);
+        // 보기 삭제
+        function removeItem(e) {
+            const element = $(e);
+            const questionChoiceNo = element.data('question-choice-no');
+            if (questionChoiceNo) {
+                deleteChoiceList.push(questionChoiceNo);
+            }
+            e.closest('.item').remove();
         }
-        e.closest('.item').remove();
-    }
 
-    // 항목 이동 선택 토글
-    function toggleMove(e) {
-        const element = $(e);
+        // 항목 이동 선택 토글
+        function toggleMove(e) {
+            const element = $(e);
 
-        if (e.checked) {
-            element.closest('.question-list').find('.form-select').each(function () {
-                if ($(this).val() == 1) {
-                    element.closest('.question-list').find('input[name="move_question_no"]').css("display", "block");
-                }
-            });
-            element.closest('.question-list').find('.form-select').addClass('on')
-        } else {
-            element.closest('.question-list').find('.form-select').each(function () {
-                if ($(this).val() != 1) {
-                    element.closest('.question-list').find('input[name="move_question_no"]').css("display", "none");
-                }
-            });
-            element.closest('.question-list').find('.form-select').removeClass('on')
+            if (e.checked) {
+                element.closest('.question-list').find('.form-select').each(function () {
+                    if ($(this).val() == 1) {
+                        element.closest('.question-list').find('input[name="move_question_no"]').css("display", "block");
+                    }
+                });
+                element.closest('.question-list').find('.form-select').addClass('on')
+            } else {
+                element.closest('.question-list').find('.form-select').each(function () {
+                    if ($(this).val() != 1) {
+                        element.closest('.question-list').find('input[name="move_question_no"]').css("display", "none");
+                    }
+                });
+                element.closest('.question-list').find('.form-select').removeClass('on')
+            }
         }
-    }
-</script>
+    </script>
+</div>
 <script th:src="@{/js/admin.js}"></script>
 
 </body>

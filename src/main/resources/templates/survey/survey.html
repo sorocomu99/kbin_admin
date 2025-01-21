@@ -65,7 +65,7 @@
                                 <tr th:each="row : ${surveyList}">
                                     <td>
                                         <th:block th:if="${row.banner_file_path != null}">
-                                            <img th:src="@{/kbinnovationhub_devadm/survey/banner?filename=${row.banner_filename}}"
+                                            <img th:src="@{/survey/banner(filename=${row.banner_filename})}"
                                                  width="200" alt="">
                                         </th:block>
                                     </td>

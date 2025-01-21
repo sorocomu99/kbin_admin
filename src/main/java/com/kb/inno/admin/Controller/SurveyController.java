@@ -98,10 +98,10 @@ public class SurveyController {
     }
 
     @PostMapping("/preview")
-    public ModelAndView preview(@RequestBody KbStartersSurveyRequestDTO requestBody) {
+    public ModelAndView preview(KbStartersSurveyRequestDTO data) {
         ModelAndView mv = new ModelAndView("survey/survey_preview");
-        mv.addObject("survey", requestBody);
-        KbStartersSurveyDTO surveyDTO = surveyService.getSurvey(requestBody.getData().get(0).getSurvey_no());
+        mv.addObject("survey", data);
+        KbStartersSurveyDTO surveyDTO = surveyService.getSurvey(data.getData().get(0).getSurvey_no());
         mv.addObject("surveyDefaultData", surveyDTO);
         return mv;
     }
