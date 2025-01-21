@@ -1704,8 +1704,7 @@ public class SurveyService {
 				question.setQuestion_no(insertQuestionNo);
 
 				surveyRepository.insertQuestion(question);
-
-				List<KbStartersQuestionChoiceDTO> choices = surveyRepository.getQuestionChoice(question);
+				List<KbStartersQuestionChoiceDTO> choices = surveyRepository.getQuestionChoice(questionParam);
 				for(KbStartersQuestionChoiceDTO choice : choices){
 					choice.setFrst_rgtr(loginId);
 					choice.setLast_mdfr(loginId);

@@ -66,4 +66,8 @@ public interface KbStartersSurvey {
 
     int deleteQuestionChoiceBySurvey(KbStartersSurveyDTO survey);
 
+    int moveApply(KbStartersApplyDTO apply);
+
+    int moveApplyAnswer(KbStartersApplyAnswerDTO answer);
+
 }

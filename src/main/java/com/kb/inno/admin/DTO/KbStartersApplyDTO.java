@@ -13,6 +13,7 @@ import java.util.List;
 public class KbStartersApplyDTO {
     private int apply_no;
     private int survey_no;
+    private String apply_status;
     private String email;
     private String company_name;
     private int frst_rgtr;

@@ -12,10 +12,11 @@ import java.util.Date;
 public class KbStartersApplyAnswerDTO {
     private int apply_answer_no;
     private int apply_no;
-    private KbStartersQuestionDTO question;
-    private KbStartersQuestionChoiceDTO question_choice;
+    private KbStartersQuestionDTO questionDTO;
+    private KbStartersQuestionChoiceDTO questionChoiceDTO;
     private String answer_content;
     private String answer_file_path;
+    private String answer_original_filename;
     private String answer_filename;
     private int frst_rgtr;
     private Date frst_reg_dt;

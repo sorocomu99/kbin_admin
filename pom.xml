@@ -121,9 +121,9 @@
             <groupId>tmaxsoft</groupId>
             <artifactId>tibero6-jdbc</artifactId>
             <version>6</version>
-            <!-- <scope>system</scope> -->            
-            <!-- <systemPath>${WEB-INF.lib}/tibero6-jdbc.jar</systemPath> -->
-            <!-- <systemPath>${project.basedir}/src/main/resources/lib/tibero6-jdbc.jar</systemPath> -->
+            <scope>system</scope>
+<!--            <systemPath>${WEB-INF.lib}/tibero6-jdbc.jar</systemPath>-->
+            <systemPath>${project.basedir}/src/main/resources/lib/tibero6-jdbc.jar</systemPath>
         </dependency>
         
         <dependency>
