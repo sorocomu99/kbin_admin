@@ -195,6 +195,10 @@
             if (questionData === false) {
                 return false;
             }
+            if(questionData.data.length == 0){
+                alert("문항을 추가해 주세요.");
+                return false;
+            }
             let form = document.createElement("form");
 
 
