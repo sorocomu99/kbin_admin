@@ -1,207 +1,176 @@
 <!doctype html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragment/config :: configFragment"></head>
 
 <body>
-    <div class="wrap">
-        <div th:replace="fragment/header :: headerFragment"></div>
-    
-        <main class="main">
-            <div class="container">
-                <div class="row">
-                    <div class="col">
-                        <div class="paper">
-                            <h2 class="h4">지원서 설문 관리 <span id="helpSurveyGuide" class="help"><i class="mb-1" data-feather="help-circle"></i></span></h2>
-                            <hr>
-                            <h3 class="h5">모집개요 관리</h3>
-                            <div class="mt-4">
-                                <form id="guide_form" name="guide_form" th:action="@{/survey/guideIns}" method="post" onsubmit="return validateForm()">
-                                    <input type="hidden" name="menu_id" th:value="${menuId}"/>
-                                    <input type="hidden" id="srvy_sn" name="srvy_sn" th:value="${srvy_sn}"/>
-                                    <input type="hidden" id="sprt_expln_sn" name="sprt_expln_sn" th:value="${srvy_sn}"/>
-                                    <table class="table table-bordered align-middle">
-                                        <tbody th:if="${selectGuide != null and selectGuide != ''}">
-                                            <tr>
-                                                <th class="bg-light" colspan="2" style="width:25%">모집 구분</th>
-                                                <td>
-                                                    <input type="text" class="form-control" id="recru_se" name="recru_se" th:value="${selectGuide.recru_se}">
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th class="bg-light" colspan="2">모집 기간</th>
-                                                <td>
-                                                    <input type="text" class="form-control" id="recru_schdl" name="recru_schdl" th:value="${selectGuide.recru_schdl}">
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th class="bg-light" rowspan="2">모집 대상</th>
-                                                <th class="bg-light">메인 텍스트</th>
-                                                <td>
-                                                    <input type="text" class="form-control" id="recru_trgt_m" name="recru_trgt_m" th:value="${selectGuide.recru_trgt_m}">
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th class="bg-light">서브 텍스트</th>
-                                                <td>
-                                                    <input type="text" class="form-control" id="recru_trgt_s" name="recru_trgt_s" th:value="${selectGuide.recru_trgt_s}">
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th class="bg-light" rowspan="2">모집 분야</th>
-                                                <th class="bg-light">메인 텍스트</th>
-                                                <td>
-                                                    <input type="text" class="form-control" id="recru_fld_m" name="recru_fld_m" th:value="${selectGuide.recru_fld_m}">
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th class="bg-light">서브 텍스트</th>
-                                                <td>
-                                                    <input type="text" class="form-control" id="recru_fld_s" name="recru_fld_s" th:value="${selectGuide.recru_fld_s}">
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th class="bg-light" colspan="2">선발 절차</th>
-                                                <td>
-                                                    <input type="text" class="form-control" id="slctn_prcs" name="slctn_prcs" th:value="${selectGuide.slctn_prcs}">
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th class="bg-light" rowspan="4">선정 혜택</th>
-                                                <th class="bg-light">내용1</th>
-                                                <td>
-                                                    <input type="text" class="form-control" id="slctn_benef_cn1" name="slctn_benef_cn1" th:value="${selectGuide.slctn_benef_cn1}">
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th class="bg-light">내용2</th>
-                                                <td>
-                                                    <input type="text" class="form-control" id="slctn_benef_cn2" name="slctn_benef_cn2" th:value="${selectGuide.slctn_benef_cn2}">
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th class="bg-light">내용3</th>
-                                                <td>
-                                                    <input type="text" class="form-control" id="slctn_benef_cn3" name="slctn_benef_cn3" th:value="${selectGuide.slctn_benef_cn3}">
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th class="bg-light">내용4</th>
-                                                <td>
-                                                    <input type="text" class="form-control" id="slctn_benef_cn4" name="slctn_benef_cn4" th:value="${selectGuide.slctn_benef_cn4}">
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                        <tbody th:if="${selectGuide == null or selectGuide == ''}">
-                                        <tr>
-                                            <th class="bg-light" colspan="2" style="width:25%">모집 구분</th>
-                                            <td>
-                                                <input type="text" class="form-control" id="recru_se" name="recru_se" value="">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th class="bg-light" colspan="2">모집 기간</th>
-                                            <td>
-                                                <input type="text" class="form-control" id="recru_schdl" name="recru_schdl" value="">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th class="bg-light" rowspan="2">모집 대상</th>
-                                            <th class="bg-light">메인 텍스트</th>
-                                            <td>
-                                                <input type="text" class="form-control" id="recru_trgt_m" name="recru_trgt_m" value="">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th class="bg-light">서브 텍스트</th>
-                                            <td>
-                                                <input type="text" class="form-control" id="recru_trgt_s" name="recru_trgt_s" value="">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th class="bg-light" rowspan="2">모집 분야</th>
-                                            <th class="bg-light">메인 텍스트</th>
-                                            <td>
-                                                <input type="text" class="form-control" id="recru_fld_m" name="recru_fld_m" value="">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th class="bg-light">서브 텍스트</th>
-                                            <td>
-                                                <input type="text" class="form-control" id="recru_fld_s" name="recru_fld_s" value="">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th class="bg-light" colspan="2">선발 절차</th>
-                                            <td>
-                                                <input type="text" class="form-control" id="slctn_prcs" name="slctn_prcs" value="">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th class="bg-light" rowspan="4">선정 혜택</th>
-                                            <th class="bg-light">내용1</th>
-                                            <td>
-                                                <input type="text" class="form-control" id="slctn_benef_cn1" name="slctn_benef_cn1" value="">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th class="bg-light">내용2</th>
-                                            <td>
-                                                <input type="text" class="form-control" id="slctn_benef_cn2" name="slctn_benef_cn2" value="">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th class="bg-light">내용3</th>
-                                            <td>
-                                                <input type="text" class="form-control" id="slctn_benef_cn3" name="slctn_benef_cn3" value="">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th class="bg-light">내용4</th>
-                                            <td>
-                                                <input type="text" class="form-control" id="slctn_benef_cn4" name="slctn_benef_cn4" value="">
-                                            </td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                    <div class="button-container">
-                                        <!--<button type="submit" class="btn btn-primary">등록하기</button>-->
-                                        <button type="button" class="btn btn-primary" onclick="guideInsert()">등록하기</button>
-                                        <a href="/html_ko/preview/kbstaters.html" target="_blank" class="btn btn-outline-primary">미리보기</a>
-                                        <!--<a href="javascript:" class="btn btn-outline-primary" onclick="history.back();">목록보기</a>-->
-                                        <a th:href="@{/survey/list/{menuId}(menuId=${menuId})}" class="btn btn-outline-primary">목록보기</a>
-                                    </div>
-                                </form>
-                            </div>
+<div class="wrap">
+    <div th:replace="fragment/header :: headerFragment"></div>
+
+    <main class="main">
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <div class="paper">
+                        <h2 class="h4">지원서 설문 관리 <span id="helpSurveyGuide" class="help"><i class="mb-1"
+                                                                                            data-feather="help-circle"></i></span>
+                        </h2>
+                        <hr>
+                        <h3 class="h5">모집개요 관리</h3>
+                        <div class="mt-4">
+                            <form id="guide_form" name="guide_form" th:action="@{/survey/guideIns}" method="post">
+                                <input type="hidden" name="menuId" th:value="${menuId}"/>
+                                <table class="table table-bordered align-middle">
+                                    <tbody th:if="${surveyInfo != null}">
+                                    <tr>
+                                        <th class="bg-light" colspan="2" style="width:25%">모집 구분</th>
+                                        <td>
+                                            <input type="hidden" id="survey_no" name="survey_no"
+                                                   th:value="${surveyInfo.survey_no}"/>
+                                            <input type="hidden" id="survey_info_no" name="survey_info_no"
+                                                   th:value="${surveyInfo.survey_info_no}"/>
+                                            <input type="text" class="form-control" name="survey_category"
+                                                   th:value="${surveyInfo.survey_category}">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th class="bg-light" colspan="2">모집 기간</th>
+                                        <td>
+                                            <input type="text" class="form-control" name="survey_date_range"
+                                                   th:value="${surveyInfo.survey_date_range}">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th class="bg-light" rowspan="2">모집 대상</th>
+                                        <th class="bg-light">메인 텍스트</th>
+                                        <td>
+                                            <input type="text" class="form-control" name="survey_target_heading"
+                                                   th:value="${surveyInfo.survey_target_heading}">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th class="bg-light">서브 텍스트</th>
+                                        <td>
+                                            <input type="text" class="form-control" name="survey_target_sub"
+                                                   th:value="${surveyInfo.survey_target_sub}">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th class="bg-light" rowspan="2">모집 분야</th>
+                                        <th class="bg-light">메인 텍스트</th>
+                                        <td>
+                                            <input type="text" class="form-control" name="survey_field_heading"
+                                                   th:value="${surveyInfo.survey_field_heading}">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th class="bg-light">서브 텍스트</th>
+                                        <td>
+                                            <input type="text" class="form-control" name="survey_field_sub"
+                                                   th:value="${surveyInfo.survey_field_sub}">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th class="bg-light" colspan="2">선발 절차</th>
+                                        <td>
+                                            <input type="text" class="form-control" name="survey_select_process"
+                                                   th:value="${surveyInfo.survey_select_process}">
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                    <tbody th:if="${surveyInfo == null}">
+                                    <tr>
+                                        <th class="bg-light" colspan="2" style="width:25%">모집 구분</th>
+                                        <td>
+                                            <input type="hidden" name="survey_no" th:value="${surveyNo}"/>
+                                            <input type="text" class="form-control" name="survey_category">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th class="bg-light" colspan="2">모집 기간</th>
+                                        <td>
+                                            <input type="text" class="form-control" name="survey_date_range">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th class="bg-light" rowspan="2">모집 대상</th>
+                                        <th class="bg-light">메인 텍스트</th>
+                                        <td>
+                                            <input type="text" class="form-control" name="survey_target_heading">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th class="bg-light">서브 텍스트</th>
+                                        <td>
+                                            <input type="text" class="form-control" name="survey_target_sub">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th class="bg-light" rowspan="2">모집 분야</th>
+                                        <th class="bg-light">메인 텍스트</th>
+                                        <td>
+                                            <input type="text" class="form-control" name="survey_field_heading">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th class="bg-light">서브 텍스트</th>
+                                        <td>
+                                            <input type="text" class="form-control" name="survey_field_sub">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th class="bg-light" colspan="2">선발 절차</th>
+                                        <td>
+                                            <input type="text" class="form-control" name="survey_select_process">
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <div class="button-container">
+                                    <!--<button type="submit" class="btn btn-primary">등록하기</button>-->
+                                    <button type="button" class="btn btn-primary" onclick="guideInsert()">등록하기</button>
+                                    <button onclick="preview();"
+                                            class="btn btn-outline-primary">미리보기
+                                    </button>
+                                    <!--<a href="javascript:" class="btn btn-outline-primary" onclick="history.back();">목록보기</a>-->
+                                    <a th:href="@{/survey/list/{menuId}(menuId=${menuId})}"
+                                       class="btn btn-outline-primary">목록보기</a>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
-        </main>
-    </div>
-    <script th:inline="javascript">
-        // 페이지 로드 시 실행
-        window.onload = function () {
-            // 페이지 로드 시 메시지 확인 및 알림 표시
-            // 수정 및 등록 시 띄울 알림창
-            const msg = /*[[${msg}]]*/ '';
-            if (msg) alert(msg);
-        }
+        </div>
+    </main>
+</div>
+<script th:inline="javascript">
+    // 페이지 로드 시 실행
+    window.onload = function () {
+        // 페이지 로드 시 메시지 확인 및 알림 표시
+        // 수정 및 등록 시 띄울 알림창
+        const msg = /*[[${msg}]]*/ '';
+        if (msg) alert(msg);
+    }
 
-        function guideInsert() {
-            let result = confirm("등록 하시겠습니까?");
-            if (result) {
-                const form = document.forms['guide_form'];
-                form.action = '/kbinnovationhub_devadm/survey/guideIns';   //전송할 URL
-                form.method = 'POST';                                    //전송 방식
-                form.target = '';                                        //새 창에서 열기
-                form.submit();                                           //폼 제출
-            }
+    function guideInsert() {
+        let result = confirm("등록 하시겠습니까?");
+        if (result) {
+            const form = document.forms['guide_form'];
+            form.action = /*[[@{'/survey/guideIns'}]]*/;
+            form.method = 'POST';                                    //전송 방식
+            form.target = '';                                        //새 창에서 열기
+            form.submit();                                           //폼 제출
         }
-        function validateForm() {
-            alert("aaa");
-            return true;
-        }
-    </script>
-    <script th:src="@{/js/admin.js}"></script>
+    }
+
+    function preview() {
+        const form = document.forms['guide_form'];
+        form.action =  /*[[@{'/survey/guidePreview'}]]*/;
+        form.method = 'POST';                                    //전송 방식
+        form.target = '_blank';                                  //새 창에서 열기
+        form.submit();
+    }
+</script>
+<script th:src="@{/js/admin.js}"></script>
 </body>
 </html>

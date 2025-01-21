@@ -1,343 +1,520 @@
 <!doctype html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragment/config :: configFragment"></head>
 
 <body>
-    <div class="wrap">
-        <div th:replace="fragment/header :: headerFragment"></div>
-    
-        <main class="main">
-            <div class="container">
-                <div class="row">
-                    <div class="col">
-                        <div class="paper">
-                            <h2 class="h4">지원서 설문 관리 <span id="helpSurveyQuestion" class="help"><i class="mb-1" data-feather="help-circle"></i></span></h2>
-                        </div>
-                        <form id="qstn_form" name="qstn_form" th:action="@{/survey/qstnInsert}" method="post">
-                            <input type="hidden" id="menu_id" name="menu_id" th:value="${menuId}"/>
-                            <input type="hidden" id="srvy_sn1" name="srvy_sn1" th:value="${srvy_sn1}"/>
-                            <div class="question">
-                                <!-- 문항 리스트 -->
-                                <div class="question-list">
-                                    <div class="question-head">
-                                        <h3 class="heading h5"><i data-feather="check-circle"></i> 문항 1</h3>
-                                        <select class="form-select select-type" name="qstn_type1" onchange="changeType(this)">
-                                            <option value="1" selected>객관식 질문</option>
-                                            <option value="2">주관식 질문</option>
-                                            <option value="3">첨부파일</option>
-                                            <option value="4">에디터</option>
-                                        </select>
-                                    </div>
-                                    <div class="question-body on" data-question-type="1">
-                                        <div class="row">
-                                            <div class="col">
-                                                <input type="text" class="form-control" id="srvy_qstn1" name="srvy_qstn1" value="" placeholder="질문을 입력해 주세요.">
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col">
-                                                <textarea class="form-control" id="questionTextType1-1" rows="5" name="srvy_dtl_qstn11" placeholder="질문에 대한 상세내용을 입력해 주세요."></textarea>
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="row">
-                                            <div class="col">
-                                                <div class="item-list">
-                                                
+<div class="wrap">
+    <div th:replace="fragment/header :: headerFragment"></div>
 
-                                                    
+    <main class="main">
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <div class="paper">
+                        <h2 class="h4">지원서 설문 관리 <span id="helpSurveyQuestion" class="help"><i class="mb-1"
+                                                                                               data-feather="help-circle"></i></span>
+                        </h2>
+                    </div>
+                    <form id="qstn_form" name="qstn_form" th:action="@{/survey/qstnInsert}" method="post">
+                        <input type="hidden" name="survey_no" id="survey_no" th:value="${surveyNo}"/>
+                        <input type="hidden" id="menu_id" name="menu_id" th:value="${menuId}"/>
+                        <div class="question">
+                            <!-- 문항 리스트 -->
+                            <div th:each="row : ${questions}" class="question-list">
+                                <input type="hidden" name="question_no" th:value="${row.question_no}"/>
+                                <div class="question-head">
+                                    <h3 class="heading h5"><i data-feather="check-circle"></i> 문항
+                                        <th:block th:text="${rowStat.index + 1}"></th:block>
+                                    </h3>
+                                    <select class="form-select select-type" name="question_type_no"
+                                            onchange="changeType(this)">
+                                        <option value="1" th:selected="${row.question_type_no == 1}">객관식 질문</option>
+                                        <option value="2" th:selected="${row.question_type_no == 2}">주관식 질문</option>
+                                        <option value="3" th:selected="${row.question_type_no == 3}">첨부파일</option>
+                                        <option value="4" th:selected="${row.question_type_no == 4}">에디터</option>
+                                    </select>
+                                </div>
+                                <div class="question-body" th:classappend="${row.question_type_no == 1 ? 'on' : ''}"
+                                     data-question-type="1">
+                                    <div class="row">
+                                        <div class="col">
+                                            <input type="text" class="form-control" name="question_title"
+                                                   th:value="${row.question_title}" placeholder="질문을 입력해 주세요.">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <textarea class="form-control" rows="5"
+                                                      name="question_description"
+                                                      th:text="${row.question_description}"
+                                                      placeholder="질문에 대한 상세내용을 입력해 주세요."></textarea>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="item-list">
+                                                <div class="item" th:each="choice : ${row.choices}">
+                                                    <input type="hidden" name="question_choice_no"
+                                                           th:value="${choice.question_choice_no}"/>
+                                                    <div class="column">
+                                                        <input type="text" class="form-control form-control-sm"
+                                                               name="choice_content" th:value="${choice.choice_content}"
+                                                               th:placeholder="${'보기' + (choiceStat.index + 1)}">
+                                                        <select class="form-select form-select-sm move-question-type">
+                                                            <option value="0">다음 문항</option>
+                                                            <option value="1"
+                                                                    th:selected="${choice.move_question_no != 0 and choice.move_question_no != 99}">
+                                                                문항 번호 선택
+                                                            </option>
+                                                            <option value="99"
+                                                                    th:selected="${choice.move_question_no == 99}">설문 제출
+                                                            </option>
+                                                        </select>
+                                                        <input th:if="${choice.move_question_no != 0 and choice.move_question_no != 99}"
+                                                               type="number" class="form-control form-control-sm w-25"
+                                                               name="move_question_no" style="display: none;"
+                                                               th:value="${choice.move_question_no}"
+                                                               placeholder="이동할 문항 번호를 입력해 주세요.">
+                                                    </div>
+                                                    <div class="column">
+                                                        <button type="button" class="btn remove-item"
+                                                                onclick="removeItem(this)"
+                                                                th:data-question-choice-no="${choice.question_choice_no}">
+                                                            <i
+                                                                    data-feather="x-circle"></i></button>
+                                                    </div>
                                                 </div>
-                                                <button type="button" class="btn btn-sm btn-dark add-item" onclick="addItem(this, 1)" data-idx="1">
-                                                    <i class="me-0" data-feather="plus"></i>
-                                                    보기 추가
-                                                </button>
                                             </div>
-                                        </div>
-                                        
-                                    </div>
-                                    <div class="question-body" data-question-type="2">
-                                        <div class="row">
-                                            <div class="col">
-                                                <input type="text" class="form-control" value="" placeholder="질문을 입력해 주세요.">
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col">
-                                                <textarea class="form-control" id="questionTextType2-1" name="srvy_dtl_qstn21" rows="5" placeholder="질문에 대한 상세내용을 입력해 주세요."></textarea>
-                                            </div>
+                                            <button type="button" class="btn btn-sm btn-dark add-item"
+                                                    onclick="addItem(this)" data-idx="1">
+                                                <i class="me-0" data-feather="plus"></i>
+                                                보기 추가
+                                            </button>
                                         </div>
                                     </div>
-                                    <div class="question-body" data-question-type="3">
-                                        <div class="row">
-                                            <div class="col">
-                                                <input type="text" class="form-control" value="" placeholder="질문을 입력해 주세요.">
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col">
-                                                <textarea class="form-control" id="questionTextType3-1" name="srvy_dtl_qstn31" rows="5" placeholder="질문에 대한 상세내용을 입력해 주세요."></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col">
-                                                <div class="d-flex align-items-center">
-                                                    <input class="form-control" type="file" id="formFile">
-                                                </div>
-                                            </div>
+
+                                </div>
+                                <div class="question-body" th:classappend="${row.question_type_no == 2 ? 'on' : ''}"
+                                     data-question-type="2">
+                                    <div class="row">
+                                        <div class="col">
+                                            <input type="text" class="form-control" name="question_title"
+                                                   th:value="${row.question_title}" placeholder="질문을 입력해 주세요.">
                                         </div>
                                     </div>
-                                    <div class="question-body" data-question-type="4">
-                                        <div class="row">
-                                            <div class="col">
-                                                <!-- <textarea class="form-control" id="questionTextType4-1" rows="5"></textarea> -->
-                                                <!-- 에디터 -->
-                                                <div id="summernote"></div>
-                                            </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <textarea class="form-control" name="question_description"
+                                                      th:text="${row.question_description}" rows="5"
+                                                      placeholder="질문에 대한 상세내용을 입력해 주세요."></textarea>
                                         </div>
-                                    </div>
-                                    <div class="question-foot">
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input" type="checkbox" role="switch" id="required1" name="required1">
-                                            <label class="form-check-label" for="required1">필수 값 설정</label>
-                                        </div>
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input" type="checkbox" role="switch" id="aftr_mvmn1" name="aftr_mvmn1" onclick="toggleMove(this)">
-                                            <label class="form-check-label" for="move1">문항 이동</label>
-                                        </div>
-                                        <button type="button" class="btn btn-sm btn-dark" onclick="removeList(this)"><i data-feather="trash-2"></i>문항 삭제</button>
                                     </div>
                                 </div>
+                                <div class="question-body" th:classappend="${row.question_type_no == 3 ? 'on' : ''}"
+                                     data-question-type="3">
+                                    <div class="row">
+                                        <div class="col">
+                                            <input type="text" class="form-control" name="question_title"
+                                                   th:value="${row.question_title}" placeholder="질문을 입력해 주세요.">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <textarea class="form-control" name="question_description" rows="5"
+                                                      placeholder="질문에 대한 상세내용을 입력해 주세요."
+                                                      th:text="${row.question_description}"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="d-flex align-items-center">
+                                                <input class="form-control" type="file"
+                                                       th:id="${'formFile' + (rowStat.index + 1)}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="question-body" th:classappend="${row.question_type_no == 4 ? 'on' : ''}"
+                                     data-question-type="4">
+                                    <div class="row">
+                                        <div class="col">
+                                            <!-- 에디터 -->
+                                            <div class="summernote-editor"
+                                                 th:id="${'summernote' + (rowStat.index + 1)}"
+                                                 th:utext="${row.question_description}"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="question-foot">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" role="switch"
+                                               th:id="${'required' + (rowStat.index + 1)}" name="required_yn" th:checked="${row.required_yn == 'Y'}">
+                                        <label class="form-check-label" th:for="${'required' + (rowStat.index + 1)}">필수
+                                            값 설정</label>
+                                    </div>
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input move-question-switch" type="checkbox"
+                                               role="switch"
+                                               th:id="${'moveQuestion' + (rowStat.index + 1)}"
+                                               onclick="toggleMove(this)">
+                                        <label class="form-check-label"
+                                               th:for="${'moveQuestion' + (rowStat.index + 1)}">문항
+                                            이동</label>
+                                    </div>
+                                    <button type="button" class="btn btn-sm btn-dark" onclick="removeList(this)"
+                                            th:attr="data-question-no=${row.question_no}"><i
+                                            data-feather="trash-2"></i>문항 삭제
+                                    </button>
+                                </div>
                             </div>
-                            <div class="button-container">
-                                <button type="button" class="btn btn-primary" onclick="surveyQuestionInsert()">등록하기</button>
-                                <!--<a href="javascript:" class="btn btn-outline-primary" onclick="history.back();">목록보기</a>-->
-                                <a th:href="@{/survey/list/{menuId}(menuId=${menuId})}" class="btn btn-outline-primary">목록보기</a>
-                                <button id="buttonAddList" type="button" class="btn btn-dark add-list"><i data-feather="plus"></i> 문항 추가</button>
-                            </div>
-                        </form>
-                    </div>
+                        </div>
+                        <div class="button-container">
+                            <button type="button" class="btn btn-primary" onclick="surveyQuestionInsert()">등록하기</button>
+                            <button type="button" onclick="preview();"
+                                    class="btn btn-outline-primary">미리보기
+                            </button>
+                            <a th:href="@{/survey/list/{menuId}(menuId=${menuId})}"
+                               class="btn btn-outline-primary">목록보기</a>
+                            <button id="buttonAddList" type="button" class="btn btn-dark add-list"><i
+                                    data-feather="plus"></i> 문항 추가
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
-        </main>
-    </div>
-    <script>
-    
-    function surveyQuestionInsert() {
-        var qstn = $("#srvy_qstn1").val();
-        if (qstn === null || qstn === '') {
-            alert("질문을 입력해 주세요.")
-            $("#srvy_qstn1").focus();
-            return false;
+        </div>
+    </main>
+    <script th:inline="javascript">
+
+        let deleteQuestionList = [];
+        let deleteChoiceList = [];
+
+        function preview() {
+            let questionData = makeQuestionList();
+            if (questionData === false) {
+                return false;
+            }
+            if(questionData.data.length == 0){
+                alert("문항을 추가해 주세요.");
+                return false;
+            }
+            let form = document.createElement("form");
+
+
+            questionData.data.forEach(function (question, idx) {
+                form.appendChild(makeInput("data["+idx+"].survey_no", question.survey_no));
+                form.appendChild(makeInput("data["+idx+"].question_title", question.question_title));
+                form.appendChild(makeInput("data["+idx+"].question_description", question.question_description));
+                form.appendChild(makeInput("data["+idx+"].required_yn", question.required_yn));
+                form.appendChild(makeInput("data["+idx+"].question_order", question.question_order));
+                form.appendChild(makeInput("data["+idx+"].question_type_no", question.question_type_no));
+                if (question.question_type_no == 1) {
+                    question.choices.forEach(function (choice, choiceIdx) {
+                        form.appendChild(makeInput("data["+idx+"].choices["+choiceIdx+"].choice_content", choice.choice_content));
+                        if(!choice.move_question_no){
+                            choice.move_question_no = 0;
+                        }
+                        form.appendChild(makeInput("data["+idx+"].choices["+choiceIdx+"].move_question_no", choice.move_question_no));
+                    });
+                }
+            });
+
+            form.action = /*[[@{/survey/preview}]]*/;
+            form.method = "POST";
+            document.body.appendChild(form);
+            form.submit();
         }
 
-        let result = confirm("등록 하시겠습니까?");
-        if (result) {
-            const form = document.forms['qstn_form'];
-            form.action = '/kbinnovationhub_devadm/survey/qstnInsert';   //전송할 URL
-            form.method = 'POST';                                    //전송 방식
-            form.target = '';                                        //새 창에서 열기
-            form.submit();                                           //폼 제출
+        function makeInput(name, value) {
+            const input = document.createElement("input");
+            input.type = "hidden";
+            input.name = name;
+            input.value = value;
+            return input;
         }
-    }
-    
-        var listIndex = 2, itemIndex = [];
-        var encIndex = 1;
 
-        $(function(){
+        function makeQuestionList() {
+            let errorMsg = "";
+            let question_data = {};
+            let question_object_list = [];
+            let questionCount = $(".question-list").length;
+            $(".question-body.on").each(function (idx) {
+                let question_object = {};
+                let question_no = 0;
+                let question_type_no = $(this).attr("data-question-type");
+                let $parent = $(this).parent();
+                question_object["question_type_no"] = question_type_no;
+                question_object["survey_no"] = $("input[name='survey_no']").val();
+                question_object["question_title"] = $(this).find("input[name='question_title']").val();
+                if (question_type_no == 4) {
+                    question_object["question_description"] = $(this).find(".summernote-editor").summernote('code');
+                } else {
+                    question_object["question_description"] = $(this).find("textarea[name='question_description']").val();
+                }
+                question_object["required_yn"] = $(this).parent().find("input[name='required_yn']").prop("checked") ? "Y" : "N";
+                question_object["question_order"] = idx + 1;
+                if ($parent.find("input[name='question_no']").length > 0) {
+                    question_no = $parent.find("input[name='question_no']").val();
+                    question_object["question_no"] = question_no;
+                }
+
+
+                if (question_type_no == 1) {
+                    let choice_list = [];
+                    $(this).find(".item-list .item").each(function (choiceIdx) {
+                        let choice_object = {};
+                        choice_object["choice_content"] = $(this).find("input[name='choice_content']").val();
+
+                        if ($(this).find("input[name='question_choice_no']").length > 0) {
+                            choice_object["question_choice_no"] = $(this).find("input[name='question_choice_no']").val();
+                        }
+                        if (question_no != 0) {
+                            choice_object["question_no"] = question_no;
+                        }
+                        if ($(this).find(".move-question-type").val() == 1) {
+                            let move_question_no = $(this).find("input[name='move_question_no']").val();
+                            if (!move_question_no) {
+                                errorMsg = (idx + 1) + "번째 문항의 " + (choiceIdx + 1) + "번째 보기의 이동할 문항 번호를 입력해 주세요.";
+                            } else {
+                                if (move_question_no < (idx + 1)) {
+                                    errorMsg = (idx + 1) + "번째 문항의 " + (choiceIdx + 1) + "번째 보기의 이동할 문항 번호는 현재 문항보다 높은 번호를 입력해 주세요.";
+                                }
+                                if (move_question_no > questionCount || move_question_no < 0) {
+                                    errorMsg = (idx + 1) + "번째 문항의 " + (choiceIdx + 1) + "번째 보기의 이동할 문항 번호가 존재하지 않습니다.";
+                                }
+                                choice_object["move_question_no"] = move_question_no;
+                            }
+                        } else if ($(this).find(".move-question-type").val() == 99) {
+                            choice_object["move_question_no"] = 99;
+                        }
+                        choice_list.push(choice_object);
+                    });
+                    if (choice_list.length == 0) {
+                        errorMsg = (idx + 1) + "번째 객관식 문항의 보기를 추가해 주세요.";
+                    }
+                    question_object["choices"] = choice_list;
+                }
+                question_object_list.push(question_object);
+            });
+
+            if (errorMsg != "") {
+                alert(errorMsg);
+                return false;
+            }
+
+            question_data["data"] = question_object_list;
+            question_data["deleteQuestionNoList"] = deleteQuestionList;
+
+            return question_data;
+
+        }
+
+        function surveyQuestionInsert() {
+            let questionData = makeQuestionList();
+            if (questionData === false) {
+                return false;
+            }
+            $.ajax({
+                url: /*[[@{/survey/question/save}]]*/,
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(questionData),
+                dataType: "JSON",
+                success: function (data) {
+                    if (data.result == "success") {
+                        alert("등록되었습니다.");
+                    } else {
+                        alert("등록에 실패하였습니다.");
+                    }
+                },
+            });
+        }
+
+        $(function () {
             $('#buttonAddList').click(addList);
             // $('.select-type').on('change', changeType);
         });
 
         // 문항 추가
         function addList() {
-        	if(listIndex > 10){
-        		alert("문항 추가는 10개 까지 가능 합니다");
-        		return true;
-        	}
-        	
-            const dom = 
-                '<div class="question-list">' +
-                    '<div class="question-head">' +
-                        '<h3 class="heading h5"><i data-feather="check-circle"></i> 문항 '+ listIndex +'</h3>' +
-                        '<select class="form-select select-type" name="qstn_type'+listIndex+'" onchange="changeType(this)">' +
-                            '<option value="1" selected>객관식 질문</option>' +
-                            '<option value="2">주관식 질문</option>' +
-                            '<option value="3">첨부파일</option>' +
-                            '<option value="4">에디터</option>' +
-                        '</select>' +
-                    '</div>' +
-                    '<div class="question-body on" data-question-type="1">' +
-                        '<div class="row">' +
-                            '<div class="col">' +
-                                '<input type="text" class="form-control" name="srvy_qstn'+listIndex+'" value="" placeholder="질문을 입력해 주세요.">' +
-                            '</div>' +
-                        '</div>' +
-                        '<div class="row">' +
-                            '<div class="col">' +
-                                '<textarea class="form-control" id="questionTextType1-'+ listIndex +'" name="srvy_dtl_qstn1'+listIndex+'" rows="5" placeholder="질문에 대한 상세내용을 입력해 주세요."></textarea>' +
-                            '</div>' +
-                        '</div>' +
-                        '<div class="row">' +
-                            '<div class="col">' +
-                                '<div class="item-list">' +
-                                /* 
-                                    '<div class="item">' +
-                                        '<div class="column">' +
-                                            '<input type="text" class="form-control form-control-sm" name="ans_cn'+listIndex+'" value="" placeholder="보기 1">' +
-                                            '<!-- 점프 기능 -->' +
-                                            '<select class="form-select form-select-sm">' +
-                                                '<option value="1">다음 문항으로 이동</option>' +
-                                                '<option value="2">n번 문항으로 이동</option>' +
-                                                '<option value="3">지원서 제출</option>' +
-                                            '</select>' +
-                                        '</div>' +
-                                        '<div class="column">' +
-                                            '<button type="button" class="btn remove-item" onclick="removeItem(this)"><i data-feather="x-circle"></i></button>' +
-                                        '</div>' +
-                                    '</div>' +
-                                    '<div class="item">' +
-                                        '<div class="column">' +
-                                            '<input type="text" class="form-control form-control-sm" name="ans_cn'+listIndex+'" value="" placeholder="보기 2">' +
-                                            '<!-- 점프 기능 -->' +
-                                            '<select class="form-select form-select-sm">' +
-                                                '<option value="1">다음 문항으로 이동</option>' +
-                                                '<option value="2">n번 문항으로 이동</option>' +
-                                                '<option value="3">지원서 제출</option>' +
-                                            '</select>' +
-                                        '</div>' +
-                                        '<div class="column">' +
-                                            '<button type="button" class="btn remove-item" onclick="removeItem(this)"><i data-feather="x-circle"></i></button>' +
-                                        '</div>' +
-                                    '</div>' +
-                                '</div>' +
-                                  */
-                                '<button type="button" class="btn btn-sm btn-dark add-item" onclick="addItem(this, listIndex)" data-idx="1">' +
-                                    '<i class="me-0" data-feather="plus"></i>' +
-                                    '보기 추가' +
-                                '</button>' +
-                            '</div>' +
-                        '</div>' +
-                    '</div>' +
-                    '<div class="question-body" data-question-type="2">' +
-                        '<div class="row">' +
-                            '<div class="col">' +
-                                '<input type="text" class="form-control" value="" placeholder="질문을 입력해 주세요.">' +
-                            '</div>' +
-                        '</div>' +
-                        '<div class="row">' +
-                            '<div class="col">' +
-                                '<textarea class="form-control" id="questionTextType2-'+ listIndex +'" name="srvy_dtl_qstn2'+listIndex+'" rows="5" placeholder="질문에 대한 상세내용을 입력해 주세요."></textarea>' +
-                            '</div>' +
-                        '</div>' +
-                    '</div>' +
-                    '<div class="question-body" data-question-type="3">' +
-                        '<div class="row">' +
-                            '<div class="col">' +
-                                '<input type="text" class="form-control" value="" placeholder="질문을 입력해 주세요.">' +
-                            '</div>' +
-                        '</div>' +
-                        '<div class="row">' +
-                            '<div class="col">' +
-                                '<textarea class="form-control" id="questionTextType3-'+ listIndex +'" name="srvy_dtl_qstn3'+listIndex+'" rows="5" placeholder="질문에 대한 상세내용을 입력해 주세요."></textarea>' +
-                            '</div>' +
-                        '</div>' +
-                        '<div class="row">' +
-                            '<div class="col">' +
-                                '<div class="d-flex align-items-center">' +
-                                    '<input class="form-control" type="file" id="formFile'+ listIndex +'">' +
-                                '</div>' +
-                            '</div>' +
-                        '</div>' +
-                    '</div>' +
-                    '<div class="question-body" data-question-type="4">' +
-                        '<div class="row">' +
-                            '<div class="col">' +
-                                '<div id="summernote'+ listIndex +'"></div>' +
-                            '</div>' +
-                        '</div>' +
-                    '</div>' +
-                    '<div class="question-foot">' +
-                        '<div class="form-check form-switch">' +
-                            '<input class="form-check-input" type="checkbox" role="switch" id="required'+ listIndex +'" name="esntl_vl_yn'+ listIndex +'">' +
-                            '<label class="form-check-label" for="required'+ listIndex +'">필수 값 설정</label>' +
-                        '</div>' +
-                        '<div class="form-check form-switch">' +
-                            '<input class="form-check-input" type="checkbox" role="switch" id="move'+ listIndex +'" name="aftr_mvmn'+ listIndex +'" onclick="toggleMove(this)">' +
-                            '<label class="form-check-label" for="move'+ listIndex +'">문항 이동</label>' +
-                        '</div>' +
-                        '<button type="button" class="btn btn-sm btn-dark" onclick="removeList(this)"><i data-feather="trash-2"></i>문항 삭제</button>' +
-                    '</div>' +
-                '</div>';
+            let questionCount = $(".question-list").length;
 
-            $('.question').append(dom);
-            
+            if (questionCount >= 10) {
+                alert("문항 추가는 10개 까지 가능 합니다");
+                return true;
+            }
+
+            $('.question').append(`<div class="question-list">
+                                <div class="question-head">
+                                    <h3 class="heading h5"><i data-feather="check-circle"></i> 문항 ${questionCount + 1}</h3>
+                                    <select class="form-select select-type"
+                                            name="question_type_no" onchange="changeType(this)">
+                                        <option value="1">객관식 질문</option>
+                                        <option value="2">주관식 질문</option>
+                                        <option value="3">첨부파일</option>
+                                        <option value="4">에디터</option>
+                                    </select>
+                                </div>
+                                <div class="question-body on"
+                                     data-question-type="1">
+                                    <div class="row">
+                                        <div class="col">
+                                            <input type="text" class="form-control" name="question_title"
+                                                   value="" placeholder="질문을 입력해 주세요.">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <textarea class="form-control" rows="5"
+                                                      name="question_description"
+                                                      placeholder="질문에 대한 상세내용을 입력해 주세요."></textarea>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="item-list">
+                                            </div>
+                                            <button type="button" class="btn btn-sm btn-dark add-item"
+                                                    onclick="addItem(this)" data-idx="1">
+                                                <i class="me-0" data-feather="plus"></i>
+                                                보기 추가
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="question-body"
+                                     data-question-type="2">
+                                    <div class="row">
+                                        <div class="col">
+                                            <input type="text" name="question_title" class="form-control" value="" placeholder="질문을 입력해 주세요.">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <textarea class="form-control"
+                                                      name="question_description" rows="5"
+                                                      placeholder="질문에 대한 상세내용을 입력해 주세요."></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="question-body"
+                                     data-question-type="3">
+                                    <div class="row">
+                                        <div class="col">
+                                            <input type="text" name="question_title" class="form-control" value="" placeholder="질문을 입력해 주세요.">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <textarea class="form-control"
+                                                      name="question_description" rows="5"
+                                                      placeholder="질문에 대한 상세내용을 입력해 주세요."></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="question-body"
+                                     data-question-type="4">
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="summernote-editor" id="summernote${questionCount + 1}"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="question-foot">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" role="switch" name="required_yn" id="required${questionCount + 1}">
+                                        <label class="form-check-label" for="required${questionCount + 1}">필수 값 설정</label>
+                                    </div>
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input move-question-switch" type="checkbox" role="switch" id="moveQuestion${questionCount + 1}" onclick="toggleMove(this)">
+                                        <label class="form-check-label" for="moveQuestion${questionCount + 1}">문항 이동</label>
+                                    </div>
+                                    <button type="button" class="btn btn-sm btn-dark" onclick="removeList(this)"><i
+                                            data-feather="trash-2"></i>문항 삭제
+                                    </button>
+                                </div>
+                            </div>`);
+
             feather.replace();
 
-            $('#summernote'+ listIndex +'').summernote({
+            $('#summernote' + (questionCount + 1)).summernote({
                 lang: 'ko-KR',
                 height: 300
             });
-
-            listIndex++;
-            encIndex++;
         }
+
+        $(".summernote-editor").summernote({
+            lang: 'ko-KR',
+            height: 300
+        });
+
 
         // 문항 삭제
         function removeList(e) {
             const element = $(e);
-
+            const questionNo = element.data('question-no');
+            if (questionNo) {
+                deleteQuestionList.push(questionNo);
+            }
             element.closest('.question-list').remove();
-            
-            listIndex-1;
         }
 
         // 질문 유형 선택
         function changeType(e) {
             const type = e.value;
 
-            // console.log(e.closest('.question-list').querySelector('.question-body'));
-
             e.closest('.question-list').querySelectorAll('.question-body').forEach(el => {
                 el.classList.remove('on');
             })
 
-            e.closest('.question-list').querySelector('[data-question-type="'+ type +'"]').classList.add('on');
+            e.closest('.question-list').querySelector('[data-question-type="' + type + '"]').classList.add('on');
         }
 
-        // 보기 추가
-        function addItem(e, index) {
-        	
-        	if(e.dataset.idx > 10){
-        		alert("보기 추가는 10개 까지 가능 합니다");
-        		
-        		return true;
-        	}
-        	
-            const element = $(e);
-            
-            element.closest('.col').find('.item-list').append(
-                '<div class="item">' +
-                    '<div class="column">' +
-                        '<input type="text" class="form-control form-control-sm" name="ans_cn'+ encIndex + e.dataset.idx+'" value="" placeholder="보기 '+ encIndex +  e.dataset.idx +'">' +
-                        '<select class="form-select form-select-sm">' +
-                            '<option value="1">다음 문항으로 이동</option>' +
-                            '<option value="2">n번 문항으로 이동</option>' +
-                            '<option value="3">지원서 제출</option>' +
-                        '</select>' +
-                    '</div>' +
-                    '<div class="column">' +
-                        '<button type="button" class="btn remove-item" onclick="removeItem(this)"><i data-feather="x-circle"></i></button>' +
-                    '</div>' +
-                '</div>'
-            );
+        function addItem(el) {
+            const $element = $(el);
+            const itemListCount = $element.parent().find('.item-list').find(".item").length;
+            if (itemListCount >= 10) {
+                alert("보기는 10개까지 추가 가능합니다.");
+                return;
+            }
 
-            e.dataset.idx = parseInt(e.dataset.idx) + 1
-            
-            feather.replace();
+            const moveYn = $element.parent().parent().parent().parent().find(".move-question-switch").prop("checked");
+            $element.parent().find(".item-list").append(`<div class="item">
+                                                        <div class="column">
+                                                            <input type="text" class="form-control form-control-sm" name="choice_content" placeholder="보기 ${itemListCount + 1}">
+                                                            <select class="form-select form-select-sm move-question-type ${moveYn ? 'on' : ''}">
+                                                                <option value="0">다음 문항</option>
+                                                                <option value="1">문항 번호 선택</option>
+                                                                <option value="99">설문 제출</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="column">
+                                                            <button type="button" class="btn remove-item" onclick="removeItem(this)"><i data-feather="x-circle"></i></button>
+                                                        </div>
+                                                    </div>`);
+
         }
+
+        $("body").on("change", ".move-question-type", function () {
+            const value = $(this).val();
+            if (value === "1") {
+                $(this).parent().append(`<input type="number" class="form-control form-control-sm w-25" name="move_question_no" placeholder="이동할 문항 번호를 입력해 주세요.">`);
+            } else {
+                $(this).parent().find("input[name='move_question_no']").remove();
+            }
+        });
+
 
         // 보기 삭제
         function removeItem(e) {
+            const element = $(e);
+            const questionChoiceNo = element.data('question-choice-no');
+            if (questionChoiceNo) {
+                deleteChoiceList.push(questionChoiceNo);
+            }
             e.closest('.item').remove();
         }
 
@@ -345,14 +522,25 @@
         function toggleMove(e) {
             const element = $(e);
 
-            if(e.checked) {
+            if (e.checked) {
+                element.closest('.question-list').find('.form-select').each(function () {
+                    if ($(this).val() == 1) {
+                        element.closest('.question-list').find('input[name="move_question_no"]').css("display", "block");
+                    }
+                });
                 element.closest('.question-list').find('.form-select').addClass('on')
             } else {
+                element.closest('.question-list').find('.form-select').each(function () {
+                    if ($(this).val() != 1) {
+                        element.closest('.question-list').find('input[name="move_question_no"]').css("display", "none");
+                    }
+                });
                 element.closest('.question-list').find('.form-select').removeClass('on')
             }
         }
     </script>
-    <script th:src="@{/js/admin.js}"></script>
-    
+</div>
+<script th:src="@{/js/admin.js}"></script>
+
 </body>
 </html>

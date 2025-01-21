@@ -41,8 +41,7 @@
                                         <div class="button-wrap d-flex justify-content-end">
                                         
                                         <a th:href="@{/receipt/list/{menuId}(menuId=${menuId})}" class="btn btn-outline-primary">목록보기</a>
-                                        
-                                        <!-- 
+
                                             <a href="javascript:" class="btn btn-outline-danger">
                                                 <i data-feather="trash-2"></i> 선택 삭제
                                             </a>
@@ -52,7 +51,6 @@
                                             <a href="javascript:" class="btn btn-outline-dark">
                                                 <i data-feather="download"></i> 선택 엑셀 다운로드
                                             </a>
-                                             -->
                                         </div>
                                     </div>
                                 </div>
@@ -62,11 +60,9 @@
                                     <table  id="mytable" class="table table-min table-small text-center align-middle">
                                         <thead>
                                             <tr>
-                                                <!-- 
                                                 <th style="width:60px">
                                                     <input class="form-check-input" type="checkbox" value="" id="checkAll">
                                                 </th>
-                                                 -->
                                                 <th style="width:200px">회사명</th>
                                                 <th style="width:120px">처리상태</th>
                                                 <th style="width:100px">상태변경</th>
@@ -93,11 +89,9 @@
                                         
                                         <!-- 리스팅 -->
                                         <tr th:unless="${selectList == null or selectList.isEmpty()}" th:each="list : ${selectList}">
-                                            <!-- 
 											<td>
                                             	<input class="form-check-input" type="checkbox" value="${list.srvy_sn}" id="${list.conm}">
                                             </td>
-                                             -->
                                             <td th:text="${list.conm}">-</td>
 											<td>
 												<select id="prgrs_stts" name="prgrs_stts" class="form-select form-select-sm" onchange="changeType(this.value)">
@@ -154,7 +148,7 @@
     
     <script th:src="@{/js/admin.js}"></script>
     <script th:inline="javascript">
-    /* 
+    /*
     var wb = XLSX.utils.table_to_book(document.getElementById('mytable'), {sheet:"지원서 접수 관리",raw:true});
     XLSX.writeFile(wb, ('지원서 접수 관리.xlsx'));
      */

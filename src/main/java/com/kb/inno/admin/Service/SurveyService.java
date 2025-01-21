@@ -10,23 +10,27 @@
  */
 package com.kb.inno.admin.Service;
 
+import com.kb.inno.admin.DAO.KbStartersSurvey;
 import com.kb.inno.admin.DAO.SurveyDAO;
-import com.kb.inno.admin.DTO.FileDTO;
-import com.kb.inno.admin.DTO.SurveyDTO;
+import com.kb.inno.admin.DTO.*;
 import com.kb.inno.common.FileUploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
 public class SurveyService {
     // DAO 연결
     private final SurveyDAO surveyDAO;
+
+	private final KbStartersSurvey surveyRepository;
 
     /**
      * 설문 조회
@@ -1511,4 +1515,210 @@ public class SurveyService {
         //KB_SRVY_EXMN_INFO(설문조사정보), KB_SRBVY_QSTN_INFO(설문질문정보), KB_SRVY_ANS_INFO(설문답변정보), KB_SRVY_RSPNS_INFO(설문응답정보) 모두 삭제
         return surveyDAO.exmnDelete(surveyDTO);
     }
+
+	public List<KbStartersSurveyDTO> getSurveyList(SearchDTO searchDTO) {
+		return surveyRepository.getSurveyList(searchDTO);
+	}
+
+	public int getSurveyListCnt(SearchDTO searchDTO) {
+		return surveyRepository.countSurvey(searchDTO);
+	}
+
+	public List<KbStartersQuestionDTO> getQuestionList(int surveyNo) {
+		KbStartersQuestionDTO question = new KbStartersQuestionDTO();
+		question.setSurvey_no(surveyNo);
+		List<KbStartersQuestionDTO> questionList = surveyRepository.getQuestion(question);
+		for(KbStartersQuestionDTO q : questionList){
+			q.setChoices(surveyRepository.getQuestionChoice(q));
+		}
+		return questionList;
+	}
+
+	public Map<String, Object> saveSurvey(KbStartersSurveyDTO survey, MultipartFile bannerFile, int loginId) {
+		Map<String, Object> result = new HashMap<>();
+		try {
+			FileUploader fileUploader = new FileUploader();
+			if(bannerFile != null && bannerFile.getSize() != 0){
+				FileDTO fileSave = fileUploader.insertFile(bannerFile, loginId);
+				survey.setBanner_file_path(fileSave.getFile_path());
+				survey.setBanner_filename(fileSave.getFile_nm());
+			}
+
+			survey.setLast_mdfr(loginId);
+
+			if (survey.getSurvey_no() == 0) {
+				survey.setFrst_rgtr(loginId);
+				int maxSurveyNo = surveyRepository.getMaxSurveyNo();
+				survey.setSurvey_no(maxSurveyNo);
+				surveyRepository.insertSurvey(survey);
+			} else {
+				surveyRepository.updateSurvey(survey);
+			}
+
+			result.put("result", "success");
+		} catch (Exception e) {
+			result.put("result", "fail");
+			result.put("message", e.getMessage());
+		}
+		return result;
+	}
+
+	@Transactional
+	public Map<String, Object> deleteSurvey(int surveyNo) {
+		Map<String, Object> result = new HashMap<>();
+		try {
+			KbStartersSurveyDTO survey = new KbStartersSurveyDTO();
+			survey.setSurvey_no(surveyNo);
+			surveyRepository.deleteSurvey(survey);
+			surveyRepository.deleteSurveyInfoBySurvey(survey);
+			surveyRepository.deleteQuestionBySurvey(survey);
+			surveyRepository.deleteQuestionChoiceBySurvey(survey);
+
+			result.put("result", "success");
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+		return result;
+	}
+
+	@Transactional
+	public Map<String, Object> saveSurveyQuestion(KbStartersSurveyRequestDTO request, int loginId){
+		try {
+			Map<String, Object> result = new HashMap<>();
+			List<KbStartersQuestionRequestDTO> questions = request.getData();
+			for(int i = 0; i < questions.size(); i++){
+				KbStartersQuestionRequestDTO question = questions.get(i);
+				KbStartersQuestionDTO questionDTO = new KbStartersQuestionDTO();
+				questionDTO.setQuestion_type_no(question.getQuestion_type_no());
+				if(question.getQuestion_title() != null) {
+					questionDTO.setQuestion_title(question.getQuestion_title());
+				}
+				if(question.getQuestion_description() != null) {
+					questionDTO.setQuestion_description(question.getQuestion_description());
+				}
+				questionDTO.setQuestion_order(i + 1);
+				questionDTO.setRequired_yn(question.getRequired_yn());
+
+				if(question.getQuestion_no() == 0) {
+					int maxQuestionNo = surveyRepository.getMaxQuestionNo();
+					questionDTO.setQuestion_no(maxQuestionNo);
+					questionDTO.setSurvey_no(question.getSurvey_no());
+					questionDTO.setFrst_rgtr(loginId);
+					questionDTO.setLast_mdfr(loginId);
+					surveyRepository.insertQuestion(questionDTO);
+				}
+				else{
+					questionDTO.setQuestion_no(question.getQuestion_no());
+					questionDTO.setLast_mdfr(loginId);
+					surveyRepository.updateQuestion(questionDTO);
+				}
+
+				surveyRepository.deleteQuestionChoiceByQuestion(questionDTO);
+
+				if(question.getChoices() != null && question.getChoices().size() > 0) {
+					for (KbStartersQuestionChoiceRequestDTO choice : question.getChoices()) {
+						KbStartersQuestionChoiceDTO choiceDTO = new KbStartersQuestionChoiceDTO();
+						choiceDTO.setQuestion_no(questionDTO.getQuestion_no());
+						choiceDTO.setChoice_content(choice.getChoice_content());
+						choiceDTO.setMove_question_no(choice.getMove_question_no());
+						choiceDTO.setQuestion_choice_no(surveyRepository.getMaxQuestionChoiceNo());
+						choiceDTO.setFrst_rgtr(loginId);
+						choiceDTO.setLast_mdfr(loginId);
+						surveyRepository.insertQuestionChoice(choiceDTO);
+					}
+				}
+			}
+
+			if(request.getDeleteQuestionNoList() != null && request.getDeleteQuestionNoList().size() > 0){
+				surveyRepository.deleteQuestions(request.getDeleteQuestionNoList());
+			}
+
+			result.put("result", "success");
+
+			return result;
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public KbStartersSurveyDTO getSurvey(int surveyNo){
+		KbStartersSurveyDTO survey = new KbStartersSurveyDTO();
+		survey.setSurvey_no(surveyNo);
+		return surveyRepository.getSurvey(survey);
+	}
+
+	public KbStartersSurveyDTO getSurveyInfo(int surveyNo) {
+		KbStartersSurveyDTO survey = new KbStartersSurveyDTO();
+		survey.setSurvey_no(surveyNo);
+		return surveyRepository.getSurveyInfo(survey);
+	}
+
+	public Map<String, Object> saveSurveyInfo(KbStartersSurveyDTO dto, int loginId) {
+		Map<String, Object> result = new HashMap<>();
+		if(dto.getSurvey_info_no() == 0){
+			dto.setFrst_rgtr(loginId);
+			dto.setLast_mdfr(loginId);
+			dto.setSurvey_info_no(surveyRepository.getMaxSurveyInfoNo());
+			surveyRepository.insertSurveyInfo(dto);
+		}
+		else{
+			dto.setLast_mdfr(loginId);
+			surveyRepository.updateSurveyInfo(dto);
+		}
+		result.put("result", "success");
+		return result;
+	}
+
+	@Transactional
+	public Map<String, Object> copySurvey(int surveyNo, int loginId) {
+		Map<String, Object> result = new HashMap<>();
+		try {
+			KbStartersSurveyDTO surveyParam = new KbStartersSurveyDTO();
+			surveyParam.setSurvey_no(surveyNo);
+
+			int insertSurveyNo = surveyRepository.getMaxSurveyNo();
+			KbStartersSurveyDTO survey = surveyRepository.getSurvey(surveyParam);
+			survey.setFrst_rgtr(loginId);
+			survey.setLast_mdfr(loginId);
+			survey.setSurvey_no(insertSurveyNo);
+			surveyRepository.insertSurvey(survey);
+
+			KbStartersSurveyDTO surveyInfo = surveyRepository.getSurveyInfo(surveyParam);
+			if(surveyInfo != null) {
+				surveyInfo.setFrst_rgtr(loginId);
+				surveyInfo.setLast_mdfr(loginId);
+				surveyInfo.setSurvey_no(insertSurveyNo);
+				surveyInfo.setSurvey_info_no(surveyRepository.getMaxSurveyInfoNo());
+				surveyRepository.insertSurveyInfo(surveyInfo);
+			}
+
+			KbStartersQuestionDTO questionParam = new KbStartersQuestionDTO();
+			questionParam.setSurvey_no(surveyNo);
+			List<KbStartersQuestionDTO> questions = surveyRepository.getQuestion(questionParam);
+			for(KbStartersQuestionDTO question : questions){
+				question.setFrst_rgtr(loginId);
+				question.setLast_mdfr(loginId);
+				question.setSurvey_no(insertSurveyNo);
+
+				int insertQuestionNo = surveyRepository.getMaxQuestionNo();
+				question.setQuestion_no(insertQuestionNo);
+
+				surveyRepository.insertQuestion(question);
+
+				List<KbStartersQuestionChoiceDTO> choices = surveyRepository.getQuestionChoice(question);
+				for(KbStartersQuestionChoiceDTO choice : choices){
+					choice.setFrst_rgtr(loginId);
+					choice.setLast_mdfr(loginId);
+					choice.setQuestion_no(insertQuestionNo);
+					choice.setQuestion_choice_no(surveyRepository.getMaxQuestionChoiceNo());
+					surveyRepository.insertQuestionChoice(choice);
+				}
+			}
+
+			result.put("result", "success");
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+		return result;
+	}
 }

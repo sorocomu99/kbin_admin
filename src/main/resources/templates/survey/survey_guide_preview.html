@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <!-- <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KB Innovation HUB</title>
+
+    <!-- 공통 스타일 시트 -->
+    <link rel="stylesheet" th:href="@{/css/swiper-bundle.min.css}">
+    <link rel="stylesheet" th:href="@{/css/flatpickr.min.css}">
+    <link rel="stylesheet" th:href="@{/css/base.css}">
+    <link rel="stylesheet" th:href="@{/css/board.css}">
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+    <link rel="stylesheet" th:href="@{/css/sub.css}">
+
+    <!-- 임시 스크립트: 헤더/푸터 컴포넌트 (작업용 임시 파일이므로 개발단계부터는 스크립트 파일 안에 HTML 코드 사용) -->
+    <script th:src="@{/component/header_preview.js}"></script>
+    <script th:src="@{/component/footer_preview.js}"></script>
+    <script>
+        const ENV = 'dev'
+    </script>
+
+    <!-- 공통 스크립트 -->
+    <script th:src="@{/js/scrollreveal.min.js}"></script>
+    <script th:src="@{/js/gsap.min.js}"></script>
+    <script th:src="@{/js/ScrollToPlugin.min.js}"></script>
+    <script th:src="@{/js/ScrollTrigger.min.js}"></script>
+    <script th:src="@{/js/lenis.min.js}"></script>
+    <script th:src="@{/js/split-type.min.js}"></script>
+    <script th:src="@{/js/echarts.min.js}"></script>
+    <script th:src="@{/js/echarts-wordcloud.min.js}"></script>
+    <script th:src="@{/js/flatpickr.js}"></script>
+    <script th:src="@{/js/ko.js}"></script>
+    <script th:src="@{/js/swiper-bundle.min.js}"></script>
+    <script th:src="@{/js/countUp.umd.js}"></script>
+    <script th:src="@{/js/common.js}"></script>
+    <script th:src="@{/js/jquery-3.6.4.min.js}"></script>
+</head>
+<body>
+<!-- 헤더 -->
+<app-header></app-header>
+
+<!-- 본문 -->
+<main class="main">
+    <div class="section-top section-top--kbstarters">
+        <div class="section-top-wrap">
+            <nav aria-label="Breadcrumb" class="breadcrumb" data-breadcrub-theme="transparent">
+                <ul>
+                    <li class="item"><a href="/static"><i class="icon icon-home"></i><span class="blind">HOME</span></a></li>
+                    <li class="item"><a href="/starters/support/list">KB스타터스</a></li>
+                    <li class="item"><span aria-current="page">지원하기</span></li>
+                </ul>
+            </nav>
+            <h2 class="title">KB의 미래 협업 파트너로 성장할 <br>KB스타터스를 모집합니다.</h2>
+        </div>
+    </div>
+    <div class="kbstarters">
+        <div class="kbstarters-wrap">
+            <p class="heading heading-dot">모집 개요</p>
+            <table class="table">
+                <tbody>
+                <tr>
+                    <th><span class="number">01</span> 모집 구분</th>
+                    <td><p th:text="${info.survey_category}"></p></td>
+                </tr>
+                <tr>
+                    <th><span class="number">02</span> 모집 기간</th>
+                    <td><p th:text="${info.survey_date_range}"></p></td>
+                </tr>
+                <tr>
+                    <th><span class="number">03</span> 모집 대상</th>
+                    <td>
+                        <p class="title" th:text="${info.survey_target_heading}"></p>
+                        <p class="sub" th:text="${info.survey_target_sub}"></p>
+                    </td>
+                </tr>
+                <tr>
+                    <th><span class="number">04</span> 모집 분야</th>
+                    <td>
+                        <p class="title" th:text="${info.survey_field_heading}"></p>
+                        <p class="sub" th:text="${info.survey_field_sub}"></p>
+                    </td>
+                </tr>
+                <tr>
+                    <th><span class="number">05</span> 선발 절차</th>
+                    <td>
+                        <p th:text="${info.survey_select_process}"></p>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="button-wrap">
+                <a class="button button-border" href="javascript:void(0)"><span>지원하기</span></a>
+            </div>
+            <div class="ban">
+                <div class="background"><img class="item" th:src="@{/images/sub/kbstarters/ban-background.jpg}" alt=""></div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- 푸터 -->
+<app-footer></app-footer>
+</body>
+</html>

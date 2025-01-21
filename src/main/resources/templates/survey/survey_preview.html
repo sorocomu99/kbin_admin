@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <!-- <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KB Innovation HUB</title>
+
+    <!-- 공통 스타일 시트 -->
+    <link rel="stylesheet" th:href="@{/css/swiper-bundle.min.css}">
+    <link rel="stylesheet" th:href="@{/css/flatpickr.min.css}">
+    <link rel="stylesheet" th:href="@{/css/base.css}">
+    <link rel="stylesheet" th:href="@{/css/board.css}">
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+    <link rel="stylesheet" th:href="@{/css/sub.css}">
+
+    <!-- 임시 스크립트: 헤더/푸터 컴포넌트 (작업용 임시 파일이므로 개발단계부터는 스크립트 파일 안에 HTML 코드 사용) -->
+    <script th:src="@{/component/header_preview.js}"></script>
+    <script th:src="@{/component/footer_preview.js}"></script>
+    <script>
+        const ENV = 'dev'
+    </script>
+
+    <!-- 공통 스크립트 -->
+    <script th:src="@{/js/scrollreveal.min.js}"></script>
+    <script th:src="@{/js/gsap.min.js}"></script>
+    <script th:src="@{/js/ScrollToPlugin.min.js}"></script>
+    <script th:src="@{/js/ScrollTrigger.min.js}"></script>
+    <script th:src="@{/js/lenis.min.js}"></script>
+    <script th:src="@{/js/split-type.min.js}"></script>
+    <script th:src="@{/js/echarts.min.js}"></script>
+    <script th:src="@{/js/echarts-wordcloud.min.js}"></script>
+    <script th:src="@{/js/flatpickr.js}"></script>
+    <script th:src="@{/js/ko.js}"></script>
+    <script th:src="@{/js/swiper-bundle.min.js}"></script>
+    <script th:src="@{/js/countUp.umd.js}"></script>
+    <script th:src="@{/js/common.js}"></script>
+    <script th:src="@{/js/jquery-3.6.4.min.js}"></script>
+</head>
+<body>
+<!-- 헤더 -->
+<app-header></app-header>
+
+<!-- 본문 -->
+<main class="main">
+    <th:block th:each="question : ${survey.data}">
+        <th:block th:if="${question.question_type_no == 1}">
+            <div class="apply" th:style="${question.question_order == 1 ? 'display: flex;' : 'display: none;'}" th:attr="data-question-order=${question.question_order}">
+                <div class="apply-image">
+                    <img th:src="@{/survey/banner(filename=${surveyDefaultData.banner_filename})}" alt="">
+                </div>
+                <div class="apply-contents">
+                    <div class="survey-form">
+                        <input type="hidden" name="question_type_no" th:value="${question.question_type_no}">
+                        <input type="hidden" name="question_order" th:value="${question.question_order}">
+                        <input type="hidden" name="required" th:value="${question.required_yn}">
+                        <!-- 기본 상태 <form> -->
+                        <div class="context">
+                            <!-- 질문 -->
+                            <h1 class="h5" th:text="${question.question_order}+'. '+${question.question_title}"></h1>
+                            <!-- 상세내용 -->
+                            <p th:text="${question.question_description}"></p>
+                            <!-- 객관식 -->
+                            <div class="input-group">
+                                <div class="radio" th:each="choice : ${question.choices}">
+                                    <input th:id="${'option' + choice.question_choice_no}" th:attr="data-next-question=${choice.move_question_no}" class="input" type="radio" name="answerCheck" th:value="${choice.question_choice_no}">
+                                    <i></i>
+                                    <label th:for="${'option' + choice.question_choice_no}" class="label" th:text="${choice.choice_content}"></label>
+                                </div>
+
+                                <!-- 유효성 체크 문구(form 태그에 need-invalid 클래스가 있으면 아래 문구가 나타납니다) -->
+                                <div class="invalid-feedback"><i class="icon icon-danger"></i>항목을 선택 해주세요.</div>
+                            </div>
+                        </div>
+
+                        <div class="bottom-button">
+                            <button class="button button-border" onclick="checkAndNext(this, false)"><span>다음으로</span> <i class="icon icon-chevron-right"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </th:block>
+        <th:block th:if="${question.question_type_no == 2}">
+            <div class="apply" th:style="${question.question_order == 1 ? 'display: flex;' : 'display: none;'}" th:attr="data-question-order=${question.question_order}">
+                <div class="apply-image">
+                    <img th:src="@{/survey/banner(filename=${surveyDefaultData.banner_filename})}" alt="">
+                </div>
+                <div class="apply-contents">
+                    <div class="survey-form">
+                        <input type="hidden" name="question_type_no" th:value="${question.question_type_no}">
+                        <input type="hidden" name="question_order" th:value="${question.question_order}">
+                        <input type="hidden" name="required" th:value="${question.required_yn}">
+                        <!-- 기본 상태 <form> -->
+                        <div class="context">
+                            <!-- 질문 -->
+                            <h1 class="h5" th:text="${question.question_order}+'. '+${question.question_title}"></h1>
+                            <!-- 상세내용 -->
+                            <p th:text="${question.question_description}"></p>
+                            <!-- 주관식 -->
+                            <input class="input" type="text" name="answer">
+                            <!-- 유효성 체크 문구(form 태그에 need-invalid 클래스가 있으면 아래 문구가 나타납니다) -->
+                            <div class="invalid-feedback"><i class="icon icon-danger"></i>항목을 입력해주세요.</div>
+                        </div>
+
+                        <div class="bottom-button">
+                            <button class="button button-border" onclick="checkAndNext(this, false)"><span>다음으로</span> <i class="icon icon-chevron-right"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </th:block>
+        <th:block th:if="${question.question_type_no == 3}">
+            <div class="apply" th:style="${question.question_order == 1 ? 'display: flex;' : 'display: none;'}" th:attr="data-question-order=${question.question_order}">
+                <div class="apply-image">
+                    <img th:src="@{/survey/banner(filename=${surveyDefaultData.banner_filename})}" alt="">
+                </div>
+                <div class="apply-contents">
+                    <div class="survey-form">
+                        <input type="hidden" name="question_type_no" th:value="${question.question_type_no}">
+                        <input type="hidden" name="question_order" th:value="${question.question_order}">
+                        <input type="hidden" name="required" th:value="${question.required_yn}">
+                        <!-- 기본 상태 <form> -->
+                        <div class="context">
+                            <!-- 질문 -->
+                            <h1 class="h5" th:text="${question.question_order}+'. '+${question.question_title}"></h1>
+                            <!-- 상세내용 -->
+                            <p th:text="${question.question_description}"></p>
+                            <!-- 첨부파일 -->
+                            <div class="file-upload">
+                                <input id="fileUpload" class="file-input" type="file" name="file[]">
+                                <div class="input-wrap">
+                                    <span id="fileName" class="input file-name"></span>
+                                    <i class="delete"></i>
+                                </div>
+                                <label class="button button-border" for="fileUpload"><i class="icon icon-upload"></i><span>파일 찾기</span></label>
+                            </div>
+                            <!-- 유효성 체크 문구(form 태그에 need-invalid 클래스가 있으면 아래 문구가 나타납니다) -->
+                            <div class="invalid-feedback"><i class="icon icon-danger"></i>파일을 첨부해주세요.</div>
+                        </div>
+                        <div class="bottom-button">
+                            <button class="button button-border" onclick="checkAndNext(this, false)"><span>다음으로</span> <i class="icon icon-chevron-right"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </th:block>
+        <th:block th:if="${question.question_type_no == 4}">
+            <div class="apply" th:style="${question.question_order == 1 ? 'display: flex;' : 'display: none;'}" th:attr="data-question-order=${question.question_order}">
+                <div class="apply-image">
+                    <img th:src="@{/survey/banner(filename=${surveyDefaultData.banner_filename})}" alt="">
+                </div>
+                <div class="apply-contents">
+                    <input type="hidden" name="question_type_no" th:value="${question.question_type_no}">
+                    <input type="hidden" name="question_order" th:value="${question.question_order}">
+                    <input type="hidden" name="required" value="N">
+                    <div class="context" th:utext="${question.question_description}"></div>
+                    <div class="bottom-button">
+                        <button class="button button-border" onclick="checkAndNext(this, true)"><span>다음으로</span> <i class="icon icon-chevron-right"></i></button>
+                    </div>
+                </div>
+            </div>
+        </th:block>
+    </th:block>
+    <div id="modalComplete" class="modal-container">
+        <div class="modal-wrapper">
+            <div class="modal">
+                <div class="modal-body">
+                    <p class="heading">제출하기</p>
+                    <p class="title p5">모든 접수 단계가 완료되었습니다.</p>
+                    <p class="p">최종 제출 하시겠습니까? <br>예를 누르면, 입력 내용으로 최종 접수됩니다.</p>
+                    <div class="button-wrap">
+                        <button class="button button-border" type="button" onclick="closeModal('modalComplete')">아니오</button>
+                        <button class="button button-primary" type="button" onclick="finalSubmit()">예</button>
+                    </div>
+                </div>
+                <div class="modal-foot">
+                    <a class="close" href="javascript:void(0);" onclick="closeModal('modalComplete')"><span class="blind">팝업 닫기</span></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- 푸터 -->
+<app-footer></app-footer>
+
+<script th:inline="javascript">
+    let maxQuestionOrder = [[${survey.data.get(survey.data.size() - 1).question_order}]];
+    function checkAndNext(el, isEditorContent){
+        let $this = $(el);
+        let $form = $this.parent().parent();
+        let currentQuestionOrder = $form.find("input[name='question_order']").val();
+        if(isEditorContent) {
+            changeContent(currentQuestionOrder, parseInt(currentQuestionOrder) + 1);
+        }
+        else{
+            let questionTypeNo = $form.find("input[name='question_type_no']").val();
+            let required = $form.find("input[name='required']").val();
+            if(questionTypeNo == 1){
+                if(required === 'Y'){
+                    let checked = $form.find("input[name='answerCheck']:checked").val();
+                    if(!checked){
+                        $form.addClass("need-invalid");
+                        return;
+                    }
+                }
+                let nextQuestionOrder = $form.find("input[name='answerCheck']:checked").attr('data-next-question');
+                if(!nextQuestionOrder || nextQuestionOrder == 0){
+                    nextQuestionOrder = parseInt(currentQuestionOrder) + 1;
+                }
+                changeContent(currentQuestionOrder, nextQuestionOrder);
+            }
+            else if (questionTypeNo == 2){
+                if(required === 'Y'){
+                    let answer = $form.find("input[name='answer']").val();
+                    if(answer === ''){
+                        $form.addClass("need-invalid");
+                        return;
+                    }
+                }
+                changeContent(currentQuestionOrder, parseInt(currentQuestionOrder) + 1);
+            }
+            else if (questionTypeNo == 3){
+                if(required === 'Y'){
+                    let file = $form.find("input[name='file[]']").val();
+                    if(file === ''){
+                        $form.addClass("need-invalid");
+                        return;
+                    }
+                }
+                changeContent(currentQuestionOrder, parseInt(currentQuestionOrder) + 1);
+            }
+            else if (questionTypeNo == 4){
+                changeContent(currentQuestionOrder, parseInt(currentQuestionOrder) + 1);
+            }
+        }
+    }
+
+    function changeContent(current, next){
+        if(next > maxQuestionOrder || next == 99){
+            openModal('modalComplete');
+            return;
+        }
+
+        let $current = $('.apply[data-question-order=' + current + ']');
+        let $next = $('.apply[data-question-order=' + next + ']');
+        $current.css("display", "none");
+        $next.css("display", "flex");
+
+        window.location.hash = `step-${next}`;
+    }
+
+    window.addEventListener("hashchange", function () {
+        let hash = window.location.hash;
+
+        if (hash.startsWith("#step-")) {
+            let step = parseInt(hash.replace("#step-", ""));
+
+            if (!isNaN(step)) {
+                let $currentVisible = $('.apply:visible'); // 현재 보이는 요소 찾기
+                let currentStep = parseInt($currentVisible.attr("data-question-order"));
+
+                if (currentStep !== step) {
+                    changeContent(currentStep, step);
+                }
+            }
+        }
+    });
+
+    // 페이지 로드 시 초기화
+    $(document).ready(function () {
+        let hash = window.location.hash;
+
+        if (hash.startsWith("#step-")) {
+            let step = parseInt(hash.replace("#step-", ""));
+            if (!isNaN(step)) {
+                // 초기 로드 시 해시가 있으면 해당 스텝으로 이동
+                changeContent(null, step);
+            }
+        } else {
+            // 초기 스텝으로 설정
+            window.location.hash = "step-1";
+        }
+    });
+
+
+</script>
+
+</body>
+</html>
