@@ -1,7 +1,6 @@
 <!doctype html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragment/config :: configFragment"></head>
-<script lang="javascript" src="dist/xlsx.full.min.js"></script>
 <body>
 <div class="wrap">
     <div th:replace="fragment/header :: headerFragment"></div>
@@ -48,7 +47,10 @@
                                         <a href="javascript:" class="btn btn-outline-danger">
                                             <i data-feather="trash-2"></i> 선택 삭제
                                         </a>
-                                        <a href="javascript:" class="btn btn-outline-dark">
+                                        <a href="javascript:exportExcel()" class="btn btn-outline-dark">
+                                            <i data-feather="download"></i> 전체 엑셀 다운로드
+                                        </a>
+                                        <a href="javascript:exportExcel(true)" class="btn btn-outline-dark">
                                             <i data-feather="download"></i> 선택 엑셀 다운로드
                                         </a>
                                         <a href="javascript:" class="btn btn-outline-dark">
@@ -92,7 +94,7 @@
                                     <tr th:unless="${applyList == null or applyList.isEmpty()}"
                                         th:each="list : ${applyList}">
                                         <td>
-                                            <input class="form-check-input" type="checkbox" th:value="${list.apply_no}">
+                                            <input class="form-check-input" type="checkbox" name="applyCheck" th:value="${list.apply_no}">
                                         </td>
                                         <td th:text="${list.company_name}">-</td>
                                         <td th:text="${list.email}">-</td>
@@ -174,12 +176,11 @@
     </main>
 </div>
 
+<script th:src="@{/js/xlsx.full.min.js}"></script>
+<script th:src="@{/js/FileSaver.min.js}"></script>
 <script th:src="@{/js/admin.js}"></script>
 <script th:inline="javascript">
-    /*
-    var wb = XLSX.utils.table_to_book(document.getElementById('mytable'), {sheet:"지원서 접수 관리",raw:true});
-    XLSX.writeFile(wb, ('지원서 접수 관리.xlsx'));
-     */
+
     // 페이지 로드 시 실행
     window.onload = function () {
         // 페이지 로드 시 메시지 확인 및 알림 표시
@@ -187,6 +188,43 @@
         const msg = /*[[${msg}]]*/ '';
         if (msg) alert(msg);
     }
+
+    function exportExcel(onlySelected = false) {
+        const table = document.getElementById("mytable");
+        const excludeCols = [0, 3, 4, $("#mytable thead th").length - 1];
+        const tableData = [];
+
+        // 헤더 추가
+        const headerRow = [];
+        for (let i = 0; i < table.tHead.rows[0].cells.length; i++) {
+            if (!excludeCols.includes(i)) {
+                headerRow.push(table.tHead.rows[0].cells[i].innerText.trim());
+            }
+        }
+        tableData.push(headerRow);
+
+        // 본문 데이터 추가
+        for (let row of table.tBodies[0].rows) {
+            // 선택된 행만 내보내기 (onlySelected가 true일 경우)
+            if (onlySelected && !row.cells[0]?.querySelector('input[type="checkbox"]').checked) {
+                continue;
+            }
+
+            const rowData = [];
+            for (let i = 0; i < row.cells.length; i++) {
+                if (!excludeCols.includes(i)) {
+                    rowData.push(row.cells[i].innerText.trim());
+                }
+            }
+            tableData.push(rowData);
+        }
+
+        const worksheet = XLSX.utils.aoa_to_sheet(tableData);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+        XLSX.writeFile(workbook, "survey_export.xlsx");
+    }
+
 
     function updateAlert(el, applyNo) {
         let status = $(el).parent().parent().find('select[name=apply_status]').val();

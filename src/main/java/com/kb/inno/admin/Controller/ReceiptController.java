@@ -27,6 +27,7 @@ import com.kb.inno.admin.Service.ReceiptService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -210,6 +211,18 @@ public class ReceiptController {
     public ResponseEntity<Map<String, Object>> deleteApply(Integer applyNo) {
         return ResponseEntity.ok(surveyService.deleteApply(applyNo));
     }
+
+    @GetMapping("/excelExport/{surveyNo}")
+    public void applyAllExcelExport(@PathVariable int surveyNo, HttpServletResponse response) {
+        response.setContentType("application/octet-stream");
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=survey_export.xlsx";
+        response.setHeader(headerKey, headerValue);
+
+        List<KbStartersApplyDTO> applyList = surveyService.getApplyList(surveyNo, null);
+
+    }
+
     
     
     

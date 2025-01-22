@@ -257,7 +257,9 @@
             </choose>
         </if>
         ORDER BY apply.FRST_REG_DT DESC
-        OFFSET #{search.start} ROWS FETCH NEXT 10 ROWS ONLY
+        <if test="search != null">
+            OFFSET #{search.start} ROWS FETCH NEXT 10 ROWS ONLY
+        </if>
     </select>
 
     <select id="getApplyAnswers" parameterType="com.kb.inno.admin.DTO.KbStartersApplyDTO"
