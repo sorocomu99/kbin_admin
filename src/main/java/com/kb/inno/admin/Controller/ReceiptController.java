@@ -1,7 +1,6 @@
 package com.kb.inno.admin.Controller;
 
 
-
 import com.kb.inno.admin.DAO.KbStartersSurvey;
 import com.kb.inno.admin.DTO.*;
 import com.kb.inno.admin.Service.SurveyService;
@@ -46,14 +45,13 @@ public class ReceiptController {
     private final ReceiptService receiptService;
 
     private final SurveyService surveyService;
-    
-    
+
 
     @ResponseBody
     @PostMapping("/receiptDelete")
     public String receiptDelete(@RequestParam("srvy_sn") int srvy_sn) {
-    	ReceiptDTO receiptDTO = new ReceiptDTO();
-    	receiptDTO.setSrvy_sn(srvy_sn);
+        ReceiptDTO receiptDTO = new ReceiptDTO();
+        receiptDTO.setSrvy_sn(srvy_sn);
         receiptService.receiptDelete(receiptDTO);
         return "success";
     }
@@ -61,8 +59,8 @@ public class ReceiptController {
     @ResponseBody
     @PostMapping("/deleteCancel")
     public String deleteCancel(@RequestParam("srvy_sn") int srvy_sn) {
-    	ReceiptDTO receiptDTO = new ReceiptDTO();
-    	receiptDTO.setSrvy_sn(srvy_sn);
+        ReceiptDTO receiptDTO = new ReceiptDTO();
+        receiptDTO.setSrvy_sn(srvy_sn);
         receiptService.deleteCancel(receiptDTO);
         return "success";
     }
@@ -70,8 +68,8 @@ public class ReceiptController {
     @ResponseBody
     @PostMapping("/tempDelete")
     public String tempDelete(@RequestParam("srvy_sn") int srvy_sn) {
-    	ReceiptDTO receiptDTO = new ReceiptDTO();
-    	receiptDTO.setSrvy_sn(srvy_sn);
+        ReceiptDTO receiptDTO = new ReceiptDTO();
+        receiptDTO.setSrvy_sn(srvy_sn);
         receiptService.tempDelete(receiptDTO);
         return "success";
     }
@@ -79,15 +77,15 @@ public class ReceiptController {
     @ResponseBody
     @PostMapping("/updateAlert")
     public String updateAlert(@RequestParam("stts") String stts,
-    						 @RequestParam("conm") String conm) {
-    	ReceiptListDTO receiptListDTO = new ReceiptListDTO();
-    	receiptListDTO.setPrgrs_stts(stts);
-    	receiptListDTO.setConm(conm);
-    	
-    	System.out.println("/updateAlert : prgrs_stts ["+stts+"]  conm ["+conm+"]");
-    	System.out.println("/updateAlert : prgrs_stts ["+receiptListDTO.getPrgrs_stts()+"]  conm ["+receiptListDTO.getConm()+"]");
-    	
-    	receiptService.updateAlert(receiptListDTO);
+                              @RequestParam("conm") String conm) {
+        ReceiptListDTO receiptListDTO = new ReceiptListDTO();
+        receiptListDTO.setPrgrs_stts(stts);
+        receiptListDTO.setConm(conm);
+
+        System.out.println("/updateAlert : prgrs_stts [" + stts + "]  conm [" + conm + "]");
+        System.out.println("/updateAlert : prgrs_stts [" + receiptListDTO.getPrgrs_stts() + "]  conm [" + receiptListDTO.getConm() + "]");
+
+        receiptService.updateAlert(receiptListDTO);
         return "success";
     }
 
@@ -95,6 +93,12 @@ public class ReceiptController {
     @ResponseBody
     public ResponseEntity<Map<String, Object>> updateApplyStatus(int applyNo, String status) {
         return ResponseEntity.ok(surveyService.updateApplyStatus(applyNo, status));
+    }
+
+    @PostMapping("/updateStatusList")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> updateStatusList(String status, @RequestParam(name = "applyNos[]") List<Integer> applyNos) {
+        return ResponseEntity.ok(surveyService.updateStatusList(applyNos, status));
     }
 
     @GetMapping("/list/{menuId}")
@@ -116,8 +120,8 @@ public class ReceiptController {
 
     @GetMapping("/receiptList/{menuId}")
     public ModelAndView receiptList(@PathVariable int menuId, int surveyNo, SearchDTO searchDTO) {
-    	ModelAndView mv = new ModelAndView("receipt/receipt_list");
-    	mv.addObject("menuId", menuId);
+        ModelAndView mv = new ModelAndView("receipt/receipt_list");
+        mv.addObject("menuId", menuId);
 
         List<KbStartersApplyDTO> applyList = surveyService.getApplyList(surveyNo, searchDTO);
         mv.addObject("applyList", applyList);
@@ -129,10 +133,10 @@ public class ReceiptController {
         mv.addObject("questionList", questionList);
 
         int colCount = 0;
-        for(KbStartersQuestionDTO question : questionList) {
-        	if(question.getQuestion_type_no() != 4) {
-        		colCount++;
-        	}
+        for (KbStartersQuestionDTO question : questionList) {
+            if (question.getQuestion_type_no() != 4) {
+                colCount++;
+            }
         }
 
         mv.addObject("colCount", colCount);
@@ -141,10 +145,10 @@ public class ReceiptController {
     }
 
     @GetMapping("/downloadUserApplyFile")
-    public ResponseEntity<Resource> downloadUserApplyFile(int applyAnswerNo){
+    public ResponseEntity<Resource> downloadUserApplyFile(int applyAnswerNo) {
         KbStartersApplyAnswerDTO applyAnswer = surveyService.getApplyAnswer(applyAnswerNo);
 
-        if(applyAnswer.getAnswer_filename() == null || applyAnswer.getAnswer_filename().equals("")) {
+        if (applyAnswer.getAnswer_filename() == null || applyAnswer.getAnswer_filename().equals("")) {
             return ResponseEntity.notFound().build();
         }
 
@@ -179,6 +183,7 @@ public class ReceiptController {
 
     /**
      * 지원서 임시 보관함 리스트
+     *
      * @param menuId
      * @param model
      * @param page
@@ -186,11 +191,11 @@ public class ReceiptController {
      */
     @GetMapping("/receiptTrash/{menuId}")
     public String receiptTrashList(@PathVariable int menuId, Model model, @RequestParam(value = "page", required = false, defaultValue = "1") int page) {
-    	receiptService.selecTemptList(menuId, page, model);
-    		
+        receiptService.selecTemptList(menuId, page, model);
+
         return directory + "/receipt_trash";
     }
-    
+
 
     @RequestMapping("/sendMail/{menuId}")
     public String insert(@PathVariable int menuId, Model model) {
@@ -200,8 +205,8 @@ public class ReceiptController {
 
     @GetMapping("/receiptMail/{menuId}")
     public String receiptMailList(@PathVariable int menuId, Model model, @RequestParam(value = "page", required = false, defaultValue = "1") int page) {
-    	receiptService.selectList(menuId, page, model);
-    		
+        receiptService.selectList(menuId, page, model);
+
         return directory + "/receipt_mail";
     }
 
@@ -212,19 +217,5 @@ public class ReceiptController {
         return ResponseEntity.ok(surveyService.deleteApply(applyNo));
     }
 
-    @GetMapping("/excelExport/{surveyNo}")
-    public void applyAllExcelExport(@PathVariable int surveyNo, HttpServletResponse response) {
-        response.setContentType("application/octet-stream");
-        String headerKey = "Content-Disposition";
-        String headerValue = "attachment; filename=survey_export.xlsx";
-        response.setHeader(headerKey, headerValue);
-
-        List<KbStartersApplyDTO> applyList = surveyService.getApplyList(surveyNo, null);
-
-    }
-
-    
-    
-    
 
 }

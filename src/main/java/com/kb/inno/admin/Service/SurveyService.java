@@ -1775,4 +1775,21 @@ public class SurveyService {
 		}
 		return result;
 	}
+
+	@Transactional
+	public Map<String, Object> updateStatusList(List<Integer> applyNoList, String status) {
+		Map<String, Object> result = new HashMap<>();
+		try {
+			KbStartersApplyDTO apply = new KbStartersApplyDTO();
+			apply.setApply_status(status);
+			for(int applyNo : applyNoList){
+				apply.setApply_no(applyNo);
+				surveyRepository.updateApplyStatus(apply);
+			}
+			result.put("result", "success");
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+		return result;
+	}
 }

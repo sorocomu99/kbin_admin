@@ -20,7 +20,7 @@
                                         <div class="d-flex align-items-center">
                                             <div class="input-group">
                                                 <div class="title">처리상태</div>
-                                                <select class="form-select" aria-label="" name="type">
+                                                <select id="filterType" class="form-select" aria-label="" name="type">
                                                     <option value="">전체</option>
                                                     <option value="접수" th:selected="${search.type} == '접수'">접수</option>
                                                     <option value="1차" th:selected="${search.type} == '1차'">1차</option>
@@ -41,9 +41,9 @@
                                 </div>
                                 <div class="col-auto">
                                     <div class="button-wrap d-flex justify-content-end">
-
-                                        <a th:href="@{/receipt/list/{menuId}(menuId=${menuId})}"
-                                           class="btn btn-outline-primary">목록보기</a>
+                                        <a href="javascript:selectChangeStatus()" class="btn btn-outline-dark">
+                                            선택 상태 변경
+                                        </a>
                                         <a href="javascript:" class="btn btn-outline-danger">
                                             <i data-feather="trash-2"></i> 선택 삭제
                                         </a>
@@ -60,6 +60,8 @@
                                            class="btn btn-outline-dark">
                                             <i data-feather="mail"></i> 메일 발송
                                         </a>
+                                        <a th:href="@{/receipt/list/{menuId}(menuId=${menuId})}"
+                                           class="btn btn-outline-primary">목록보기</a>
                                     </div>
                                 </div>
                             </div>
@@ -187,6 +189,59 @@
         // 수정 및 등록 시 띄울 알림창
         const msg = /*[[${msg}]]*/ '';
         if (msg) alert(msg);
+    }
+
+    $("#checkAll").click(function () {
+        $("#mytable tbody input[type=checkbox]").prop('checked', $(this).prop('checked'));
+    });
+
+    $("#mytable tbody input[type=checkbox]").click(function () {
+        if ($("#mytable tbody input[type=checkbox]:checked").length == $("#mytable tbody input[type=checkbox]").length) {
+            $("#checkAll").prop('checked', true);
+        } else {
+            $("#checkAll").prop('checked', false);
+        }
+    });
+
+    function selectChangeStatus(){
+        let status = $("#filterType").val();
+        if(!status || status === ''){
+            alert("변경할 상태를 선택해주세요.");
+            return;
+        }
+
+        let applyNos = [];
+        $("input[name='applyCheck']:checked").each(function(){
+            applyNos.push($(this).val());
+        });
+
+        if(applyNos.length === 0){
+            alert("선택된 항목이 없습니다.");
+            return;
+        }
+
+        let result = confirm("선택된 항목의 상태를 변경하시겠습니까?");
+
+        if(result){
+            $.ajax({
+                url: /*[[@{/receipt/updateStatusList}]]*/, // 요청 URL
+                type: 'POST', // HTTP 메서드
+                data: {"applyNos[]": applyNos, "status": status}, // 보내는 데이터
+                success: function (response) {
+                    if(response.result == 'success'){
+                        alert("처리 상태 변경에 성공하였습니다.");
+                        window.location.reload();
+                    }
+                    else{
+                        alert("처리 상태 변경에 실패하였습니다.");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    alert("처리 상태 변경에 실패하였습니다.");
+                    console.error('Error:', error);
+                }
+            });
+        }
     }
 
     function exportExcel(onlySelected = false) {
