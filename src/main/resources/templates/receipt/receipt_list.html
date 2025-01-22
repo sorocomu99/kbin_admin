@@ -44,7 +44,7 @@
                                         <a href="javascript:selectChangeStatus()" class="btn btn-outline-dark">
                                             선택 상태 변경
                                         </a>
-                                        <a href="javascript:" class="btn btn-outline-danger">
+                                        <a href="javascript:selectDelete()" class="btn btn-outline-danger">
                                             <i data-feather="trash-2"></i> 선택 삭제
                                         </a>
                                         <a href="javascript:exportExcel()" class="btn btn-outline-dark">
@@ -191,6 +191,41 @@
         // 수정 및 등록 시 띄울 알림창
         const msg = /*[[${msg}]]*/ '';
         if (msg) alert(msg);
+    }
+
+    function selectDelete(){
+        let applyNos = [];
+        $("input[name='applyCheck']:checked").each(function(){
+            applyNos.push($(this).val());
+        });
+
+        if(applyNos.length === 0){
+            alert("선택된 항목이 없습니다.");
+            return;
+        }
+
+        let result = confirm("선택된 항목을 삭제하시겠습니까?");
+
+        if(result){
+            $.ajax({
+                url: /*[[@{/receipt/deleteApplyList}]]*/, // 요청 URL
+                type: 'POST', // HTTP 메서드
+                data: {"applyNos[]": applyNos}, // 보내는 데이터
+                success: function (response) {
+                    if(response.result == 'success'){
+                        alert("삭제에 성공하였습니다.");
+                        window.location.reload();
+                    }
+                    else{
+                        alert("삭제에 실패하였습니다.");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    alert("삭제를 실패하였습니다.");
+                    console.error('Error:', error);
+                }
+            });
+        }
     }
 
     function selectMailSend(){

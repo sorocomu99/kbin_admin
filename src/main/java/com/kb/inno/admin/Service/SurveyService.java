@@ -1762,6 +1762,23 @@ public class SurveyService {
 	}
 
 	@Transactional
+	public Map<String, Object> deleteApplyList(List<Integer> applyNoList) {
+		Map<String, Object> result = new HashMap<>();
+		try {
+			KbStartersApplyDTO apply = new KbStartersApplyDTO();
+			for(int applyNo : applyNoList){
+				apply.setApply_no(applyNo);
+				surveyRepository.deleteApply(apply);
+				surveyRepository.deleteApplyAnswerByApply(apply);
+			}
+			result.put("result", "success");
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+		return result;
+	}
+
+	@Transactional
 	public Map<String, Object> updateApplyStatus(int applyNo, String status) {
 		Map<String, Object> result = new HashMap<>();
 		try {

@@ -231,5 +231,11 @@ public class ReceiptController {
         return ResponseEntity.ok(surveyService.deleteApply(applyNo));
     }
 
+    @PostMapping("/deleteApplyList")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> deleteApplyList(@RequestParam(name = "applyNos[]") List<Integer> applyNos) {
+        return ResponseEntity.ok(surveyService.deleteApplyList(applyNos));
+    }
+
 
 }
