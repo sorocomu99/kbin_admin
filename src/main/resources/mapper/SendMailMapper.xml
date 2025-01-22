@@ -96,4 +96,25 @@
          WHERE SEND_YMD = ${send_ymd}
            AND SEND_MAIL_SN = ${send_mail_sn}
     </delete>
+
+    <insert id="saveHistory" parameterType="com.kb.inno.admin.DTO.SendMailDTO">
+        INSERT INTO KB_SEND_MAIL_HIST
+        (
+            SEND_YMD
+          , SEND_MAIL_SN
+          , MAIL_RCVR
+          , MAIL_TTL
+          , MAIL_CN
+          , FRST_REG_DT
+        )
+        VALUES
+        (
+            #{send_ymd}
+          , #{send_mail_sn}
+          , #{mail_rcvr}
+          , #{mail_ttl}
+          , #{mail_cn}
+          , SYSDATE
+        )
+    </insert>
 </mapper>

@@ -53,7 +53,7 @@
                                         <a href="javascript:exportExcel(true)" class="btn btn-outline-dark">
                                             <i data-feather="download"></i> 선택 엑셀 다운로드
                                         </a>
-                                        <a href="javascript:" class="btn btn-outline-dark">
+                                        <a href="javascript:selectMailSend()" class="btn btn-outline-dark">
                                             <i data-feather="mail"></i> 선택 메일 발송
                                         </a>
                                         <a th:href="@{/receipt/sendMail/{menuId}(menuId=${menuId})}"
@@ -99,7 +99,9 @@
                                             <input class="form-check-input" type="checkbox" name="applyCheck" th:value="${list.apply_no}">
                                         </td>
                                         <td th:text="${list.company_name}">-</td>
-                                        <td th:text="${list.email}">-</td>
+                                        <td>
+                                            <span class="apply-email" th:text="${list.email}"></span>
+                                        </td>
                                         <td>
                                             <select name="apply_status" class="form-select form-select-sm">
                                                 <option value="접수" th:selected="${list.apply_status} == '접수'">접수
@@ -189,6 +191,23 @@
         // 수정 및 등록 시 띄울 알림창
         const msg = /*[[${msg}]]*/ '';
         if (msg) alert(msg);
+    }
+
+    function selectMailSend(){
+        let receivers = [];
+        $("input[name='applyCheck']:checked").each(function(){
+            receivers.push($(this).parent().parent().find(".apply-email").text());
+        });
+
+        if(receivers.length === 0){
+            alert("선택된 항목이 없습니다.");
+            return;
+        }
+
+        let moveUrl = /*[[@{/receipt/sendMail/{menuId}(menuId=${menuId})}]]*/;
+        moveUrl += "?receivers=" + receivers.join(",");
+
+        window.open(moveUrl, "_blank");
     }
 
     $("#checkAll").click(function () {

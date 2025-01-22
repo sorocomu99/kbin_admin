@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragment/config :: configFragment"></head>
 
 <body>
@@ -11,10 +11,10 @@
                 <div class="row">
                     <div class="col">
                         <div class="paper">
-                            <h2 class="h4">메인 비주얼 등록</h2>
+                            <h2 class="h4">메일 발송</h2>
                             <div class="mt-4">
                             	<input type="hidden" name="menu_id" th:value="${menuId}"/>
-                                <form action="">
+                                <form th:action="@{/receipt/sendMail}" enctype="multipart/form-data" method="post">
                                     <table class="table table-bordered align-middle">
                                         <tbody>
                                             <tr>
@@ -22,26 +22,37 @@
                                                 <td>최고관리자(hwan@kbfg.com)</td>
                                             </tr>
                                             <tr>
+                                                <th class="bg-light">받는사람</th>
+                                                <td>
+                                                    <input th:if="${receivers != null and receivers.size() != 0}" type="text" name="receivers[]" class="form-control" placeholder="받는사람 이메일 주소" th:value="${#strings.listJoin(receivers, ',')}">
+                                                    <input th:unless="${receivers != null and receivers.size() != 0}" type="text" name="receivers[]" class="form-control" placeholder="받는사람 이메일 주소">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th class="bg-light">메일제목</th>
+                                                <td>
+                                                    <input type="text" name="subject" class="form-control">
+                                                </td>
+                                            </tr>
+                                            <tr>
                                                 <th class="bg-light">메일 내용</th>
                                                 <td>
                                                     <p>※ 여기 적는 내용은 이메일을 통해 고객에게 발송됩니다.</p>
-                                                    <textarea class="form-control" id="formText" rows="2"></textarea>
+                                                    <textarea name="content" class="form-control" id="formText" rows="2"></textarea>
                                                 </td>
                                             </tr>
-                                            <!-- 
                                             <tr>
                                                 <th class="bg-light">첨부 파일</th>
                                                 <td>
                                                     <div class="d-flex align-items-center">
-                                                        <input class="form-control w-auto" type="file" id="formFile">
+                                                        <input name="attachment" class="form-control w-auto" type="file" id="attachment">
                                                     </div>
                                                 </td>
                                             </tr>
-                                             -->
                                         </tbody>
                                     </table>
                                     <div class="button-container">
-                                        <button type="submit" class="btn btn-primary">등록하기</button>
+                                        <button type="submit" class="btn btn-primary">메일전송</button>
                                         <a href="javascript:" class="btn btn-outline-primary" onclick="history.back();">목록보기</a>
                                     </div>
                                 </form>
@@ -54,75 +65,6 @@
     </div>
     
     <script th:src="@{/js/admin.js}"></script>
-    <script th:inline="javascript">
-        // 페이지 로드 시 실행
-        window.onload = function () {
-            // 페이지 로드 시 메시지 확인 및 알림 표시
-            // 수정 및 등록 시 띄울 알림창
-            const msg = /*[[${msg}]]*/ '';
-            if (msg) alert(msg);
-        }
-        // 수정 페이지 이동
-        function guidePage(srvy_sn, menuId) {
-            // 빈 form 전달
-            let pageMoveForm = document.createElement('form');
-            // 인수 값 전달
-            let obj = document.createElement('input');
-            obj.setAttribute('type', 'hidden');
-            obj.setAttribute('name', 'srvy_sn');
-            obj.setAttribute('value', srvy_sn);
-            pageMoveForm.appendChild(obj);
-
-            let obj2 = document.createElement('input');
-            obj2.setAttribute('type', 'hidden');
-            obj2.setAttribute('name', 'menuId');
-            obj2.setAttribute('value', menuId);
-            pageMoveForm.appendChild(obj2);
-
-            pageMoveForm.setAttribute('method', 'post');
-            pageMoveForm.setAttribute('action', '/kbinnovationhub_devadm/survey/guide');
-            document.body.appendChild(pageMoveForm);
-            pageMoveForm.submit();
-        }
-
-        function deleteAlert(srvy_sn) {
-            let result = confirm("정말 삭제 하시겠습니까?");
-            if (result) {
-                $.ajax({
-                    url: /*[[@{/survey/exmnDelete}]]*/, // 요청 URL
-                    type: 'POST', // HTTP 메서드
-                    data: { srvy_sn: srvy_sn }, // 보내는 데이터
-                    success: function(response) {
-                        alert("삭제에 성공하였습니다.");
-                        window.location.reload();
-                    },
-                    error: function(xhr, status, error) {
-                        alert("삭제를 실패하였습니다.");
-                        console.error('Error:', error);
-                    }
-                });
-            }
-        }
-
-        function copyAlert(srvy_sn) {
-            let result = confirm("정말 삭제 하시겠습니까?");
-            if (result) {
-                $.ajax({
-                    url: /*[[@{/survey/exmnDelete}]]*/, // 요청 URL
-                    type: 'POST', // HTTP 메서드
-                    data: { srvy_sn: srvy_sn }, // 보내는 데이터
-                    success: function(response) {
-                        alert("삭제에 성공하였습니다.");
-                        window.location.reload();
-                    },
-                    error: function(xhr, status, error) {
-                        alert("삭제를 실패하였습니다.");
-                        console.error('Error:', error);
-                    }
-                });
-            }
-        }
-    </script>
 
 </body>
 </html>

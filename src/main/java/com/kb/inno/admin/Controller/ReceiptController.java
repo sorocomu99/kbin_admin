@@ -4,8 +4,10 @@ package com.kb.inno.admin.Controller;
 import com.kb.inno.admin.DAO.KbStartersSurvey;
 import com.kb.inno.admin.DTO.*;
 import com.kb.inno.admin.Service.SurveyService;
+import com.kb.inno.common.MailUtil;
 import com.kb.inno.common.Pagination;
 import org.apache.commons.codec.binary.Base64;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
@@ -24,8 +26,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.kb.inno.admin.Service.ReceiptService;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
@@ -198,17 +202,27 @@ public class ReceiptController {
 
 
     @RequestMapping("/sendMail/{menuId}")
-    public String insert(@PathVariable int menuId, Model model) {
-        model.addAttribute("menuId", menuId);
-        return directory + "/receipt_mail";
+    public ModelAndView sendMail(@RequestParam(value = "receivers", required = false) List<String> receivers) {
+        ModelAndView mv = new ModelAndView("receipt/receipt_mail");
+        mv.addObject("receivers", receivers);
+        return mv;
     }
 
-    @GetMapping("/receiptMail/{menuId}")
-    public String receiptMailList(@PathVariable int menuId, Model model, @RequestParam(value = "page", required = false, defaultValue = "1") int page) {
-        receiptService.selectList(menuId, page, model);
-
-        return directory + "/receipt_mail";
+    @PostMapping("/sendMail")
+    public ModelAndView sendMail(@RequestParam("receivers[]") List<String> receivers, String subject, String content, MultipartFile attachment, HttpServletRequest request) {
+        String referer = request.getHeader("Referer");
+        ModelAndView mv = new ModelAndView("redirect:" + referer);
+        MailUtil mailUtil = new MailUtil();
+        if(mailUtil.sendMail(receivers, subject, content, attachment)){
+            return mv;
+        }
+        else{
+            mv.setViewName("alertBack");
+            mv.addObject("message", "메일 전송에 실패하였습니다.");
+            return mv;
+        }
     }
+
 
 
     @PostMapping("/deleteApply")
