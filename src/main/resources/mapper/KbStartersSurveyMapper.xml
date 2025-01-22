@@ -294,11 +294,79 @@
                WHERE SURVEY_NO = #{survey_no})
     </delete>
 
+    <select id="getApplyBySurvey" resultType="com.kb.inno.admin.DTO.KbStartersApplyDTO">
+        SELECT *
+        FROM KB_STARTERS_APPLY
+        WHERE SURVEY_NO = #{survey.survey_no}
+        <if test="search.type != null and search.type != ''">
+            AND APPLY_STATUS = #{search.type}
+        </if>
+    </select>
+
+    <select id="getOneApplyAnswer" parameterType="int" resultType="com.kb.inno.admin.DTO.KbStartersApplyAnswerDTO">
+        SELECT *
+        FROM KB_STARTERS_APPLY_ANSWER
+        WHERE APPLY_ANSWER_NO = #{apply_answer_no}
+    </select>
+
+    <select id="getApplyAnswerByApply" parameterType="com.kb.inno.admin.DTO.KbStartersApplyDTO"
+            resultType="com.kb.inno.admin.DTO.KbStartersApplyAnswerDTO">
+        SELECT *
+        FROM KB_STARTERS_APPLY_ANSWER
+        WHERE APPLY_NO = #{apply_no}
+    </select>
+
+    <insert id="insertApply" parameterType="com.kb.inno.admin.DTO.KbStartersApplyDTO">
+        INSERT INTO KB_STARTERS_APPLY
+        (APPLY_NO, SURVEY_NO, APPLY_STATUS, EMAIL, COMPANY_NAME, FRST_RGTR, FRST_REG_DT, LAST_MDFR, LAST_MDFCN_DT)
+        VALUES (#{apply_no}, #{survey_no}, #{apply_status}, #{email}, #{company_name}, #{frst_rgtr}, SYSDATE,
+                #{last_mdfr}, SYSDATE)
+    </insert>
+
     <insert id="moveApply" parameterType="com.kb.inno.admin.DTO.KbStartersApplyDTO">
         INSERT INTO KB_STARTERS_APPLY_DELETE
         (APPLY_NO, SURVEY_NO, APPLY_STATUS, EMAIL, COMPANY_NAME, FRST_RGTR, FRST_REG_DT, LAST_MDFR, LAST_MDFCN_DT)
         VALUES (#{apply_no}, #{survey_no}, #{apply_status}, #{email}, #{company_name}, #{frst_rgtr}, SYSDATE,
                 #{last_mdfr}, SYSDATE)
+    </insert>
+
+    <insert id="insertApplyAnswer" parameterType="com.kb.inno.admin.DTO.KbStartersApplyAnswerDTO">
+        INSERT INTO KB_STARTERS_APPLY_ANSWER
+        (APPLY_ANSWER_NO, APPLY_NO, QUESTION_NO,
+        <if test="question_choice_no != null">
+            QUESTION_CHOICE_NO,
+        </if>
+        <if test="answer_content != null">
+            ANSWER_CONTENT,
+        </if>
+        <if test="answer_file_path != null">
+            ANSWER_FILE_PATH,
+        </if>
+        <if test="answer_filename != null">
+            ANSWER_ORIGINAL_FILENAME,
+        </if>
+        <if test="answer_filename != null">
+            ANSWER_FILENAME,
+        </if>
+        FRST_RGTR, FRST_REG_DT, LAST_MDFR, LAST_MDFCN_DT)
+        VALUES
+        (#{apply_answer_no}, #{apply_no}, #{question_no},
+        <if test="question_choice_no != null">
+            #{question_choice_no},
+        </if>
+        <if test="answer_content != null">
+            #{answer_content},
+        </if>
+        <if test="answer_file_path != null">
+            #{answer_file_path},
+        </if>
+        <if test="answer_original_filename != null">
+            #{answer_original_filename},
+        </if>
+        <if test="answer_filename != null">
+            #{answer_filename},
+        </if>
+        #{frst_rgtr}, SYSDATE, #{last_mdfr}, SYSDATE)
     </insert>
 
     <insert id="moveApplyAnswer" parameterType="com.kb.inno.admin.DTO.KbStartersApplyAnswerDTO">
@@ -339,4 +407,18 @@
         </if>
         #{frst_rgtr}, SYSDATE, #{last_mdfr}, SYSDATE)
     </insert>
+
+    <delete id="deleteApplyBySurvey" parameterType="com.kb.inno.admin.DTO.KbStartersSurveyDTO">
+        DELETE
+        FROM KB_STARTERS_APPLY
+        WHERE SURVEY_NO = #{survey_no}
+    </delete>
+
+    <delete id="deleteApplyAnswerByApply" parameterType="com.kb.inno.admin.DTO.KbStartersApplyDTO">
+        DELETE
+        FROM KB_STARTERS_APPLY_ANSWER
+        WHERE APPLY_NO = #{apply_no}
+    </delete>
+
+
 </mapper>

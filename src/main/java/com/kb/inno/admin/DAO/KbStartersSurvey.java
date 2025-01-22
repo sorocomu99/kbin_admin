@@ -2,6 +2,7 @@ package com.kb.inno.admin.DAO;
 
 import com.kb.inno.admin.DTO.*;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -69,5 +70,19 @@ public interface KbStartersSurvey {
     int moveApply(KbStartersApplyDTO apply);
 
     int moveApplyAnswer(KbStartersApplyAnswerDTO answer);
+
+    List<KbStartersApplyDTO> getApplyBySurvey(@Param("survey") KbStartersSurveyDTO survey, @Param("search") SearchDTO search);
+
+    List<KbStartersApplyAnswerDTO> getApplyAnswerByApply(KbStartersApplyDTO apply);
+
+    int insertApply(KbStartersApplyDTO apply);
+
+    int insertApplyAnswer(KbStartersApplyAnswerDTO answer);
+
+    int deleteApplyBySurvey(KbStartersSurveyDTO survey);
+
+    int deleteApplyAnswerByApply(KbStartersApplyDTO apply);
+
+    KbStartersApplyAnswerDTO getOneApplyAnswer(int apply_answer_no);
 
 }

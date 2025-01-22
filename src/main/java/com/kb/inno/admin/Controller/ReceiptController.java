@@ -2,7 +2,17 @@ package com.kb.inno.admin.Controller;
 
 
 
+import com.kb.inno.admin.DAO.KbStartersSurvey;
+import com.kb.inno.admin.DTO.*;
+import com.kb.inno.admin.Service.SurveyService;
+import com.kb.inno.common.Pagination;
+import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,12 +22,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.kb.inno.admin.DTO.ReceiptDTO;
-import com.kb.inno.admin.DTO.ReceiptListDTO;
-import com.kb.inno.admin.DTO.SurveyDTO;
 import com.kb.inno.admin.Service.ReceiptService;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.servlet.ModelAndView;
+
+import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -29,15 +42,11 @@ public class ReceiptController {
 
     //Service 연결
     private final ReceiptService receiptService;
+
+    private final SurveyService surveyService;
     
     
-    /**
-     * 지원서 임시 보관함 영구 삭제
-     * @param menuId
-     * @param model
-     * @param page
-     * @return
-     */
+
     @ResponseBody
     @PostMapping("/receiptDelete")
     public String receiptDelete(@RequestParam("srvy_sn") int srvy_sn) {
@@ -46,13 +55,7 @@ public class ReceiptController {
         receiptService.receiptDelete(receiptDTO);
         return "success";
     }
-    /**
-     * 지원서 임시 보관함 삭제 취소
-     * @param menuId
-     * @param model
-     * @param page
-     * @return
-     */
+
     @ResponseBody
     @PostMapping("/deleteCancel")
     public String deleteCancel(@RequestParam("srvy_sn") int srvy_sn) {
@@ -61,13 +64,7 @@ public class ReceiptController {
         receiptService.deleteCancel(receiptDTO);
         return "success";
     }
-    /**
-     * 지원서 접수 관리 임시 삭제
-     * @param menuId
-     * @param model
-     * @param page
-     * @return
-     */
+
     @ResponseBody
     @PostMapping("/tempDelete")
     public String tempDelete(@RequestParam("srvy_sn") int srvy_sn) {
@@ -92,47 +89,75 @@ public class ReceiptController {
         return "success";
     }
 
-    /**
-     * 설문 조회
-     * @param menuId
-     * @param model
-     * @param page
-     * @return
-     */
     @GetMapping("/list/{menuId}")
-    public String receiptMainList(@PathVariable int menuId, Model model, @RequestParam(value = "page", required = false, defaultValue = "1") int page) {
-    	
-    	receiptService.selectList(menuId, page, model);
-    		
-        return directory + "/receipt";
+    public ModelAndView receiptMainList(@PathVariable int menuId, SearchDTO search) {
+        ModelAndView mv = new ModelAndView("receipt/receipt");
+
+        List<KbStartersSurveyDTO> surveyList = surveyService.getSurveyList(search);
+        int totalCount = surveyService.getSurveyListCnt(search);
+
+        Pagination pagination = new Pagination(totalCount, search.getStart(), 10, 10);
+
+        mv.addObject("surveyList", surveyList);
+        mv.addObject("pagination", pagination);
+        mv.addObject("totalCount", totalCount);
+        mv.addObject("menuId", menuId);
+
+        return mv;
     }
-    
-    /**
-     * 지원서 접수 관리 > 지원서 상세보기 클릭
-     * @param menuId
-     * @param model
-     * @param page
-     * @return
-     *     @GetMapping("/list/{menuId}")
-    public String mailList(@PathVariable int menuId, Model model,
-                           @RequestParam(value = "type", required = false, defaultValue = "") String type,
-                           @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
-                           @RequestParam(value = "page", required = false, defaultValue = "1") int page) {
-        sendMailService.selectListMail(menuId, model, type, keyword, page);
-        model.addAttribute("menuId", menuId);
-        return directory + "/mail";
-    }
-     */
+
     @GetMapping("/receiptList/{menuId}")
-    public String receiptList(@PathVariable int menuId, Model model, 
-    						  @RequestParam(value = "type", required = false, defaultValue = "all") String type,
-    						  @RequestParam(value = "srvy_sn" , required = false, defaultValue = "1") int srvy_sn) {
-    	
-    	System.out.println("================================receiptList type["+type+"]   srvy_sn["+srvy_sn+"]");
-    	receiptService.receiptTenList(menuId, type, model, srvy_sn);
-    	
-        model.addAttribute("menuId", menuId);
-        return directory + "/receipt_list";
+    public ModelAndView receiptList(@PathVariable int menuId, int surveyNo, SearchDTO searchDTO) {
+    	ModelAndView mv = new ModelAndView("receipt/receipt_list");
+    	mv.addObject("menuId", menuId);
+
+        List<KbStartersApplyDTO> applyList = surveyService.getApplyList(surveyNo, searchDTO);
+        mv.addObject("applyList", applyList);
+
+        mv.addObject("search", searchDTO);
+        mv.addObject("surveyNo", surveyNo);
+
+        List<KbStartersQuestionDTO> questionList = surveyService.getQuestionList(surveyNo);
+        mv.addObject("questionList", questionList);
+
+        return mv;
+    }
+
+    @GetMapping("/downloadUserApplyFile")
+    public ResponseEntity<Resource> downloadUserApplyFile(int applyAnswerNo){
+        KbStartersApplyAnswerDTO applyAnswer = surveyService.getApplyAnswer(applyAnswerNo);
+
+        if(applyAnswer.getAnswer_filename() == null || applyAnswer.getAnswer_filename().equals("")) {
+            return ResponseEntity.notFound().build();
+        }
+
+        // TODO : 파일 경로를 설정해주세요 또는 기존 파일경로를 설정했던 방식으로 사용해주세요
+        String filePath = "/Users/johuiyang/Documents/web/uploads/kbinno/" + applyAnswer.getAnswer_filename();
+
+        // 파일이 존재하는지 확인
+        File file = new File(filePath);
+        if (!file.exists()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        // 파일을 Resource로 감싸서 반환
+        Resource resource = new FileSystemResource(file);
+
+        String decodedFileName = new String(Base64.decodeBase64(applyAnswer.getAnswer_original_filename()));
+
+        try {
+            decodedFileName = URLEncoder.encode(decodedFileName, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+        decodedFileName = decodedFileName.replaceAll("\\+", "%20");
+
+        String contentDisposition = "attachment; filename=\"" + decodedFileName + "\"";
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition)
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .body(resource);
     }
 
     /**

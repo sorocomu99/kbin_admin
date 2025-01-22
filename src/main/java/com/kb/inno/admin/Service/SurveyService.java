@@ -15,6 +15,7 @@ import com.kb.inno.admin.DAO.SurveyDAO;
 import com.kb.inno.admin.DTO.*;
 import com.kb.inno.common.FileUploader;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.codec.binary.Base64;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -1719,5 +1720,29 @@ public class SurveyService {
 			throw new RuntimeException(e);
 		}
 		return result;
+	}
+
+	public List<KbStartersApplyDTO> getApplyList(int surveyNo, SearchDTO search) {
+		KbStartersSurveyDTO survey = new KbStartersSurveyDTO();
+		survey.setSurvey_no(surveyNo);
+		List<KbStartersApplyDTO> applyList = surveyRepository.getApplyBySurvey(survey, search);
+		for(KbStartersApplyDTO applyDTO : applyList){
+			List<KbStartersApplyAnswerDTO> answerDTO = surveyRepository.getApplyAnswerByApply(applyDTO);
+			for(KbStartersApplyAnswerDTO answer : answerDTO){
+				KbStartersQuestionChoiceDTO choice = new KbStartersQuestionChoiceDTO();
+				choice.setQuestion_choice_no(answer.getQuestion_choice_no());
+				answer.setQuestionChoiceDTO(surveyRepository.getOneQuestionChoice(choice));
+				if(answer.getAnswer_original_filename() != null && !answer.getAnswer_original_filename().equals("")){
+					String decodedFileName = new String(Base64.decodeBase64(answer.getAnswer_original_filename()));
+					answer.setAnswer_original_filename(decodedFileName);
+				}
+			}
+			applyDTO.setAnswers(answerDTO);
+		}
+		return applyList;
+	}
+
+	public KbStartersApplyAnswerDTO getApplyAnswer(int applyAnswerNo){
+		return surveyRepository.getOneApplyAnswer(applyAnswerNo);
 	}
 }

@@ -1,235 +1,268 @@
 <!doctype html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragment/config :: configFragment"></head>
 <script lang="javascript" src="dist/xlsx.full.min.js"></script>
 <body>
-    <div class="wrap">
-        <div th:replace="fragment/header :: headerFragment"></div>
-        
-		<main class="main">
-            <div class="container">
-                <div class="row">
-                    <div class="col">
-                        <div class="paper">
-                            <h2 class="h4">지원서 접수 관리</h2>
-                            <div class="mt-4">
-                            	<input type="hidden" name="menu_id" th:value="${menuId}"/>
-                                <div class="top-search d-flex mt-4">
-                                    <div class="col">
-                                        <form th:action="@{/receipt/receiptList/{menuId}(menuId=${menuId})}" method="get">
-										<input type="hidden" name="srvy_sn" th:value="${srvy_sn}"/>
-                                            <div class="d-flex align-items-center">
-                                                <div class="input-group">
-                                                    <div class="title">처리상태</div>
-                                                    <select class="form-select" aria-label="" name="type">
-                                                        <option value="all" th:selected="${type} == 'all'">전체</option>
-                                                        <option value="0"   th:selected="${type} == '0'">접수</option>
-                                                        <option value="1"   th:selected="${type} == '1'">1차</option>
-                                                        <option value="2"   th:selected="${type} == '2'">2차</option>
-                                                        <option value="3"   th:selected="${type} == '3'">3차</option>
-                                                        <option value="4"   th:selected="${type} == '4'">4차</option>
-                                                        <option value="5"   th:selected="${type} == '5'">5차</option>
-                                                        <option value="6"   th:selected="${type} == '6'">합격</option>
-                                                        <option value="7"   th:selected="${type} == '7'">불합격</option>
-                                                    </select>
-                                                    <button type="submit" class="btn btn-dark"><span data-feather="search"></span></button>
-                                                </div>
+<div class="wrap">
+    <div th:replace="fragment/header :: headerFragment"></div>
+
+    <main class="main">
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <div class="paper">
+                        <h2 class="h4">지원서 접수 관리</h2>
+                        <div class="mt-4">
+                            <input type="hidden" name="menu_id" th:value="${menuId}"/>
+                            <div class="top-search d-flex mt-4">
+                                <div class="col">
+                                    <form th:action="@{/receipt/receiptList/{menuId}(menuId=${menuId})}" method="get">
+                                        <input type="hidden" name="surveyNo" th:value="${surveyNo}"/>
+                                        <div class="d-flex align-items-center">
+                                            <div class="input-group">
+                                                <div class="title">처리상태</div>
+                                                <select class="form-select" aria-label="" name="type">
+                                                    <option value="">전체</option>
+                                                    <option value="접수" th:selected="${search.type} == '접수'">접수</option>
+                                                    <option value="1차" th:selected="${search.type} == '1차'">1차</option>
+                                                    <option value="2차" th:selected="${search.type} == '2차'">2차</option>
+                                                    <option value="3차" th:selected="${search.type} == '3차'">3차</option>
+                                                    <option value="4차" th:selected="${search.type} == '4차'">4차</option>
+                                                    <option value="5차" th:selected="${search.type} == '5차'">5차</option>
+                                                    <option value="심사" th:selected="${search.type} == '심사'">심사</option>
+                                                    <option value="합격" th:selected="${search.type} == '합격'">합격</option>
+                                                    <option value="불합격" th:selected="${search.type} == '불합격'">불합격
+                                                    </option>
+                                                </select>
+                                                <button type="submit" class="btn btn-dark"><span
+                                                        data-feather="search"></span></button>
                                             </div>
-                                        </form>
-                                    </div>
-                                    <div class="col-auto">
-                                        <div class="button-wrap d-flex justify-content-end">
-                                        
-                                        <a th:href="@{/receipt/list/{menuId}(menuId=${menuId})}" class="btn btn-outline-primary">목록보기</a>
-
-                                            <a href="javascript:" class="btn btn-outline-danger">
-                                                <i data-feather="trash-2"></i> 선택 삭제
-                                            </a>
-                                            <a th:href="@{/receipt/sendMail/{menuId}(menuId=${menuId})}" class="btn btn-outline-dark">
-                                                <i data-feather="mail"></i> 선택 메일 발송
-                                            </a>
-                                            <a href="javascript:" class="btn btn-outline-dark">
-                                                <i data-feather="download"></i> 선택 엑셀 다운로드
-                                            </a>
                                         </div>
+                                    </form>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="button-wrap d-flex justify-content-end">
+
+                                        <a th:href="@{/receipt/list/{menuId}(menuId=${menuId})}"
+                                           class="btn btn-outline-primary">목록보기</a>
+                                        <a href="javascript:" class="btn btn-outline-danger">
+                                            <i data-feather="trash-2"></i> 선택 삭제
+                                        </a>
+                                        <a href="javascript:" class="btn btn-outline-dark">
+                                            <i data-feather="download"></i> 선택 엑셀 다운로드
+                                        </a>
+                                        <a href="javascript:" class="btn btn-outline-dark">
+                                            <i data-feather="mail"></i> 선택 메일 발송
+                                        </a>
+                                        <a th:href="@{/receipt/sendMail/{menuId}(menuId=${menuId})}"
+                                           class="btn btn-outline-dark">
+                                            <i data-feather="mail"></i> 메일 발송
+                                        </a>
                                     </div>
                                 </div>
                             </div>
-                            <div class="mt-4">
-                                <div class="table-scroll">
-                                    <table  id="mytable" class="table table-min table-small text-center align-middle">
-                                        <thead>
-                                            <tr>
-                                                <th style="width:60px">
-                                                    <input class="form-check-input" type="checkbox" value="" id="checkAll">
-                                                </th>
-                                                <th style="width:200px">회사명</th>
-                                                <th style="width:120px">처리상태</th>
-                                                <th style="width:100px">상태변경</th>
-                                                <th style="">질문1</th>
-                                                <th style="">질문2</th>
-                                                <th style="">질문3</th>
-                                                <th style="">질문4</th>
-                                                <th style="">질문5</th>
-                                                <th style="">질문6</th>
-                                                <th style="">질문7</th>
-                                                <th style="">질문8</th>
-                                                <th style="">질문9</th>
-                                                <th style="">질문10</th>
-                                                <th style="width:100px">관리</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                        <!-- 검색 결과 없을 때 -->
-                                        <tr th:if="${selectList == null or selectList.isEmpty()}">
-                                            <td class="py-5" colspan="14">
-                                                검색 결과가 없습니다.
-                                            </td>
-                                        </tr>
-                                        
-                                        <!-- 리스팅 -->
-                                        <tr th:unless="${selectList == null or selectList.isEmpty()}" th:each="list : ${selectList}">
-											<td>
-                                            	<input class="form-check-input" type="checkbox" value="${list.srvy_sn}" id="${list.conm}">
-                                            </td>
-                                            <td th:text="${list.conm}">-</td>
-											<td>
-												<select id="prgrs_stts" name="prgrs_stts" class="form-select form-select-sm" onchange="changeType(this.value)">
-													<option value="0" th:selected="${list.prgrs_stts}=='0'">접수</option>
-													<option value="1" th:selected="${list.prgrs_stts}=='1'">1차</option>
-													<option value="2" th:selected="${list.prgrs_stts}=='2'">2차</option>
-													<option value="3" th:selected="${list.prgrs_stts}=='3'">3차</option>
-													<option value="4" th:selected="${list.prgrs_stts}=='4'">4차</option>
-													<option value="5" th:selected="${list.prgrs_stts}=='5'">5차</option>
-													<option value="6" th:selected="${list.prgrs_stts}=='6'">합격</option>
-													<option value="7" th:selected="${list.prgrs_stts}=='7'">불합격</option>
-												</select>
-											</td>
-											
-											<td>
-                                                <button type="button" th:onclick="|updateAlert('${list.conm}')|" class="btn btn-outline-warning btn-sm">변경</button>
-                                            </td>
-                                            
-                                            
-                                            <td th:text="${list.rspns_cn1}">---</td>
-                                            <td th:text="${list.rspns_cn2}">---</td>
-                                            <td th:text="${list.rspns_cn3}">---</td>
-                                            <td th:text="${list.rspns_cn4}">---</td>
-                                            <td th:text="${list.rspns_cn5}">---</td>
-                                            <td th:text="${list.rspns_cn6}">---</td>
-                                            <td th:text="${list.rspns_cn7}">---</td>
-                                            <td th:text="${list.rspns_cn8}">---</td>
-                                            <td th:text="${list.rspns_cn9}">---</td>
-                                            <td th:text="${list.rspns_cn10}">---</td>
-											<td>
-                                                <button type="button" th:onclick="|deleteAlert('${list.srvy_sn}')|" class="btn btn-outline-danger btn-sm">삭제</button>
-                                            </td>
+                        </div>
+                        <div class="mt-4">
+                            <div class="table-scroll">
+                                <table id="mytable" class="table table-min table-small text-center align-middle"
+                                       th:with="colCount=1">
+                                    <thead>
+                                    <tr>
+                                        <th style="width:60px">
+                                            <input class="form-check-input" type="checkbox" value="" id="checkAll">
+                                        </th>
+                                        <th style="width:200px">회사명</th>
+                                        <th style="width:200px">이메일</th>
+                                        <th style="width:120px">처리상태</th>
+                                        <th style="width:100px">상태변경</th>
+                                        <th th:each="question : ${questionList}"
+                                            th:if="${question.question_type_no != 4}">
+                                            <th:block th:with="colCount=${colCount+1}"
+                                                      th:text="${question.question_title}"></th:block>
+                                        </th>
+                                        <th style="width:100px">관리</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <!-- 검색 결과 없을 때 -->
+                                    <tr th:if="${applyList == null or applyList.isEmpty()}">
+                                        <td class="py-5" th:colspan="${6 + colCount}">
+                                            검색 결과가 없습니다.
+                                        </td>
+                                    </tr>
 
-                                            <!-- 
-                                            	<button type="button" th:onclick="|deleteAlert('${list.srvy_sn}')|" class="btn btn-outline-danger btn-sm">삭제</button>
-                                                <a th:href="@{/survey/qstnInsert/{menuId}(menuId=${menuId})}" class="btn btn-outline-dark btn-sm">문항관리</a>
-                                                <button th:onclick="|guidePage('${list.srvy_sn}', '${menuId}')|" class="btn btn-outline-dark btn-sm">모집개요관리</button>
-                                                <button type="button" th:onclick="|copyAlert('${list.srvy_sn}')|" class="btn btn-outline-danger btn-sm">복사</button>
-                                                 -->
-                                        </tr>
-                                        
-                                            
-                                        </tbody>
-                                    </table>
-                                </div>
-         
+                                    <!-- 리스팅 -->
+                                    <tr th:unless="${applyList == null or applyList.isEmpty()}"
+                                        th:each="list : ${applyList}">
+                                        <td>
+                                            <input class="form-check-input" type="checkbox" th:value="${list.apply_no}">
+                                        </td>
+                                        <td th:text="${list.company_name}">-</td>
+                                        <td th:text="${list.email}">-</td>
+                                        <td>
+                                            <select name="apply_status" class="form-select form-select-sm"
+                                                    onchange="changeType(this.value)">
+                                                <option value="접수" th:selected="${list.apply_status} == '접수'">접수
+                                                </option>
+                                                <option value="1차" th:selected="${list.apply_status} == '1차'">1차
+                                                </option>
+                                                <option value="2차" th:selected="${list.apply_status} == '2차'">2차
+                                                </option>
+                                                <option value="3차" th:selected="${list.apply_status} == '3차'">3차
+                                                </option>
+                                                <option value="4차" th:selected="${list.apply_status} == '4차'">4차
+                                                </option>
+                                                <option value="5차" th:selected="${list.apply_status} == '5차'">5차
+                                                </option>
+                                                <option value="심사" th:selected="${list.apply_status} == '심사'">심사
+                                                </option>
+                                                <option value="합격" th:selected="${list.apply_status} == '합격'">합격
+                                                </option>
+                                                <option value="불합격" th:selected="${list.apply_status} == '불합격'">불합격
+                                                </option>
+                                            </select>
+                                        </td>
+
+                                        <td>
+                                            <button type="button" th:onclick="|updateAlert('${list.apply_no}')|"
+                                                    class="btn btn-outline-warning btn-sm">변경
+                                            </button>
+                                        </td>
+                                        <td th:each="question : ${questionList}"
+                                            th:if="${question.question_type_no != 4}">
+                                            <th:block th:each="answer : ${list.answers}">
+                                                <th:block th:if="${question.question_no} == ${answer.question_no}">
+
+                                                    <a th:if="${answer.answer_filename != null and answer.answer_filename != ''}"
+                                                       target="_blank"
+                                                       th:href="@{/receipt/downloadUserApplyFile(applyAnswerNo=${answer.apply_answer_no})}"
+                                                       th:text="${answer.answer_original_filename}"></a>
+
+                                                    <th:block
+                                                            th:if="${answer.answer_content != null and answer.answer_content != ''}"
+                                                            th:text="${answer.answer_content}">
+                                                    </th:block>
+
+                                                    <th:block th:if="${answer.questionChoiceDTO != null}">
+                                                        <th:block
+                                                                th:text="${answer.questionChoiceDTO.choice_content}"></th:block>
+                                                    </th:block>
+
+                                                </th:block>
+                                            </th:block>
+                                        </td>
+                                        <td>
+                                            <button type="button" th:onclick="|deleteAlert('${list.survey_no}')|"
+                                                    class="btn btn-outline-danger btn-sm">삭제
+                                            </button>
+                                        </td>
+
+                                        <!--
+                                            <button type="button" th:onclick="|deleteAlert('${list.srvy_sn}')|" class="btn btn-outline-danger btn-sm">삭제</button>
+                                            <a th:href="@{/survey/qstnInsert/{menuId}(menuId=${menuId})}" class="btn btn-outline-dark btn-sm">문항관리</a>
+                                            <button th:onclick="|guidePage('${list.srvy_sn}', '${menuId}')|" class="btn btn-outline-dark btn-sm">모집개요관리</button>
+                                            <button type="button" th:onclick="|copyAlert('${list.srvy_sn}')|" class="btn btn-outline-danger btn-sm">복사</button>
+                                             -->
+                                    </tr>
+
+
+                                    </tbody>
+                                </table>
                             </div>
+
                         </div>
                     </div>
                 </div>
             </div>
-        </main>
-    </div>
-    
-    <script th:src="@{/js/admin.js}"></script>
-    <script th:inline="javascript">
+        </div>
+    </main>
+</div>
+
+<script th:src="@{/js/admin.js}"></script>
+<script th:inline="javascript">
     /*
     var wb = XLSX.utils.table_to_book(document.getElementById('mytable'), {sheet:"지원서 접수 관리",raw:true});
     XLSX.writeFile(wb, ('지원서 접수 관리.xlsx'));
      */
-        // 페이지 로드 시 실행
-        window.onload = function () {
-            // 페이지 로드 시 메시지 확인 및 알림 표시
-            // 수정 및 등록 시 띄울 알림창
-            const msg = /*[[${msg}]]*/ '';
-            if (msg) alert(msg);
+    // 페이지 로드 시 실행
+    window.onload = function () {
+        // 페이지 로드 시 메시지 확인 및 알림 표시
+        // 수정 및 등록 시 띄울 알림창
+        const msg = /*[[${msg}]]*/ '';
+        if (msg) alert(msg);
+    }
+
+    var stts;
+
+    function changeType(e) {
+        stts = e;
+    }
+
+    function updateAlert(conm) {
+
+        let result = confirm("처리 상태를 변경 하시겠습니까?");
+        if (result) {
+            $.ajax({
+                url: /*[[@{/receipt/updateAlert}]]*/, // 요청 URL
+                type: 'POST', // HTTP 메서드
+                data: {conm: conm, stts: stts}, // 보내는 데이터
+                success: function (response) {
+                    alert("처리 상태 변경에 성공하였습니다.");
+                    window.location.reload();
+                },
+                error: function (xhr, status, error) {
+                    alert("처리 상태 변경에 실패하였습니다.");
+                    console.error('Error:', error);
+                }
+            });
         }
-        
-	var stts;
-	function changeType(e) {
-		stts = e;
-     }
-     
-	function updateAlert(conm) {
+    }
 
-            let result = confirm("처리 상태를 변경 하시겠습니까?");
-            if (result) {
-                $.ajax({
-                    url: /*[[@{/receipt/updateAlert}]]*/, // 요청 URL
-                    type: 'POST', // HTTP 메서드
-                    data: { conm: conm , stts: stts }, // 보내는 데이터
-                    success: function(response) {
-                        alert("처리 상태 변경에 성공하였습니다.");
-                        window.location.reload();
-                    },
-                    error: function(xhr, status, error) {
-                        alert("처리 상태 변경에 실패하였습니다.");
-                        console.error('Error:', error);
-                    }
-                });
-            }
+
+    // 수정 페이지 이동
+    function guidePage(srvy_sn, menuId) {
+        // 빈 form 전달
+        let pageMoveForm = document.createElement('form');
+        // 인수 값 전달
+        let obj = document.createElement('input');
+        obj.setAttribute('type', 'hidden');
+        obj.setAttribute('name', 'srvy_sn');
+        obj.setAttribute('value', srvy_sn);
+        pageMoveForm.appendChild(obj);
+
+        let obj2 = document.createElement('input');
+        obj2.setAttribute('type', 'hidden');
+        obj2.setAttribute('name', 'menuId');
+        obj2.setAttribute('value', menuId);
+        pageMoveForm.appendChild(obj2);
+
+        pageMoveForm.setAttribute('method', 'post');
+        pageMoveForm.setAttribute('action', '/kbinnovationhub_devadm/survey/guide');
+        document.body.appendChild(pageMoveForm);
+        pageMoveForm.submit();
+    }
+
+    function deleteAlert(srvy_sn) {
+        let result = confirm("정말 삭제 하시겠습니까?");
+        if (result) {
+            $.ajax({
+                url: /*[[@{/survey/exmnDelete}]]*/, // 요청 URL
+                type: 'POST', // HTTP 메서드
+                data: {srvy_sn: srvy_sn}, // 보내는 데이터
+                success: function (response) {
+                    alert("삭제에 성공하였습니다.");
+                    window.location.reload();
+                },
+                error: function (xhr, status, error) {
+                    alert("삭제를 실패하였습니다.");
+                    console.error('Error:', error);
+                }
+            });
         }
-        
-
-        // 수정 페이지 이동
-        function guidePage(srvy_sn, menuId) {
-            // 빈 form 전달
-            let pageMoveForm = document.createElement('form');
-            // 인수 값 전달
-            let obj = document.createElement('input');
-            obj.setAttribute('type', 'hidden');
-            obj.setAttribute('name', 'srvy_sn');
-            obj.setAttribute('value', srvy_sn);
-            pageMoveForm.appendChild(obj);
-
-            let obj2 = document.createElement('input');
-            obj2.setAttribute('type', 'hidden');
-            obj2.setAttribute('name', 'menuId');
-            obj2.setAttribute('value', menuId);
-            pageMoveForm.appendChild(obj2);
-
-            pageMoveForm.setAttribute('method', 'post');
-            pageMoveForm.setAttribute('action', '/kbinnovationhub_devadm/survey/guide');
-            document.body.appendChild(pageMoveForm);
-            pageMoveForm.submit();
-        }
-
-        function deleteAlert(srvy_sn) {
-            let result = confirm("정말 삭제 하시겠습니까?");
-            if (result) {
-                $.ajax({
-                    url: /*[[@{/survey/exmnDelete}]]*/, // 요청 URL
-                    type: 'POST', // HTTP 메서드
-                    data: { srvy_sn: srvy_sn }, // 보내는 데이터
-                    success: function(response) {
-                        alert("삭제에 성공하였습니다.");
-                        window.location.reload();
-                    },
-                    error: function(xhr, status, error) {
-                        alert("삭제를 실패하였습니다.");
-                        console.error('Error:', error);
-                    }
-                });
-            }
-        }
+    }
 
 
-    </script>
+</script>
 
 </body>
 </html>

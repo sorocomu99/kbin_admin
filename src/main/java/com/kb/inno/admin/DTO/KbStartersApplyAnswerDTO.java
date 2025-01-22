@@ -12,7 +12,8 @@ import java.util.Date;
 public class KbStartersApplyAnswerDTO {
     private int apply_answer_no;
     private int apply_no;
-    private KbStartersQuestionDTO questionDTO;
+    private int question_no;
+    private int question_choice_no;
     private KbStartersQuestionChoiceDTO questionChoiceDTO;
     private String answer_content;
     private String answer_file_path;
