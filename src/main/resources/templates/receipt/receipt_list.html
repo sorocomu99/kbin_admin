@@ -64,8 +64,7 @@
                         </div>
                         <div class="mt-4">
                             <div class="table-scroll">
-                                <table id="mytable" class="table table-min table-small text-center align-middle"
-                                       th:with="colCount=1">
+                                <table id="mytable" class="table table-min table-small text-center align-middle">
                                     <thead>
                                     <tr>
                                         <th style="width:60px">
@@ -76,9 +75,7 @@
                                         <th style="width:120px">처리상태</th>
                                         <th style="width:100px">상태변경</th>
                                         <th th:each="question : ${questionList}"
-                                            th:if="${question.question_type_no != 4}">
-                                            <th:block th:with="colCount=${colCount+1}"
-                                                      th:text="${question.question_title}"></th:block>
+                                            th:if="${question.question_type_no != 4}" th:text="${question.question_title}">
                                         </th>
                                         <th style="width:100px">관리</th>
                                     </tr>
@@ -152,7 +149,7 @@
                                             </th:block>
                                         </td>
                                         <td>
-                                            <button type="button" th:onclick="|deleteAlert('${list.survey_no}')|"
+                                            <button type="button" th:onclick="|deleteAlert('${list.apply_no}')|"
                                                     class="btn btn-outline-danger btn-sm">삭제
                                             </button>
                                         </td>
@@ -242,16 +239,20 @@
         pageMoveForm.submit();
     }
 
-    function deleteAlert(srvy_sn) {
+    function deleteAlert(apply_no) {
         let result = confirm("정말 삭제 하시겠습니까?");
         if (result) {
             $.ajax({
-                url: /*[[@{/survey/exmnDelete}]]*/, // 요청 URL
+                url: /*[[@{/receipt/deleteApply}]]*/, // 요청 URL
                 type: 'POST', // HTTP 메서드
-                data: {srvy_sn: srvy_sn}, // 보내는 데이터
+                data: {applyNo: apply_no}, // 보내는 데이터
                 success: function (response) {
-                    alert("삭제에 성공하였습니다.");
-                    window.location.reload();
+                    if(response.result == 'success') {
+                        alert("삭제에 성공하였습니다.");
+                        window.location.reload();
+                    } else {
+                        alert("삭제에 실패하였습니다.");
+                    }
                 },
                 error: function (xhr, status, error) {
                     alert("삭제를 실패하였습니다.");

@@ -31,6 +31,7 @@ import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -120,6 +121,15 @@ public class ReceiptController {
         List<KbStartersQuestionDTO> questionList = surveyService.getQuestionList(surveyNo);
         mv.addObject("questionList", questionList);
 
+        int colCount = 0;
+        for(KbStartersQuestionDTO question : questionList) {
+        	if(question.getQuestion_type_no() != 4) {
+        		colCount++;
+        	}
+        }
+
+        mv.addObject("colCount", colCount);
+
         return mv;
     }
 
@@ -186,6 +196,13 @@ public class ReceiptController {
     	receiptService.selectList(menuId, page, model);
     		
         return directory + "/receipt_mail";
+    }
+
+
+    @PostMapping("/deleteApply")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> deleteApply(Integer applyNo) {
+        return ResponseEntity.ok(surveyService.deleteApply(applyNo));
     }
     
     

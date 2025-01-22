@@ -414,6 +414,12 @@
         WHERE SURVEY_NO = #{survey_no}
     </delete>
 
+    <delete id="deleteApply" parameterType="com.kb.inno.admin.DTO.KbStartersApplyDTO">
+        DELETE
+        FROM KB_STARTERS_APPLY
+        WHERE APPLY_NO = #{apply_no}
+    </delete>
+
     <delete id="deleteApplyAnswerByApply" parameterType="com.kb.inno.admin.DTO.KbStartersApplyDTO">
         DELETE
         FROM KB_STARTERS_APPLY_ANSWER

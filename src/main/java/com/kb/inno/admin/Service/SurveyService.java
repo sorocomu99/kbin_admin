@@ -1745,4 +1745,19 @@ public class SurveyService {
 	public KbStartersApplyAnswerDTO getApplyAnswer(int applyAnswerNo){
 		return surveyRepository.getOneApplyAnswer(applyAnswerNo);
 	}
+
+	@Transactional
+	public Map<String, Object> deleteApply(int applyNo) {
+		Map<String, Object> result = new HashMap<>();
+		try {
+			KbStartersApplyDTO apply = new KbStartersApplyDTO();
+			apply.setApply_no(applyNo);
+			surveyRepository.deleteApply(apply);
+			surveyRepository.deleteApplyAnswerByApply(apply);
+			result.put("result", "success");
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+		return result;
+	}
 }
