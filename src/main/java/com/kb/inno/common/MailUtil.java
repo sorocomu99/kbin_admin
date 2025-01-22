@@ -19,10 +19,10 @@ public class MailUtil {
 
     public boolean sendMail(List<String> receivers, String subject, String content, MultipartFile attachment) {
         //TODO : 메일 정보 수정
-        String host = "smtp.gmail.com";
+        String host = "smtp.fmcity.com";
         String port = "587";
-        final String from = "support@aquastudio.co.kr";
-        final String password = "dxbn dcei sqke xvjw";
+        final String from = "hunhee@soroweb.co.kr";
+        final String password = "1q2w3e4r!@";
 
         if(receivers == null || receivers.size() == 0) {
             return false;
