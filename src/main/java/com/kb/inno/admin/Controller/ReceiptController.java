@@ -185,12 +185,13 @@ public class ReceiptController {
     }
 
     @GetMapping("/receiptTrash/{menuId}")
-    public ModelAndView receiptTrashList(SearchDTO searchDTO) {
+    public ModelAndView receiptTrashList(SearchDTO searchDTO, @PathVariable int menuId) {
         searchDTO.setDelete_yn("Y");
         List<KbStartersSurveyDTO> surveyList = surveyService.getSurveyList(searchDTO);
         int totalCount = surveyService.getSurveyListCnt(searchDTO);
 
         ModelAndView mv = new ModelAndView("receipt/receipt_trash");
+        mv.addObject("menuId", menuId);
         mv.addObject("surveyList", surveyList);
         mv.addObject("totalCount", totalCount);
 
