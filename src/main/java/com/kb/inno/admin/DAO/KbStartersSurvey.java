@@ -87,4 +87,6 @@ public interface KbStartersSurvey {
 
     int deleteApply(KbStartersApplyDTO apply);
 
+    int updateApplyStatus(KbStartersApplyDTO apply);
+
 }

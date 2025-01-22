@@ -97,8 +97,7 @@
                                         <td th:text="${list.company_name}">-</td>
                                         <td th:text="${list.email}">-</td>
                                         <td>
-                                            <select name="apply_status" class="form-select form-select-sm"
-                                                    onchange="changeType(this.value)">
+                                            <select name="apply_status" class="form-select form-select-sm">
                                                 <option value="접수" th:selected="${list.apply_status} == '접수'">접수
                                                 </option>
                                                 <option value="1차" th:selected="${list.apply_status} == '1차'">1차
@@ -121,7 +120,7 @@
                                         </td>
 
                                         <td>
-                                            <button type="button" th:onclick="|updateAlert('${list.apply_no}')|"
+                                            <button type="button" th:onclick="|updateAlert(this, '${list.apply_no}')|"
                                                     class="btn btn-outline-warning btn-sm">변경
                                             </button>
                                         </td>
@@ -189,23 +188,22 @@
         if (msg) alert(msg);
     }
 
-    var stts;
-
-    function changeType(e) {
-        stts = e;
-    }
-
-    function updateAlert(conm) {
-
+    function updateAlert(el, applyNo) {
+        let status = $(el).parent().parent().find('select[name=apply_status]').val();
         let result = confirm("처리 상태를 변경 하시겠습니까?");
         if (result) {
             $.ajax({
-                url: /*[[@{/receipt/updateAlert}]]*/, // 요청 URL
+                url: /*[[@{/receipt/updateApplyStatus}]]*/, // 요청 URL
                 type: 'POST', // HTTP 메서드
-                data: {conm: conm, stts: stts}, // 보내는 데이터
+                data: {"applyNo": applyNo, "status": status}, // 보내는 데이터
                 success: function (response) {
-                    alert("처리 상태 변경에 성공하였습니다.");
-                    window.location.reload();
+                    if(response.result == 'success'){
+                        alert("처리 상태 변경에 성공하였습니다.");
+                        window.location.reload();
+                    }
+                    else{
+                        alert("처리 상태 변경에 실패하였습니다.");
+                    }
                 },
                 error: function (xhr, status, error) {
                     alert("처리 상태 변경에 실패하였습니다.");

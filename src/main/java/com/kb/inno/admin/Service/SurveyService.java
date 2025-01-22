@@ -1760,4 +1760,19 @@ public class SurveyService {
 		}
 		return result;
 	}
+
+	@Transactional
+	public Map<String, Object> updateApplyStatus(int applyNo, String status) {
+		Map<String, Object> result = new HashMap<>();
+		try {
+			KbStartersApplyDTO apply = new KbStartersApplyDTO();
+			apply.setApply_no(applyNo);
+			apply.setApply_status(status);
+			surveyRepository.updateApplyStatus(apply);
+			result.put("result", "success");
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+		return result;
+	}
 }

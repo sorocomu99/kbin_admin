@@ -90,6 +90,12 @@ public class ReceiptController {
         return "success";
     }
 
+    @PostMapping("/updateApplyStatus")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> updateApplyStatus(int applyNo, String status) {
+        return ResponseEntity.ok(surveyService.updateApplyStatus(applyNo, status));
+    }
+
     @GetMapping("/list/{menuId}")
     public ModelAndView receiptMainList(@PathVariable int menuId, SearchDTO search) {
         ModelAndView mv = new ModelAndView("receipt/receipt");

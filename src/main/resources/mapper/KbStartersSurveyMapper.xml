@@ -426,5 +426,11 @@
         WHERE APPLY_NO = #{apply_no}
     </delete>
 
+    <update id="updateApplyStatus" parameterType="com.kb.inno.admin.DTO.KbStartersApplyDTO">
+        UPDATE KB_STARTERS_APPLY
+        SET APPLY_STATUS = #{apply_status}
+        WHERE APPLY_NO = #{apply_no}
+    </update>
+
 
 </mapper>
