@@ -210,10 +210,12 @@ public class ReceiptController {
 
     @PostMapping("/sendMail")
     public ModelAndView sendMail(@RequestParam("receivers[]") List<String> receivers, String subject, String content, MultipartFile attachment, HttpServletRequest request) {
-        String referer = request.getHeader("Referer");
-        ModelAndView mv = new ModelAndView("redirect:" + referer);
+        ModelAndView mv = new ModelAndView("alert");
         MailUtil mailUtil = new MailUtil();
         if(mailUtil.sendMail(receivers, subject, content, attachment)){
+            String referer = request.getHeader("Referer");
+            mv.addObject("message", "메일 전송이 완료되었습니다.");
+            mv.addObject("url", referer);
             return mv;
         }
         else{
