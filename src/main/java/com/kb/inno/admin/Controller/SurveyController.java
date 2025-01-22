@@ -103,6 +103,8 @@ public class SurveyController {
         mv.addObject("survey", data);
         KbStartersSurveyDTO surveyDTO = surveyService.getSurvey(data.getData().get(0).getSurvey_no());
         mv.addObject("surveyDefaultData", surveyDTO);
+
+        mv.addObject("newLineChar", "\n");
         return mv;
     }
 

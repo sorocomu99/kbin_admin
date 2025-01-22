@@ -60,7 +60,7 @@
                             <!-- 질문 -->
                             <h1 class="h5" th:text="${question.question_order}+'. '+${question.question_title}"></h1>
                             <!-- 상세내용 -->
-                            <p th:text="${question.question_description}"></p>
+                            <p th:utext="${#strings.replace(question.question_description, newLineChar, '&lt;br /&gt;')}"></p>
                             <!-- 객관식 -->
                             <div class="input-group">
                                 <div class="radio" th:each="choice : ${question.choices}">
@@ -96,7 +96,7 @@
                             <!-- 질문 -->
                             <h1 class="h5" th:text="${question.question_order}+'. '+${question.question_title}"></h1>
                             <!-- 상세내용 -->
-                            <p th:text="${question.question_description}"></p>
+                            <p th:utext="${#strings.replace(question.question_description, newLineChar, '&lt;br /&gt;')}"></p>
                             <!-- 주관식 -->
                             <input class="input" type="text" name="answer">
                             <!-- 유효성 체크 문구(form 태그에 need-invalid 클래스가 있으면 아래 문구가 나타납니다) -->
@@ -125,7 +125,7 @@
                             <!-- 질문 -->
                             <h1 class="h5" th:text="${question.question_order}+'. '+${question.question_title}"></h1>
                             <!-- 상세내용 -->
-                            <p th:text="${question.question_description}"></p>
+                            <p th:utext="${#strings.replace(question.question_description, newLineChar, '&lt;br /&gt;')}"></p>
                             <!-- 첨부파일 -->
                             <div class="file-upload">
                                 <input id="fileUpload" class="file-input" type="file" name="file[]">
