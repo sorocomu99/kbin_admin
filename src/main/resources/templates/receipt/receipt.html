@@ -163,13 +163,13 @@
             pageMoveForm.submit();
         }
 
-        function deleteAlert(srvy_sn) {
+        function deleteAlert(survey_no) {
             let result = confirm("정말 임시 삭제 하시겠습니까?");
             if (result) {
                 $.ajax({
                     url: /*[[@{/receipt/tempDelete}]]*/, // 요청 URL
                     type: 'POST', // HTTP 메서드
-                    data: { srvy_sn: srvy_sn }, // 보내는 데이터
+                    data: { survey_no: survey_no, delete_yn: 'Y' }, // 보내는 데이터
                     success: function(response) {
                         alert("임시 삭제에 성공하였습니다.");
                         window.location.reload();

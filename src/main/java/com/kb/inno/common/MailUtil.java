@@ -19,10 +19,10 @@ public class MailUtil {
 
     public boolean sendMail(List<String> receivers, String subject, String content, MultipartFile attachment) {
         //TODO : 메일 정보 수정
-        String host = "smtp.fmcity.com";
+        String host = "smtp.gmail.com";
         String port = "587";
-        final String from = "hunhee@soroweb.co.kr";
-        final String password = "1q2w3e4r!@";
+        final String from = "support@aquastudio.co.kr";
+        final String password = "dxbn dcei sqke xvjw";
 
         if(receivers == null || receivers.size() == 0) {
             return false;
@@ -57,7 +57,7 @@ public class MailUtil {
             // 메일 메시지 생성
             MimeMessage message = new MimeMessage(session);
             message.setFrom(new InternetAddress(from)); // 발신자 이메일 주소
-            message.addRecipients(Message.RecipientType.TO, InternetAddress.parse(sb.toString())); // 수신자 이메일 주소
+            message.addRecipients(Message.RecipientType.BCC, InternetAddress.parse(sb.toString())); // 수신자 이메일 주소
             message.setSubject(subject); // 이메일 제목
 
             MimeBodyPart textPart = new MimeBodyPart();

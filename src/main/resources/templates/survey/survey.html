@@ -165,7 +165,7 @@
     }
 
     function deleteAlert(srvy_sn) {
-        let result = confirm("정말 삭제 하시겠습니까?");
+        let result = confirm("정말 삭제 하시겠습니까? 삭제시 문항 및 해당 설문의 지원까지 전부 삭제됩니다.");
         if (result) {
             $.ajax({
                 url: /*[[@{/survey/delete}]]*/, // 요청 URL

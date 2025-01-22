@@ -16,6 +16,7 @@ public class KbStartersSurveyDTO {
     private String survey_title;
     private String banner_file_path;
     private String banner_filename;
+    private String delete_yn;
 
     private int survey_info_no;
     private String survey_category;

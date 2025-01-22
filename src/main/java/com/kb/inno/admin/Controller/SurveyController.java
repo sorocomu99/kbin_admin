@@ -75,6 +75,7 @@ public class SurveyController {
     @GetMapping("/list/{menuId}")
     public ModelAndView surveyList(@PathVariable int menuId, @ModelAttribute SearchDTO searchDTO) {
         ModelAndView mv = new ModelAndView("survey/survey");
+        searchDTO.setDelete_yn("N");
         int totalCount = surveyService.getSurveyListCnt(searchDTO);
         List<KbStartersSurveyDTO> surveyDTOList = surveyService.getSurveyList(searchDTO);
         Pagination pagination = new Pagination(totalCount, searchDTO.getStart(), 10, 10);

@@ -1570,6 +1570,13 @@ public class SurveyService {
 		try {
 			KbStartersSurveyDTO survey = new KbStartersSurveyDTO();
 			survey.setSurvey_no(surveyNo);
+			List<KbStartersApplyDTO> applyList = surveyRepository.getApplyBySurvey(survey, new SearchDTO());
+
+			for(KbStartersApplyDTO apply : applyList){
+				surveyRepository.deleteApplyAnswerByApply(apply);
+				surveyRepository.deleteApply(apply);
+			}
+
 			surveyRepository.deleteSurvey(survey);
 			surveyRepository.deleteSurveyInfoBySurvey(survey);
 			surveyRepository.deleteQuestionBySurvey(survey);
@@ -1803,6 +1810,26 @@ public class SurveyService {
 				apply.setApply_no(applyNo);
 				surveyRepository.updateApplyStatus(apply);
 			}
+			result.put("result", "success");
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+		return result;
+	}
+
+	@Transactional
+	public Map<String, Object> surveyTempDelete(int surveyNo, String deleteYn) {
+		Map<String, Object> result = new HashMap<>();
+		try {
+			KbStartersSurveyDTO param = new KbStartersSurveyDTO();
+			param.setSurvey_no(surveyNo);
+
+			KbStartersSurveyDTO survey = surveyRepository.getSurvey(param);
+			if(survey != null) {
+				survey.setDelete_yn(deleteYn);
+				surveyRepository.updateSurvey(survey);
+			}
+
 			result.put("result", "success");
 		} catch (Exception e) {
 			throw new RuntimeException(e);

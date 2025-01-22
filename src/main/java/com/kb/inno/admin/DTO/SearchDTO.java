@@ -10,4 +10,6 @@ public class SearchDTO {
     private String keyword; // 검색 조건
     private int ctgry;      // FAQ 검색을 위한 카테고리 번호
     private int faq_sn;     // FAQ 검색을 위한 시리얼 번호
+
+    private String delete_yn; // 삭제 여부
 }

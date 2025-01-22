@@ -71,11 +71,8 @@ public class ReceiptController {
 
     @ResponseBody
     @PostMapping("/tempDelete")
-    public String tempDelete(@RequestParam("srvy_sn") int srvy_sn) {
-        ReceiptDTO receiptDTO = new ReceiptDTO();
-        receiptDTO.setSrvy_sn(srvy_sn);
-        receiptService.tempDelete(receiptDTO);
-        return "success";
+    public ResponseEntity<Map<String, Object>> tempDelete(@RequestParam("survey_no") int surveyNo, @RequestParam("delete_yn") String deleteYn) {
+        return ResponseEntity.ok(surveyService.surveyTempDelete(surveyNo, deleteYn));
     }
 
     @ResponseBody
@@ -108,6 +105,8 @@ public class ReceiptController {
     @GetMapping("/list/{menuId}")
     public ModelAndView receiptMainList(@PathVariable int menuId, SearchDTO search) {
         ModelAndView mv = new ModelAndView("receipt/receipt");
+
+        search.setDelete_yn("N");
 
         List<KbStartersSurveyDTO> surveyList = surveyService.getSurveyList(search);
         int totalCount = surveyService.getSurveyListCnt(search);
@@ -185,19 +184,20 @@ public class ReceiptController {
                 .body(resource);
     }
 
-    /**
-     * 지원서 임시 보관함 리스트
-     *
-     * @param menuId
-     * @param model
-     * @param page
-     * @return
-     */
     @GetMapping("/receiptTrash/{menuId}")
-    public String receiptTrashList(@PathVariable int menuId, Model model, @RequestParam(value = "page", required = false, defaultValue = "1") int page) {
-        receiptService.selecTemptList(menuId, page, model);
+    public ModelAndView receiptTrashList(SearchDTO searchDTO) {
+        searchDTO.setDelete_yn("Y");
+        List<KbStartersSurveyDTO> surveyList = surveyService.getSurveyList(searchDTO);
+        int totalCount = surveyService.getSurveyListCnt(searchDTO);
 
-        return directory + "/receipt_trash";
+        ModelAndView mv = new ModelAndView("receipt/receipt_trash");
+        mv.addObject("surveyList", surveyList);
+        mv.addObject("totalCount", totalCount);
+
+        Pagination pagination = new Pagination(totalCount, searchDTO.getStart(), 10, 10);
+        mv.addObject("pagination", pagination);
+
+        return mv;
     }
 
 
