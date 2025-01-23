@@ -153,21 +153,10 @@ public class FileUploader {
         // 파일 이름 설정
         String fileName = UUID.randomUUID().toString() + fileExtension;
 
-        // 경로 설정
-        /*
-        Path path = Paths.get("D:\\fsfile\\dev_kbinnovation\\").toAbsolutePath().normalize();
-        //String uploadPath = "D:/fsfile/dev_kbinnovation/";
-        //Path path = Paths.get("/fsfile").toAbsolutePath().normalize();
-        //String savePath = path + "\\dev_kbinnovation\\";
-        //String savePath = path + "/dev_kbinnovation/";
-        */
+        // 경로 설정 (아래는 개발 테스트 경로. 운영 리눅스서버 경로로 추후 변경해줘야합니다.)
 //        Path path = Paths.get("D:\\fsfile").toAbsolutePath().normalize();
-//        String savePath = path + "\\dev_kbinnovation\\";
-
-//        Path path = Paths.get("/fsfile").toAbsolutePath().normalize();
-//        String savePath = path + "/dev_kbinnovation/";
-
-        String savePath = "/Users/johuiyang/Documents/web/uploads/kbinno/";
+//        String savePath = path + "\\kbinnovationhub_devadm\\";
+        String savePath = "/kbinnovationhub_devadm/";
 
         File directory = new File(savePath);
 
@@ -212,9 +201,9 @@ public class FileUploader {
         fileDTO.setOrgnl_file_nm(originalFileName);
         fileDTO.setFile_sz(bytes);
         fileDTO.setFile_extn(fileExtension);
-        //fileDTO.setFile_path("\\upload\\");
-        fileDTO.setFile_path("\\upload\\");
-//        fileDTO.setFile_path("/upload");
+//        fileDTO.setFile_path("\\upload\\");
+        fileDTO.setFile_path("/upload/");
+
         // 파일 DTO에 로그인 한 사람 추가 (임시로 나중에 수정 요망!)
         fileDTO.setFrst_rgtr(loginId);
         fileDTO.setLast_mdfr(loginId);
@@ -227,8 +216,10 @@ public class FileUploader {
 //    	Path path = Paths.get("D:\\fsfile\\dev_kbinnovation\\").toAbsolutePath().normalize();
 //        Path path = Paths.get("/fsfile/dev_kbinnovation/").toAbsolutePath().normalize();
 //        File deleteFile = new File(path + realPath + fileName);
+//        String savePath = "/Users/johuiyang/Documents/web/uploads/kbinno/";
 
-        String savePath = "/Users/johuiyang/Documents/web/uploads/kbinno/";
+        String savePath = "/kbinnovationhub_devadm/";
+
         File deleteFile = new File(savePath + fileName);
         return deleteFile.delete();
     }
