@@ -65,8 +65,7 @@
                                             <td>
                                                 <div class="list-iamge-wrap">
                                                     <th:block th:if="${list.file_path != null}">
-                                                        <img th:src="${list.file_path == null ? '' : '\kbinnovationhub_devadm'+list.file_path + list.file_nm}" alt="">
-                                                        <!--<img src="/images/dummy/visual-slide-image-1.png" alt="">-->
+                                                        <img th:src="${list.file_path == null ? '' : '/kbinnovationhub_devadm'+list.file_path + list.file_nm}" alt="">
                                                     </th:block>
                                                 </div>
                                             </td>

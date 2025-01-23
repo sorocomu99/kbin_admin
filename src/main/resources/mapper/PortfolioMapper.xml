@@ -276,4 +276,58 @@
          WHERE PORT_YR = #{port_yr}
            AND PORT_SN = #{port_sn}
     </update>
+
+    <select id="selectPortYearList" resultType="com.kb.inno.admin.DTO.PortfolioDTO">
+        SELECT
+            PORT_YR          AS port_yr
+             ,FRST_RGTR        AS frst_rgtr
+             ,FRST_REG_DT      AS frst_reg_dt
+             ,LAST_MDFR        AS last_mdfr
+             ,LAST_MDFCN_DT    AS last_mdfcn_dt
+        FROM KB_PORT_YR_INFO
+        ORDER BY PORT_YR DESC
+    </select>
+
+    <select id="selectList" parameterType="com.kb.inno.admin.DTO.SearchDTO" resultType="com.kb.inno.admin.DTO.PortfolioDTO">
+        SELECT P.*
+        FROM (
+        SELECT
+        PORT.PORT_SN                                    AS port_sn
+        ,PORT.PORT_YR                                   AS port_yr
+        ,PORT.BZENTY_NM                                 AS bzenty_nm
+        ,PORT.INTRO_CN                                  AS intro_cn
+        ,PORT.HMPG_LINK                                 AS hmpg_link
+        ,PORT.ATCH_FILE_SN                              AS atch_file_sn
+        ,PORT.SORT_NO                                   AS sort_no
+        ,FILES.FILE_SN                                  AS atch_file_sn
+        ,FILES.ORGNL_FILE_NM                            AS ori_file_name
+        ,FILES.FILE_NM                                  AS file_name
+        ,FILES.FILE_PATH                                AS file_path
+        FROM KB_PORT_INFO PORT
+        ,KB_FILE_INFO FILES
+        WHERE
+        PORT.ATCH_FILE_SN = FILES.FILE_SN(+)
+        ORDER BY PORT.PORT_YR, PORT.SORT_NO, PORT.PORT_SN DESC
+        ) P
+        WHERE 1=1
+        <if test='keyword != null and keyword != ""'>
+            AND P.PORT_YR = #{keyword}
+        </if>
+    </select>
+
+    <select id="selectPreviewFile" parameterType="com.kb.inno.admin.DTO.FileDTO" resultType="com.kb.inno.admin.DTO.FileDTO">
+        SELECT
+              FILE_SN
+            , FILE_NM
+            , ORGNL_FILE_NM
+            , FILE_SZ
+            , FILE_EXTN
+            , FILE_PATH
+            , FRST_RGTR
+            , FRST_REG_DT
+            , LAST_MDFR
+            , LAST_MDFCN_DT
+        FROM KB_FILE_INFO
+        WHERE FILE_SN = #{file_sn}
+    </select>
 </mapper>

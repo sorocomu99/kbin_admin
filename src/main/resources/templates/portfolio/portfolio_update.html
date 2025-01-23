@@ -28,7 +28,7 @@
                                                         <input class="form-control w-auto" type="file" id="main_file" name="main_file" onchange="preview()">
                                                         <button onclick="clearImage()" id="deleteThumbnail" class="btn btn-secondary ms-2" style="display: none;">삭제</button>
                                                     </div>
-                                                    <img id="previewFrame" th:src="|\kbinnovationhub_devadm${portListDet.file_path + portListDet.file_nm}|" width="200" class="img-fluid mt-2" style="display:none" />
+                                                    <img id="previewFrame" th:src="|/kbinnovationhub_devadm${portListDet.file_path + portListDet.file_nm}|" width="200" class="img-fluid mt-2" style="display:none" />
                                                     <!--<img id="previewFrame" src="" class="img-fluid mt-2" style="display:none" />-->
                                                     <p class="mb-0 mt-2">
                                                         * 권장 사이즈 : 251x237px 
@@ -69,7 +69,7 @@
                                     </table>
                                     <div class="button-container">
                                         <button type="submit" class="btn btn-primary" onclick="portListUpdate()">수정하기</button>
-                                        <a href="/html_ko/preview/portfolio.html" target="_blank" class="btn btn-outline-primary">미리보기</a>
+                                        <button type="submit" class="btn btn-outline-primary" onclick="previewPage()">미리보기</button>
                                         <!--<a href="javascript:" class="btn btn-outline-dark" onclick="history.back();">목록보기</a>-->
                                         <!--<a th:href="@{/portfolio/portList/{menuId}(menuId=${menuId})?port_yr=${port_yr}}" class="btn btn-outline-primary">목록보기</a>-->
                                         <button type="button" class="btn btn-outline-primary" th:onclick="|portListMove('${menuId}', '${port_yr}')|">목록보기</button>
@@ -163,7 +163,20 @@
             document.body.appendChild(pageMoveForm);
             pageMoveForm.submit();
         }
-    </script>
+
+
+        function previewPage(){
+            var main_file = $('input[name=main_file]').val();
+            if(main_file == null || main_file == "") {
+                alert("파일을 선택 해 주세요.");
+                return;
+            }
+            const form = document.forms['portfolio_form'];
+            form.action = '/kbinnovationhub_devadm/portfolio/preview';
+            form.method = 'POST';
+            form.target = '';
+            form.submit();
+        }
     <script th:src="@{/js/admin.js}"></script>
 </body>
 </html>

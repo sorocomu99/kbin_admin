@@ -43,4 +43,7 @@ public class PortfolioDTO implements Serializable {
     private String keyword;
     private int start;
     private int end;
+
+    private String ori_file_name;           //오리지널 파일명
+    private String file_name;               //파일명
 }

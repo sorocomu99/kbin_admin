@@ -12,9 +12,10 @@ package com.kb.inno.admin.DAO;
 
 import com.kb.inno.admin.DTO.FileDTO;
 import com.kb.inno.admin.DTO.PortfolioDTO;
-import com.kb.inno.admin.DTO.SurveyDTO;
+import com.kb.inno.admin.DTO.SearchDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
+import org.springframework.ui.Model;
 
 import java.util.List;
 
@@ -37,4 +38,8 @@ public interface PortfolioDAO {
     int portYrListDelete(PortfolioDTO portfolioDTO);
     PortfolioDTO portListDet(PortfolioDTO portfolioDTO);
     int portListUpdate(PortfolioDTO portfolioDTO);
+    List<PortfolioDTO> selectPortYearList(Model model);
+    List<PortfolioDTO> selectList(SearchDTO search);
+    int insert(PortfolioDTO portfolioDTO);
+    FileDTO selectPreviewFile(int file_sn);
 }

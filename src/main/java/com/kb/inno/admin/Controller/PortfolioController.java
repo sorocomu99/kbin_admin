@@ -10,10 +10,7 @@
  */
 package com.kb.inno.admin.Controller;
 
-import com.kb.inno.admin.DTO.HistoryDTO;
-import com.kb.inno.admin.DTO.PortfolioDTO;
-import com.kb.inno.admin.DTO.SurveyDTO;
-import com.kb.inno.admin.DTO.VisualDTO;
+import com.kb.inno.admin.DTO.*;
 import com.kb.inno.admin.Service.PortfolioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,10 +21,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -278,7 +272,40 @@ public class PortfolioController {
         portfolioDTO.setPort_yr(port_yr);
         portfolioDTO.setMenu_id(menuId);
         portfolioService.portListDel(portfolioDTO);
-        return "success";
+        return "visualuccess";
+    }
+
+    @RequestMapping("/preview")
+    public String preview(Model model, HttpServletRequest request, PortfolioDTO portfolioDTO,
+                          @RequestParam String port_yr, @RequestParam String bzenty_nm,
+                          @RequestParam String intro_cn, @RequestParam String hmpg_link, @RequestParam int sort_no) {
+        HttpSession session = request.getSession(false);
+        int loginId = (int) session.getAttribute("mngrSn");
+
+        if(portfolioDTO.getFile_yn() == 1){
+            portfolioService.previewImgInsert(portfolioDTO, loginId, model);
+        }
+
+        model.addAttribute("port_yr", port_yr);
+        model.addAttribute("bzenty_nm", bzenty_nm);
+        model.addAttribute("intro_cn", intro_cn);
+        model.addAttribute("hmpg_link", hmpg_link);
+        model.addAttribute("sort_no", sort_no);
+
+        return directory + "/portfolio_preview";
+    }
+
+
+    @ResponseBody
+    @RequestMapping("/getyear")
+    public Map<String, Object> getPortYearList(Model model) {
+        return portfolioService.getPortYearList(model);
+    }
+
+    @ResponseBody
+    @RequestMapping("/selectList")
+    public Map<String, Object> selectList(Model model, @RequestParam String keyword) {
+        return portfolioService.selectList(model, keyword);
     }
 }
 

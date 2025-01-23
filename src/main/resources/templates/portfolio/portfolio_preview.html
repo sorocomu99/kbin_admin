@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KB Innovation HUB | 미리보기</title>
+
+    <!-- 공통 스타일 시트 -->
+    <link rel="stylesheet" href="/kbinnovationhub_devadm/css/swiper-bundle.min.css">
+    <link rel="stylesheet" href="/kbinnovationhub_devadm/css/base.css">
+    <link rel="stylesheet" href="/kbinnovationhub_devadm/css/board.css">
+    <link rel="stylesheet" href="/kbinnovationhub_devadm/css/common.css">
+    <link rel="stylesheet" href="/kbinnovationhub_devadm/css/main.css">
+    <link rel="stylesheet" href="/kbinnovationhub_devadm/css/sub.css">
+
+    <!-- 임시 스크립트: 헤더/푸터 컴포넌트 (작업용 임시 파일이므로 개발단계부터는 스크립트 파일 안에 HTML 코드 사용) -->
+    <script src="/kbinnovationhub_devadm/component/header_preview.js"></script>
+    <script src="/kbinnovationhub_devadm/component/footer_preview.js"></script>
+
+    <!-- 공통 스크립트 -->
+    <script src="/kbinnovationhub_devadm/js/scrollreveal.min.js"></script>
+    <script src="/kbinnovationhub_devadm/js/gsap.min.js"></script>
+    <script src="/kbinnovationhub_devadm/js/ScrollToPlugin.min.js"></script>
+    <script src="/kbinnovationhub_devadm/js/ScrollTrigger.min.js"></script>
+    <script src="/kbinnovationhub_devadm/js/lenis.min.js"></script>
+    <script src="/kbinnovationhub_devadm/js/split-type.min.js"></script>
+    <script src="/kbinnovationhub_devadm/js/echarts.min.js"></script>
+    <script src="/kbinnovationhub_devadm/js/echarts-wordcloud.min.js"></script>
+    <script src="/kbinnovationhub_devadm/js/flatpickr.js"></script>
+    <script src="/kbinnovationhub_devadm/js/ko.js"></script>
+    <script src="/kbinnovationhub_devadm/js/swiper-bundle.min.js"></script>
+    <script src="/kbinnovationhub_devadm/js/countUp.umd.js"></script>
+    <script src="/kbinnovationhub_devadm/js/common.js"></script>
+    <script src="/kbinnovationhub_devadm/js/jquery-3.6.4.min.js"></script>
+</head>
+<body>
+<!-- 헤더 -->
+<app-header></app-header>
+<!-- 본문 -->
+    <main class="main">
+        <div class="section-top">
+            <div class="section-top-wrap">
+                <nav aria-label="Breadcrumb" class="breadcrumb" data-breadcrub-theme="light">
+                    <ul>
+                        <li class="item"><a href="/"><i class="icon icon-home"></i><span class="blind">HOME</span></a></li>
+                        <li class="item"><a href="/starters/support/list">KB스타터스</a></li>
+                        <li class="item"><span aria-current="page">포트폴리오</span></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+        <div class="portfolio">
+            <div class="portfolio-side">
+                <div class="sticky">
+                    <div class="swiper tab">
+                        <div class="swiper-wrapper list" id="nav-year">
+                        </div>
+                        <div class="swiper-scrollbar"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="portfolio-main" id="port-list">
+            </div>
+            <input type="hidden" name="port_yr" id="port_yr" th:value="${port_yr}">
+            <input type="hidden" name="bzenty_nm" id="bzenty_nm" th:value="${bzenty_nm}">
+            <input type="hidden" name="intro_cn" id="intro_cn" th:value="${intro_cn}">
+            <input type="hidden" name="hmpg_link" id="hmpg_link" th:value="${hmpg_link}">
+            <input type="hidden" name="sort_no" id="sort_no" th:value="${sort_no}">
+            <input type="hidden" name="preview_file_path" id="preview_file_path" th:value="${preview_file_path}">
+            <input type="hidden" name="preview_file_name" id="preview_file_name" th:value="${preview_file_name}">
+        </div>
+    </main>
+<!-- 푸터 -->
+<app-footer></app-footer>
+
+<!-- 스크립트 -->
+<script>
+    $(document).ready(function (){
+        const portyear = document.getElementById('port_yr').value;
+        getYear();
+        selectList(portyear);
+    });
+
+    function getYear() {
+
+        $.ajax({
+            url: '/kbinnovationhub_devadm/portfolio/getyear',
+            type: 'POST',
+            dataType: 'json',
+            success: function (data) {
+                if (data.portYearList && data.portYearList.length > 0) {
+                    const portYearList = data.portYearList;
+                    let htmlCode = '';
+                    for (let i = 0; i < portYearList.length; i++) {
+                        htmlCode += '<div class="swiper-slide item">';
+                        htmlCode += '   <a class="button" href="#portfolio-' + portYearList[i].port_yr + '" onclick="selectList(' + portYearList[i].port_yr + ')">';
+                        htmlCode += '       <span>' + portYearList[i].port_yr + '</span><i class="icon"></i>';
+                        htmlCode += '   </a>';
+                        htmlCode += '</div>';
+                    }
+                    $('#nav-year').html(htmlCode);
+
+                }else{
+                    $('#nav-year').html('<p>등록된 년도 정보가 없습니다.</p>');
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error('Error:', error);
+            }
+        });
+    }
+
+    function selectList(year) {
+        const bzenty_nm = document.getElementById('bzenty_nm').value;
+        const intro_cn = document.getElementById('intro_cn').value;
+        const hmpg_link = document.getElementById('hmpg_link').value;
+        const sort_no = document.getElementById('sort_no').value;
+        const preview_file_path = document.getElementById('preview_file_path').value;
+        const preview_file_name = document.getElementById('preview_file_name').value;
+
+        $.ajax({
+            url: '/kbinnovationhub_devadm/portfolio/selectList',
+            type: 'POST',
+            dataType: 'json',
+            data: { keyword: year },
+            success: function (data) {
+                if (data.selectList && data.selectList.length > 0) {
+                    const selectList = data.selectList;
+
+                    //sort_no 기준으로 정렬
+                    selectList.sort((a, b) => a.sort_no - b.sort_no);
+
+                    let htmlCode = '';
+                    htmlCode = '<div id="portfolio-' + selectList[0].port_yr + '" class="row">';
+                    htmlCode += '   <p class="heading heading-dot">' + selectList[0].port_yr + '</p>';
+                    htmlCode += '       <ul class="list">';
+
+                    //새로운 항목을 삽입할 html 코드
+                    let html_put = '';
+                    html_put += '       <li class="item" id="order_' + sort_no + '">';
+                    html_put += '           <div class="block">';
+                    html_put += '               <div class="image">';
+                    html_put += '                   <img src="' + (preview_file_path ? '/kbinnovationhub_devadm' + preview_file_path + preview_file_name : '') + '" alt="">';
+                    // html_put += '                   <img src="' + (preview_file_path ? '\\kbinnovationhub_devadm' + preview_file_path + preview_file_name : '') + '" alt="">';
+                    html_put += '               </div>';
+                    html_put += '               <div class="context">';
+                    html_put += '                   <p class="text">' + bzenty_nm + '</p>';
+                    html_put += '                   <p class="title">' + intro_cn + '</p>';
+                    html_put += '                   <a class="link" href="' + hmpg_link + '" target="_blank"></a>';
+                    html_put += '               </div>';
+                    html_put += '           </div>';
+                    html_put += '       </li>';
+
+                    // 기존 리스트에 새로운 항목을 추가할 위치 계산
+                    let insertIndex = selectList.findIndex(item => item.sort_no >= sort_no);
+                    if (insertIndex === -1) insertIndex = selectList.length;  //새로운 항목이 마지막에 추가되는 경우
+
+                    //새로운 항목을 해당 위치에 삽입
+                    selectList.splice(insertIndex, 0, {
+                        sort_no: sort_no,
+                        bzenty_nm: bzenty_nm,
+                        intro_cn: intro_cn,
+                        hmpg_link: hmpg_link,
+                        file_path: selectList[0].file_path,
+                        file_name: selectList[0].file_name
+                    });
+
+                    for (let i = 0; i < selectList.length; i++) {
+                        htmlCode += '           <li class="item" id="order_' + selectList[i].sort_no + '">';
+                        htmlCode += '               <div class="block">';
+                        htmlCode += '               <div class="image">';
+                        htmlCode += '                   <div class="image">';
+                        htmlCode += '                   <img src="' + (selectList[i].file_path ? '/kbinnovationhub_devadm' + selectList[i].file_path + selectList[i].file_name : '') + '" alt="">';
+                        // htmlCode += '                   <img src="' + (selectList[i].file_path ? '\\kbinnovationhub_devadm' + selectList[i].file_path + selectList[i].file_name : '') + '" alt="">';
+                        htmlCode += '               </div>';
+                        htmlCode += '                   <div class="context">';
+                        htmlCode += '                       <p class="text">' + selectList[i].intro_cn + '</p>';
+                        htmlCode += '                       <p class="title">' + selectList[i].bzenty_nm + '</p>';
+                        htmlCode += '                       <a class="link" href="' + selectList[i].hmpg_link + '" target="_blank"></a>';
+                        htmlCode += '                   </div>';
+                        htmlCode += '               </div>';
+                        htmlCode += '           </li>';
+                    }
+                    htmlCode += '       </ul>';
+                    htmlCode += '</div>';
+                    $('#port-list').html(htmlCode);
+
+                } else {
+                    $('#port-list').html('<p>등록된 포트폴리오가 없습니다.</p>');
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error('Error:', error);
+            }
+        });
+    }
+
+
+    let sticky, computedStyle, gap;
+
+    window.addEventListener('DOMContentLoaded', () => {
+        const hash = window.location.hash;
+        const rows = document.querySelectorAll('.portfolio-main .row');
+
+        sticky = document.querySelector('.portfolio-side .sticky');
+        computedStyle = window.getComputedStyle(sticky);
+        gap = parseInt(computedStyle.top, 10);
+
+        sr.reveal('.portfolio-side .tab', { distance: 0 });
+        sr.reveal('.portfolio-main .heading', { duration: 800 });
+        rows.forEach((row) => sr.reveal(row.querySelectorAll('.item'), { duration: 800, interval: 60 }));
+    });
+
+    function slideToSection(id) {
+        lenis.scrollTo(id, { offset: -gap, duration: 0.65 });
+    }
+
+    function sectionHistory() {
+        const scroll = document.querySelector('.sticky-container .scroll');
+        const tabs = document.querySelectorAll('.portfolio-side .tab .button');
+
+        let prev = tabs[0];
+        prev.setAttribute('aria-selected', 'true');
+
+        mobileTabMenu = new Swiper('.portfolio-side .tab', {
+            enable: false,
+            allowTouchMove: true,
+            speed: 300,
+            slidesPerView: 'auto',
+            slidesPerGroup: 1,
+            spaceBetween: 6,
+            breakpoints: {
+                1025: {
+                    allowTouchMove: false,
+                }
+            },
+            scrollbar: {
+                el: '.portfolio-side .tab .swiper-scrollbar',
+                draggable: true,
+            },
+        });
+
+        tabs.forEach((tab, i) => {
+            const href = tab.getAttribute("href");
+            let element = document.querySelector(href);
+
+            ScrollTrigger.create({
+                trigger: element,
+                start: "top center",
+                end: "bottom bottom",
+                onToggle: self => self.isActive && setActive(tab, i)
+                // markers: true
+            });
+
+            tab.addEventListener('click', () => slideToSection(href));
+        });
+
+        function setActive(link, i) {
+            prev.removeAttribute('aria-selected', 'false')
+            tabs[i].setAttribute('aria-selected', 'true')
+            prev = tabs[i];
+            mobileTabMenu.slideTo(i, 100);
+        }
+    }
+</script>
+</body>
+</html>

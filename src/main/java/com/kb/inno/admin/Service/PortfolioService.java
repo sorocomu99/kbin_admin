@@ -12,15 +12,19 @@ package com.kb.inno.admin.Service;
 
 import com.kb.inno.admin.DAO.PortfolioDAO;
 import com.kb.inno.admin.DTO.FileDTO;
+import com.kb.inno.admin.DTO.NoticeDTO;
 import com.kb.inno.admin.DTO.PortfolioDTO;
+import com.kb.inno.admin.DTO.SearchDTO;
 import com.kb.inno.common.FileUploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -287,5 +291,35 @@ public class PortfolioService {
         }
 
         return resultMap;
+    }
+
+    public Map<String, Object> getPortYearList(Model model) {
+        Map<String, Object> result = new HashMap<>();
+        List<PortfolioDTO> portYearList = portfolioDAO.selectPortYearList(model);
+        result.put("portYearList", portYearList);
+        return result;
+    }
+
+    public Map<String, Object> selectList(Model model, String keyword) {
+        Map<String, Object> result = new HashMap<>();
+        SearchDTO search = new SearchDTO();
+        search.setKeyword(keyword); //년도 (port_yr)
+        List<PortfolioDTO> selectList = portfolioDAO.selectList(search);
+        result.put("selectList", selectList);
+        return result;
+    }
+
+    public void previewImgInsert(PortfolioDTO portfolioDTO, int loginId, Model model) {
+        MultipartFile file = portfolioDTO.getMain_file();
+        FileUploader fileUploader = new FileUploader();
+        FileDTO fileSave = fileUploader.insertFile(file, loginId);
+
+        int result = portfolioDAO.insertFile(fileSave);
+
+        if(fileSave != null && result == 1){
+            FileDTO fileDTO = portfolioDAO.selectPreviewFile(fileSave.getFile_sn());
+            model.addAttribute("preview_file_path",fileDTO.getFile_path());
+            model.addAttribute("preview_file_name",fileDTO.getFile_nm());
+        }
     }
 }
