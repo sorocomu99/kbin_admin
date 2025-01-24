@@ -185,8 +185,7 @@ let hamburger = {
                 return;
             }
 
-            console.log('aa');
-            
+
             
             hamburger.closeMenu();
         });

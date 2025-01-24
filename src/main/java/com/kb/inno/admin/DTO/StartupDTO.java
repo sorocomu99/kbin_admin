@@ -11,12 +11,12 @@ public class StartupDTO {
     private String ent_nm;             //기업명
     private String main_biz;           //주요사업
     private String tpbiz;              //업종
-    private int now_wrkr_nocs;         //현재근무자수
+    private Integer now_wrkr_nocs;         //현재근무자수
     private String rprsv_nm;           //대표자명
     private String fndn_ymd;           //설립일자
     private String brno;               //사업자번호
     private String corp_no;            //법인번호
-    private long cptl_amt;             //자본금
+    private Long cptl_amt;             //자본금
     private String ent_shape;          //기업 형태
     private String external_audit_yn;  //외감기업 여부
     private String venture_cert_yn;    //벤처인증 여부
@@ -24,8 +24,8 @@ public class StartupDTO {
     private String ent_scale;          //기업 규모
     private String prdct;              //제품
     private String hmpg;               //홈페이지 주소
-    private int mm12_jncmp_nocs;       //12개월 입사자
-    private int mm12_rsgntn_nocs;      //12개월 퇴사자
+    private Integer mm12_jncmp_nocs;       //12개월 입사자
+    private Integer mm12_rsgntn_nocs;      //12개월 퇴사자
     private String mm12_rsgntn_rt;       //12개월 퇴사율
     //사업 서비스 정보( , -> | 으로 변경 DB 등록시 , 로 다시 변경)
     private String srvc_nm;            //서비스 명
@@ -49,42 +49,42 @@ public class StartupDTO {
     private String sls_yr3;            //년도3
     private String sls_yr4;            //년도4
     private String sls_yr5;            //년도5
-    private long sls_amt;
-    private long sls_amt1 = 0;             //매출액1
-    private long sls_amt2 = 0;             //매출액2
-    private long sls_amt3 = 0;             //매출액3
-    private long sls_amt4 = 0;             //매출액4
-    private long sls_amt5 = 0;             //매출액5
-    private long sls_cost_amt;
-    private long sls_cost_amt1 = 0;        //매출원가1
-    private long sls_cost_amt2 = 0;        //매출원가2
-    private long sls_cost_amt3 = 0;        //매출원가3
-    private long sls_cost_amt4 = 0;        //매출원가4
-    private long sls_cost_amt5 = 0;        //매출원가5
-    private long sls_gramt;
-    private long sls_gramt1 = 0;           //매출총이익1
-    private long sls_gramt2 = 0;           //매출총이익2
-    private long sls_gramt3 = 0;           //매출총이익3
-    private long sls_gramt4 = 0;           //매출총이익4
-    private long sls_gramt5 = 0;           //매출총이익5
-    private long sga_amt;
-    private long sga_amt1 = 0;             //판관비1
-    private long sga_amt2 = 0;             //판관비2
-    private long sga_amt3 = 0;             //판관비3
-    private long sga_amt4 = 0;             //판관비4
-    private long sga_amt5 = 0;             //판관비5
-    private long operating_profit;
-    private long operating_profit1 = 0;    //영업이익1
-    private long operating_profit2 = 0;    //영업이익2
-    private long operating_profit3 = 0;    //영업이익3
-    private long operating_profit4 = 0;    //영업이익4
-    private long operating_profit5 = 0;    //영업이익5
-    private long net_profit;
-    private long net_profit1 = 0;          //순이익1
-    private long net_profit2 = 0;          //순이익2
-    private long net_profit3 = 0;          //순이익3
-    private long net_profit4 = 0;          //순이익4
-    private long net_profit5 = 0;          //순이익5
+    private Long sls_amt;
+    private Long sls_amt1 = 0L;             //매출액1
+    private Long sls_amt2 = 0L;             //매출액2
+    private Long sls_amt3 = 0L;             //매출액3
+    private Long sls_amt4 = 0L;             //매출액4
+    private Long sls_amt5 = 0L;             //매출액5
+    private Long sls_cost_amt;
+    private Long sls_cost_amt1 = 0L;        //매출원가1
+    private Long sls_cost_amt2 = 0L;        //매출원가2
+    private Long sls_cost_amt3 = 0L;        //매출원가3
+    private Long sls_cost_amt4 = 0L;        //매출원가4
+    private Long sls_cost_amt5 = 0L;        //매출원가5
+    private Long sls_gramt;
+    private Long sls_gramt1 = 0L;           //매출총이익1
+    private Long sls_gramt2 = 0L;           //매출총이익2
+    private Long sls_gramt3 = 0L;           //매출총이익3
+    private Long sls_gramt4 = 0L;           //매출총이익4
+    private Long sls_gramt5 = 0L;           //매출총이익5
+    private Long sga_amt;
+    private Long sga_amt1 = 0L;             //판관비1
+    private Long sga_amt2 = 0L;             //판관비2
+    private Long sga_amt3 = 0L;             //판관비3
+    private Long sga_amt4 = 0L;             //판관비4
+    private Long sga_amt5 = 0L;             //판관비5
+    private Long operating_profit;
+    private Long operating_profit1 = 0L;    //영업이익1
+    private Long operating_profit2 = 0L;    //영업이익2
+    private Long operating_profit3 = 0L;    //영업이익3
+    private Long operating_profit4 = 0L;    //영업이익4
+    private Long operating_profit5 = 0L;    //영업이익5
+    private Long net_profit;
+    private Long net_profit1 = 0L;          //순이익1
+    private Long net_profit2 = 0L;          //순이익2
+    private Long net_profit3 = 0L;          //순이익3
+    private Long net_profit4 = 0L;          //순이익4
+    private Long net_profit5 = 0L;          //순이익5
     //재무상태표
     private String ast_yr;
     private String ast_yr1;            //년도1
@@ -92,42 +92,42 @@ public class StartupDTO {
     private String ast_yr3;            //년도3
     private String ast_yr4;            //년도4
     private String ast_yr5;            //년도5
-    private long current_assets;
-    private long current_assets1 = 0;      //유동자산1
-    private long current_assets2 = 0;      //유동자산2
-    private long current_assets3 = 0;      //유동자산3
-    private long current_assets4 = 0;      //유동자산4
-    private long current_assets5 = 0;      //유동자산5
-    private long non_current_assets;
-    private long non_current_assets1 = 0;  //비유동자산1
-    private long non_current_assets2 = 0;  //비유동자산2
-    private long non_current_assets3 = 0;  //비유동자산3
-    private long non_current_assets4 = 0;  //비유동자산4
-    private long non_current_assets5 = 0;  //비유동자산5
-    private long ast_gramt;
-    private long ast_gramt1 = 0;           //자산총계1
-    private long ast_gramt2 = 0;           //자산총계2
-    private long ast_gramt3 = 0;           //자산총계3
-    private long ast_gramt4 = 0;           //자산총계4
-    private long ast_gramt5 = 0;           //자산총계5
-    private long debt_gramt;
-    private long debt_gramt1 = 0;          //부채총계1
-    private long debt_gramt2 = 0;          //부채총계2
-    private long debt_gramt3 = 0;          //부채총계3
-    private long debt_gramt4 = 0;          //부채총계4
-    private long debt_gramt5 = 0;          //부채총계5
-    private long cptl;
-    private long cptl1 = 0;                //자본금1
-    private long cptl2 = 0;                //자본금2
-    private long cptl3 = 0;                //자본금3
-    private long cptl4 = 0;                //자본금4
-    private long cptl5 = 0;                //자본금5
-    private long cptl_gramt;
-    private long cptl_gramt1 = 0;          //자본총계1
-    private long cptl_gramt2 = 0;          //자본총계2
-    private long cptl_gramt3 = 0;          //자본총계3
-    private long cptl_gramt4 = 0;          //자본총계4
-    private long cptl_gramt5 = 0;          //자본총계5
+    private Long current_assets;
+    private Long current_assets1 = 0L;      //유동자산1
+    private Long current_assets2 = 0L;      //유동자산2
+    private Long current_assets3 = 0L;      //유동자산3
+    private Long current_assets4 = 0L;      //유동자산4
+    private Long current_assets5 = 0L;      //유동자산5
+    private Long non_current_assets;
+    private Long non_current_assets1 = 0L;  //비유동자산1
+    private Long non_current_assets2 = 0L;  //비유동자산2
+    private Long non_current_assets3 = 0L;  //비유동자산3
+    private Long non_current_assets4 = 0L;  //비유동자산4
+    private Long non_current_assets5 = 0L;  //비유동자산5
+    private Long ast_gramt;
+    private Long ast_gramt1 = 0L;           //자산총계1
+    private Long ast_gramt2 = 0L;           //자산총계2
+    private Long ast_gramt3 = 0L;           //자산총계3
+    private Long ast_gramt4 = 0L;           //자산총계4
+    private Long ast_gramt5 = 0L;           //자산총계5
+    private Long debt_gramt;
+    private Long debt_gramt1 = 0L;          //부채총계1
+    private Long debt_gramt2 = 0L;          //부채총계2
+    private Long debt_gramt3 = 0L;          //부채총계3
+    private Long debt_gramt4 = 0L;          //부채총계4
+    private Long debt_gramt5 = 0L;          //부채총계5
+    private Long cptl;
+    private Long cptl1 = 0L;                //자본금1
+    private Long cptl2 = 0L;                //자본금2
+    private Long cptl3 = 0L;                //자본금3
+    private Long cptl4 = 0L;                //자본금4
+    private Long cptl5 = 0L;                //자본금5
+    private Long cptl_gramt;
+    private Long cptl_gramt1 = 0L;          //자본총계1
+    private Long cptl_gramt2 = 0L;          //자본총계2
+    private Long cptl_gramt3 = 0L;          //자본총계3
+    private Long cptl_gramt4 = 0L;          //자본총계4
+    private Long cptl_gramt5 = 0L;          //자본총계5
     //뉴스정보( , -> | 으로 변경 DB 등록시 , 로 다시 변경)
     private String thumb_url;          //썸네일 이미지
     private String news_ttl;           //기사 제목
@@ -136,38 +136,38 @@ public class StartupDTO {
     private String news_id;
     //키워드
     private String keywd;
-    private int nocs;
+    private Integer nocs;
     private String keywd1;             //키워드1
-    private int nocs1 = 0;                 //카운트1
+    private Integer nocs1 = 0;                 //카운트1
     private String keywd2;             //키워드2
-    private int nocs2 = 0;                 //카운트2
+    private Integer nocs2 = 0;                 //카운트2
     private String keywd3;             //키워드3
-    private int nocs3 = 0;                 //카운트3
+    private Integer nocs3 = 0;                 //카운트3
     private String keywd4;             //키워드4
-    private int nocs4 = 0;                 //카운트4
+    private Integer nocs4 = 0;                 //카운트4
     private String keywd5;             //키워드5
-    private int nocs5 = 0;                 //카운트5
+    private Integer nocs5 = 0;                 //카운트5
     private String keywd6;             //키워드6
-    private int nocs6 = 0;                 //카운트6
+    private Integer nocs6 = 0;                 //카운트6
     private String keywd7;             //키워드7
-    private int nocs7 = 0;                 //카운트7
+    private Integer nocs7 = 0;                 //카운트7
     private String keywd8;             //키워드8
-    private int nocs8 = 0;                 //카운트8
+    private Integer nocs8 = 0;                 //카운트8
     private String keywd9;             //키워드9
-    private int nocs9 = 0;                 //카운트9
+    private Integer nocs9 = 0;                 //카운트9
     private String keywd10;            //키워드10
-    private int nocs10 = 0;                //카운트10
+    private Integer nocs10 = 0;                //카운트10
     //공통
-    private int frst_rgtr;       // 최초 등록자
+    private Integer frst_rgtr;       // 최초 등록자
     private Date frst_reg_dt;    // 최초 등록 일시
-    private int last_mdfr;       // 최종 수정자
+    private Integer last_mdfr;       // 최종 수정자
     private Date last_mdfcn_dt;  // 최종 수정 일시
-    private int menu_id;         // 메뉴 ID
-    private int rownumber;       // 순번
-    private int rnum;
+    private Integer menu_id;         // 메뉴 ID
+    private Integer rownumber;       // 순번
+    private Integer rnum;
     //검색
     private String type;
     private String keyword;
-    private int start;
-    private int end;
+    private Integer start;
+    private Integer end;
 }

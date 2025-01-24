@@ -49,7 +49,9 @@ public class SurveyController {
     @GetMapping("/banner")
     public ResponseEntity<Resource> getImage(String filename) throws IOException {
         // TODO : 파일 경로를 설정해주세요 또는 기존 파일경로를 설정했던 방식으로 사용해주세요
-        String filePath = "/Users/johuiyang/Documents/web/uploads/kbinno/" + filename;
+        //String filePath = "/Users/johuiyang/Documents/web/uploads/kbinno/" + filename;
+        String filePath = "D:/fsfile/dev_kbinnovation/" + filename;
+        //String filePath = "/fsfile/kbinnovation/" + filename;
 
         // 파일이 존재하는지 확인
         File file = new File(filePath);

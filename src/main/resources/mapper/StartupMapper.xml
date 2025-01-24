@@ -47,7 +47,7 @@
 				       SELECT ENT_CD
 				            , ENT_NM
 				            , MAIN_BIZ
-				            , ROW_NUMBER() OVER(ORDER BY ENT_CD DESC) RNUM
+				            , ROW_NUMBER() OVER(ORDER BY A.FRST_REG_DT DESC) RNUM
 				            , NVL((SELECT DISTINCT SRVC_NM FROM KB_API_BIZ_SRVC_INFO Z WHERE Z.ENT_CD = A.ENT_CD AND ROWNUM = 1), '-') SRVC_NM
                          FROM KB_API_STARTER_INFO A
                         WHERE 1 = 1
@@ -66,9 +66,9 @@
                                 </when>
                             </choose>
                         </if>
-                        ORDER BY ENT_CD ASC
+                        ORDER BY A.FRST_REG_DT DESC
                        )
-                 ORDER BY ROWNUMBER DESC
+                 ORDER BY ROWNUMBER ASC
               )
          WHERE RNUM BETWEEN #{start} AND #{end}
     </select>
@@ -284,6 +284,32 @@
         )
     </insert>
 
+    <update id="updateStarterInfo" parameterType="com.kb.inno.admin.DTO.StartupDTO">
+        UPDATE KB_API_STARTER_INFO
+           SET ENT_NM = #{ent_nm}
+             , MAIN_BIZ = #{main_biz}
+             , TPBIZ = #{tpbiz}
+             , NOW_WRKR_NOCS = #{now_wrkr_nocs}
+             , RPRSV_NM = #{rprsv_nm}
+             , FNDN_YMD = #{fndn_ymd}
+             , BRNO = REPLACE(#{brno}, '-', '')
+             , CORP_NO = REPLACE(#{corp_no}, '-', '')
+             , CPTL_AMT = #{cptl_amt}
+             , ENT_SHAPE = #{ent_shape}
+             , EXTERNAL_AUDIT_YN = #{external_audit_yn}
+             , VENTURE_CERT_YN = #{venture_cert_yn}
+             , ADDR = #{addr}
+             , ENT_SCALE = #{ent_scale}
+             , PRDCT = #{prdct}
+             , HMPG = #{hmpg}
+             , MM12_JNCMP_NOCS = #{mm12_jncmp_nocs}
+             , MM12_RSGNTN_NOCS = #{mm12_rsgntn_nocs}
+             , MM12_RSGNTN_RT = #{mm12_rsgntn_rt}
+             , KB_STARTERS_YN = 'Y'
+             , LAST_MDFCN_DT = SYSDATE
+        WHERE ENT_CD = #{ent_cd}
+    </update>
+
     <delete id="deleteStarterInfo" parameterType="com.kb.inno.admin.DTO.StartupDTO">
         DELETE
           FROM KB_API_STARTER_INFO
@@ -389,9 +415,9 @@
          WHERE ENT_CD = #{ent_cd}
     </select>
 
-    <select id="selectSlsInfo" parameterType="com.kb.inno.admin.DTO.StartupDTO" resultType="com.kb.inno.admin.DTO.StartupDTO">
+    <select id="selectListSlsInfo" parameterType="com.kb.inno.admin.DTO.StartupDTO" resultType="com.kb.inno.admin.DTO.StartupDTO">
         SELECT ENT_CD
-             , YR
+             , YR as sls_yr
              , SLS_AMT
              , SLS_COST_AMT
              , SLS_GRAMT
@@ -400,11 +426,12 @@
              , NET_PROFIT
           FROM KB_API_SLS_INFO
          WHERE ENT_CD = #{ent_cd}
+         ORDER BY YR ASC
     </select>
 
-    <select id="selectAstInfo" parameterType="com.kb.inno.admin.DTO.StartupDTO" resultType="com.kb.inno.admin.DTO.StartupDTO">
+    <select id="selectListAstInfo" parameterType="com.kb.inno.admin.DTO.StartupDTO" resultType="com.kb.inno.admin.DTO.StartupDTO">
         SELECT ENT_CD
-             , YR
+             , YR as ast_yr
              , CURRENT_ASSETS
              , NON_CURRENT_ASSETS
              , AST_GRAMT
@@ -413,6 +440,7 @@
              , CPTL_GRAMT
           FROM KB_API_AST_INFO
          WHERE ENT_CD = #{ent_cd}
+        ORDER BY YR ASC
     </select>
 
     <select id="selectNewsInfo" parameterType="com.kb.inno.admin.DTO.StartupDTO" resultType="com.kb.inno.admin.DTO.StartupDTO">

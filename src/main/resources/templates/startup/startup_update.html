@@ -5,7 +5,7 @@
 <body>
     <div class="wrap">
         <div th:replace="fragment/header :: headerFragment"></div>
-    
+
         <main class="main">
             <div class="container">
                 <div class="row">
@@ -167,30 +167,30 @@
                                             </button>
                                         </div>
                                     </div>
-                                    <table class="table-service table table-bordered align-middle">
+                                    <table class="table-service table table-bordered align-middle" th:each="bizSrvc, status : ${selectBizSrvcInfo}">
                                         <tbody>
                                             <tr>
                                                 <th class="bg-light" width="20%">서비스명</th>
                                                 <td>
-                                                    <input type="text" class="form-control" id="srvc_nm" name="srvc_nm" value="" placeholder="ex) ATOM">
+                                                    <input type="text" class="form-control" id="srvc_nm" name="srvc_nm" th:value="${bizSrvc.srvc_nm}" placeholder="ex) ATOM">
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <th class="bg-light" width="20%">Web 링크</th>
                                                 <td>
-                                                    <input type="text" class="form-control" id="web_srvc_link" name="web_srvc_link" value="" placeholder="ex) https://rebellions.ai/rebellions-product/atom-2/">
+                                                    <input type="text" class="form-control" id="web_srvc_link" name="web_srvc_link" th:value="${bizSrvc.web_srvc_link}" placeholder="ex) https://rebellions.ai/rebellions-product/atom-2/">
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <th class="bg-light" width="20%">Android 링크</th>
                                                 <td>
-                                                    <input type="text" class="form-control" id="google_app_link" name="google_app_link" value="" placeholder="ex) https://rebellions.ai/rebellions-product/atom-2/">
+                                                    <input type="text" class="form-control" id="google_app_link" name="google_app_link" th:value="${bizSrvc.google_app_link}" placeholder="ex) https://rebellions.ai/rebellions-product/atom-2/">
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <th class="bg-light" width="20%">IOS 링크</th>
                                                 <td>
-                                                    <input type="text" class="form-control" id="apple_app_link" name="apple_app_link" value="" placeholder="ex) https://rebellions.ai/rebellions-product/atom-2/">
+                                                    <input type="text" class="form-control" id="apple_app_link" name="apple_app_link" th:value="${bizSrvc.apple_app_link}" placeholder="ex) https://rebellions.ai/rebellions-product/atom-2/">
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -208,8 +208,8 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td><input type="text" class="form-control" id="invest_ymd" name="invest_ymd" value="" placeholder="ex) 2024-08-09"></td>
+                                            <tr th:if="${#lists.isEmpty(selectInvestInfo)}">
+                                                <td><input type="text" class="form-control" id="invest_ymd" name="invest_ymd" placeholder="ex) 2024-08-09"></td>
                                                 <td>
                                                     <select class="form-select" aria-label="" name="series_nm">
                                                         <option value="">해당없음</option>
@@ -222,13 +222,42 @@
                                                         <option value="E">Series E</option>
                                                         <option value="F">Series F</option>
                                                         <option value="G">Series G</option>
-                                                        <option value=PREIPO">Pre-IPO</option>
+                                                        <option value="PREIPO">Pre-IPO</option>
                                                         <option value="M&A">M&A</option>
                                                         <option value="TIPS">TIPS</option>
                                                     </select>
                                                 </td>
-                                                <td><input type="number" class="form-control" id="invest_amt" name="invest_amt" value="" placeholder="ex) 100000000"></td>
-                                                <td><input type="text" class="form-control" id="investor" name="investor" value="" placeholder="ex) 글로벌팁스"></td>
+                                                <td><input type="number" class="form-control" id="invest_amt" name="invest_amt" placeholder="ex) 100000000"></td>
+                                                <td><input type="text" class="form-control" id="investor" name="investor" placeholder="ex) 글로벌팁스"></td>
+                                                <td class="text-center">
+                                                    <button type="button" class="btn btn-sm btn-outline-primary" onclick="addInputInvest()">
+                                                        <i class="me-0" data-feather="plus"></i>
+                                                        추가
+                                                    </button>
+                                                </td>
+                                            </tr>
+
+                                            <tr th:each="invest, status : ${selectInvestInfo}">
+                                                <td><input type="text" class="form-control" id="invest_ymd" name="invest_ymd" th:value="${invest.apple_app_link}" placeholder="ex) 2024-08-09"></td>
+                                                <td>
+                                                    <select class="form-select" aria-label="" name="series_nm">
+                                                        <option value="" th:selected="${invest.series_nm == null or invest.series_nm == ''}">해당없음</option>
+                                                        <option value="SEED" th:selected="${invest.series_nm == 'SEED'}">Seed</option>
+                                                        <option value="PREA" th:selected="${invest.series_nm == 'PREA'}">Pre-A</option>
+                                                        <option value="A" th:selected="${invest.series_nm == 'A'}">Series A</option>
+                                                        <option value="B" th:selected="${invest.series_nm == 'B'}">Series B</option>
+                                                        <option value="C" th:selected="${invest.series_nm == 'C'}">Series C</option>
+                                                        <option value="D" th:selected="${invest.series_nm == 'D'}">Series D</option>
+                                                        <option value="E" th:selected="${invest.series_nm == 'E'}">Series E</option>
+                                                        <option value="F" th:selected="${invest.series_nm == 'F'}">Series F</option>
+                                                        <option value="G" th:selected="${invest.series_nm == 'G'}">Series G</option>
+                                                        <option value="PREIPO" th:selected="${invest.series_nm == 'PREIPO'}">Pre-IPO</option>
+                                                        <option value="M&A" th:selected="${invest.series_nm == 'M&A'}">M&A</option>
+                                                        <option value="TIPS" th:selected="${invest.series_nm == 'TIPS'}">TIPS</option>
+                                                    </select>
+                                                </td>
+                                                <td><input type="number" class="form-control" id="invest_amt" name="invest_amt" th:value="${invest.invest_amt}" placeholder="ex) 100000000"></td>
+                                                <td><input type="text" class="form-control" id="investor" name="investor" th:value="${invest.investor}" placeholder="ex) 글로벌팁스"></td>
                                                 <td class="text-center">
                                                     <button type="button" class="btn btn-sm btn-outline-primary" onclick="addInputInvest()">
                                                         <i class="me-0" data-feather="plus"></i>
@@ -251,11 +280,26 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td><input type="number" class="form-control" name="crtr_ym" value="" placeholder="ex) 202008" maxlength="6"></td>
-                                                <td><input type="number" class="form-control" name="jncmp_nocs" value="" placeholder="ex) 4"></td>
-                                                <td><input type="number" class="form-control" name="rsgntn_nocs" value="" placeholder="ex) 0"></td>
-                                                <td><input type="number" class="form-control" name="hdof_nocs" value="" placeholder="ex) 4"></td>
+                                            <tr th:if="${#lists.isEmpty(selectEmploInfo)}">
+                                                <td><input type="number" class="form-control" name="crtr_ym" placeholder="ex) 202008" maxlength="6"
+                                                           oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"></td>
+                                                <td><input type="number" class="form-control" name="jncmp_nocs" placeholder="ex) 4"></td>
+                                                <td><input type="number" class="form-control" name="rsgntn_nocs" placeholder="ex) 0"></td>
+                                                <td><input type="number" class="form-control" name="hdof_nocs" placeholder="ex) 4"></td>
+                                                <td class="text-center">
+                                                    <button type="button" class="btn btn-sm btn-outline-primary" onclick="addInputRecruit()">
+                                                        <i class="me-0" data-feather="plus"></i>
+                                                        추가
+                                                    </button>
+                                                </td>
+                                            </tr>
+
+                                            <tr th:each="emplo, status : ${selectEmploInfo}">
+                                                <td><input type="number" class="form-control" name="crtr_ym" th:value="${emplo.crtr_ym}" placeholder="ex) 202008" maxlength="6"
+                                                           oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"></td>
+                                                <td><input type="number" class="form-control" name="jncmp_nocs" th:value="${emplo.jncmp_nocs}" placeholder="ex) 4"></td>
+                                                <td><input type="number" class="form-control" name="rsgntn_nocs" th:value="${emplo.rsgntn_nocs}" placeholder="ex) 0"></td>
+                                                <td><input type="number" class="form-control" name="hdof_nocs" th:value="${emplo.hdof_nocs}" placeholder="ex) 4"></td>
                                                 <td class="text-center">
                                                     <button type="button" class="btn btn-sm btn-outline-primary" onclick="addInputRecruit()">
                                                         <i class="me-0" data-feather="plus"></i>
@@ -271,71 +315,91 @@
                                         <thead>
                                             <tr>
                                                 <th class="bg-light align-middle" width="16.66666%">항목</th>
-                                                <th class="bg-light" width="16.66666%">
-                                                    <input type="number" class="form-control" name="sls_yr1" value="" placeholder="ex) 2019" maxlength="4" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
-                                                </th>
-                                                <th class="bg-light" width="16.66666%">
-                                                    <input type="number" class="form-control" name="sls_yr2" value="" placeholder="ex) 2020" maxlength="4" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
-                                                </th>
-                                                <th class="bg-light" width="16.66666%">
-                                                    <input type="number" class="form-control" name="sls_yr3" value="" placeholder="ex) 2021" maxlength="4" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
-                                                </th>
-                                                <th class="bg-light" width="16.66666%">
-                                                    <input type="number" class="form-control" name="sls_yr4" value="" placeholder="ex) 2022" maxlength="4" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
-                                                </th>
-                                                <th class="bg-light" width="16.66666%">
-                                                    <input type="number" class="form-control" name="sls_yr5" value="" placeholder="ex) 2023" maxlength="4" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
-                                                </th>
+                                                <th:block th:with="list=${selectSlsInfoList ?: {}}">
+                                                    <th:block th:each="item, iterStat : ${#numbers.sequence(1, 5)}">
+                                                        <th class="bg-light" width="16.66666%">
+                                                            <input type="number" class="form-control" th:name="'sls_yr' + ${iterStat.count}"
+                                                                   th:value="${iterStat.index < #lists.size(list)} ? ${list[iterStat.index]?.sls_yr} : ''"
+                                                                   th:placeholder="'ex) ' + ${2019 + iterStat.index}"
+                                                                   maxlength="4"
+                                                                   oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
+                                                        </th>
+                                                    </th:block>
+                                                </th:block>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr>
                                                 <th>매출액</th>
-                                                <td><input type="number" class="form-control" name="sls_amt1" value="" placeholder="ex) 100000"></td>
-                                                <td><input type="number" class="form-control" name="sls_amt2" value="" placeholder="ex) 100000"></td>
-                                                <td><input type="number" class="form-control" name="sls_amt3" value="" placeholder="ex) 100000"></td>
-                                                <td><input type="number" class="form-control" name="sls_amt4" value="" placeholder="ex) 100000"></td>
-                                                <td><input type="number" class="form-control" name="sls_amt5" value="" placeholder="ex) 100000"></td>
+                                                <th:block th:with="list=${selectSlsInfoList ?: {}}">
+                                                    <th:block th:each="item, iterStat : ${#numbers.sequence(1, 5)}">
+                                                        <td>
+                                                            <input type="number" class="form-control" th:name="'sls_amt' + ${iterStat.count}"
+                                                                   th:value="${iterStat.index < #lists.size(list)} ? ${list[iterStat.index]?.sls_amt} : ''"
+                                                                   placeholder="ex) 100000">
+                                                        </td>
+                                                    </th:block>
+                                                </th:block>
                                             </tr>
                                             <tr>
                                                 <th>매출원가</th>
-                                                <td><input type="number" class="form-control" name="sls_cost_amt1" value="" placeholder="ex) 100000"></td>
-                                                <td><input type="number" class="form-control" name="sls_cost_amt2" value="" placeholder="ex) 100000"></td>
-                                                <td><input type="number" class="form-control" name="sls_cost_amt3" value="" placeholder="ex) 100000"></td>
-                                                <td><input type="number" class="form-control" name="sls_cost_amt4" value="" placeholder="ex) 100000"></td>
-                                                <td><input type="number" class="form-control" name="sls_cost_amt5" value="" placeholder="ex) 100000"></td>
+                                                <th:block th:with="list=${selectSlsInfoList ?: {}}">
+                                                    <th:block th:each="item, iterStat : ${#numbers.sequence(1, 5)}">
+                                                        <td>
+                                                            <input type="number" class="form-control" th:name="'sls_cost_amt' + ${iterStat.count}"
+                                                                   th:value="${iterStat.index < #lists.size(list)} ? ${list[iterStat.index]?.sls_cost_amt} : ''"
+                                                                   placeholder="ex) 100000">
+                                                        </td>
+                                                    </th:block>
+                                                </th:block>
                                             </tr>
                                             <tr>
                                                 <th>매출총이익</th>
-                                                <td><input type="number" class="form-control" name="sls_gramt1" value="" placeholder="ex) 100000"></td>
-                                                <td><input type="number" class="form-control" name="sls_gramt2" value="" placeholder="ex) 100000"></td>
-                                                <td><input type="number" class="form-control" name="sls_gramt3" value="" placeholder="ex) 100000"></td>
-                                                <td><input type="number" class="form-control" name="sls_gramt4" value="" placeholder="ex) 100000"></td>
-                                                <td><input type="number" class="form-control" name="sls_gramt5" value="" placeholder="ex) 100000"></td>
+                                                <th:block th:with="list=${selectSlsInfoList ?: {}}">
+                                                    <th:block th:each="item, iterStat : ${#numbers.sequence(1, 5)}">
+                                                        <td>
+                                                            <input type="number" class="form-control" th:name="'sls_gramt' + ${iterStat.count}"
+                                                                   th:value="${iterStat.index < #lists.size(list)} ? ${list[iterStat.index]?.sls_gramt} : ''"
+                                                                   placeholder="ex) 100000">
+                                                        </td>
+                                                    </th:block>
+                                                </th:block>
                                             </tr>
                                             <tr>
                                                 <th>판관비</th>
-                                                <td><input type="number" class="form-control" name="sga_amt1" value="" placeholder="ex) 100000"></td>
-                                                <td><input type="number" class="form-control" name="sga_amt2" value="" placeholder="ex) 100000"></td>
-                                                <td><input type="number" class="form-control" name="sga_amt3" value="" placeholder="ex) 100000"></td>
-                                                <td><input type="number" class="form-control" name="sga_amt4" value="" placeholder="ex) 100000"></td>
-                                                <td><input type="number" class="form-control" name="sga_amt5" value="" placeholder="ex) 100000"></td>
+                                                <th:block th:with="list=${selectSlsInfoList ?: {}}">
+                                                    <th:block th:each="item, iterStat : ${#numbers.sequence(1, 5)}">
+                                                        <td>
+                                                            <input type="number" class="form-control" th:name="'sga_amt' + ${iterStat.count}"
+                                                                   th:value="${iterStat.index < #lists.size(list)} ? ${list[iterStat.index]?.sga_amt} : ''"
+                                                                   placeholder="ex) 100000">
+                                                        </td>
+                                                    </th:block>
+                                                </th:block>
                                             </tr>
                                             <tr>
                                                 <th>영업이익</th>
-                                                <td><input type="number" class="form-control" name="operating_profit1" value="" placeholder="ex) 100000"></td>
-                                                <td><input type="number" class="form-control" name="operating_profit2" value="" placeholder="ex) -100000"></td>
-                                                <td><input type="number" class="form-control" name="operating_profit3" value="" placeholder="ex) -100000"></td>
-                                                <td><input type="number" class="form-control" name="operating_profit4" value="" placeholder="ex) -100000"></td>
-                                                <td><input type="number" class="form-control" name="operating_profit5" value="" placeholder="ex) -100000"></td>
+                                                <th:block th:with="list=${selectSlsInfoList ?: {}}">
+                                                    <th:block th:each="item, iterStat : ${#numbers.sequence(1, 5)}">
+                                                        <td>
+                                                            <input type="number" class="form-control" th:name="'operating_profit' + ${iterStat.count}"
+                                                                   th:value="${iterStat.index < #lists.size(list)} ? ${list[iterStat.index]?.operating_profit} : ''"
+                                                                   placeholder="ex) 100000">
+                                                        </td>
+                                                    </th:block>
+                                                </th:block>
                                             </tr>
                                             <tr>
                                                 <th>순이익</th>
-                                                <td><input type="number" class="form-control" name="net_profit1" value="" placeholder="ex) 100000"></td>
-                                                <td><input type="number" class="form-control" name="net_profit2" value="" placeholder="ex) -100000"></td>
-                                                <td><input type="number" class="form-control" name="net_profit3" value="" placeholder="ex) -100000"></td>
-                                                <td><input type="number" class="form-control" name="net_profit4" value="" placeholder="ex) -100000"></td>
-                                                <td><input type="number" class="form-control" name="net_profit5" value="" placeholder="ex) -100000"></td>
+                                                <th:block th:with="list=${selectSlsInfoList ?: {}}">
+                                                    <th:block th:each="item, iterStat : ${#numbers.sequence(1, 5)}">
+                                                        <td>
+                                                            <input type="number" class="form-control" th:name="'net_profit' + ${iterStat.count}"
+                                                                   th:value="${iterStat.index < #lists.size(list)} ? ${list[iterStat.index]?.net_profit} : ''"
+                                                                   placeholder="ex) 100000">
+                                                        </td>
+                                                    </th:block>
+                                                </th:block>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -345,61 +409,91 @@
                                         <thead>
                                             <tr>
                                                 <th class="bg-light align-middle" width="16.66666%">항목</th>
-                                                <th class="bg-light" width="16.66666%"><input type="number" class="form-control" name="ast_yr1" value="" placeholder="ex) 2019"></th>
-                                                <th class="bg-light" width="16.66666%"><input type="number" class="form-control" name="ast_yr2" value="" placeholder="ex) 2020"></th>
-                                                <th class="bg-light" width="16.66666%"><input type="number" class="form-control" name="ast_yr3" value="" placeholder="ex) 2021"></th>
-                                                <th class="bg-light" width="16.66666%"><input type="number" class="form-control" name="ast_yr4" value="" placeholder="ex) 2022"></th>
-                                                <th class="bg-light" width="16.66666%"><input type="number" class="form-control" name="ast_yr5" value="" placeholder="ex) 2023"></th>
+                                                <th:block th:with="list=${selectListAstInfo ?: {}}">
+                                                    <th:block th:each="item, iterStat : ${#numbers.sequence(1, 5)}">
+                                                        <th class="bg-light" width="16.66666%">
+                                                            <input type="number" class="form-control" th:name="'ast_yr' + ${iterStat.count}"
+                                                                   th:value="${iterStat.index < #lists.size(list)} ? ${list[iterStat.index]?.ast_yr} : ''"
+                                                                   th:placeholder="'ex) ' + ${2019 + iterStat.index}"
+                                                                   maxlength="4"
+                                                                   oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
+                                                        </th>
+                                                    </th:block>
+                                                </th:block>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr>
                                                 <th>유동자산</th>
-                                                <td><input type="number" class="form-control" name="current_assets1" value="" placeholder="ex) 100000"></td>
-                                                <td><input type="number" class="form-control" name="current_assets2" value="" placeholder="ex) 100000"></td>
-                                                <td><input type="number" class="form-control" name="current_assets3" value="" placeholder="ex) 100000"></td>
-                                                <td><input type="number" class="form-control" name="current_assets4" value="" placeholder="ex) 100000"></td>
-                                                <td><input type="number" class="form-control" name="current_assets5" value="" placeholder="ex) 100000"></td>
+                                                <th:block th:with="list=${selectListAstInfo ?: {}}">
+                                                    <th:block th:each="item, iterStat : ${#numbers.sequence(1, 5)}">
+                                                        <td>
+                                                            <input type="number" class="form-control" th:name="'current_assets' + ${iterStat.count}"
+                                                                   th:value="${iterStat.index < #lists.size(list)} ? ${list[iterStat.index]?.current_assets} : ''"
+                                                                   placeholder="ex) 100000">
+                                                        </td>
+                                                    </th:block>
+                                                </th:block>
                                             </tr>
                                             <tr>
                                                 <th>비유동자</th>
-                                                <td><input type="number" class="form-control" name="non_current_assets1" value="" placeholder="ex) 100000"></td>
-                                                <td><input type="number" class="form-control" name="non_current_assets2" value="" placeholder="ex) 100000"></td>
-                                                <td><input type="number" class="form-control" name="non_current_assets3" value="" placeholder="ex) 100000"></td>
-                                                <td><input type="number" class="form-control" name="non_current_assets4" value="" placeholder="ex) 100000"></td>
-                                                <td><input type="number" class="form-control" name="non_current_assets5" value="" placeholder="ex) 100000"></td>
+                                                <th:block th:with="list=${selectListAstInfo ?: {}}">
+                                                    <th:block th:each="item, iterStat : ${#numbers.sequence(1, 5)}">
+                                                        <td>
+                                                            <input type="number" class="form-control" th:name="'non_current_assets' + ${iterStat.count}"
+                                                                   th:value="${iterStat.index < #lists.size(list)} ? ${list[iterStat.index]?.non_current_assets} : ''"
+                                                                   placeholder="ex) 100000">
+                                                        </td>
+                                                    </th:block>
+                                                </th:block>
                                             </tr>
                                             <tr>
                                                 <th>자산총계</th>
-                                                <td><input type="number" class="form-control" name="ast_gramt1" value="" placeholder="ex) 100000"></td>
-                                                <td><input type="number" class="form-control" name="ast_gramt2" value="" placeholder="ex) 100000"></td>
-                                                <td><input type="number" class="form-control" name="ast_gramt3" value="" placeholder="ex) 100000"></td>
-                                                <td><input type="number" class="form-control" name="ast_gramt4" value="" placeholder="ex) 100000"></td>
-                                                <td><input type="number" class="form-control" name="ast_gramt5" value="" placeholder="ex) 100000"></td>
+                                                <th:block th:with="list=${selectListAstInfo ?: {}}">
+                                                    <th:block th:each="item, iterStat : ${#numbers.sequence(1, 5)}">
+                                                        <td>
+                                                            <input type="number" class="form-control" th:name="'ast_gramt' + ${iterStat.count}"
+                                                                   th:value="${iterStat.index < #lists.size(list)} ? ${list[iterStat.index]?.ast_gramt} : ''"
+                                                                   placeholder="ex) 100000">
+                                                        </td>
+                                                    </th:block>
+                                                </th:block>
                                             </tr>
                                             <tr>
                                                 <th>부채총계</th>
-                                                <td><input type="number" class="form-control" name="debt_gramt1" value="" placeholder="ex) 100000"></td>
-                                                <td><input type="number" class="form-control" name="debt_gramt2" value="" placeholder="ex) 100000"></td>
-                                                <td><input type="number" class="form-control" name="debt_gramt3" value="" placeholder="ex) 100000"></td>
-                                                <td><input type="number" class="form-control" name="debt_gramt4" value="" placeholder="ex) 100000"></td>
-                                                <td><input type="number" class="form-control" name="debt_gramt5" value="" placeholder="ex) 100000"></td>
+                                                <th:block th:with="list=${selectListAstInfo ?: {}}">
+                                                    <th:block th:each="item, iterStat : ${#numbers.sequence(1, 5)}">
+                                                        <td>
+                                                            <input type="number" class="form-control" th:name="'debt_gramt' + ${iterStat.count}"
+                                                                   th:value="${iterStat.index < #lists.size(list)} ? ${list[iterStat.index]?.debt_gramt} : ''"
+                                                                   placeholder="ex) 100000">
+                                                        </td>
+                                                    </th:block>
+                                                </th:block>
                                             </tr>
                                             <tr>
                                                 <th>자본금</th>
-                                                <td><input type="number" class="form-control" name="cptl1" value="" placeholder="ex) 100000"></td>
-                                                <td><input type="number" class="form-control" name="cptl2" value="" placeholder="ex) 100000"></td>
-                                                <td><input type="number" class="form-control" name="cptl3" value="" placeholder="ex) -100000"></td>
-                                                <td><input type="number" class="form-control" name="cptl4" value="" placeholder="ex) 100000"></td>
-                                                <td><input type="number" class="form-control" name="cptl5" value="" placeholder="ex) 100000"></td>
+                                                <th:block th:with="list=${selectListAstInfo ?: {}}">
+                                                    <th:block th:each="item, iterStat : ${#numbers.sequence(1, 5)}">
+                                                        <td>
+                                                            <input type="number" class="form-control" th:name="'cptl' + ${iterStat.count}"
+                                                                   th:value="${iterStat.index < #lists.size(list)} ? ${list[iterStat.index]?.cptl} : ''"
+                                                                   placeholder="ex) 100000">
+                                                        </td>
+                                                    </th:block>
+                                                </th:block>
                                             </tr>
                                             <tr>
                                                 <th>자본총계</th>
-                                                <td><input type="number" class="form-control" name="cptl_gramt1" value="" placeholder="ex) 100000"></td>
-                                                <td><input type="number" class="form-control" name="cptl_gramt2" value="" placeholder="ex) 100000"></td>
-                                                <td><input type="number" class="form-control" name="cptl_gramt3" value="" placeholder="ex) 100000"></td>
-                                                <td><input type="number" class="form-control" name="cptl_gramt4" value="" placeholder="ex) 100000"></td>
-                                                <td><input type="number" class="form-control" name="cptl_gramt5" value="" placeholder="ex) 100000"></td>
+                                                <th:block th:with="list=${selectListAstInfo ?: {}}">
+                                                    <th:block th:each="item, iterStat : ${#numbers.sequence(1, 5)}">
+                                                        <td>
+                                                            <input type="number" class="form-control" th:name="'cptl_gramt' + ${iterStat.count}"
+                                                                   th:value="${iterStat.index < #lists.size(list)} ? ${list[iterStat.index]?.cptl_gramt} : ''"
+                                                                   placeholder="ex) 100000">
+                                                        </td>
+                                                    </th:block>
+                                                </th:block>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -417,37 +511,41 @@
                                             </button>
                                         </div>
                                     </div>
-                                    <table class="table-news table table-bordered align-middle">
+                                    <table class="table-news table table-bordered align-middle" th:each="news, status : ${selectNewsInfo}">
                                         <tbody>
-                                            <tr>
-                                                <th class="bg-light">썸네일 이미지 링크</th>
-                                                <td>
-                                                    <input type="text" class="form-control" name="thumb_url" value="" placeholder="ex) https://www.dt.co.kr/contents.html?article_no=2024110602109931092006&ref=jeadan ">
-                                                    <!--<div class="d-flex">
-                                                        <input class="form-control w-auto" type="file" id="formFile" onchange="preview()">
-                                                    </div>
-                                                    <img id="previewFrame" src="" class="img-fluid mt-2" style="display:none" />
-                                                    <p class="mb-0 mt-2">* 권장 사이즈 : 588x360px </p>-->
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th class="bg-light" width="20%">기사 제목</th>
-                                                <td>
-                                                    <input type="text" class="form-control" name="news_ttl" value="" placeholder="ex) 티맥스클라우드, 리벨리온과 AI 반도체 기반 IaaS 사업 협력">
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th class="bg-light" width="20%">출처</th>
-                                                <td>
-                                                    <input type="text" class="form-control" name="provider" value="" placeholder="ex) 디지털타임스">
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th class="bg-light" width="20%">링크</th>
-                                                <td>
-                                                    <input type="text" class="form-control" name="news_link" value="" placeholder="ex) https://www.dt.co.kr/contents.html?article_no=2024110602109931092006&ref=jeadan ">
-                                                </td>
-                                            </tr>
+                                        <!-- 첫 번째 항목에만 썸네일 필드 포함 -->
+                                        <tr th:if="${status.index == 0}">
+                                            <th class="bg-light">썸네일 이미지 링크</th>
+                                            <td>
+                                                <input type="text" class="form-control" name="thumb_url"
+                                                       th:value="${news.thumb_url}"
+                                                       placeholder="ex) https://www.dt.co.kr/contents.html?article_no=2024110602109931092006&ref=jeadan">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th class="bg-light" width="20%">기사 제목</th>
+                                            <td>
+                                                <input type="text" class="form-control" name="news_ttl"
+                                                       th:value="${news.news_ttl}"
+                                                       placeholder="ex) 티맥스클라우드, 리벨리온과 AI 반도체 기반 IaaS 사업 협력">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th class="bg-light" width="20%">출처</th>
+                                            <td>
+                                                <input type="text" class="form-control" name="provider"
+                                                       th:value="${news.provider}"
+                                                       placeholder="ex) 디지털타임스">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th class="bg-light" width="20%">링크</th>
+                                            <td>
+                                                <input type="text" class="form-control" name="news_link"
+                                                       th:value="${news.news_link}"
+                                                       placeholder="ex) https://www.dt.co.kr/contents.html?article_no=2024110602109931092006&ref=jeadan">
+                                            </td>
+                                        </tr>
                                         </tbody>
                                     </table>
 
@@ -466,130 +564,162 @@
                                                 <th class="bg-light" rowspan="2" style="width:10%">키워드 1</th>
                                                 <th class="bg-light" style="width:10%">키워드명</th>
                                                 <td>
-                                                    <input type="text" class="form-control w-auto" name="keywd1" value="" placeholder="ex) AI">
+                                                    <input type="text" class="form-control w-auto" name="keywd1" th:value="${selectKeywdInfo != null && selectKeywdInfo.size() > 0 ? selectKeywdInfo[0].keywd : ''}" placeholder="ex) AI">
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <th class="bg-light">숫자</th>
                                                 <td>
-                                                    <input type="number" class="form-control w-auto" name="nocs1" value="" placeholder="ex) 500">
+                                                    <input type="number" class="form-control w-auto" name="nocs1" th:value="${selectKeywdInfo != null && selectKeywdInfo.size() > 0 ? selectKeywdInfo[0].nocs : ''}" placeholder="ex) 500">
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <th class="bg-light" rowspan="2">키워드 2</th>
                                                 <th class="bg-light">키워드명</th>
                                                 <td>
-                                                    <input type="text" class="form-control w-auto" name="keywd2" value="" placeholder="ex) 리벨리온">
+                                                    <input type="text" class="form-control w-auto" name="keywd2" th:value="${selectKeywdInfo != null && selectKeywdInfo.size() > 1 ? selectKeywdInfo[1].keywd : ''}" placeholder="ex) 리벨리온">
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <th class="bg-light">숫자</th>
                                                 <td>
-                                                    <input type="number" class="form-control w-auto" name="nocs2" value="" placeholder="ex) 450">
+                                                    <input type="number" class="form-control w-auto" name="nocs2" th:value="${selectKeywdInfo != null && selectKeywdInfo.size() > 1 ? selectKeywdInfo[1].nocs : ''}" placeholder="ex) 450">
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <th class="bg-light" rowspan="2">키워드 3</th>
                                                 <th class="bg-light">키워드명</th>
                                                 <td>
-                                                    <input type="text" class="form-control w-auto" name="keywd3" value="" placeholder="ex) 반도체">
+                                                    <input type="text" class="form-control w-auto" name="keywd3"
+                                                           th:value="${selectKeywdInfo != null && selectKeywdInfo.size() > 2 ? selectKeywdInfo[2].keywd : ''}"
+                                                           placeholder="ex) 반도체">
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <th class="bg-light">숫자</th>
                                                 <td>
-                                                    <input type="number" class="form-control w-auto" name="nocs3" value="" placeholder="ex) 400">
+                                                    <input type="number" class="form-control w-auto" name="nocs3"
+                                                           th:value="${selectKeywdInfo != null && selectKeywdInfo.size() > 2 ? selectKeywdInfo[2].nocs : ''}"
+                                                           placeholder="ex) 400">
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <th class="bg-light" rowspan="2">키워드 4</th>
                                                 <th class="bg-light">키워드명</th>
                                                 <td>
-                                                    <input type="text" class="form-control w-auto" name="keywd4" value="" placeholder="ex) 기업">
+                                                    <input type="text" class="form-control w-auto" name="keywd4"
+                                                           th:value="${selectKeywdInfo != null && selectKeywdInfo.size() > 3 ? selectKeywdInfo[3].keywd : ''}"
+                                                           placeholder="ex) 기업">
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <th class="bg-light">숫자</th>
                                                 <td>
-                                                    <input type="number" class="form-control w-auto" name="nocs4" value="" placeholder="ex) 350">
+                                                    <input type="number" class="form-control w-auto" name="nocs4"
+                                                           th:value="${selectKeywdInfo != null && selectKeywdInfo.size() > 3 ? selectKeywdInfo[3].nocs : ''}"
+                                                           placeholder="ex) 350">
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <th class="bg-light" rowspan="2">키워드 5</th>
                                                 <th class="bg-light">키워드명</th>
                                                 <td>
-                                                    <input type="text" class="form-control w-auto" name="keywd5" value="" placeholder="ex) 사업">
+                                                    <input type="text" class="form-control w-auto" name="keywd5"
+                                                           th:value="${selectKeywdInfo != null && selectKeywdInfo.size() > 4 ? selectKeywdInfo[4].keywd : ''}"
+                                                           placeholder="ex) 사업">
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <th class="bg-light">숫자</th>
                                                 <td>
-                                                    <input type="number" class="form-control w-auto" name="nocs5" value="" placeholder="ex) 300">
+                                                    <input type="number" class="form-control w-auto" name="nocs5"
+                                                           th:value="${selectKeywdInfo != null && selectKeywdInfo.size() > 4 ? selectKeywdInfo[4].nocs : ''}"
+                                                           placeholder="ex) 300">
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <th class="bg-light" rowspan="2">키워드 6</th>
                                                 <th class="bg-light">키워드명</th>
                                                 <td>
-                                                    <input type="text" class="form-control w-auto" name="keywd6" value="" placeholder="ex) 협력">
+                                                    <input type="text" class="form-control w-auto" name="keywd6"
+                                                           th:value="${selectKeywdInfo != null && selectKeywdInfo.size() > 5 ? selectKeywdInfo[5].keywd : ''}"
+                                                           placeholder="ex) 협력">
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <th class="bg-light">숫자</th>
                                                 <td>
-                                                    <input type="number" class="form-control w-auto" name="nocs6" value="" placeholder="ex) 250">
+                                                    <input type="number" class="form-control w-auto" name="nocs6"
+                                                           th:value="${selectKeywdInfo != null && selectKeywdInfo.size() > 5 ? selectKeywdInfo[5].nocs : ''}"
+                                                           placeholder="ex) 250">
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <th class="bg-light" rowspan="2">키워드 7</th>
                                                 <th class="bg-light">키워드명</th>
                                                 <td>
-                                                    <input type="text" class="form-control w-auto" name="keywd7" value="" placeholder="ex) NPU">
+                                                    <input type="text" class="form-control w-auto" name="keywd7"
+                                                           th:value="${selectKeywdInfo != null && selectKeywdInfo.size() > 6 ? selectKeywdInfo[6].keywd : ''}"
+                                                           placeholder="ex) NPU">
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <th class="bg-light">숫자</th>
                                                 <td>
-                                                    <input type="number" class="form-control w-auto" name="nocs7" value="" placeholder="ex) 200">
+                                                    <input type="number" class="form-control w-auto" name="nocs7"
+                                                           th:value="${selectKeywdInfo != null && selectKeywdInfo.size() > 6 ? selectKeywdInfo[6].nocs : ''}"
+                                                           placeholder="ex) 200">
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <th class="bg-light" rowspan="2">키워드 8</th>
                                                 <th class="bg-light">키워드명</th>
                                                 <td>
-                                                    <input type="text" class="form-control w-auto" name="keywd8" value="" placeholder="ex) 대표">
+                                                    <input type="text" class="form-control w-auto" name="keywd8"
+                                                           th:value="${selectKeywdInfo != null && selectKeywdInfo.size() > 7 ? selectKeywdInfo[7].keywd : ''}"
+                                                           placeholder="ex) 대표">
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <th class="bg-light">숫자</th>
                                                 <td>
-                                                    <input type="number" class="form-control w-auto" name="nocs8" value="" placeholder="ex) 150">
+                                                    <input type="number" class="form-control w-auto" name="nocs8"
+                                                           th:value="${selectKeywdInfo != null && selectKeywdInfo.size() > 7 ? selectKeywdInfo[7].nocs : ''}"
+                                                           placeholder="ex) 150">
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <th class="bg-light" rowspan="2">키워드 9</th>
                                                 <th class="bg-light">키워드명</th>
                                                 <td>
-                                                    <input type="text" class="form-control w-auto" name="keywd9" value="" placeholder="ex) 코오롱베니트">
+                                                    <input type="text" class="form-control w-auto" name="keywd9"
+                                                           th:value="${selectKeywdInfo != null && selectKeywdInfo.size() > 8 ? selectKeywdInfo[8].keywd : ''}"
+                                                           placeholder="ex) 코오롱베니트">
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <th class="bg-light">숫자</th>
                                                 <td>
-                                                    <input type="number" class="form-control w-auto" name="nocs9" value="" placeholder="ex) 100">
+                                                    <input type="number" class="form-control w-auto" name="nocs9"
+                                                           th:value="${selectKeywdInfo != null && selectKeywdInfo.size() > 8 ? selectKeywdInfo[8].nocs : ''}"
+                                                           placeholder="ex) 100">
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <th class="bg-light" rowspan="2">키워드 10</th>
                                                 <th class="bg-light">키워드명</th>
                                                 <td>
-                                                    <input type="text" class="form-control w-auto" name="keywd10" value="" placeholder="ex) 시장">
+                                                    <input type="text" class="form-control w-auto" name="keywd10"
+                                                           th:value="${selectKeywdInfo != null && selectKeywdInfo.size() > 9 ? selectKeywdInfo[9].keywd : ''}"
+                                                           placeholder="ex) 시장">
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <th class="bg-light">숫자</th>
                                                 <td>
-                                                    <input type="number" class="form-control w-auto" name="nocs10" value="" placeholder="ex) 50">
+                                                    <input type="number" class="form-control w-auto" name="nocs10"
+                                                           th:value="${selectKeywdInfo != null && selectKeywdInfo.size() > 9 ? selectKeywdInfo[9].nocs : ''}"
+                                                           placeholder="ex) 50">
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -623,7 +753,7 @@
         let serviceIndex = 0;
 
         function addInputService() {
-            const dom = 
+            const dom =
             '<table class="table-service table table-bordered align-middle">' +
                 '<tbody>' +
                     '<tr>' +
@@ -652,11 +782,11 @@
                     '</tr>' +
                 '</tbody>' +
             '</table>';
-            
+
             $('.table-service').eq(serviceIndex).after(dom);
-            
+
             removeServeiceButton.removeClass('d-none');
-            
+
             serviceIndex++;
         }
 
@@ -666,18 +796,18 @@
 
                 serviceIndex--;
             }
-            
+
             if(serviceIndex === 0) {
                 removeServeiceButton.addClass('d-none');
             }
-            
+
         }
 
         // 투자유치
         let investIndex = 0;
 
         function addInputInvest() {
-            const dom = 
+            const dom =
             '<tr>' +
                 '<td><input type="text" class="form-control" name="invest_ymd" value="" placeholder="ex) 2024-08-09"></td>' +
                 '<td>' +
@@ -710,9 +840,9 @@
                     '</button>' +
                 '</td>' +
             '</tr>';
-            
+
             $('.table-invest tbody').append(dom);
-            
+
             investIndex++;
         }
 
@@ -724,7 +854,7 @@
         let recruitIndex = 0;
 
         function addInputRecruit() {
-            const dom = 
+            const dom =
             '<tr>' +
                 '<td><input type="text" class="form-control" name="crtr_ym" value="" placeholder="ex) 2020.08"></td>' +
                 '<td><input type="text" class="form-control" name="jncmp_nocs" value="" placeholder="ex) 4"></td>' +
@@ -741,9 +871,9 @@
                     '</button>' +
                 '</td>' +
             '</tr>';
-            
+
             $('.table-recruit tbody').append(dom);
-            
+
             recruitIndex++;
         }
 
@@ -756,7 +886,7 @@
         let newsIndex = 0;
 
         function addInputNews() {
-            const dom = 
+            const dom =
             '<table class="table-news table table-bordered align-middle">' +
                 '<tbody>' +
                     '<tr>' +
@@ -779,11 +909,11 @@
                     '</tr>' +
                 '</tbody>' +
             '</table>';
-            
+
             $('.table-news').eq(newsIndex).after(dom);
-            
+
             removeNewsButton.removeClass('d-none');
-            
+
             newsIndex++;
         }
 
@@ -793,11 +923,11 @@
 
                 newsIndex--;
             }
-            
+
             if(newsIndex === 0) {
                 removeNewsButton.addClass('d-none');
             }
-            
+
         }
 
         function startupUpdate() {
@@ -834,7 +964,7 @@
             let result = confirm("등록 하시겠습니까?");
             if (result) {
                 const form = document.forms['startup_form'];
-                form.action = '/kbinnovationhub_devadm/startup/insert';  //전송할 URL
+                form.action = '/kbinnovationhub_devadm/startup/update';  //전송할 URL
                 form.method = 'POST';                                    //전송 방식
                 form.target = '';                                        //새 창에서 열기
                 form.submit();                                           //폼 제출

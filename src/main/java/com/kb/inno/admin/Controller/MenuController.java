@@ -59,14 +59,19 @@ public class MenuController {
     // 메뉴 수정
     @PostMapping("/update")
     public String update(RedirectAttributes redirectAttributes, MenuDTO menuDTO) {
-        int result = menuService.update(menuDTO);
-        // 결과 메시지 설정
-        if (result == 1) {
-            redirectAttributes.addFlashAttribute("msg", "저장이 완료되었습니다.");
-            return "redirect:" + directory + "/list/" + menuDTO.getMenu_id();
-        } else {
-            redirectAttributes.addFlashAttribute("msg", "저장이 실패했습니다.");
-            return directory + "/menu";
+        try{
+            int result = menuService.update(menuDTO);
+            // 결과 메시지 설정
+            if (result == 1) {
+                redirectAttributes.addFlashAttribute("msg", "저장이 완료되었습니다.");
+                return "redirect:" + directory + "/list/" + menuDTO.getMenu_id();
+            } else {
+                redirectAttributes.addFlashAttribute("msg", "저장이 실패했습니다.");
+                return directory + "/menu";
+            }
+        }catch (Exception e) {
+            e.printStackTrace();
         }
+        return null;
     }
 }

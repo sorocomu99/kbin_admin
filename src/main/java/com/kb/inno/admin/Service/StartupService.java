@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import com.kb.inno.admin.DAO.StartupDAO;
 import com.kb.inno.admin.DTO.StartupDTO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.util.StringUtils;
 
 @Service
 @RequiredArgsConstructor
@@ -102,8 +103,12 @@ public class StartupService {
                 startupDTO.setWeb_srvc_link(web_srvc_link_List.get(i));
                 startupDTO.setGoogle_app_link(google_app_link_List.get(i));
                 startupDTO.setApple_app_link(apple_app_link_List.get(i));
-
-                startupDAO.insertBizSrvcInfo(startupDTO);
+                if(StringUtils.hasText(startupDTO.getSrvc_nm())
+                        || StringUtils.hasText(startupDTO.getWeb_srvc_link())
+                        || StringUtils.hasText(startupDTO.getGoogle_app_link())
+                        || StringUtils.hasText(startupDTO.getApple_app_link())) {
+                    startupDAO.insertBizSrvcInfo(startupDTO);
+                }
             }
         }
         //투자정보 등록 (KB_API_INVEST_INFO)
@@ -121,8 +126,12 @@ public class StartupService {
                 startupDTO.setSeries_nm(series_nm_List.get(i));
                 startupDTO.setInvest_amt(invest_amt_List.get(i));
                 startupDTO.setInvestor(investor_List.get(i));
-
-                startupDAO.insertInvestInfo(startupDTO);
+                if(StringUtils.hasText(startupDTO.getInvest_ymd())
+                        || StringUtils.hasText(startupDTO.getSeries_nm())
+                        || StringUtils.hasText(startupDTO.getInvest_amt())
+                        || StringUtils.hasText(startupDTO.getInvestor())) {
+                    startupDAO.insertInvestInfo(startupDTO);
+                }
             }
         }
         //고용현황 등록 (KB_API_EMPLO_INFO)
@@ -136,12 +145,13 @@ public class StartupService {
             rsgntn_nocs_List = (List) map.get("rsgntn_nocs_List");
             hdof_nocs_List = (List) map.get("hdof_nocs_List");
             for (int i = 0; i < crtr_ym_List.size(); i++) {
-                startupDTO.setCrtr_ym(crtr_ym_List.get(i));
-                startupDTO.setJncmp_nocs(jncmp_nocs_List.get(i));
-                startupDTO.setRsgntn_nocs(rsgntn_nocs_List.get(i));
-                startupDTO.setHdof_nocs(hdof_nocs_List.get(i));
-
-                startupDAO.insertEmploInfo(startupDTO);
+                if(StringUtils.hasText(crtr_ym_List.get(i))) {
+                    startupDTO.setCrtr_ym(crtr_ym_List.get(i));
+                    startupDTO.setJncmp_nocs(jncmp_nocs_List.get(i));
+                    startupDTO.setRsgntn_nocs(rsgntn_nocs_List.get(i));
+                    startupDTO.setHdof_nocs(hdof_nocs_List.get(i));
+                    startupDAO.insertEmploInfo(startupDTO);
+                }
             }
         }
         //매출정보(손익계산서) 등록 (KB_API_SLS_INFO)
@@ -152,7 +162,7 @@ public class StartupService {
         startupDTO.setSga_amt(startupDTO.getSga_amt1());
         startupDTO.setOperating_profit(startupDTO.getOperating_profit1());
         startupDTO.setNet_profit(startupDTO.getNet_profit1());
-        if (startupDTO.getSls_yr() != null || !startupDTO.getSls_yr().equals("")) {
+        if (StringUtils.hasText(startupDTO.getSls_yr())) {
             startupDAO.insertSlsInfo(startupDTO);
         }
 
@@ -163,7 +173,7 @@ public class StartupService {
         startupDTO.setSga_amt(startupDTO.getSga_amt2());
         startupDTO.setOperating_profit(startupDTO.getOperating_profit2());
         startupDTO.setNet_profit(startupDTO.getNet_profit2());
-        if (startupDTO.getSls_yr() != null || !startupDTO.getSls_yr().equals("")) {
+        if (StringUtils.hasText(startupDTO.getSls_yr())) {
             startupDAO.insertSlsInfo(startupDTO);
         }
 
@@ -174,7 +184,7 @@ public class StartupService {
         startupDTO.setSga_amt(startupDTO.getSga_amt3());
         startupDTO.setOperating_profit(startupDTO.getOperating_profit3());
         startupDTO.setNet_profit(startupDTO.getNet_profit3());
-        if (startupDTO.getSls_yr() != null || !startupDTO.getSls_yr().equals("")) {
+        if (StringUtils.hasText(startupDTO.getSls_yr())) {
             startupDAO.insertSlsInfo(startupDTO);
         }
 
@@ -185,7 +195,7 @@ public class StartupService {
         startupDTO.setSga_amt(startupDTO.getSga_amt4());
         startupDTO.setOperating_profit(startupDTO.getOperating_profit4());
         startupDTO.setNet_profit(startupDTO.getNet_profit4());
-        if (startupDTO.getSls_yr() != null || !startupDTO.getSls_yr().equals("")) {
+        if (StringUtils.hasText(startupDTO.getSls_yr())) {
             startupDAO.insertSlsInfo(startupDTO);
         }
 
@@ -196,7 +206,7 @@ public class StartupService {
         startupDTO.setSga_amt(startupDTO.getSga_amt5());
         startupDTO.setOperating_profit(startupDTO.getOperating_profit5());
         startupDTO.setNet_profit(startupDTO.getNet_profit5());
-        if (startupDTO.getSls_yr() != null || !startupDTO.getSls_yr().equals("")) {
+        if (StringUtils.hasText(startupDTO.getSls_yr())) {
             startupDAO.insertSlsInfo(startupDTO);
         }
         //자산정보(재무상태표) 등록 (KB_API_AST_INFO)
@@ -207,7 +217,7 @@ public class StartupService {
         startupDTO.setDebt_gramt(startupDTO.getDebt_gramt1());
         startupDTO.setCptl(startupDTO.getCptl1());
         startupDTO.setCptl_gramt(startupDTO.getCptl_gramt1());
-        if (startupDTO.getAst_yr() != null || !startupDTO.getAst_yr().equals("")) {
+        if (StringUtils.hasText(startupDTO.getAst_yr())) {
             startupDAO.insertAstInfo(startupDTO);
         }
 
@@ -218,7 +228,7 @@ public class StartupService {
         startupDTO.setDebt_gramt(startupDTO.getDebt_gramt2());
         startupDTO.setCptl(startupDTO.getCptl2());
         startupDTO.setCptl_gramt(startupDTO.getCptl_gramt2());
-        if (startupDTO.getAst_yr() != null || !startupDTO.getAst_yr().equals("")) {
+        if (StringUtils.hasText(startupDTO.getAst_yr())) {
             startupDAO.insertAstInfo(startupDTO);
         }
 
@@ -229,7 +239,7 @@ public class StartupService {
         startupDTO.setDebt_gramt(startupDTO.getDebt_gramt3());
         startupDTO.setCptl(startupDTO.getCptl3());
         startupDTO.setCptl_gramt(startupDTO.getCptl_gramt3());
-        if (startupDTO.getAst_yr() != null || !startupDTO.getAst_yr().equals("")) {
+        if (StringUtils.hasText(startupDTO.getAst_yr())) {
             startupDAO.insertAstInfo(startupDTO);
         }
 
@@ -240,7 +250,7 @@ public class StartupService {
         startupDTO.setDebt_gramt(startupDTO.getDebt_gramt4());
         startupDTO.setCptl(startupDTO.getCptl4());
         startupDTO.setCptl_gramt(startupDTO.getCptl_gramt4());
-        if (startupDTO.getAst_yr() != null || !startupDTO.getAst_yr().equals("")) {
+        if (StringUtils.hasText(startupDTO.getAst_yr())) {
             startupDAO.insertAstInfo(startupDTO);
         }
 
@@ -251,7 +261,7 @@ public class StartupService {
         startupDTO.setDebt_gramt(startupDTO.getDebt_gramt5());
         startupDTO.setCptl(startupDTO.getCptl5());
         startupDTO.setCptl_gramt(startupDTO.getCptl_gramt5());
-        if (startupDTO.getAst_yr() != null || !startupDTO.getAst_yr().equals("")) {
+        if (StringUtils.hasText(startupDTO.getAst_yr())) {
             startupDAO.insertAstInfo(startupDTO);
         }
         //뉴스정보 등록 (KB_API_NEWS_INFO)
@@ -260,8 +270,7 @@ public class StartupService {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
             String dateTimeStr = formatter.format(now);
             Random random = new Random();
-            int randomNumber = 100 + random.nextInt(900);
-            startupDTO.setNews_id(dateTimeStr + randomNumber);
+
             List<String> news_ttl_List = new ArrayList<>();
             List<String> thumb_url_List = new ArrayList<>();
             List<String> provider_List = new ArrayList<>();
@@ -270,13 +279,26 @@ public class StartupService {
             thumb_url_List = (List) map.get("thumb_url_List");
             provider_List = (List) map.get("provider_List");
             news_link_List = (List) map.get("news_link_List");
+
             for (int i = 0; i < news_ttl_List.size(); i++) {
+                if(i == 0) {
+                    try{
+                        startupDTO.setThumb_url(thumb_url_List.get(0));
+                    }catch (Exception ignored) {}
+                }else{
+                    startupDTO.setThumb_url(null);
+                }
+
+                startupDTO.setNews_id(dateTimeStr + 100 + random.nextInt(900));
                 startupDTO.setNews_ttl(news_ttl_List.get(i));
-                startupDTO.setThumb_url(thumb_url_List.get(i));
                 startupDTO.setProvider(provider_List.get(i));
                 startupDTO.setNews_link(news_link_List.get(i));
 
-                startupDAO.insertNewsInfo(startupDTO);
+                if(StringUtils.hasText(startupDTO.getNews_ttl())
+                        || StringUtils.hasText(startupDTO.getProvider())
+                        || StringUtils.hasText(startupDTO.getNews_link())) {
+                    startupDAO.insertNewsInfo(startupDTO);
+                }
             }
         }
         //키워드정보 등록 (KB_API_KEYWD_INFO)
@@ -341,37 +363,11 @@ public class StartupService {
         List<StartupDTO> selectEmploInfo = startupDAO.selectEmploInfo(startupDTO);
         model.addAttribute("selectEmploInfo", selectEmploInfo);
 
-        startupDTO.setSls_yr("2019");
-        StartupDTO selectSlsInfo1 = startupDAO.selectSlsInfo(startupDTO);
-        model.addAttribute("selectSlsInfo1", selectSlsInfo1);
-        startupDTO.setSls_yr("2020");
-        StartupDTO selectSlsInfo2 = startupDAO.selectSlsInfo(startupDTO);
-        model.addAttribute("selectSlsInfo2", selectSlsInfo2);
-        startupDTO.setSls_yr("2021");
-        StartupDTO selectSlsInfo3 = startupDAO.selectSlsInfo(startupDTO);
-        model.addAttribute("selectSlsInfo3", selectSlsInfo3);
-        startupDTO.setSls_yr("2022");
-        StartupDTO selectSlsInfo4 = startupDAO.selectSlsInfo(startupDTO);
-        model.addAttribute("selectSlsInfo4", selectSlsInfo4);
-        startupDTO.setSls_yr("2023");
-        StartupDTO selectSlsInfo5 = startupDAO.selectSlsInfo(startupDTO);
-        model.addAttribute("selectSlsInfo5", selectSlsInfo5);
+        List<StartupDTO> selectListSlsInfo = startupDAO.selectListSlsInfo(startupDTO);
+        model.addAttribute("selectSlsInfoList", selectListSlsInfo);
 
-        startupDTO.setAst_yr("2019");
-        StartupDTO selectAstInfo1 = startupDAO.selectAstInfo(startupDTO);
-        model.addAttribute("selectAstInfo1", selectAstInfo1);
-        startupDTO.setAst_yr("2020");
-        StartupDTO selectAstInfo2 = startupDAO.selectAstInfo(startupDTO);
-        model.addAttribute("selectAstInfo2", selectAstInfo2);
-        startupDTO.setAst_yr("2021");
-        StartupDTO selectAstInfo3 = startupDAO.selectAstInfo(startupDTO);
-        model.addAttribute("selectAstInfo3", selectAstInfo3);
-        startupDTO.setAst_yr("2022");
-        StartupDTO selectAstInfo4 = startupDAO.selectAstInfo(startupDTO);
-        model.addAttribute("selectAstInfo4", selectAstInfo4);
-        startupDTO.setAst_yr("2023");
-        StartupDTO selectAstInfo5 = startupDAO.selectAstInfo(startupDTO);
-        model.addAttribute("selectAstInfo5", selectAstInfo5);
+        List<StartupDTO> selectListAstInfo = startupDAO.selectListAstInfo(startupDTO);
+        model.addAttribute("selectListAstInfo", selectListAstInfo);
 
         List<StartupDTO> selectNewsInfo = startupDAO.selectNewsInfo(startupDTO);
         model.addAttribute("selectNewsInfo", selectNewsInfo);
@@ -389,8 +385,8 @@ public class StartupService {
         startupDTO.setFrst_rgtr(loginId);  //최초등록자 세팅
         startupDTO.setLast_mdfr(loginId);  //최종수정자 세팅
 
-        //기업정보 등록 (KB_API_STARTER_INFO)
-        startupDAO.insertStarterInfo(startupDTO);
+        //기업정보 수정 (KB_API_STARTER_INFO)
+        startupDAO.updateStarterInfo(startupDTO);
         //사업서비스 정보 등록 (KB_API_BIZ_SRVC_INFO)
         if (map.get("srvc_nm_List") != null && !map.get("srvc_nm_List").equals("")) {
             List<String> srvc_nm_List = new ArrayList<>();
@@ -407,8 +403,12 @@ public class StartupService {
                 startupDTO.setWeb_srvc_link(web_srvc_link_List.get(i));
                 startupDTO.setGoogle_app_link(google_app_link_List.get(i));
                 startupDTO.setApple_app_link(apple_app_link_List.get(i));
-
-                startupDAO.insertBizSrvcInfo(startupDTO);
+                if(StringUtils.hasText(startupDTO.getSrvc_nm())
+                        || StringUtils.hasText(startupDTO.getWeb_srvc_link())
+                        || StringUtils.hasText(startupDTO.getGoogle_app_link())
+                        || StringUtils.hasText(startupDTO.getApple_app_link())) {
+                    startupDAO.insertBizSrvcInfo(startupDTO);
+                }
             }
         }
         //투자정보 등록 (KB_API_INVEST_INFO)
@@ -427,8 +427,12 @@ public class StartupService {
                 startupDTO.setSeries_nm(series_nm_List.get(i));
                 startupDTO.setInvest_amt(invest_amt_List.get(i));
                 startupDTO.setInvestor(investor_List.get(i));
-
-                startupDAO.insertInvestInfo(startupDTO);
+                if(StringUtils.hasText(startupDTO.getInvest_ymd())
+                        || StringUtils.hasText(startupDTO.getSeries_nm())
+                        || StringUtils.hasText(startupDTO.getInvest_amt())
+                        || StringUtils.hasText(startupDTO.getInvestor())) {
+                    startupDAO.insertInvestInfo(startupDTO);
+                }
             }
         }
         //고용현황 등록 (KB_API_EMPLO_INFO)
@@ -443,12 +447,13 @@ public class StartupService {
             hdof_nocs_List = (List) map.get("hdof_nocs_List");
             startupDAO.deleteEmploInfo(startupDTO);
             for (int i = 0; i < crtr_ym_List.size(); i++) {
-                startupDTO.setCrtr_ym(crtr_ym_List.get(i));
-                startupDTO.setJncmp_nocs(jncmp_nocs_List.get(i));
-                startupDTO.setRsgntn_nocs(rsgntn_nocs_List.get(i));
-                startupDTO.setHdof_nocs(hdof_nocs_List.get(i));
-
-                startupDAO.insertEmploInfo(startupDTO);
+                if(StringUtils.hasText(crtr_ym_List.get(i))) {
+                    startupDTO.setCrtr_ym(crtr_ym_List.get(i));
+                    startupDTO.setJncmp_nocs(jncmp_nocs_List.get(i));
+                    startupDTO.setRsgntn_nocs(rsgntn_nocs_List.get(i));
+                    startupDTO.setHdof_nocs(hdof_nocs_List.get(i));
+                    startupDAO.insertEmploInfo(startupDTO);
+                }
             }
         }
         //매출정보(손익계산서) 등록 (KB_API_SLS_INFO)
@@ -460,7 +465,7 @@ public class StartupService {
         startupDTO.setSga_amt(startupDTO.getSga_amt1());
         startupDTO.setOperating_profit(startupDTO.getOperating_profit1());
         startupDTO.setNet_profit(startupDTO.getNet_profit1());
-        if (startupDTO.getSls_yr() != null || !startupDTO.getSls_yr().equals("")) {
+        if (StringUtils.hasText(startupDTO.getSls_yr())) {
             startupDAO.insertSlsInfo(startupDTO);
         }
 
@@ -471,7 +476,7 @@ public class StartupService {
         startupDTO.setSga_amt(startupDTO.getSga_amt2());
         startupDTO.setOperating_profit(startupDTO.getOperating_profit2());
         startupDTO.setNet_profit(startupDTO.getNet_profit2());
-        if (startupDTO.getSls_yr() != null || !startupDTO.getSls_yr().equals("")) {
+        if (StringUtils.hasText(startupDTO.getSls_yr())) {
             startupDAO.insertSlsInfo(startupDTO);
         }
 
@@ -482,7 +487,7 @@ public class StartupService {
         startupDTO.setSga_amt(startupDTO.getSga_amt3());
         startupDTO.setOperating_profit(startupDTO.getOperating_profit3());
         startupDTO.setNet_profit(startupDTO.getNet_profit3());
-        if (startupDTO.getSls_yr() != null || !startupDTO.getSls_yr().equals("")) {
+        if (StringUtils.hasText(startupDTO.getSls_yr())) {
             startupDAO.insertSlsInfo(startupDTO);
         }
 
@@ -493,7 +498,7 @@ public class StartupService {
         startupDTO.setSga_amt(startupDTO.getSga_amt4());
         startupDTO.setOperating_profit(startupDTO.getOperating_profit4());
         startupDTO.setNet_profit(startupDTO.getNet_profit4());
-        if (startupDTO.getSls_yr() != null || !startupDTO.getSls_yr().equals("")) {
+        if (StringUtils.hasText(startupDTO.getSls_yr())) {
             startupDAO.insertSlsInfo(startupDTO);
         }
 
@@ -504,7 +509,7 @@ public class StartupService {
         startupDTO.setSga_amt(startupDTO.getSga_amt5());
         startupDTO.setOperating_profit(startupDTO.getOperating_profit5());
         startupDTO.setNet_profit(startupDTO.getNet_profit5());
-        if (startupDTO.getSls_yr() != null || !startupDTO.getSls_yr().equals("")) {
+        if (StringUtils.hasText(startupDTO.getSls_yr())) {
             startupDAO.insertSlsInfo(startupDTO);
         }
         //자산정보(재무상태표) 등록 (KB_API_AST_INFO)
@@ -516,7 +521,7 @@ public class StartupService {
         startupDTO.setDebt_gramt(startupDTO.getDebt_gramt1());
         startupDTO.setCptl(startupDTO.getCptl1());
         startupDTO.setCptl_gramt(startupDTO.getCptl_gramt1());
-        if (startupDTO.getAst_yr() != null || !startupDTO.getAst_yr().equals("")) {
+        if (StringUtils.hasText(startupDTO.getAst_yr())) {
             startupDAO.insertAstInfo(startupDTO);
         }
 
@@ -527,7 +532,7 @@ public class StartupService {
         startupDTO.setDebt_gramt(startupDTO.getDebt_gramt2());
         startupDTO.setCptl(startupDTO.getCptl2());
         startupDTO.setCptl_gramt(startupDTO.getCptl_gramt2());
-        if (startupDTO.getAst_yr() != null || !startupDTO.getAst_yr().equals("")) {
+        if (StringUtils.hasText(startupDTO.getAst_yr())) {
             startupDAO.insertAstInfo(startupDTO);
         }
 
@@ -538,7 +543,7 @@ public class StartupService {
         startupDTO.setDebt_gramt(startupDTO.getDebt_gramt3());
         startupDTO.setCptl(startupDTO.getCptl3());
         startupDTO.setCptl_gramt(startupDTO.getCptl_gramt3());
-        if (startupDTO.getAst_yr() != null || !startupDTO.getAst_yr().equals("")) {
+        if (StringUtils.hasText(startupDTO.getAst_yr())) {
             startupDAO.insertAstInfo(startupDTO);
         }
 
@@ -549,7 +554,7 @@ public class StartupService {
         startupDTO.setDebt_gramt(startupDTO.getDebt_gramt4());
         startupDTO.setCptl(startupDTO.getCptl4());
         startupDTO.setCptl_gramt(startupDTO.getCptl_gramt4());
-        if (startupDTO.getAst_yr() != null || !startupDTO.getAst_yr().equals("")) {
+        if (StringUtils.hasText(startupDTO.getAst_yr())) {
             startupDAO.insertAstInfo(startupDTO);
         }
 
@@ -560,7 +565,7 @@ public class StartupService {
         startupDTO.setDebt_gramt(startupDTO.getDebt_gramt5());
         startupDTO.setCptl(startupDTO.getCptl5());
         startupDTO.setCptl_gramt(startupDTO.getCptl_gramt5());
-        if (startupDTO.getAst_yr() != null || !startupDTO.getAst_yr().equals("")) {
+        if (StringUtils.hasText(startupDTO.getAst_yr())) {
             startupDAO.insertAstInfo(startupDTO);
         }
         //뉴스정보 등록 (KB_API_NEWS_INFO)
@@ -569,8 +574,7 @@ public class StartupService {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
             String dateTimeStr = formatter.format(now);
             Random random = new Random();
-            int randomNumber = 100 + random.nextInt(900);
-            startupDTO.setNews_id(dateTimeStr + randomNumber);
+
             List<String> news_ttl_List = new ArrayList<>();
             List<String> thumb_url_List = new ArrayList<>();
             List<String> provider_List = new ArrayList<>();
@@ -580,13 +584,26 @@ public class StartupService {
             provider_List = (List) map.get("provider_List");
             news_link_List = (List) map.get("news_link_List");
             startupDAO.deleteNewsInfo(startupDTO);
+
             for (int i = 0; i < news_ttl_List.size(); i++) {
+                if(i == 0) {
+                    try{
+                        startupDTO.setThumb_url(thumb_url_List.get(0));
+                    }catch (Exception ignored) {}
+                }else{
+                    startupDTO.setThumb_url(null);
+                }
+
+                startupDTO.setNews_id(dateTimeStr + 100 + random.nextInt(900));
                 startupDTO.setNews_ttl(news_ttl_List.get(i));
-                startupDTO.setThumb_url(thumb_url_List.get(i));
                 startupDTO.setProvider(provider_List.get(i));
                 startupDTO.setNews_link(news_link_List.get(i));
 
-                startupDAO.insertNewsInfo(startupDTO);
+                if(StringUtils.hasText(startupDTO.getNews_ttl())
+                        || StringUtils.hasText(startupDTO.getProvider())
+                        || StringUtils.hasText(startupDTO.getNews_link())) {
+                    startupDAO.insertNewsInfo(startupDTO);
+                }
             }
         }
         //키워드정보 등록 (KB_API_KEYWD_INFO)

@@ -28,12 +28,13 @@ public class FileUploader {
         Map<String, Object> resultMap = new HashMap<>();
 
         // 경로 설정
-//        Path path = Paths.get("D:\\fsfile").toAbsolutePath().normalize();
-//        String savePath = path + "\\dev_kbinnovation\\";
+        Path path = Paths.get("D:\\fsfile").toAbsolutePath().normalize();
+        String savePath = path + "\\dev_kbinnovation\\";
 //        Path path = Paths.get("/fsfile").toAbsolutePath().normalize();
 //        String savePath = path + "/dev_kbinnovation/";
 
-        String savePath = "/Users/johuiyang/Documents/web/uploads/kbinno/";
+        // String savePath = "/Users/johuiyang/Documents/web/uploads/kbinno/";
+        //String savePath = "/kbinnovationhub_devadm/";
 
         File directory = new File(savePath);
 
@@ -69,13 +70,13 @@ public class FileUploader {
     public List<FileDTO> insertFiles(List<MultipartFile> files, int loginId) {
 
         // 경로 설정
-//    	Path path = Paths.get("D:\\fsfile").toAbsolutePath().normalize();
-//        String savePath = path + "\\dev_kbinnovation\\";
+    	Path path = Paths.get("D:\\fsfile").toAbsolutePath().normalize();
+        String savePath = path + "\\dev_kbinnovation\\";
 
 //        Path path = Paths.get("/fsfile").toAbsolutePath().normalize();
 //        String savePath = path + "/dev_kbinnovation/";
 
-        String savePath = "/Users/johuiyang/Documents/web/uploads/kbinno/";
+        //String savePath = "/Users/johuiyang/Documents/web/uploads/kbinno/";
 
         // 디렉토리 없으면 생성
         File directory = new File(savePath);
@@ -154,9 +155,9 @@ public class FileUploader {
         String fileName = UUID.randomUUID().toString() + fileExtension;
 
         // 경로 설정 (아래는 개발 테스트 경로. 운영 리눅스서버 경로로 추후 변경해줘야합니다.)
-//        Path path = Paths.get("D:\\fsfile").toAbsolutePath().normalize();
-//        String savePath = path + "\\kbinnovationhub_devadm\\";
-        String savePath = "/kbinnovationhub_devadm/";
+        Path path = Paths.get("D:\\fsfile").toAbsolutePath().normalize();
+        String savePath = path + "\\kbinnovationhub_devadm\\";
+//        String savePath = "/kbinnovationhub_devadm/";
 
         File directory = new File(savePath);
 
@@ -217,8 +218,8 @@ public class FileUploader {
 //        Path path = Paths.get("/fsfile/dev_kbinnovation/").toAbsolutePath().normalize();
 //        File deleteFile = new File(path + realPath + fileName);
 //        String savePath = "/Users/johuiyang/Documents/web/uploads/kbinno/";
-
-        String savePath = "/kbinnovationhub_devadm/";
+        String savePath = "D:\\fsfile\\dev_kbinnovation\\";
+        //String savePath = "/kbinnovationhub_devadm/";
 
         File deleteFile = new File(savePath + fileName);
         return deleteFile.delete();

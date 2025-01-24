@@ -34,10 +34,12 @@ public interface StartupDAO {
     List<StartupDTO> selectBizSrvcInfo(StartupDTO startupDTO);
     List<StartupDTO> selectInvestInfo(StartupDTO startupDTO);
     List<StartupDTO> selectEmploInfo(StartupDTO startupDTO);
-    StartupDTO selectSlsInfo(StartupDTO startupDTO);
-    StartupDTO selectAstInfo(StartupDTO startupDTO);
+    List<StartupDTO> selectListSlsInfo(StartupDTO startupDTO);
+    List<StartupDTO> selectListAstInfo(StartupDTO startupDTO);
     List<StartupDTO> selectNewsInfo(StartupDTO startupDTO);
     List<StartupDTO> selectKeywdInfo(StartupDTO startupDTO);
+    // KB 스타터스 기본정보 수정
+    int updateStarterInfo(StartupDTO startupDTO);
     //KB 스타터스 삭제
     int deleteStarterInfo(StartupDTO startupDTO);
     int deleteBizSrvcInfo(StartupDTO startupDTO);

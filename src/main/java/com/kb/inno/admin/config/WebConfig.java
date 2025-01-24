@@ -49,6 +49,7 @@ public class WebConfig implements WebMvcConfigurer {
 
         registry.addInterceptor(interceptor)
                 .addPathPatterns("/popup/**", "/member/**", "/visual/**")
+                .addPathPatterns("/kbinnovationhub_devadm/**")
                 .excludePathPatterns("/css/**", "/images/**", "/js/**, /enov/component/**");
     }
 
