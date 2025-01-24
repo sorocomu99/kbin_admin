@@ -8,10 +8,10 @@
         <if test="type != null and type != ''">
             <choose>
                 <when test="type == 'all'">
-                    AND (SURVEY_TITLE 'like' '%' || #{keyword} || '%')
+                    AND (SURVEY_TITLE like '%' || #{keyword} || '%')
                 </when>
                 <when test="type == 'title'">
-                    AND (SURVEY_TITLE 'like' '%' || #{keyword} || '%')
+                    AND (SURVEY_TITLE like '%' || #{keyword} || '%')
                 </when>
             </choose>
         </if>
@@ -37,10 +37,10 @@
         <if test="type != null and type != ''">
             <choose>
                 <when test="type == 'all'">
-                    AND (SURVEY_TITLE 'like' '%' || #{keyword} || '%')
+                    AND (SURVEY_TITLE like '%' || #{keyword} || '%')
                 </when>
                 <when test="type == 'title'">
-                    AND (SURVEY_TITLE 'like' '%' || #{keyword} || '%')
+                    AND (SURVEY_TITLE like '%' || #{keyword} || '%')
                 </when>
             </choose>
         </if>
@@ -155,7 +155,7 @@
         FROM KB_STARTERS_QUESTION
     </select>
 
-    <insert id="insertQuestion" parameterType="com.kb.inno.admin.DTO.KbStartersQuestionDTO" keyProperty="question_no">
+    <insert id="insertQuestion" parameterType="com.kb.inno.admin.DTO.KbStartersQuestionDTO">
         INSERT INTO KB_STARTERS_QUESTION
         (QUESTION_NO, SURVEY_NO, QUESTION_TYPE_NO,
         <if test="question_title != null and question_title != ''">
@@ -225,8 +225,7 @@
         FROM KB_STARTERS_QUESTION_CHOICE
     </select>
 
-    <insert id="insertQuestionChoice" parameterType="com.kb.inno.admin.DTO.KbStartersQuestionChoiceDTO"
-            keyProperty="question_choice_no">
+    <insert id="insertQuestionChoice" parameterType="com.kb.inno.admin.DTO.KbStartersQuestionChoiceDTO">
         INSERT INTO KB_STARTERS_QUESTION_CHOICE
         (QUESTION_CHOICE_NO, QUESTION_NO, CHOICE_CONTENT, MOVE_QUESTION_NO, FRST_RGTR, FRST_REG_DT, LAST_MDFR,
          LAST_MDFCN_DT)
@@ -258,10 +257,10 @@
         <if test="search.type != null and search.type != ''">
             <choose>
                 <when test="search.type == 'all'">
-                    AND (survey.SURVEY_TITLE 'like' '%' || #{search.keyword} || '%')
+                    AND (survey.SURVEY_TITLE like '%' || #{search.keyword} || '%')
                 </when>
                 <when test="search.type == 'title'">
-                    AND (survey.SURVEY_TITLE 'like' '%' || #{search.keyword} || '%')
+                    AND (survey.SURVEY_TITLE like '%' || #{search.keyword} || '%')
                 </when>
             </choose>
         </if>

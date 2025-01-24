@@ -118,6 +118,8 @@ public class ReceiptController {
         mv.addObject("totalCount", totalCount);
         mv.addObject("menuId", menuId);
 
+        mv.addObject("search", search);
+
         return mv;
     }
 
@@ -197,6 +199,8 @@ public class ReceiptController {
 
         Pagination pagination = new Pagination(totalCount, searchDTO.getStart(), 10, 10);
         mv.addObject("pagination", pagination);
+
+        mv.addObject("search", searchDTO);
 
         return mv;
     }

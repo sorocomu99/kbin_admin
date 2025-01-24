@@ -159,8 +159,7 @@
                                                th:id="${'moveQuestion' + (rowStat.index + 1)}"
                                                onclick="toggleMove(this)">
                                         <label class="form-check-label"
-                                               th:for="${'moveQuestion' + (rowStat.index + 1)}">문항
-                                            이동</label>
+                                               th:for="${'moveQuestion' + (rowStat.index + 1)}">문항 이동 정보보기</label>
                                     </div>
                                     <button type="button" class="btn btn-sm btn-dark" onclick="removeList(this)"
                                             th:attr="data-question-no=${row.question_no}"><i
@@ -432,7 +431,7 @@
                                     </div>
                                     <div class="form-check form-switch">
                                         <input class="form-check-input move-question-switch" type="checkbox" role="switch" id="moveQuestion${questionCount + 1}" onclick="toggleMove(this)">
-                                        <label class="form-check-label" for="moveQuestion${questionCount + 1}">문항 이동</label>
+                                        <label class="form-check-label" for="moveQuestion${questionCount + 1}">문항 이동 정보보기</label>
                                     </div>
                                     <button type="button" class="btn btn-sm btn-dark" onclick="removeList(this)"><i
                                             data-feather="trash-2"></i>문항 삭제

@@ -83,6 +83,8 @@ public class SurveyController {
         mv.addObject("pagination", pagination);
         mv.addObject("totalCount", totalCount);
         mv.addObject("menuId", menuId);
+
+        mv.addObject("search", searchDTO);
         return mv;
     }
 

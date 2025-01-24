@@ -1577,10 +1577,10 @@ public class SurveyService {
 				surveyRepository.deleteApply(apply);
 			}
 
-			surveyRepository.deleteSurvey(survey);
-			surveyRepository.deleteSurveyInfoBySurvey(survey);
-			surveyRepository.deleteQuestionBySurvey(survey);
 			surveyRepository.deleteQuestionChoiceBySurvey(survey);
+			surveyRepository.deleteQuestionBySurvey(survey);
+			surveyRepository.deleteSurveyInfoBySurvey(survey);
+			surveyRepository.deleteSurvey(survey);
 
 			result.put("result", "success");
 		} catch (Exception e) {
@@ -1704,6 +1704,7 @@ public class SurveyService {
 			questionParam.setSurvey_no(surveyNo);
 			List<KbStartersQuestionDTO> questions = surveyRepository.getQuestion(questionParam);
 			for(KbStartersQuestionDTO question : questions){
+				int prevQuestionNo = question.getQuestion_no();
 				question.setFrst_rgtr(loginId);
 				question.setLast_mdfr(loginId);
 				question.setSurvey_no(insertSurveyNo);
@@ -1712,12 +1713,16 @@ public class SurveyService {
 				question.setQuestion_no(insertQuestionNo);
 
 				surveyRepository.insertQuestion(question);
-				List<KbStartersQuestionChoiceDTO> choices = surveyRepository.getQuestionChoice(questionParam);
+				KbStartersQuestionDTO questionChoiceParam = new KbStartersQuestionDTO();
+				questionChoiceParam.setQuestion_no(prevQuestionNo);
+
+				List<KbStartersQuestionChoiceDTO> choices = surveyRepository.getQuestionChoice(questionChoiceParam);
 				for(KbStartersQuestionChoiceDTO choice : choices){
 					choice.setFrst_rgtr(loginId);
 					choice.setLast_mdfr(loginId);
 					choice.setQuestion_no(insertQuestionNo);
 					choice.setQuestion_choice_no(surveyRepository.getMaxQuestionChoiceNo());
+
 					surveyRepository.insertQuestionChoice(choice);
 				}
 			}

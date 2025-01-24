@@ -22,11 +22,11 @@
                                         <div class="d-flex align-items-center">
                                             <div class="input-group">
                                                 <select class="form-select" aria-label="" name="type">
-                                                    <option value="all" selected>전체</option>
-                                                    <option value="title">설문명</option>
+                                                    <option value="all">전체</option>
+                                                    <option value="title" th:selected="${search.type == 'title'}">설문명</option>
                                                 </select>
                                                 <input type="text" class="form-control" placeholder="검색어를 입력해주세요."
-                                                       aria-label="" name="keyword">
+                                                       aria-label="" name="keyword" th:value="${search.keyword}">
                                                 <button class="btn btn-dark" type="submit">
                                                     <span data-feather="search"></span>
                                                 </button>
