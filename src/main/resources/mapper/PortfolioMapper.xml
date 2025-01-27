@@ -75,7 +75,7 @@
                            , A.HMPG_LINK
                            , A.ATCH_FILE_SN
                            , B.FILE_NM
-                           , B.FILE_PATH
+                           , REPLACE(B.FILE_PATH, '\', '/') AS FILE_PATH
                            , ROW_NUMBER() OVER(ORDER BY A.PORT_SN DESC) RNUM
                         FROM KB_PORT_INFO A
                            , KB_FILE_INFO B
@@ -125,7 +125,7 @@
                              , A.HMPG_LINK
                              , A.ATCH_FILE_SN
                              , B.FILE_NM
-                             , B.FILE_PATH
+                             , REPLACE(B.FILE_PATH, '\', '/') AS FILE_PATH
                              , ROW_NUMBER() OVER(ORDER BY A.PORT_SN DESC) RNUM
                           FROM KB_PORT_INFO A
                              , KB_FILE_INFO B
@@ -253,7 +253,7 @@
              , A.HMPG_LINK
              , A.ATCH_FILE_SN
              , B.FILE_NM
-             , B.FILE_PATH
+             , REPLACE(B.FILE_PATH, '\', '/') AS FILE_PATH
              , A.SORT_NO
         FROM KB_PORT_INFO A
            , KB_FILE_INFO B
@@ -302,7 +302,7 @@
         ,FILES.FILE_SN                                  AS atch_file_sn
         ,FILES.ORGNL_FILE_NM                            AS ori_file_name
         ,FILES.FILE_NM                                  AS file_name
-        ,FILES.FILE_PATH                                AS file_path
+        ,REPLACE(FILES.FILE_PATH, '\', '/')                                AS file_path
         FROM KB_PORT_INFO PORT
         ,KB_FILE_INFO FILES
         WHERE
@@ -322,7 +322,7 @@
             , ORGNL_FILE_NM
             , FILE_SZ
             , FILE_EXTN
-            , FILE_PATH
+            , REPLACE(FILE_PATH, '\', '/') AS FILE_PATH
             , FRST_RGTR
             , FRST_REG_DT
             , LAST_MDFR

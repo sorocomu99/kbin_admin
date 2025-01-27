@@ -12,7 +12,9 @@ package com.kb.inno.admin.Service;
 
 import com.kb.inno.admin.DAO.HubDAO;
 import com.kb.inno.admin.DTO.*;
+import com.kb.inno.common.FilePathUtil;
 import com.kb.inno.common.FileUploader;
+import com.kb.inno.common.PropertiesValue;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -125,10 +127,16 @@ public class HubService {
         }
 
         // 파일 경로 설정
-        Path path = Paths.get("D:\\fsfile");
-        String savePath = path + "\\dev_kbinnovation\\";
+        // Path path = Paths.get("D:\\fsfile");
+        // String savePath = path + "\\dev_kbinnovation\\";
         //Path path = Paths.get("/fsfile");
         //String savePath = path + "/dev_kbinnovation/";
+
+        //운영
+//        Path path = Paths.get("/fsfile");
+//        String savePath = path + "/kbinnovation/";
+
+        String savePath = FilePathUtil.getSavePath(PropertiesValue.profilesActive);
 
         // 파일 디렉토리 생성(없으면)
         File directory = new File(savePath);
@@ -232,7 +240,7 @@ public class HubService {
     
     // HUB 센터 소식 수정
     public int update(HubDTO hubDTO, int loginId) {
-
+        //TODO: author krh 2025-01-26, 일, 15:17 : D: 하드코딩 되어있음. 단위테스트 후 디버깅
         // 경로 설정
         Path path = Paths.get("D:\\");
         // 0. 기존 파일 재조회
@@ -347,6 +355,7 @@ public class HubService {
         // 0. HUB 센터 소식 상세 조회
         HubDTO basicFile = hubDAO.select(hub_sn);
 
+        //TODO: author krh 2025-01-26, 일, 15:17 : D: 하드코딩 되어있음. 단위테스트 후 디버깅
         // 1. 경로 설정
         Path path = Paths.get("D:\\");
 

@@ -12,13 +12,15 @@
  */
 package com.kb.inno.admin.Controller;
 
+import com.kb.inno.admin.VO.SendMailInfoVO;
+import com.kb.inno.common.CommonUtil;
+import com.kb.inno.common.PropertiesValue;
 import com.kb.inno.common.Sha256;
 import com.kb.inno.admin.DTO.AdminLoginDTO;
 import com.kb.inno.admin.Service.AdminLoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -181,32 +183,38 @@ public class AdminLoginController {
 
         String title = "KB Innovation Hub 입니다.";
         String content = "임시 비밀번호 입니다.\n접속 후 반드시 비밀번호를 변경해서 사용해 주세요.\n임시비밀번호는 "+randomPw+" 입니다.";
-        String host = "smtp.fmcity.com";
-        String port = "587";
-        //String host = "10.200.85.102";  //비밀번호는 내부 메일로 보냄
-        //String port = "25";  //고객사 메일 포트
+
+        // SMTP 정보
+        SendMailInfoVO mailInfo = SendMailInfoVO.getInfo();
+
         String to = (String)params.get("pwdMailAddr");
-        final String from = "hunhee@soroweb.co.kr";  //고객사 메일로 변경
-        final String pw = "1q2w3e4r!@";  //고객사 비밀번호로 변경
 
         Properties props = new Properties();
-        props.setProperty("mail.smtp.host", host);
-        props.setProperty("mail.smtp.port", port);
-        props.setProperty("mail.smtp.auth", "true");
-        props.setProperty("mail.smtp.starttls.enable", "true");
+        props.setProperty("mail.smtp.host", mailInfo.getHost());
+        props.setProperty("mail.smtp.port", mailInfo.getPort());
+        props.setProperty("mail.smtp.auth", mailInfo.getSmtpAuth());
+        props.setProperty("mail.smtp.starttls.enable", mailInfo.getSmtpEnable());
 
-        //Session session = Session.getDefaultInstance(props);
+        Session session; //Session.getDefaultInstance(props);
 
-        Session session = Session.getInstance(props, new Authenticator() {
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(from, pw);
-            }
-        });
+        //TODO: author krh 2025-01-26, 일, 16:24 : 이메일 발송 테스트
+        if(CommonUtil.isProd(PropertiesValue.profilesActive)) {
+            session = Session.getDefaultInstance(props);
+        }else{
+            final String finalFrom = mailInfo.getFrom();
+            //TODO: author krh 2025-01-26, 일, 16:0 : 내부 서버 인증 방식 Check
+            final String finalPw = mailInfo.getPw();
+            session = Session.getInstance(props, new Authenticator() {
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication(finalFrom, finalPw);
+                }
+            });
+        }
 
         try {
             // 메일 메시지 생성
             MimeMessage message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(from)); // 발신자 이메일 주소
+            message.setFrom(new InternetAddress(mailInfo.getFrom())); // 발신자 이메일 주소
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(to)); // 수신자 이메일 주소
             message.setSubject(title); // 이메일 제목
             message.setText(content); // 이메일 내용

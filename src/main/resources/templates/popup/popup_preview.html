@@ -6,31 +6,31 @@
     <title>KB Innovation HUB | 미리보기</title>
 
     <!-- 공통 스타일 시트 -->
-    <link rel="stylesheet" href="/kbinnovationhub_devadm/css/swiper-bundle.min.css">
-    <link rel="stylesheet" href="/kbinnovationhub_devadm/css/base.css">
-    <link rel="stylesheet" href="/kbinnovationhub_devadm/css/board.css">
-    <link rel="stylesheet" href="/kbinnovationhub_devadm/css/common.css">
-    <link rel="stylesheet" href="/kbinnovationhub_devadm/css/main.css">
-    <link rel="stylesheet" href="/kbinnovationhub_devadm/css/sub.css">
+    <link rel="stylesheet" th:href="@{/css/swiper-bundle.min.css}">
+    <link rel="stylesheet" th:href="@{/css/base.css}">
+    <link rel="stylesheet" th:href="@{/css/board.css}">
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+    <link rel="stylesheet" th:href="@{/css/sub.css}">
     
     <!-- 임시 스크립트: 헤더/푸터 컴포넌트 (작업용 임시 파일이므로 개발단계부터는 스크립트 파일 안에 HTML 코드 사용) -->
-    <script src="/kbinnovationhub_devadm/component/header_preview.js"></script>
-    <script src="/kbinnovationhub_devadm/component/footer_preview.js"></script>
+    <script th:src="@{/component/header_preview.js}"></script>
+    <script th:src="@{/component/footer_preview.js}"></script>
 
     <!-- 공통 스크립트 -->
-    <script src="/kbinnovationhub_devadm/js/scrollreveal.min.js"></script>
-    <script src="/kbinnovationhub_devadm/js/gsap.min.js"></script>
-    <script src="/kbinnovationhub_devadm/js/ScrollToPlugin.min.js"></script>
-    <script src="/kbinnovationhub_devadm/js/ScrollTrigger.min.js"></script>
-    <script src="/kbinnovationhub_devadm/js/lenis.min.js"></script>
-    <script src="/kbinnovationhub_devadm/js/split-type.min.js"></script>
-    <script src="/kbinnovationhub_devadm/js/echarts.min.js"></script>
-    <script src="/kbinnovationhub_devadm/js/echarts-wordcloud.min.js"></script>
-    <script src="/kbinnovationhub_devadm/js/flatpickr.js"></script>
-    <script src="/kbinnovationhub_devadm/js/ko.js"></script>
-    <script src="/kbinnovationhub_devadm/js/swiper-bundle.min.js"></script>
-    <script src="/kbinnovationhub_devadm/js/countUp.umd.js"></script>
-    <script src="/kbinnovationhub_devadm/js/common.js"></script>
+    <script th:src="@{/js/scrollreveal.min.js}"></script>
+    <script th:src="@{/js/gsap.min.js}"></script>
+    <script th:src="@{/js/ScrollToPlugin.min.js}"></script>
+    <script th:src="@{/js/ScrollTrigger.min.js}"></script>
+    <script th:src="@{/js/lenis.min.js}"></script>
+    <script th:src="@{/js/split-type.min.js}"></script>
+    <script th:src="@{/js/echarts.min.js}"></script>
+    <script th:src="@{/js/echarts-wordcloud.min.js}"></script>
+    <script th:src="@{/js/flatpickr.js}"></script>
+    <script th:src="@{/js/ko.js}"></script>
+    <script th:src="@{/js/swiper-bundle.min.js}"></script>
+    <script th:src="@{/js/countUp.umd.js}"></script>
+    <script th:src="@{/js/common.js}"></script>
 </head>
 <body>
     <!-- 팝업 -->
@@ -75,19 +75,19 @@
                 <div class="swiper">
                     <div class="swiper-wrapper">
                         <div class="swiper-slide">
-                            <div class="background"><img class="item" src="/kbinnovationhub_devadm/images/main/visual-slide-image-1.png" alt=""></div>
+                            <div class="background"><img class="item" th:src="@{/images/main/visual-slide-image-1.png}" alt=""></div>
                             <div class="context">
                                 <p class="text" data-split>스타트업 육성을 통해 <br>대한민국 디지털 금융 혁신을 이끌어갑니다.</p>
                             </div>
                         </div>
                         <div class="swiper-slide">
-                            <div class="background background-2"><img class="item" src="/kbinnovationhub_devadm/images/main/visual-slide-image-2.jpg" alt=""></div>
+                            <div class="background background-2"><img class="item" th:src="@{/images/main/visual-slide-image-2.jpg}" alt=""></div>
                             <div class="context">
                                 <p class="text" data-split>글로벌 육성 프로그램을 통해 <br>스타트업의 성공적인 글로벌 진출을 지원합니다.</p>
                             </div>
                         </div>
                         <div class="swiper-slide">
-                            <div class="background"><img class="item" src="/kbinnovationhub_devadm/images/main/visual-slide-image-3.jpg" alt=""></div>
+                            <div class="background"><img class="item" th:src="@{/images/main/visual-slide-image-3.jpg}" alt=""></div>
                             <div class="context">
                                 <p class="text" data-split>KB Innovation HUB는 앞으로도 스타트업과 함께 <br>더 나은 미래를 만들어 나가겠습니다.</p>
                             </div>
@@ -95,12 +95,12 @@
                     </div>
                 </div>
                 <div class="title">
-                    <img class="item" src="/kbinnovationhub_devadm/images/main/visual-slide-title.svg" alt="">
+                    <img class="item" th:src="@{/images/main/visual-slide-title.svg}" alt="">
                 </div>
             </div>
             <div class="section-introduce">
                 <div class="sticky">
-                    <img class="background" src="/kbinnovationhub_devadm/images/main/indroduce-background.jpg" alt="">
+                    <img class="background" th:src="@{/images/main/indroduce-background.jpg}" alt="">
                     <div data-animate="fade-in" class="container container-1">
                         <h4 class="section-title"><span class="block">스타트업과 함께 만드는<br><span class="highlight">금융 혁신 핀테크 랩</span></span></h4>
                         <div class="context">
@@ -113,6 +113,12 @@
     </main>
 
     <!-- 푸터 -->
+    <script th:inline="javascript">
+        window.staticPath = /*[[${@environment.getProperty('staticpath')} + '/']]*/'/';
+        if(window.staticPath === '//') {
+            window.staticPath = '/';
+        }
+    </script>
     <app-footer></app-footer>
 </body>
 </html>

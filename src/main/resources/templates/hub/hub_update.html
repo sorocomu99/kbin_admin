@@ -42,7 +42,8 @@
                                                     <div class="d-flex">
                                                         <input class="form-control w-auto" type="file" name="hub_img" onchange="preview()">
                                                     </div>
-                                                    <img id="previewFrame" th:src="${hub.hub_path_img == null ? '' : '\kbinnovationhub_devadm'+hub.hub_path_img + hub.hub_img_name}" width="200" class="img-fluid mt-2" style="display:none" />
+                                                    <img id="previewFrame" th:src="${hub.hub_path_img == null ? '' : (@environment.getProperty('staticpath') == '/' ? '' : @environment.getProperty('staticpath'))
+                                                    +hub.hub_path_img + hub.hub_img_name}" width="200" class="img-fluid mt-2" style="display:none" />
                                                     <p class="mb-0 mt-2">
                                                         * 권장 사이즈 : 500x320px
                                                     </p>
@@ -134,7 +135,7 @@
             $("#hub_cn").val(summernote_value);
 
             const form = document.forms['hub_form'];
-            form.action = '/kbinnovationhub_devadm/hub/preview'; // 전송할 URL
+            form.action = window.staticPath + 'hub/preview'; // 전송할 URL
             form.method = 'POST';            // 전송 방식
             form.target = '_blank';          // 새 창에서 열기
             form.submit();                   // 폼 제출
@@ -256,7 +257,7 @@
                 $("#hub_cn").val(summernote_value);
                 // 폼 태그 서브밋 보내기
                 const form = document.forms['hub_form'];
-                form.action = '/kbinnovationhub_devadm/hub/update'; // 전송할 URL
+                form.action = window.staticPath + 'hub/update'; // 전송할 URL
                 form.method = 'POST';            // 전송 방식
                 form.target = '';          // 새 창에서 열기
                 form.submit();                   // 폼 제출

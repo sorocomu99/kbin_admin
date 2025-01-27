@@ -13,7 +13,9 @@ package com.kb.inno.admin.Controller;
 import com.kb.inno.admin.DAO.KbStartersSurvey;
 import com.kb.inno.admin.DTO.*;
 import com.kb.inno.admin.Service.SurveyService;
+import com.kb.inno.common.FilePathUtil;
 import com.kb.inno.common.Pagination;
+import com.kb.inno.common.PropertiesValue;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
@@ -50,8 +52,9 @@ public class SurveyController {
     public ResponseEntity<Resource> getImage(String filename) throws IOException {
         // TODO : 파일 경로를 설정해주세요 또는 기존 파일경로를 설정했던 방식으로 사용해주세요
         //String filePath = "/Users/johuiyang/Documents/web/uploads/kbinno/" + filename;
-        String filePath = "D:/fsfile/dev_kbinnovation/" + filename;
+        //String filePath = "D:/fsfile/dev_kbinnovation/" + filename;
         //String filePath = "/fsfile/kbinnovation/" + filename;
+        String filePath = FilePathUtil.getSavePath(PropertiesValue.profilesActive);
 
         // 파일이 존재하는지 확인
         File file = new File(filePath);

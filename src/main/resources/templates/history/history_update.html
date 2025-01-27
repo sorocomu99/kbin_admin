@@ -739,7 +739,7 @@
             let result = confirm("수정 하시겠습니까?");
             if (result) {
                 const form = document.forms['history_form'];
-                form.action = '/kbinnovationhub_devadm/history/update'; // 전송할 URL
+                form.action = window.staticPath + 'history/update'; // 전송할 URL
                 form.method = 'POST';            // 전송 방식
                 form.target = '';          // 새 창에서 열기
                 form.submit();                   // 폼 제출

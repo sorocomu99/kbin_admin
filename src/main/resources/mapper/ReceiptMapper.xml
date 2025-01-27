@@ -71,7 +71,7 @@
 		                       A.TMPR_DEL_YN,
 		                       B.FILE_SN,
 		                       B.FILE_NM,
-		                       B.FILE_PATH
+							   REPLACE(B.FILE_PATH, '\', '/') AS FILE_PATH
 		                FROM   KB_SRVY_EXMN_INFO A,
 		                       KB_FILE_INFO B
 		                WHERE  1 = 1
@@ -118,7 +118,7 @@
 		                       A.TMPR_DEL_YN,
 		                       B.FILE_SN,
 		                       B.FILE_NM,
-		                       B.FILE_PATH
+							   REPLACE(B.FILE_PATH, '\', '/') AS FILE_PATH
 		                FROM   KB_SRVY_EXMN_INFO A,
 		                       KB_FILE_INFO B
 		                WHERE  1 = 1

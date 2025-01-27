@@ -4,6 +4,8 @@ import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import com.kb.inno.common.FilePathUtil;
+import com.kb.inno.common.PropertiesValue;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
@@ -23,10 +25,12 @@ public class ImageController {
     public ResponseEntity<Resource> getImage(@PathVariable String imageName) {
 		//System.out.println("imageName==================="+imageName);
         //Path path = Paths.get("D:/fsfile/dev_kbinnovation/").resolve(imageName).normalize();
-        String imagePath = "D:/fsfile/dev_kbinnovation/" + imageName;
+        //String imagePath = "D:/fsfile/dev_kbinnovation/" + imageName;
         //String imagePath = "/fsfile/kbinnovation/" + imageName;
         //System.out.println("imagePath==================="+imagePath);
         //Resource resource = new FileSystemResource(path.toString());
+
+        String imagePath = FilePathUtil.getSavePath(PropertiesValue.profilesActive) + imageName;
         Resource resource = new FileSystemResource(imagePath);
 
         if (resource.exists()) {
@@ -41,8 +45,10 @@ public class ImageController {
     @RequestMapping("/summernoteimages/{imageName:.+}")
     @ResponseBody
     public ResponseEntity<Resource> getNoteImage(@PathVariable String imageName) {
-    	String imagePath = "D:/fsfile/dev_kbinnovation/" + imageName;
+    	//String imagePath = "D:/fsfile/dev_kbinnovation/" + imageName;
         //String imagePath = "/fsfile/kbinnovation/" + imageName;
+
+        String imagePath = FilePathUtil.getSavePath(PropertiesValue.profilesActive) + imageName;
     	Resource resource = new FileSystemResource(imagePath);
 
         if (resource.exists()) {

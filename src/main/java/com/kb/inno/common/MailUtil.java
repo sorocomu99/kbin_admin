@@ -1,5 +1,6 @@
 package com.kb.inno.common;
 
+import com.kb.inno.admin.VO.SendMailInfoVO;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.activation.DataHandler;
@@ -18,29 +19,36 @@ import java.util.Properties;
 public class MailUtil {
 
     public boolean sendMail(List<String> receivers, String subject, String content, MultipartFile attachment) {
-        //TODO : 메일 정보 수정
-        String host = "smtp.fmcity.com";
-        String port = "587";
-        final String from = "hunhee@soroweb.co.kr";
-        final String password = "1q2w3e4r!@";
 
         if(receivers == null || receivers.size() == 0) {
             return false;
         }
 
+        // SMTP 정보
+        SendMailInfoVO mailInfo = SendMailInfoVO.getInfo();
+
         // 메일 관련 정보
         Properties props = new Properties();
+        props.setProperty("mail.smtp.host", mailInfo.getHost());
+        props.setProperty("mail.smtp.port", mailInfo.getPort());
+        props.setProperty("mail.smtp.auth", mailInfo.getSmtpAuth());
+        props.setProperty("mail.smtp.starttls.enable", mailInfo.getSmtpEnable());
 
-        props.setProperty("mail.smtp.host", host);
-        props.setProperty("mail.smtp.port", port);
-        props.setProperty("mail.smtp.auth", "true");
-        props.setProperty("mail.smtp.starttls.enable", "true");
+        Session session; //Session.getDefaultInstance(props);
 
-        Session session = Session.getInstance(props, new Authenticator() {
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(from, password);
-            }
-        });
+        //TODO: author krh 2025-01-26, 일, 16:24 : 이메일 발송 테스트
+        if(CommonUtil.isProd(PropertiesValue.profilesActive)) {
+            session = Session.getDefaultInstance(props);
+        }else{
+            final String finalFrom = mailInfo.getFrom();
+            //TODO: author krh 2025-01-26, 일, 16:0 : 내부 서버 인증 방식 Check
+            final String finalPw = mailInfo.getPw();
+            session = Session.getInstance(props, new Authenticator() {
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication(finalFrom, finalPw);
+                }
+            });
+        }
 
         StringBuilder sb = new StringBuilder();
         if(receivers.size() > 1) {
@@ -56,7 +64,7 @@ public class MailUtil {
         try {
             // 메일 메시지 생성
             MimeMessage message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(from)); // 발신자 이메일 주소
+            message.setFrom(new InternetAddress(mailInfo.getFrom())); // 발신자 이메일 주소
             message.addRecipients(Message.RecipientType.BCC, InternetAddress.parse(sb.toString())); // 수신자 이메일 주소
             message.setSubject(subject); // 이메일 제목
 

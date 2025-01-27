@@ -28,13 +28,23 @@ public class FileUploader {
         Map<String, Object> resultMap = new HashMap<>();
 
         // 경로 설정
-        Path path = Paths.get("D:\\fsfile").toAbsolutePath().normalize();
-        String savePath = path + "\\dev_kbinnovation\\";
+//        Path path = Paths.get("D:\\fsfile").toAbsolutePath().normalize();
+//        String savePath = path + "\\dev_kbinnovation\\";
+
+        //TODO: author krh 2025-01-26, 일, 15:9 : 인프라 DEV 서버 물리 경로 확인 필요. dev_kbinnovation or kbinnovationhub_devadm. enum : dev_kbinnovation 설정중
 //        Path path = Paths.get("/fsfile").toAbsolutePath().normalize();
 //        String savePath = path + "/dev_kbinnovation/";
 
         // String savePath = "/Users/johuiyang/Documents/web/uploads/kbinno/";
+
+        //TODO: author krh 2025-01-26, 일, 15:9 : 인프라 DEV 서버 물리 경로 확인 필요. dev_kbinnovation or kbinnovationhub_devadm. enum : dev_kbinnovation 설정중
         //String savePath = "/kbinnovationhub_devadm/";
+
+// 운영
+//        Path path = Paths.get("/fsfile").toAbsolutePath().normalize();
+//        String savePath = path + "/kbinnovation/";
+
+        String savePath = FilePathUtil.getSavePath(PropertiesValue.profilesActive);
 
         File directory = new File(savePath);
 
@@ -57,7 +67,11 @@ public class FileUploader {
             // 파일 복사
             Files.copy(fileStream, targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 
-            String imageUrl = "/kbinnovationhub_devadm/summernoteimages/" + savedFileName;
+            // String imageUrl = "/kbinnovationhub_devadm/summernoteimages/" + savedFileName;
+            // 운영
+            // String imageUrl = "/kbinnovationhub_adm/summernoteimages/" + savedFileName;
+            String imageUrl = FilePathUtil.getSummerNoteImagesPath() + savedFileName;
+
             resultMap.put("url", imageUrl);
 
         } catch (IOException e) {
@@ -70,13 +84,20 @@ public class FileUploader {
     public List<FileDTO> insertFiles(List<MultipartFile> files, int loginId) {
 
         // 경로 설정
-    	Path path = Paths.get("D:\\fsfile").toAbsolutePath().normalize();
-        String savePath = path + "\\dev_kbinnovation\\";
+//    	Path path = Paths.get("D:\\fsfile").toAbsolutePath().normalize();
+//        String savePath = path + "\\dev_kbinnovation\\";
 
+        //TODO: author krh 2025-01-26, 일, 15:9 : 인프라 DEV 서버 물리 경로 확인 필요. dev_kbinnovation or kbinnovationhub_devadm. enum : dev_kbinnovation 설정중
 //        Path path = Paths.get("/fsfile").toAbsolutePath().normalize();
 //        String savePath = path + "/dev_kbinnovation/";
 
         //String savePath = "/Users/johuiyang/Documents/web/uploads/kbinno/";
+
+        // 운영
+//        Path path = Paths.get("/fsfile").toAbsolutePath().normalize();
+//        String savePath = path + "/kbinnovation/";
+
+        String savePath = FilePathUtil.getSavePath(PropertiesValue.profilesActive);
 
         // 디렉토리 없으면 생성
         File directory = new File(savePath);
@@ -155,10 +176,17 @@ public class FileUploader {
         String fileName = UUID.randomUUID().toString() + fileExtension;
 
         // 경로 설정 (아래는 개발 테스트 경로. 운영 리눅스서버 경로로 추후 변경해줘야합니다.)
-        Path path = Paths.get("D:\\fsfile").toAbsolutePath().normalize();
-        String savePath = path + "\\kbinnovationhub_devadm\\";
+        //Path path = Paths.get("D:\\fsfile").toAbsolutePath().normalize();
+
+        //TODO: author krh 2025-01-26, 일, 15:9 : 인프라 DEV 서버 물리 경로 확인 필요. dev_kbinnovation or kbinnovationhub_devadm. enum : dev_kbinnovation 설정중
+        //String savePath = path + "\\kbinnovationhub_devadm\\";
 //        String savePath = "/kbinnovationhub_devadm/";
 
+        // 운영
+//        Path path = Paths.get("/fsfile").toAbsolutePath().normalize();
+//        String savePath = path + "/kbinnovation/";
+
+        String savePath = FilePathUtil.getSavePath(PropertiesValue.profilesActive);
         File directory = new File(savePath);
 
         System.out.println("savePath====================="+savePath);
@@ -218,8 +246,15 @@ public class FileUploader {
 //        Path path = Paths.get("/fsfile/dev_kbinnovation/").toAbsolutePath().normalize();
 //        File deleteFile = new File(path + realPath + fileName);
 //        String savePath = "/Users/johuiyang/Documents/web/uploads/kbinno/";
-        String savePath = "D:\\fsfile\\dev_kbinnovation\\";
+
+
+        // String savePath = "D:\\fsfile\\dev_kbinnovation\\";
+        //TODO: author krh 2025-01-26, 일, 15:9 : 인프라 DEV 서버 물리 경로 확인 필요. dev_kbinnovation or kbinnovationhub_devadm. enum : dev_kbinnovation 설정중
         //String savePath = "/kbinnovationhub_devadm/";
+        // 운영
+        //Path path = Paths.get("/fsfile/kbinnovation/").toAbsolutePath().normalize();
+
+        String savePath = FilePathUtil.getSavePath(PropertiesValue.profilesActive);
 
         File deleteFile = new File(savePath + fileName);
         return deleteFile.delete();

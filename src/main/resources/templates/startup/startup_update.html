@@ -726,9 +726,9 @@
                                     </table>
 
                                     <div class="button-container">
-                                        <button type="button" class="btn btn-primary" onclick="javascript:startupUpdate();">수정하기</button>
                                         <!--<a href="/html_ko/preview/startup.html" target="_blank" class="btn btn-outline-primary">미리보기</a>-->
                                         <a th:href="@{/startup/list/{menuId}(menuId=${menuId})}" class="btn btn-outline-dark">목록보기</a>
+                                        <button type="button" class="btn btn-primary" onclick="javascript:startupUpdate();">수정하기</button>
                                     </div>
                                 </form>
                             </div>
@@ -964,7 +964,7 @@
             let result = confirm("등록 하시겠습니까?");
             if (result) {
                 const form = document.forms['startup_form'];
-                form.action = '/kbinnovationhub_devadm/startup/update';  //전송할 URL
+                form.action = window.staticPath + 'startup/update';  //전송할 URL
                 form.method = 'POST';                                    //전송 방식
                 form.target = '';                                        //새 창에서 열기
                 form.submit();                                           //폼 제출

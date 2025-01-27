@@ -15,10 +15,10 @@
             </button>
             <div class="right-link">
                 <div class="item">
-                    <a class="px-3" href="/kbinnovationhub_devadm" target="_blank"><span data-feather="home"></span> 홈페이지</a>
+                    <a class="px-3" th:href="@{/}" target="_blank"><span data-feather="home"></span> 홈페이지</a>
                 </div>
                 <div class="item">
-                    <a class="px-3" href="/kbinnovationhub_devadm/logout"><span data-feather="log-out"></span> 로그아웃</a>
+                    <a class="px-3" th:href="@{/logout}"><span data-feather="log-out"></span> 로그아웃</a>
                 </div>
             </div>
         </header>
@@ -28,7 +28,7 @@
             $(document).ready(function() {
                 let htmlCode = "";
                 $.ajax({
-                    url: `/kbinnovationhub_devadm/menu/`, // 요청 URL
+                    url: window.staticPath + `menu/`, // 요청 URL
                     type: `GET`, // HTTP 메서드
                     contentType: `application/x-www-form-urlencoded`, // 헤더 설정
                     data: {}, // 보내는 데이터
@@ -63,7 +63,7 @@
                                     for(let j = 0; j < level2.length; j++) {
                                         if(level1[i].menu_sn == level2[j].menu_up_sn) {
                                             htmlCode += `    <input type="hidden" id="menu_id_` + level2[j].menu_sn +  `" value="` + level2[j].menu_sn + `"/>`;
-                                            htmlCode += `    <a id="` + i + `" class="nav-link" href="/kbinnovationhub_devadm` + level2[j].menu_link +`/` + level2[j].menu_sn + `">`;
+                                            htmlCode += `    <a id="` + i + `" class="nav-link" href="` + window.staticPath.replace(/\/$/, "") + level2[j].menu_link +`/` + level2[j].menu_sn + `">`;
                                             htmlCode +=         level2[j].menu_nm;
                                             htmlCode += `    </a>`;
                                         }

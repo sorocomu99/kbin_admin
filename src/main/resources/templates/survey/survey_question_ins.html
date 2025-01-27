@@ -126,6 +126,15 @@
                                                       th:text="${row.question_description}"></textarea>
                                         </div>
                                     </div>
+<!--                                   todo krh kb_admin_adm 과 코드 상이. 확인 필요 -->
+<!--                                    <div class="row">-->
+<!--                                        <div class="col">-->
+<!--                                            <div class="d-flex align-items-center">-->
+<!--                                                <input class="form-control" type="file"-->
+<!--                                                       th:id="${'formFile' + (rowStat.index + 1)}">-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
                                 </div>
                                 <div class="question-body" th:classappend="${row.question_type_no == 4 ? 'on' : ''}"
                                      data-question-type="4">

@@ -149,7 +149,7 @@
              , FILES.FILE_SN       AS ATCH_FILE_SN
              , FILES.ORGNL_FILE_NM AS ORIGIN_FILE_NAME
              , FILES.FILE_NM       AS NTC_FILE_NAME
-             , FILES.FILE_PATH     AS NTC_PATH
+             , REPLACE(FILES.FILE_PATH, '\', '/')     AS NTC_PATH
           FROM KB_NTC_INFO NOTICE
              , KB_FILE_INFO FILES
          WHERE NOTICE.ATCH_FILE_SN = FILES.FILE_SN(+)

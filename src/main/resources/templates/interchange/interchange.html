@@ -55,7 +55,8 @@
                                         </tr>
                                         <tr th:unless="${selectList == null or selectList.isEmpty()}" th:each="list : ${selectList}">
                                             <td th:text="${list.rownumber}"></td>
-                                            <td><img th:src="${list.inter_path1 == null ? '' : '\kbinnovationhub_devadm' + list.inter_path1 + list.inter_file_name1}" width="200" alt=""></td>
+                                            <td><img th:src="${list.inter_path1 == null ? '' : (@environment.getProperty('staticpath') == '/' ? '' : @environment.getProperty('staticpath'))
+                                             + list.inter_path1 + list.inter_file_name1}" width="200" alt=""></td>
                                             <td th:text="${list.exch_ttl}"></td>
                                             <td th:text="${list.expsr_yn == 'Y' ? '노출' : '미노출'}"></td>
                                             <td th:text="${list.sort_no}"></td>
@@ -102,7 +103,7 @@
             pageMoveForm.appendChild(obj2);
 
             pageMoveForm.setAttribute('method', 'post');
-            pageMoveForm.setAttribute('action', '/kbinnovationhub_devadm/interchange/detail');
+            pageMoveForm.setAttribute('action', window.staticPath + 'interchange/detail');
             document.body.appendChild(pageMoveForm);
             pageMoveForm.submit();
         }

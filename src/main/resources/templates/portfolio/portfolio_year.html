@@ -118,7 +118,7 @@
             pageMoveForm.appendChild(obj2);
 
             pageMoveForm.setAttribute('method', 'post');
-            pageMoveForm.setAttribute('action', '/kbinnovationhub_devadm/portfolio/yearDetail');
+            pageMoveForm.setAttribute('action', window.staticPath + 'portfolio/yearDetail');
             document.body.appendChild(pageMoveForm);
             pageMoveForm.submit();
         }
@@ -140,7 +140,7 @@
             pageMoveForm.appendChild(obj2);
 
             pageMoveForm.setAttribute('method', 'get');
-            pageMoveForm.setAttribute('action', '/kbinnovationhub_devadm/portfolio/portList/'+menuId);
+            pageMoveForm.setAttribute('action', window.staticPath + 'portfolio/portList/'+menuId);
             document.body.appendChild(pageMoveForm);
             pageMoveForm.submit();
         }

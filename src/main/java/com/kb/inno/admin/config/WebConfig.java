@@ -50,15 +50,16 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(interceptor)
                 .addPathPatterns("/popup/**", "/member/**", "/visual/**")
                 .addPathPatterns("/kbinnovationhub_devadm/**")
+				.addPathPatterns("/kbinnovationhub_adm/**")
                 .excludePathPatterns("/css/**", "/images/**", "/js/**, /enov/component/**");
     }
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         //registry.addResourceHandler("/summernoteimages/**" , "/upload/**")
-    	registry.addResourceHandler("/summernoteimages/**" , "/kbinnovationhub_devadm/upload/**", "/kbinnovationhub/upload/**")
-    	        .addResourceLocations("file:///D:/fsifle/dev_kbinnovation/");
-                //.addResourceLocations("file:/fsfile/dev_kbinnovation/");
+    	registry.addResourceHandler("/summernoteimages/**" , "/kbinnovationhub_devadm/upload/**", "/kbinnovationhub_adm/upload/**", "/kbinnovationhub/upload/**")
+    	        .addResourceLocations("file:///D:/fsifle/dev_kbinnovation/")
+                .addResourceLocations("file:/fsfile/dev_kbinnovation/");
     }
 
 	@Override

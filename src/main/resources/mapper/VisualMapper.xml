@@ -14,7 +14,7 @@
                    , VISUAL.SORT_NO      AS SORT_NO
                    , FILES.ORGNL_FILE_NM AS ORIGIN_FILE_NAME
                    , FILES.FILE_NM       AS MAIN_FILE_NAME
-                   , FILES.FILE_PATH     AS MAIN_PATH
+                   , REPLACE(FILES.FILE_PATH, '\', '/')     AS MAIN_PATH
                  FROM KB_MAIN_INFO VISUAL
                     , KB_FILE_INFO FILES
                 WHERE VISUAL.ATCH_FILE_SN = FILES.FILE_SN(+)
@@ -95,7 +95,7 @@
              , FILES.FILE_SN       AS ATCH_FILE_SN
              , FILES.ORGNL_FILE_NM AS ORIGIN_FILE_NAME
              , FILES.FILE_NM       AS MAIN_FILE_NAME
-             , FILES.FILE_PATH     AS MAIN_PATH
+             , REPLACE(FILES.FILE_PATH, '\', '/')     AS MAIN_PATH
           FROM KB_MAIN_INFO VISUAL
              , KB_FILE_INFO FILES
          WHERE VISUAL.ATCH_FILE_SN = FILES.FILE_SN(+)
@@ -136,7 +136,7 @@
              , VISUAL.SORT_NO      AS SORT_NO
              , FILES.ORGNL_FILE_NM AS ORIGIN_FILE_NAME
              , FILES.FILE_NM       AS MAIN_FILE_NAME
-             , FILES.FILE_PATH     AS MAIN_PATH
+             , REPLACE(FILES.FILE_PATH, '\', '/')     AS MAIN_PATH
         FROM KB_MAIN_INFO VISUAL
            , KB_FILE_INFO FILES
         WHERE 1=1

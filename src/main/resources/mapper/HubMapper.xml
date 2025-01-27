@@ -47,13 +47,13 @@
                             , HUB.EXPSR_YN        AS EXPSR_YN
                             , HUB.SORT_NO         AS SORT_NO
                             , HUB.ATCH_FILE_SN1   AS ATCH_FILE_SN1
-                            , FILES1.FILE_PATH    AS HUB_PATH_IMG
+                            , REPLACE(FILES1.FILE_PATH, '\', '/')    AS HUB_PATH_IMG
                             , FILES1.FILE_NM      AS HUB_IMG_NAME
                             , HUB.ATCH_FILE_SN2   AS ATCH_FILE_SN2
-                            , FILES2.FILE_PATH    AS HUB_PATH_MOV
+                            , REPLACE(FILES2.FILE_PATH, '\', '/')    AS HUB_PATH_MOV
                             , FILES2.FILE_NM      AS HUB_MOV_NAME
                             , HUB.ATCH_FILE_SN3   AS ATCH_FILE_SN3
-                            , FILES3.FILE_PATH    AS HUB_PATH
+                            , REPLACE(FILES3.FILE_PATH, '\', '/')    AS HUB_PATH
                             , FILES3.FILE_NM      AS HUB_FILE_NAME
                          FROM KB_HUB_DAY_INFO HUB
                             , KB_FILE_INFO FILES1
@@ -165,7 +165,7 @@
              , HUB.ATCH_FILE_SN1   AS ATCH_FILE_SN1
              , HUB.ATCH_FILE_SN2   AS ATCH_FILE_SN2
              , HUB.ATCH_FILE_SN3   AS ATCH_FILE_SN3
-             , FILES.FILE_PATH     AS HUB_PATH_IMG
+             , REPLACE(FILES.FILE_PATH, '\', '/')     AS HUB_PATH_IMG
              , FILES.FILE_NM       AS HUB_IMG_NAME
         FROM KB_HUB_DAY_INFO HUB
            , KB_FILE_INFO FILES

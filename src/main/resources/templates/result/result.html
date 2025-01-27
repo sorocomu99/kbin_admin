@@ -208,7 +208,7 @@
         //$("#rslt_sn").val("1");
 
         const form = document.forms['result_form'];
-        form.action = '/kbinnovationhub_devadm/result/preview'; // 전송할 URL
+        form.action = window.staticPath + 'result/preview'; // 전송할 URL
         form.method = 'POST';            // 전송 방식
         form.target = '_blank';          // 새 창에서 열기
         form.submit();                   // 폼 제출
@@ -269,7 +269,7 @@
             }
             // 폼 태그 서브밋 보내기
             const form = document.forms['result_form'];
-            form.action = '/kbinnovationhub_devadm/result/save'; // 전송할 URL
+            form.action = window.staticPath + 'result/save'; // 전송할 URL
             form.method = 'POST';            // 전송 방식
             form.target = '';          // 새 창에서 열기
             form.submit();                   // 폼 제출

@@ -133,7 +133,7 @@
             }
 
             const form = document.forms['place_form'];
-            form.action = '/kbinnovationhub_devadm/place/preview'; // 전송할 URL
+            form.action = window.staticPath + 'place/preview'; // 전송할 URL
             form.method = 'POST';            // 전송 방식
             form.target = '_blank';          // 새 창에서 열기
             form.submit();                   // 폼 제출
@@ -179,7 +179,7 @@
             } else {
                 // 폼 태그 서브밋 보내기
                 const form = document.forms['place_form'];
-                form.action = '/kbinnovationhub_devadm/place/insert';   // 전송할 URL
+                form.action = window.staticPath + 'place/insert';   // 전송할 URL
                 form.method = 'POST';            // 전송 방식
                 form.target = '';                // 새 창에서 열기
                 form.submit();                   // 폼 제출

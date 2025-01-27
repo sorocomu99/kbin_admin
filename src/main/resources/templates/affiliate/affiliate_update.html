@@ -35,7 +35,8 @@
                                                 <div class="d-flex align-items-center">
                                                     <input class="form-control w-auto" type="file" name="affiliate_file" onchange="preview()">
                                                 </div>
-                                                <img id="previewFrame" th:src="${affiliate?.affiliate_path == null ? '' : '\kbinnovationhub_devadm' + affiliate?.affiliate_path + affiliate?.affiliate_file_name}" width="200" class="img-fluid mt-2" />
+                                                <img id="previewFrame" th:src="${affiliate?.affiliate_path == null ? '' : (@environment.getProperty('staticpath') == '/' ? '' : @environment.getProperty('staticpath'))
+                                                 + affiliate?.affiliate_path + affiliate?.affiliate_file_name}" width="200" class="img-fluid mt-2" />
                                                 <p class="mb-0 mt-2">
                                                     * 권장 사이즈 : 458x328px
                                                 </p>
@@ -136,7 +137,7 @@
     // 프리뷰 페이지로 이동
     function previewPage() {
         const form = document.forms['affiliate_form'];
-        form.action = '/kbinnovationhub_devadm/affiliate/preview'; // 전송할 URL
+        form.action = window.staticPath + 'affiliate/preview'; // 전송할 URL
         form.method = 'POST';            // 전송 방식
         form.target = '_blank';          // 새 창에서 열기
         form.submit();                   // 폼 제출
@@ -190,7 +191,7 @@
         } else {
             // 폼 태그 서브밋 보내기
             const form = document.forms['affiliate_form'];
-            form.action = '/kbinnovationhub_devadm/affiliate/update'; // 전송할 URL
+            form.action = window.staticPath + 'affiliate/update'; // 전송할 URL
             form.method = 'POST';            // 전송 방식
             form.target = '';          // 새 창에서 열기
             form.submit();                   // 폼 제출

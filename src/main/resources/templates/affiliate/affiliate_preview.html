@@ -6,35 +6,35 @@
     <title>KB Innovation HUB</title>
 
     <!-- 공통 스타일 시트 -->
-    <link rel="stylesheet" href="/kbinnovationhub_devadm/css/swiper-bundle.min.css">
-    <link rel="stylesheet" href="/kbinnovationhub_devadm/css/flatpickr.min.css">
-    <link rel="stylesheet" href="/kbinnovationhub_devadm/css/base.css">
-    <link rel="stylesheet" href="/kbinnovationhub_devadm/css/board.css">
-    <link rel="stylesheet" href="/kbinnovationhub_devadm/css/common.css">
-    <link rel="stylesheet" href="/kbinnovationhub_devadm/css/main.css">
-    <link rel="stylesheet" href="/kbinnovationhub_devadm/css/sub.css">
+    <link rel="stylesheet" th:href="@{/css/swiper-bundle.min.css}">
+    <link rel="stylesheet" th:href="@{/css/flatpickr.min.css}">
+    <link rel="stylesheet" th:href="@{/css/base.css}">
+    <link rel="stylesheet" th:href="@{/css/board.css}">
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+    <link rel="stylesheet" th:href="@{/css/sub.css}">
     
     <!-- 임시 스크립트: 헤더/푸터 컴포넌트 (작업용 임시 파일이므로 개발단계부터는 스크립트 파일 안에 HTML 코드 사용) -->
-    <script src="/kbinnovationhub_devadm/component/header_preview.js"></script>
-    <script src="/kbinnovationhub_devadm/component/footer_preview.js"></script>
+    <script th:src="@{/component/header_preview.js}"></script>
+    <script th:src="@{/component/footer_preview.js}"></script>
     <script>
         const ENV = 'dev'
     </script>
 
     <!-- 공통 스크립트 -->
-    <script src="/kbinnovationhub_devadm/js/scrollreveal.min.js"></script>
-    <script src="/kbinnovationhub_devadm/js/gsap.min.js"></script>
-    <script src="/kbinnovationhub_devadm/js/ScrollToPlugin.min.js"></script>
-    <script src="/kbinnovationhub_devadm/js/ScrollTrigger.min.js"></script>
-    <script src="/kbinnovationhub_devadm/js/lenis.min.js"></script>
-    <script src="/kbinnovationhub_devadm/js/split-type.min.js"></script>
-    <script src="/kbinnovationhub_devadm/js/echarts.min.js"></script>
-    <script src="/kbinnovationhub_devadm/js/echarts-wordcloud.min.js"></script>
-    <script src="/kbinnovationhub_devadm/js/flatpickr.js"></script>
-    <script src="/kbinnovationhub_devadm/js/ko.js"></script>
-    <script src="/kbinnovationhub_devadm/js/swiper-bundle.min.js"></script>
-    <script src="/kbinnovationhub_devadm/js/countUp.umd.js"></script>
-    <script src="/kbinnovationhub_devadm/js/common.js"></script>
+    <script th:src="@{/js/scrollreveal.min.js}"></script>
+    <script th:src="@{/js/gsap.min.js}"></script>
+    <script th:src="@{/js/ScrollToPlugin.min.js}"></script>
+    <script th:src="@{/js/ScrollTrigger.min.js}"></script>
+    <script th:src="@{/js/lenis.min.js}"></script>
+    <script th:src="@{/js/split-type.min.js}"></script>
+    <script th:src="@{/js/echarts.min.js}"></script>
+    <script th:src="@{/js/echarts-wordcloud.min.js}"></script>
+    <script th:src="@{/js/flatpickr.js}"></script>
+    <script th:src="@{/js/ko.js}"></script>
+    <script th:src="@{/js/swiper-bundle.min.js}"></script>
+    <script th:src="@{/js/countUp.umd.js}"></script>
+    <script th:src="@{/js/common.js}"></script>
 </head>
 <body>
     <!-- 헤더 -->
@@ -67,14 +67,16 @@
                                         <div class="swiper-wrapper">
                                             <th:block th:if="${affiliate.expsr_yn == 'Y'}">
                                                 <div class="swiper-slide">
-                                                    <div class="thumbnail"><img th:src="|\kbinnovationhub_devadm${affiliate.affiliate_path + affiliate.affiliate_file_name}|" alt=""></div>
+                                                    <div class="thumbnail"><img th:src="${(@environment.getProperty('staticpath') == '/' ? '' : @environment.getProperty('staticpath'))
+                                                     + affiliate.affiliate_path + affiliate.affiliate_file_name}" alt=""></div>
                                                     <p class="sub"><b th:text="${affiliate.affiliate_nm}"></b> X <span th:text="${affiliate.starter_nm}"></span></p>
                                                     <p class="title" th:text="${affiliate.srvc_nm}"></p>
                                                     <div class="chips"><span class="chip" th:text="${affiliate.ctgry_nm}"></span></div>
                                                 </div>
                                             </th:block>
                                             <div class="swiper-slide" th:each="list : ${selectList}" th:if="${list.affiliate_path != null}">
-                                                <div class="thumbnail"><img th:src="|\kbinnovationhub_devadm${list.affiliate_path + list.affiliate_file_name}|" alt=""></div>
+                                                <div class="thumbnail"><img th:src="${(@environment.getProperty('staticpath') == '/' ? '' : @environment.getProperty('staticpath'))
+                                                 + list.affiliate_path + list.affiliate_file_name}" alt=""></div>
                                                 <p class="sub">
                                                     <b th:text="${list.affiliate_nm}"></b> X <span th:text="${list.starter_nm}"></span>
                                                 </p>
@@ -93,6 +95,12 @@
         </div>
     </main>
 
+    <script th:inline="javascript">
+        window.staticPath = /*[[${@environment.getProperty('staticpath')} + '/']]*/'/';
+        if(window.staticPath === '//') {
+            window.staticPath = '/';
+        }
+    </script>
     <!-- 푸터 -->
     <app-footer></app-footer>
 

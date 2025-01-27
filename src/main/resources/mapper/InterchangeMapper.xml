@@ -13,7 +13,7 @@
                     , EXCH.EXCH_CN        AS EXCH_CN
                     , EXCH.EXPSR_YN       AS EXPSR_YN
                     , EXCH.SORT_NO        AS SORT_NO
-                    , FILES.FILE_PATH     AS INTER_PATH1
+                    , REPLACE(FILES.FILE_PATH, '\', '/')     AS INTER_PATH1
                     , FILES.FILE_NM       AS INTER_FILE_NAME1
                  FROM KB_EXCH_INFO EXCH
                     , KB_FILE_INFO FILES
@@ -96,7 +96,7 @@
              , EXCH.EXPSR_YN       AS EXPSR_YN
              , EXCH.SORT_NO        AS SORT_NO
              , EXCH.ATCH_FILE_SN1  AS ATCH_FILE_SN1
-             , FILES.FILE_PATH     AS INTER_PATH1
+             , REPLACE(FILES.FILE_PATH, '\', '/')     AS INTER_PATH1
              , FILES.FILE_NM       AS INTER_FILE_NAME1
         FROM KB_EXCH_INFO EXCH
            , KB_FILE_INFO FILES
@@ -143,7 +143,7 @@
         SELECT EXCH.EXCH_SN        AS EXCH_SN
              , EXCH.EXCH_TTL       AS EXCH_TTL
              , EXCH.EXCH_CN        AS EXCH_CN
-             , FILES.FILE_PATH     AS INTER_PATH1
+             , REPLACE(FILES.FILE_PATH, '\', '/')     AS INTER_PATH1
              , FILES.FILE_NM       AS INTER_FILE_NAME1
         FROM KB_EXCH_INFO EXCH
            , KB_FILE_INFO FILES

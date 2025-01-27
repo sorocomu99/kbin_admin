@@ -90,13 +90,13 @@
              , PLC.PLC_ADDR         AS PLC_ADDR
              , PLC.SORT_NO          AS SORT_NO
              , PLC.ATCH_FILE_SN1    AS ATCH_FILE_SN1
-             , FILES1.FILE_PATH     AS PLC_PATH1
+             , REPLACE(FILES1.FILE_PATH, '\', '/')     AS PLC_PATH1
              , FILES1.FILE_NM       AS PLC_FILE_NAME1
              , PLC.ATCH_FILE_SN2    AS ATCH_FILE_SN2
-             , FILES2.FILE_PATH     AS PLC_PATH2
+             , REPLACE(FILES2.FILE_PATH, '\', '/')     AS PLC_PATH2
              , FILES2.FILE_NM       AS PLC_FILE_NAME2
              , PLC.ATCH_FILE_SN3    AS ATCH_FILE_SN3
-             , FILES3.FILE_PATH     AS PLC_PATH3
+             , REPLACE(FILES3.FILE_PATH, '\', '/')     AS PLC_PATH3
              , FILES3.FILE_NM       AS PLC_FILE_NAME3
         FROM KB_PLC_INFO PLC
            , KB_FILE_INFO FILES1
@@ -141,11 +141,11 @@
         SELECT PLC.PLC_SN           AS PLC_SN
              , PLC.PLC_NM           AS PLC_NM
              , PLC.PLC_ADDR         AS PLC_ADDR
-             , FILES1.FILE_PATH     AS PLC_PATH1
+             , REPLACE(FILES1.FILE_PATH, '\', '/')     AS PLC_PATH1
              , FILES1.FILE_NM       AS PLC_FILE_NAME1
-             , FILES2.FILE_PATH     AS PLC_PATH2
+             , REPLACE(FILES2.FILE_PATH, '\', '/')     AS PLC_PATH2
              , FILES2.FILE_NM       AS PLC_FILE_NAME2
-             , FILES3.FILE_PATH     AS PLC_PATH3
+             , REPLACE(FILES3.FILE_PATH, '\', '/')     AS PLC_PATH3
              , FILES3.FILE_NM       AS PLC_FILE_NAME3
         FROM KB_PLC_INFO PLC
            , KB_FILE_INFO FILES1

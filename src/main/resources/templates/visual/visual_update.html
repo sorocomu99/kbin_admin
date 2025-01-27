@@ -36,7 +36,7 @@
                         <input class="form-control w-auto" type="file" id="formFile" name="main_file" onchange="preview()">
 <!--                        <button type="button" onclick="clearImage()" id="deleteThumbnail" class="btn btn-secondary ms-2" style="display: none;">삭제</button>-->
                       </div>
-                      <img id="previewFrame" th:src="|\kbinnovationhub_devadm${visual.main_path + visual.main_file_name}|" width="200" class="img-fluid mt-2" style="display:none" />
+                      <img id="previewFrame" th:src="${(@environment.getProperty('staticpath') == '/' ? '' : @environment.getProperty('staticpath')) + visual.main_path + visual.main_file_name}" width="200" class="img-fluid mt-2" style="display:none" />
                       <p class="mb-0 mt-2">
                         * 권장 사이즈 : 1920x978px
                         <!-- 업로드 가능한 파일: <span class="fw-bold">mp4</span> / <span class="fw-bold text-danger">10MB 미만</span> -->
@@ -115,7 +115,7 @@
       // 프리뷰 페이지로 이동
     function previewPage() {
         const form = document.forms['main_form'];
-        form.action = '/kbinnovationhub_devadm/visual/preview'; // 전송할 URL
+        form.action = window.staticPath + 'visual/preview'; // 전송할 URL
         form.method = 'POST';            // 전송 방식
         form.target = '_blank';          // 새 창에서 열기
         form.submit();                   // 폼 제출
@@ -143,7 +143,7 @@
           // 폼 태그 서브밋 보내기
           // 폼 태그 서브밋 보내기
           const form = document.forms['main_form'];
-          form.action = '/kbinnovationhub_devadm/visual/update'; // 전송할 URL
+          form.action = window.staticPath + 'visual/update'; // 전송할 URL
           form.method = 'POST';            // 전송 방식
           form.target = '';          // 새 창에서 열기
           form.submit();                   // 폼 제출

@@ -28,7 +28,7 @@
                                                         <input class="form-control w-auto" type="file" id="main_file" name="main_file" onchange="preview()">
                                                         <button onclick="clearImage()" id="deleteThumbnail" class="btn btn-secondary ms-2" style="display: none;">삭제</button>
                                                     </div>
-                                                    <img id="previewFrame" th:src="|/kbinnovationhub_devadm${portListDet.file_path + portListDet.file_nm}|" width="200" class="img-fluid mt-2" style="display:none" />
+                                                    <img id="previewFrame" th:src="${(@environment.getProperty('staticpath') == '/' ? '' : @environment.getProperty('staticpath')) + portListDet.file_path + portListDet.file_nm}" width="200" class="img-fluid mt-2" style="display:none" />
                                                     <!--<img id="previewFrame" src="" class="img-fluid mt-2" style="display:none" />-->
                                                     <p class="mb-0 mt-2">
                                                         * 권장 사이즈 : 251x237px 
@@ -68,11 +68,11 @@
                                         </tbody>
                                     </table>
                                     <div class="button-container">
-                                        <button type="submit" class="btn btn-primary" onclick="portListUpdate()">수정하기</button>
-                                        <button type="submit" class="btn btn-outline-primary" onclick="previewPage()">미리보기</button>
+                                        <button type="button" class="btn btn-outline-primary" onclick="previewPage()">미리보기</button>
                                         <!--<a href="javascript:" class="btn btn-outline-dark" onclick="history.back();">목록보기</a>-->
                                         <!--<a th:href="@{/portfolio/portList/{menuId}(menuId=${menuId})?port_yr=${port_yr}}" class="btn btn-outline-primary">목록보기</a>-->
                                         <button type="button" class="btn btn-outline-primary" th:onclick="|portListMove('${menuId}', '${port_yr}')|">목록보기</button>
+                                        <button type="submit" class="btn btn-primary" onclick="portListUpdate()">수정하기</button>
                                     </div>
                                 </form>
                             </div>
@@ -136,7 +136,7 @@
             let result = confirm("수정 하시겠습니까?");
             if (result) {
                 const form = document.forms['portfolio_form'];
-                form.action = '/kbinnovationhub_devadm/portfolio/portListUpdate';   //전송할 URL
+                form.action = window.staticPath + 'portfolio/portListUpdate';   //전송할 URL
                 form.method = 'POST';                                    //전송 방식
                 form.target = '';                                        //새 창에서 열기
                 form.submit();                                           //폼 제출
@@ -159,7 +159,7 @@
             pageMoveForm.appendChild(obj2);
 
             pageMoveForm.setAttribute('method', 'get');
-            pageMoveForm.setAttribute('action', '/kbinnovationhub_devadm/portfolio/portList/'+menuId);
+            pageMoveForm.setAttribute('action', window.staticPath + 'portfolio/portList/'+menuId);
             document.body.appendChild(pageMoveForm);
             pageMoveForm.submit();
         }
@@ -172,11 +172,12 @@
                 return;
             }
             const form = document.forms['portfolio_form'];
-            form.action = '/kbinnovationhub_devadm/portfolio/preview';
+            form.action = window.staticPath + 'portfolio/preview';
             form.method = 'POST';
-            form.target = '';
+            form.target = '_blank';          // 새 창에서 열기
             form.submit();
         }
+    </script>
     <script th:src="@{/js/admin.js}"></script>
 </body>
 </html>

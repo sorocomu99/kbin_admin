@@ -101,6 +101,12 @@
     </div>
 </main>
 
+<script th:inline="javascript">
+    window.staticPath = /*[[${@environment.getProperty('staticpath')} + '/']]*/'/';
+    if(window.staticPath === '//') {
+        window.staticPath = '/';
+    }
+</script>
 <!-- 푸터 -->
 <app-footer></app-footer>
 </body>

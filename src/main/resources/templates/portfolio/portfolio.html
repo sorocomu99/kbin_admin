@@ -65,7 +65,8 @@
                                             <td>
                                                 <div class="list-iamge-wrap">
                                                     <th:block th:if="${list.file_path != null}">
-                                                        <img th:src="${list.file_path == null ? '' : '/kbinnovationhub_devadm'+list.file_path + list.file_nm}" alt="">
+                                                        <img th:src="${list.file_path == null ? '' : (@environment.getProperty('staticpath') == '/' ? '' : @environment.getProperty('staticpath'))
+                                                         + list.file_path + list.file_nm}" alt="">
                                                     </th:block>
                                                 </div>
                                             </td>
@@ -147,7 +148,7 @@
             pageMoveForm.appendChild(obj3);
 
             pageMoveForm.setAttribute('method', 'post');
-            pageMoveForm.setAttribute('action', '/kbinnovationhub_devadm/portfolio/portListDet');
+            pageMoveForm.setAttribute('action', window.staticPath + 'portfolio/portListDet');
             document.body.appendChild(pageMoveForm);
             pageMoveForm.submit();
         }

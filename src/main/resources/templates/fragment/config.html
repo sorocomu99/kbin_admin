@@ -6,6 +6,12 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <title>KB Innovation HUB Admin</title>
+    <script th:inline="javascript">
+        window.staticPath = /*[[${@environment.getProperty('staticpath')} + '/']]*/'/';
+        if(window.staticPath === '//') {
+            window.staticPath = '/';
+        }
+    </script>
     <link th:href="@{/css/history_preview.css}" rel="stylesheet">
     <link th:href="@{/css/bootstrap-datepicker.min.css}" rel="stylesheet">
     <link th:href="@{/css/bootstrap-clockpicker.min.css}" rel="stylesheet">

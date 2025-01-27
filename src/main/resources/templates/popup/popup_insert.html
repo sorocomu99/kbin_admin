@@ -197,7 +197,7 @@
         $("#popup_cn").val(summernote_value);
 
         const form = document.forms['popup_form'];
-        form.action = '/kbinnovationhub_devadm/popup/preview'; // 전송할 URL
+        form.action = window.staticPath + 'popup/preview'; // 전송할 URL
         form.method = 'POST';            // 전송 방식
         form.target = '_blank';          // 새 창에서 열기
         form.submit();                   // 폼 제출
@@ -242,7 +242,7 @@
         } else {
             // 폼 태그 서브밋 보내기
             var form = document.forms['popup_form'];
-            form.action = '/kbinnovationhub_devadm/popup/insert';  // 전송할 URL
+            form.action = window.staticPath + 'popup/insert';  // 전송할 URL
             form.method = 'POST';            // 전송 방식
             form.target = '';          // 새 창에서 열기
             form.submit();                   // 폼 제출

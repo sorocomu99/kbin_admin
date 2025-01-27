@@ -56,7 +56,7 @@
                   <tr th:unless="${selectList == null or selectList.isEmpty()}" th:each="list : ${selectList}">
                     <td th:text="${list.rownumber}"></td>
                     <!-- <td><img th:src="${'/upload/' + list.main_file_name}" width="200" alt=""></td> -->
-                    <td><img th:src="${'/kbinnovationhub_devadm/upload/' + list.main_file_name}" width="200" alt=""></td>
+                    <td><img th:src="${(@environment.getProperty('staticpath') == '/' ? '' : @environment.getProperty('staticpath')) + '/upload/' + list.main_file_name}" width="200" alt=""></td>
                     <td th:utext="${list.main_cn}"></td>
                     <td th:text="${list.expsr_yn == 'Y' ? '노출' : '미노출'}"></td>
                     <td th:text="${list.sort_no}"></td>
@@ -104,7 +104,7 @@
     pageMoveForm.appendChild(obj2);
 
     pageMoveForm.setAttribute('method', 'post');
-    pageMoveForm.setAttribute('action', '/kbinnovationhub_devadm/visual/detail');
+    pageMoveForm.setAttribute('action', window.staticPath + 'visual/detail');
     document.body.appendChild(pageMoveForm);
     pageMoveForm.submit();
   }

@@ -65,10 +65,10 @@
                             </div>
                             <div class="button-container">
                                 <!--<button type="submit" class="btn btn-primary">등록하기</button>-->
-                                <button type="button" class="btn btn-primary" onclick="javascript:historyInsert();">등록하기</button>
                                 <!--<a href="#" target="_blank" class="btn btn-outline-primary">미리보기</a>-->
                                 <button type="button" class="btn btn-outline-primary" id="preview_open">미리보기</button>
                                 <a th:href="@{/history/list/{menuId}(menuId=${menuId})}" class="btn btn-outline-primary">목록보기</a>
+                                <button type="button" class="btn btn-primary" onclick="javascript:historyInsert();">등록하기</button>
                                 <!--<a href="javascript:" class="btn btn-outline-primary" onclick="history.back();">목록보기</a>-->
                                 <button id="buttonAddList" type="button" class="btn btn-dark add-list"><i data-feather="plus"></i> 항목 추가</button>
                             </div>
@@ -370,7 +370,7 @@
             let result = confirm("등록 하시겠습니까?");
             if (result) {
                 const form = document.forms['history_form'];
-                form.action = '/kbinnovationhub_devadm/history/insert';  //전송할 URL
+                form.action = window.staticPath + 'history/insert';  //전송할 URL
                 form.method = 'POST';                                    //전송 방식
                 form.target = '';                                        //새 창에서 열기
                 form.submit();                                           //폼 제출

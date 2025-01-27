@@ -65,11 +65,11 @@
                                         </tbody>
                                     </table>
                                     <div class="button-container">
-                                        <button type="submit" class="btn btn-primary" onclick="portListInsert()">등록하기</button>
-                                        <button type="submit" class="btn btn-outline-primary" onclick="previewPage()">미리보기</button>
+                                        <button type="button" class="btn btn-outline-primary" onclick="previewPage()">미리보기</button>
                                         <!--<a href="javascript:" class="btn btn-outline-dark" onclick="history.back();">목록보기</a>-->
                                         <!--<a th:href="@{/portfolio/portList/{menuId}(menuId=${menuId})}" class="btn btn-outline-primary">목록보기</a>-->
                                         <button type="button" class="btn btn-outline-primary" th:onclick="|portListMove('${menuId}','${port_yr}')|">목록보기</button>
+                                        <button type="submit" class="btn btn-primary" onclick="portListInsert()">등록하기</button>
                                     </div>
                                 </form>
                             </div>
@@ -128,7 +128,7 @@
             let result = confirm("등록 하시겠습니까?");
             if (result) {
                 const form = document.forms['portfolio_form'];
-                form.action = '/kbinnovationhub_devadm/portfolio/portListInsert';
+                form.action = window.staticPath + 'portfolio/portListInsert';
                 form.method = 'POST';
                 form.target = '';
                 form.submit();
@@ -151,7 +151,7 @@
             pageMoveForm.appendChild(obj2);
 
             pageMoveForm.setAttribute('method', 'get');
-            pageMoveForm.setAttribute('action', '/kbinnovationhub_devadm/portfolio/portList/'+menuId);
+            pageMoveForm.setAttribute('action', window.staticPath + 'portfolio/portList/'+menuId);
             document.body.appendChild(pageMoveForm);
             pageMoveForm.submit();
         }
@@ -163,7 +163,7 @@
                 return;
             }
             const form = document.forms['portfolio_form'];
-            form.action = '/kbinnovationhub_devadm/portfolio/preview';
+            form.action = window.staticPath + 'portfolio/preview';
             form.method = 'POST';
             form.target = '';
             form.submit();

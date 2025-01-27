@@ -14,7 +14,7 @@
                    , AFFI.EXPSR_YN     AS EXPSR_YN
                    , AFFI.SORT_NO      AS SORT_NO
                    , FILES.FILE_NM     AS AFFILIATE_FILE_NAME
-                   , FILES.FILE_PATH   AS AFFILIATE_PATH
+                   , REPLACE(FILES.FILE_PATH, '\', '/')   AS AFFILIATE_PATH
                 FROM KB_AFFILIATE_INFO AFFI
                    , KB_FILE_INFO FILES
                WHERE AFFI.ATCH_FILE_SN = FILES.FILE_SN(+)
@@ -104,7 +104,7 @@
              , AFFI.ATCH_FILE_SN   AS ATCH_FILE_SN
              , FILES.ORGNL_FILE_NM AS ORIGIN_FILE_NAME
              , FILES.FILE_NM       AS AFFILIATE_FILE_NAME
-             , FILES.FILE_PATH     AS AFFILIATE_PATH
+             , REPLACE(FILES.FILE_PATH, '\', '/') AS AFFILIATE_PATH
           FROM KB_AFFILIATE_INFO AFFI
              , KB_FILE_INFO FILES
         WHERE AFFI.ATCH_FILE_SN = FILES.FILE_SN(+)
@@ -158,7 +158,7 @@
              , AFFI.EXPSR_YN     AS EXPSR_YN
              , AFFI.SORT_NO      AS SORT_NO
              , FILES.FILE_NM     AS AFFILIATE_FILE_NAME
-             , FILES.FILE_PATH   AS AFFILIATE_PATH
+             , REPLACE(FILES.FILE_PATH, '\', '/') AS AFFILIATE_PATH
           FROM KB_AFFILIATE_INFO AFFI
              , KB_FILE_INFO FILES
          WHERE 1=1
