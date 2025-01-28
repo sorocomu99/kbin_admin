@@ -349,7 +349,7 @@
             var mainInput1 = $("#main_input1").val();
 
             if (hstryYr === "" || hstryYr === null) {
-                alert("년도를 입력하세요!");
+                alert("연도를 입력하세요!");
                 $("#hstry_yr").focus();
                 return false
             }
@@ -367,14 +367,27 @@
             formData.append("sub_input1", joinedValue);
             */
             //console.log("========="+JSON.stringify(formData));
-            let result = confirm("등록 하시겠습니까?");
-            if (result) {
-                const form = document.forms['history_form'];
-                form.action = window.staticPath + 'history/insert';  //전송할 URL
-                form.method = 'POST';                                    //전송 방식
-                form.target = '';                                        //새 창에서 열기
-                form.submit();                                           //폼 제출
-            }
+            $.ajax({
+                url: window.staticPath + 'history/existYearData', // 요청 URL
+                type: 'GET', // HTTP 메서드
+                data: { hstryYr: hstryYr }, // 보내는 데이터
+                success: function(response) {
+                    if(response === 'N') {
+                        let result = confirm("등록 하시겠습니까?");
+                        if (result) {
+                            const form = document.forms['history_form'];
+                            form.action = window.staticPath + 'history/insert';  //전송할 URL
+                            form.method = 'POST';                                    //전송 방식
+                            form.target = '';                                        //새 창에서 열기
+                            form.submit();                                           //폼 제출
+                        }
+                    }else{
+                        alert('입력하신 해당년도의 연혁이 존재합니다');
+                    }
+                },
+                error: function(xhr, status, error) {
+                }
+            });
         }
 
         function changeTxt(e) {

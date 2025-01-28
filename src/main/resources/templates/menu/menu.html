@@ -108,10 +108,11 @@
         var menu_nm = $('input[name=menu_nm]').val();
         if(menu_nm == "") {
             alert("메뉴명을 입력하세요.");
+            $('input[name=menu_nm]').focus();
             return false;
         }
 
-        let result = confirm("수정 하시겠습니까?");
+        let result = confirm("저장 하시겠습니까?");
         if(result) {
             // PK 값 세팅
             var menu_sn = $('#menu_sn').val();

@@ -460,5 +460,11 @@ public class HistoryController {
         historyService.delete(hstry_yr);
         return "success";
     }
+
+    @ResponseBody
+    @RequestMapping("/existYearData")
+    public String existYearData (@RequestParam("hstryYr") String hstryYr) {
+        return historyService.existYearData(hstryYr);
+    }
 }
 

@@ -15,7 +15,6 @@ import com.kb.inno.admin.DTO.HistoryDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.*;
 
@@ -781,5 +780,13 @@ public class HistoryService {
         HistoryDTO historyDTO = new HistoryDTO();
         historyDTO.setHstry_yr(hstry_yr);
         return historyDAO.delete(historyDTO);
+    }
+
+    public String existYearData(String hstryYr) {
+        //해당년도의 데이터 존재 여부 확인
+        HistoryDTO historyDTO = new HistoryDTO();
+        historyDTO.setHstry_yr(hstryYr);
+        int totalCnt = historyDAO.selectCount(historyDTO);
+        return totalCnt > 0 ? "Y" : "N";
     }
 }
