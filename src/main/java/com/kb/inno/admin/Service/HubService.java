@@ -159,7 +159,7 @@ public class HubService {
                 // 파일 이름 설정
                 String fileName = UUID.randomUUID().toString() + fileExtension;
 
-                File targetFile = new File(savePath + fileName);
+                File targetFile = new File(savePath + File.separator + fileName);
 
                 // 파일 저장
                 try (InputStream fileStream = files.get(i).getInputStream()) {

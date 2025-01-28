@@ -38,7 +38,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="input-group clockpicker">
-                                                        <input type="text" class="form-control w-auto" th:value="${popup?.bgng_hr}" name="bgng_hr">
+                                                        <input type="text" class="form-control w-auto" th:value="${popup?.bgng_hr}" id="bgng_hr" name="bgng_hr">
                                                         <span class="input-group-addon">
                                                             <span data-feather="clock"></span>
                                                         </span>
@@ -61,7 +61,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="input-group clockpicker">
-                                                        <input type="text" class="form-control w-auto" th:value="${popup?.end_hr}" name="end_hr">
+                                                        <input type="text" class="form-control w-auto" th:value="${popup?.end_hr}" id="end_hr" name="end_hr">
                                                         <span class="input-group-addon">
                                                             <span data-feather="clock"></span>
                                                         </span>
@@ -97,7 +97,7 @@
                                         <tr>
                                             <th class="bg-light" width="20%">팝업 제목</th>
                                             <td>
-                                                <input type="text" class="form-control" th:value="${popup?.mngr_ttl}" name="mngr_ttl">
+                                                <input type="text" class="form-control" th:value="${popup?.mngr_ttl}" name="mngr_ttl" maxlength="100">
                                             </td>
                                         </tr>
                                         <tr>
@@ -209,6 +209,30 @@
 
         // 컨펌 메시지 띄우는 함수
         function confirmMsg() {
+            if($.trim($('#inputStart').val()) === '') {
+                alert('시작일자를 입력하세요.');
+                $('#inputStart').focus();
+                return false;
+            }
+
+            if($.trim($('#bgng_hr').val()) === '') {
+                alert('시작시간을 입력하세요.');
+                $('#bgng_hr').focus();
+                return false;
+            }
+
+            if($.trim($('#inputEnd').val()) === '') {
+                alert('종료일자를 입력하세요.');
+                $('#inputEnd').focus();
+                return false;
+            }
+
+            if($.trim($('#end_hr').val()) === '') {
+                alert('종료시간을 입력하세요.');
+                $('#end_hr').focus();
+                return false;
+            }
+
             // 팝업 위치 왼쪽 입력 확인
             var popup_left_pstn = $('input[name=popup_left_pstn]').val();
             if(popup_left_pstn.trim() == "") {

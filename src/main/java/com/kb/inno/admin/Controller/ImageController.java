@@ -30,7 +30,7 @@ public class ImageController {
         //System.out.println("imagePath==================="+imagePath);
         //Resource resource = new FileSystemResource(path.toString());
 
-        String imagePath = FilePathUtil.getSavePath(PropertiesValue.profilesActive) + imageName;
+        String imagePath = FilePathUtil.getSavePath(PropertiesValue.profilesActive) + File.separator + imageName;
         Resource resource = new FileSystemResource(imagePath);
 
         if (resource.exists()) {
@@ -48,7 +48,7 @@ public class ImageController {
     	//String imagePath = "D:/fsfile/dev_kbinnovation/" + imageName;
         //String imagePath = "/fsfile/kbinnovation/" + imageName;
 
-        String imagePath = FilePathUtil.getSavePath(PropertiesValue.profilesActive) + imageName;
+        String imagePath = FilePathUtil.getSavePath(PropertiesValue.profilesActive) + File.separator + imageName;
     	Resource resource = new FileSystemResource(imagePath);
 
         if (resource.exists()) {

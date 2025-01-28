@@ -59,7 +59,7 @@ public class FileUploader {
         String savedFileName = UUID.randomUUID() + extension;	// 저장될 파일명
 
         // 옮겨지는 곳
-        File targetFile = new File(savePath + savedFileName);
+        File targetFile = new File(savePath + File.separator + savedFileName);
 
         // 보여지는 input, output
         try (InputStream fileStream = file.getInputStream()) {
@@ -72,7 +72,7 @@ public class FileUploader {
             // String imageUrl = "/kbinnovationhub_adm/summernoteimages/" + savedFileName;
             String imageUrl = FilePathUtil.getSummerNoteImagesPath() + savedFileName;
 
-            resultMap.put("url", imageUrl);
+            resultMap.put("url", imageUrl.replaceAll("\\\\", "/"));
 
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -122,7 +122,7 @@ public class FileUploader {
                 String fileName = UUID.randomUUID().toString() + fileExtension;
                 //String fileName = UUID.randomUUID() + fileExtension;
 
-                File targetFile = new File(savePath + fileName);
+                File targetFile = new File(savePath + File.separator + fileName);
 
                 // 파일 저장
                 try (InputStream fileStream = files.get(i).getInputStream()) {
@@ -202,7 +202,7 @@ public class FileUploader {
             directory.mkdirs();
         }
 
-        File targetFile = new File(savePath + fileName);
+        File targetFile = new File(savePath + File.separator + fileName);
 
         // 파일 저장
         /*
@@ -256,7 +256,7 @@ public class FileUploader {
 
         String savePath = FilePathUtil.getSavePath(PropertiesValue.profilesActive);
 
-        File deleteFile = new File(savePath + fileName);
+        File deleteFile = new File(savePath + File.separator + fileName);
         return deleteFile.delete();
     }
 }

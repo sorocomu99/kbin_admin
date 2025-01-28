@@ -5,17 +5,29 @@
     <!-- 관리자 계정 리스트 조회 -->
     <select id="selectList" resultType="com.kb.inno.admin.DTO.MemberDTO">
         /* 관리자 계정 리스트 조회 */
-        SELECT MNGR_SN
-               , MNGR_ID
-               , MNGR_NM
-               , MNGR_EML
-               , LAST_CNTN_DT
-               , FRST_RGTR
-               , FRST_REG_DT
-               , LAST_MDFR
-               , LAST_MDFCN_DT
-          FROM KB_MNGR_MBR_INFO
-         ORDER BY MNGR_SN DESC
+        SELECT ROWNUMBER
+             , MNGR_SN
+             , MNGR_ID
+             , MNGR_NM
+             , MNGR_EML
+             , LAST_CNTN_DT
+             , FRST_RGTR
+             , FRST_REG_DT
+             , LAST_MDFR
+             , LAST_MDFCN_DT
+        FROM (SELECT ROWNUM ROWNUMBER
+                   , MNGR_SN
+                   , MNGR_ID
+                   , MNGR_NM
+                   , MNGR_EML
+                   , LAST_CNTN_DT
+                   , FRST_RGTR
+                   , FRST_REG_DT
+                   , LAST_MDFR
+                   , LAST_MDFCN_DT
+              FROM KB_MNGR_MBR_INFO
+              ORDER BY MNGR_SN DESC) as MEMBER
+        ORDER BY ROWNUMBER DESC
     </select>
     <!-- 관리자 계정 상세 조회 -->
     <select id="select" parameterType="int" resultType="com.kb.inno.admin.DTO.MemberDTO">

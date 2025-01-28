@@ -54,7 +54,7 @@ public class SurveyController {
         //String filePath = "/Users/johuiyang/Documents/web/uploads/kbinno/" + filename;
         //String filePath = "D:/fsfile/dev_kbinnovation/" + filename;
         //String filePath = "/fsfile/kbinnovation/" + filename;
-        String filePath = FilePathUtil.getSavePath(PropertiesValue.profilesActive);
+        String filePath = FilePathUtil.getSavePath(PropertiesValue.profilesActive) + File.separator + filename;
 
         // 파일이 존재하는지 확인
         File file = new File(filePath);
