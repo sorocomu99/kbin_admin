@@ -119,14 +119,14 @@
         if (mngr_id == null || mngr_id == "") {
             document.getElementById('idVal').innerHTML = '아이디를 입력하세요.';
             $("#mngr_id").last().addClass("is-invalid");
-
+            $("#mngr_id").focus()
             return false;
         }
 
         if (mngr_pswd == null || mngr_pswd == "") {
-            document.getElementById('idVal').innerHTML = '비밀번호를 입력하세요.';
+            document.getElementById('pwVal').innerHTML = '비밀번호를 입력하세요.';
             $("#mngr_pswd").last().addClass("is-invalid");
-
+            $("#mngr_pswd").focus()
             return false;
         }
 
@@ -165,17 +165,19 @@
 
         if (pwdMailId == null || pwdMailId == "") {
             alert("아이디를 입력하세요.")
+            $("#pwdMailId").focus()
             return false;
         }
 
         if (pwdMailAddr == null || pwdMailAddr == "") {
             alert("임시 비밀번호를 받을 이메일 주소를 입력하세요.");
+            $("#pwdMailAddr").focus()
             return false;
         }
 
-        if (emailCheck(pwdMailAddr)) {
-        } else {
+        if (!emailCheck(pwdMailAddr)) {
             alert("유효하지 않은 이메일 주소입니다.");
+            $("#pwdMailAddr").focus()
             return false;
         }
 
@@ -193,10 +195,12 @@
                 if (data.success == "success") {
                     alert(data.message);
                     document.getElementById('modalCancel').click();
+                    $("#pwdMailId").val('');
+                    $("#pwdMailAddr").val('');
                     //location.href = "/kbinnovationhub_devadm/member/list/101000";
                 } else if (data.success == "fail") {
                     alert(data.message);
-                    document.getElementById('modalCancel').click();
+                    //document.getElementById('modalCancel').click();
                     //location.href = "/kbinnovationhub_devadm";
                 }
             },
@@ -210,11 +214,7 @@
     //이메일 정합성 체크
     function emailCheck(email_address){
         email_regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i;
-        if (!email_regex.test(email_address)) {
-            return false;
-        } else {
-            return true;
-        }
+        return email_regex.test(email_address);
     }
 </script>
 </body>

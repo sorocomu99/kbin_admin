@@ -32,16 +32,15 @@ public class MailUtil {
         props.setProperty("mail.smtp.host", mailInfo.getHost());
         props.setProperty("mail.smtp.port", mailInfo.getPort());
         props.setProperty("mail.smtp.auth", mailInfo.getSmtpAuth());
-        props.setProperty("mail.smtp.starttls.enable", mailInfo.getSmtpEnable());
+        //tls1.2 이슈로 false 처리
+        props.setProperty("mail.smtp.starttls.enable", "false");
 
         Session session; //Session.getDefaultInstance(props);
 
-        //TODO: author krh 2025-01-26, 일, 16:24 : 이메일 발송 테스트
         if(CommonUtil.isProd(PropertiesValue.profilesActive)) {
             session = Session.getDefaultInstance(props);
         }else{
             final String finalFrom = mailInfo.getFrom();
-            //TODO: author krh 2025-01-26, 일, 16:0 : 내부 서버 인증 방식 Check
             final String finalPw = mailInfo.getPw();
             session = Session.getInstance(props, new Authenticator() {
                 protected PasswordAuthentication getPasswordAuthentication() {
