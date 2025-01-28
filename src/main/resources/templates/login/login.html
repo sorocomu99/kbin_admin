@@ -213,7 +213,7 @@
 
     //이메일 정합성 체크
     function emailCheck(email_address){
-        email_regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i;
+        var email_regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i;
         return email_regex.test(email_address);
     }
 </script>

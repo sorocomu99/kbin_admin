@@ -47,7 +47,7 @@
                           2. 텍스트: input 하단에 'invalid-feedback' 이름으로 div 안에 텍스트 추가
                       -->
                       <input type="password" class="form-control w-auto" id="mngr_pswd2" name="mngr_pswd2">
-                      <div class="invalid-feedback">패스워드가 일치하지 않습니다.</div>
+                      <div class="invalid-feedback">비밀번호가 일치하지 않습니다.</div>
                     </td>
                   </tr>
                   <tr>
@@ -85,6 +85,7 @@
     var mngr_id = $('input[name=mngr_id]').val();
     if(mngr_id.trim() == "") {
       alert("아이디를 입력하세요.");
+      $('input[name=mngr_id]').focus();
       return false;
     }
 
@@ -92,6 +93,7 @@
     var mngr_nm = $('input[name=mngr_nm]').val();
     if(mngr_nm.trim() == "") {
       alert("이름을 입력하세요.");
+      $('input[name=mngr_nm]').focus();
       return false;
     }
 
@@ -103,12 +105,23 @@
       // 패스워드 내용 적용(잘못 되었다는 메시지)
       $("#mngr_pswd2").addClass("is-invalid");
       return false;
-    }
-
-    // 패스워드 내용 지우기(잘못 되었다는 메시지)
-    if(mngr_pswd == mngr_pswd2) {
+    }else{
       // 패스워드 내용 적용(잘못 되었다는 메시지)
       $("#mngr_pswd2").removeClass("is-invalid");
+    }
+
+    var mngr_eml = $('input[name=mngr_eml]').val();
+
+    if (mngr_eml == null || mngr_eml == "") {
+      alert("이메일 주소를 입력하세요.");
+      $('input[name=mngr_eml]').focus()
+      return false;
+    }
+
+    if (!emailCheck(mngr_eml)) {
+      alert("유효하지 않은 이메일 주소입니다.");
+      $('input[name=mngr_eml]').focus()
+      return false;
     }
 
     let result = confirm("수정 하시겠습니까?");
@@ -119,6 +132,11 @@
       f=document.member_form;
       f.submit();
     }
+  }
+
+  function emailCheck(email_address){
+    var email_regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i;
+    return email_regex.test(email_address);
   }
 </script>
 </body>
