@@ -398,17 +398,14 @@ public class HubService {
                     file_sn = basicFile.getAtch_file_sn3();
                 }
 
-                // 물리경로 파일 삭제 로직. 로직 미완성으로 DB만 삭제 처리 함. 250129. krh
                 // 2. 파일 삭제
-//                boolean removed = deleteFile != null && deleteFile.delete();
-//
-//                // 3. 만약 경로에 파일이 지워졌다면
-//                if(removed) {
-//                    // 테이블에 있는 파일 삭제
-//                    hubDAO.deleteFile(file_sn);
-//                }
+                boolean removed = deleteFile != null && deleteFile.delete();
 
-                hubDAO.deleteFile(file_sn);
+                // 3. 만약 경로에 파일이 지워졌다면
+                if(removed) {
+                    // 테이블에 있는 파일 삭제
+                    hubDAO.deleteFile(file_sn);
+                }
             }
         }
         

@@ -4,8 +4,10 @@ package com.kb.inno.admin.Controller;
 import com.kb.inno.admin.DAO.KbStartersSurvey;
 import com.kb.inno.admin.DTO.*;
 import com.kb.inno.admin.Service.SurveyService;
+import com.kb.inno.common.FilePathUtil;
 import com.kb.inno.common.MailUtil;
 import com.kb.inno.common.Pagination;
+import com.kb.inno.common.PropertiesValue;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -158,7 +160,9 @@ public class ReceiptController {
         }
 
         // TODO : 파일 경로를 설정해주세요 또는 기존 파일경로를 설정했던 방식으로 사용해주세요
-        String filePath = "/Users/johuiyang/Documents/web/uploads/kbinno/" + applyAnswer.getAnswer_filename();
+        //String filePath = "/Users/johuiyang/Documents/web/uploads/kbinno/" + applyAnswer.getAnswer_filename();
+
+        String filePath = FilePathUtil.getSavePath(PropertiesValue.profilesActive) + File.separator + applyAnswer.getAnswer_filename();
 
         // 파일이 존재하는지 확인
         File file = new File(filePath);
