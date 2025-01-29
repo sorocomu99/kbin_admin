@@ -35,9 +35,7 @@ public class Interceptor implements HandlerInterceptor {
         HttpSession session = request.getSession(false);
 
         //세션 정보가 없으면 로그인 페이지로 이동
-        if (session == null) {
-            //TODO: author krh 2025-01-27, 월, 15:56 : 테스트&디버깅 완료후 아래 주석 적용
-        //if (session == null || session.getAttribute("mngrId") == null) {
+        if (session == null || session.getAttribute("mngrId") == null) {
             if(CommonUtil.isProd(PropertiesValue.profilesActive)) {
                 //TODO: author krh 2025-01-26, 일, 21:10 : 정식 오픈하면 별도 도메인이 있는지 확인 ex) https://kbinnovationhub_adm.com
                 // dev 도메인도 같이 확인

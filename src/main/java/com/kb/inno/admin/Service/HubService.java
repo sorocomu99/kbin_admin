@@ -240,25 +240,26 @@ public class HubService {
     
     // HUB 센터 소식 수정
     public int update(HubDTO hubDTO, int loginId) {
-        //TODO: author krh 2025-01-26, 일, 15:17 : D: 하드코딩 되어있음. 단위테스트 후 디버깅
-        // 경로 설정
         Path path = Paths.get("D:\\");
         // 0. 기존 파일 재조회
         HubDTO basicFile = hubDAO.select(hubDTO.getHub_sn());
 
         // 만약 파일을 삭제 한다면
+        // 물리경로 파일 삭제 로직. 로직 미완성으로 DB만 삭제 처리 함. 250129. krh
         if(hubDTO.getDel_yn().equals("Y")) {
-            File delete = new File(path + hubDTO.getHub_path() + hubDTO.getHub_file_name());
+//            File delete = new File(path + hubDTO.getHub_path() + hubDTO.getHub_file_name());
+//            int file_sn = hubDTO.getAtch_file_sn3();
+//
+//            // 파일 삭제
+//            boolean removed = delete != null && delete.delete();
+//
+//            // 2. 만약 경로에 파일이 지워졌다면
+//            if(removed) {
+//                // 테이블에 있는 파일 삭제
+//                hubDAO.deleteFile(file_sn);
+//            }
             int file_sn = hubDTO.getAtch_file_sn3();
-
-            // 파일 삭제
-            boolean removed = delete != null && delete.delete();
-
-            // 2. 만약 경로에 파일이 지워졌다면
-            if(removed) {
-                // 테이블에 있는 파일 삭제
-                hubDAO.deleteFile(file_sn);
-            }
+            hubDAO.deleteFile(file_sn);
         }
 
         // 파일을 새로 등록했는 지 확인
@@ -355,7 +356,6 @@ public class HubService {
         // 0. HUB 센터 소식 상세 조회
         HubDTO basicFile = hubDAO.select(hub_sn);
 
-        //TODO: author krh 2025-01-26, 일, 15:17 : D: 하드코딩 되어있음. 단위테스트 후 디버깅
         // 1. 경로 설정
         Path path = Paths.get("D:\\");
 
@@ -398,14 +398,17 @@ public class HubService {
                     file_sn = basicFile.getAtch_file_sn3();
                 }
 
+                // 물리경로 파일 삭제 로직. 로직 미완성으로 DB만 삭제 처리 함. 250129. krh
                 // 2. 파일 삭제
-                boolean removed = deleteFile != null && deleteFile.delete();
+//                boolean removed = deleteFile != null && deleteFile.delete();
+//
+//                // 3. 만약 경로에 파일이 지워졌다면
+//                if(removed) {
+//                    // 테이블에 있는 파일 삭제
+//                    hubDAO.deleteFile(file_sn);
+//                }
 
-                // 3. 만약 경로에 파일이 지워졌다면
-                if(removed) {
-                    // 테이블에 있는 파일 삭제
-                    hubDAO.deleteFile(file_sn);
-                }
+                hubDAO.deleteFile(file_sn);
             }
         }
         
