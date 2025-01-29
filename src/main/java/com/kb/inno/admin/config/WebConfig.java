@@ -48,7 +48,32 @@ public class WebConfig implements WebMvcConfigurer {
         Interceptor interceptor = new Interceptor();
 
         registry.addInterceptor(interceptor)
-                .addPathPatterns("/popup/**", "/member/**", "/visual/**")
+				// 일괄 처리 테스트 결과 error 페이지 호출이 확인되어 컨트롤러 모든 맵핑 수기 등록
+				// .addPathPatterns("/**")
+                .addPathPatterns(
+						"/popup/**"
+						, "/member/**"
+						, "/visual/**"
+						, "/affiliate/**"
+						, "/cooperation/**"
+						, "/faq/**"
+						, "/history/**"
+						, "/hub/**"
+						, "/interchange/**"
+						, "/investment/**"
+						, "/menu/**"
+						, "/notice/**"
+						, "/place/**"
+						, "/portfolio/**"
+						, "/promote/**"
+						, "/receipt/**"
+						, "/recruit/**"
+						, "/result/**"
+						, "/mail/**"
+						, "/starters/**"
+						, "/startup/**"
+						, "/survey/**"
+				)
                 .addPathPatterns("/kbinnovationhub_devadm/**")
 				.addPathPatterns("/kbinnovationhub_adm/**")
                 .excludePathPatterns("/css/**", "/images/**", "/js/**, /enov/component/**");
