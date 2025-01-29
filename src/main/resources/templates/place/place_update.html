@@ -79,21 +79,21 @@
                                                 <th class="bg-light">공간 이름</th>
                                                 <td>
                                                     <p class="mb-2">최대 10자까지 입력 가능합니다.</p>
-                                                    <input type="text" class="form-control" name="plc_nm" th:value="${place?.plc_nm}">
+                                                    <input type="text" class="form-control" name="plc_nm" th:value="${place?.plc_nm}" maxlength="10">
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <th class="bg-light">주소</th>
                                                 <td>
                                                     <p class="mb-2">최대 44자까지 입력 가능합니다.</p>
-                                                    <input type="text" class="form-control" name="plc_addr" th:value="${place?.plc_addr}">
+                                                    <input type="text" class="form-control" name="plc_addr" th:value="${place?.plc_addr}" maxlength="44">
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <th class="bg-light">정렬</th>
                                                 <td>
                                                     <div class="d-flex">
-                                                        <input class="form-control" type="number" name="sort_no" th:value="${place?.sort_no}" style="width:100px">
+                                                        <input class="form-control" type="number" name="sort_no" oninput="if(this.value.length > 3) this.value = this.value.slice(0, 3);" th:value="${place?.sort_no}" style="width:100px">
                                                         <p class="mb-0 mt-2 ms-3">* 숫자가 낮을수록 상위 노출됩니다.</p>
                                                     </div>
                                                 </td>
@@ -136,6 +136,7 @@
             var plc_nm = $('input[name=plc_nm]').val();
             if(plc_nm == null || plc_nm == "") {
                 alert("공간 이름을 입력 해 주세요.");
+                $('input[name=plc_nm]').focus()
                 return false;
             }
 
@@ -160,6 +161,18 @@
 
         // 컨펌 메시지 띄우는 함수
         function confirmMsg(type) {
+            var plc_nm = $('input[name=plc_nm]').val();
+            if(plc_nm == null || plc_nm == "") {
+                alert("공간 이름을 입력 해 주세요.");
+                $('input[name=plc_nm]').focus()
+                return false;
+            }
+
+            // sort_no를 비웠을 경우 1을 대입
+            if($("input[name=sort_no]").val() == '') {
+                $("input[name=sort_no]").val(1)
+            }
+
             let result = confirm("수정 하시겠습니까?");
             if(!result) {
                 return false;

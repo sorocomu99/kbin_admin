@@ -64,7 +64,7 @@
                                                 <th class="bg-light">정렬</th>
                                                 <td>
                                                     <div class="d-flex">
-                                                        <input class="form-control" type="number" name="sort_no" th:value="${faq.sort_no}" style="width:100px">
+                                                        <input class="form-control" type="number" name="sort_no" oninput="if(this.value.length > 3) this.value = this.value.slice(0, 3);" th:value="${faq.sort_no}" style="width:100px">
                                                         <p class="mb-0 mt-2 ms-3">* 숫자가 낮을수록 상위 노출됩니다.</p>
                                                     </div>
                                                 </td>
@@ -75,7 +75,7 @@
                                         <!-- <a href="javascript:" class="btn btn-outline-primary">미리보기</a> -->
                                         <a class="btn btn-outline-dark" th:href="@{|/faq/list/${menuId}?ctgry=${ctgry}|}">목록보기</a>
                                         <!-- <a class="btn btn-outline-dark" th:href="@{/faq/list/{menuId}(menuId=${menuId})}">목록보기</a> -->
-                                        <button type="submit" class="btn btn-primary" onclick="confirmMsg()">수정하기</button>
+                                        <button type="button" class="btn btn-primary" onclick="confirmMsg()">수정하기</button>
                                     </div>
                                 </form>
                             </div>
@@ -98,16 +98,18 @@
         // 컨펌 메시지 띄우는 함수
         function confirmMsg() {
             // 질문 텍스트 입력 확인
-            var faq_qstn = $('input[name=faq_qstn]').val();
+            var faq_qstn = $('textarea[name=faq_qstn]').val();
             if(faq_qstn.trim() == "") {
                 alert("질문 텍스트를 입력하세요.");
+                $('textarea[name=faq_qstn]').focus()
                 return false;
             }
 
             // 답변 텍스트 입력 확인
-            var faq_ans = $('input[name=faq_ans]').val();
+            var faq_ans = $('textarea[name=faq_ans]').val();
             if(faq_ans.trim() == "") {
                 alert("답변 텍스트를 입력하세요.");
+                $('textarea[name=faq_ans]').focus()
                 return false;
             }
 

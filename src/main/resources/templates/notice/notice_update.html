@@ -36,7 +36,7 @@
                                                 <th class="bg-light" width="20%">제목</th>
                                                 <td>
                                                     <div class="d-flex align-items-center">
-                                                        <input type="text" class="form-control" id="ntc_ttl" name="ntc_ttl" th:value="${notice.ntc_ttl}">
+                                                        <input type="text" class="form-control" id="ntc_ttl" name="ntc_ttl" th:value="${notice.ntc_ttl}" maxlength="100">
                                                         <div class="ms-3 mb-0 form-check form-switch">
                                                             <input class="form-check-input" type="checkbox" role="switch" id="ntc_yn" name="ntc_yn" th:checked="${notice.ntc_yn == 'Y'}">
                                                             <label class="form-check-label text-nowrap" for="ntc_yn">공지</label>
@@ -82,7 +82,7 @@
                                                 <th class="bg-light">정렬</th>
                                                 <td>
                                                     <div class="d-flex">
-                                                        <input class="form-control" type="number" name="sort_no" style="width:100px" th:value="${notice.sort_no}">
+                                                        <input class="form-control" type="number" name="sort_no" oninput="if(this.value.length > 3) this.value = this.value.slice(0, 3);" style="width:100px" th:value="${notice.sort_no}">
                                                         <p class="mb-0 mt-2 ms-3">* 숫자가 낮을수록 상위 노출됩니다.</p>
                                                     </div>
                                                 </td>
@@ -164,6 +164,7 @@
             var ntc_ttl = $('input[name=ntc_ttl]').val();
             if(ntc_ttl.trim() == "") {
                 alert("제목을 입력하세요.");
+                $('input[name=ntc_ttl]').focus();
                 return false;
             }
 
@@ -174,6 +175,7 @@
             var ntc_cn = $("#ntc_cn").val();
             if(ntc_cn.trim() == "<p><br></p>") {
                 alert("내용을 입력하세요.");
+                $("#ntc_cn").focus();
                 return false;
             }
 

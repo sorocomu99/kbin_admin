@@ -272,18 +272,16 @@ public class StartupService {
             Random random = new Random();
 
             List<String> news_ttl_List = new ArrayList<>();
-            List<String> thumb_url_List = new ArrayList<>();
             List<String> provider_List = new ArrayList<>();
             List<String> news_link_List = new ArrayList<>();
             news_ttl_List = (List) map.get("news_ttl_List");
-            thumb_url_List = (List) map.get("thumb_url_List");
             provider_List = (List) map.get("provider_List");
             news_link_List = (List) map.get("news_link_List");
 
             for (int i = 0; i < news_ttl_List.size(); i++) {
                 if(i == 0) {
                     try{
-                        startupDTO.setThumb_url(thumb_url_List.get(0));
+                        startupDTO.setThumb_url(startupDTO.getThumb_url());
                     }catch (Exception ignored) {}
                 }else{
                     startupDTO.setThumb_url(null);
@@ -576,11 +574,9 @@ public class StartupService {
             Random random = new Random();
 
             List<String> news_ttl_List = new ArrayList<>();
-            List<String> thumb_url_List = new ArrayList<>();
             List<String> provider_List = new ArrayList<>();
             List<String> news_link_List = new ArrayList<>();
             news_ttl_List = (List) map.get("news_ttl_List");
-            thumb_url_List = (List) map.get("thumb_url_List");
             provider_List = (List) map.get("provider_List");
             news_link_List = (List) map.get("news_link_List");
             startupDAO.deleteNewsInfo(startupDTO);
@@ -588,7 +584,7 @@ public class StartupService {
             for (int i = 0; i < news_ttl_List.size(); i++) {
                 if(i == 0) {
                     try{
-                        startupDTO.setThumb_url(thumb_url_List.get(0));
+                        startupDTO.setThumb_url(startupDTO.getThumb_url());
                     }catch (Exception ignored) {}
                 }else{
                     startupDTO.setThumb_url(null);

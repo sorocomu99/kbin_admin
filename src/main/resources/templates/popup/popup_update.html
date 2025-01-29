@@ -32,13 +32,13 @@
                                             <td>
                                                 <div class="d-flex align-items-center">
                                                     <div class="input-group w-auto flex-nowrap me-2 date" data-provide="datepicker">
-                                                        <input id="inputStart" type="text" class="form-control w-auto" th:value="${popup?.bgng_ymd}" name="bgng_ymd">
+                                                        <input id="inputStart" type="text" class="form-control w-auto" th:value="${popup?.bgng_ymd}" name="bgng_ymd" maxlength="10">
                                                         <div class="input-group-addon">
                                                             <span data-feather="calendar"></span>
                                                         </div>
                                                     </div>
                                                     <div class="input-group clockpicker">
-                                                        <input type="text" class="form-control w-auto" th:value="${popup?.bgng_hr}" id="bgng_hr" name="bgng_hr">
+                                                        <input type="text" class="form-control w-auto" th:value="${popup?.bgng_hr}" id="bgng_hr" name="bgng_hr" maxlength="5">
                                                         <span class="input-group-addon">
                                                             <span data-feather="clock"></span>
                                                         </span>
@@ -55,13 +55,13 @@
                                             <td>
                                                 <div class="d-flex align-items-center">
                                                     <div class="input-group w-auto flex-nowrap me-2 date" data-provide="datepicker">
-                                                        <input id="inputEnd" type="text" class="form-control w-auto" th:value="${popup?.end_ymd}" name="end_ymd">
+                                                        <input id="inputEnd" type="text" class="form-control w-auto" th:value="${popup?.end_ymd}" name="end_ymd" maxlength="10>
                                                         <div class="input-group-addon">
                                                             <span data-feather="calendar"></span>
                                                         </div>
                                                     </div>
                                                     <div class="input-group clockpicker">
-                                                        <input type="text" class="form-control w-auto" th:value="${popup?.end_hr}" id="end_hr" name="end_hr">
+                                                        <input type="text" class="form-control w-auto" th:value="${popup?.end_hr}" id="end_hr" name="end_hr" maxlength="5">
                                                         <span class="input-group-addon">
                                                             <span data-feather="clock"></span>
                                                         </span>
@@ -79,12 +79,12 @@
                                                 <div class="col-lg-6">
                                                     <div class="input-group mb-2" style="width:275px">
                                                         <span class="input-group-text">X</span>
-                                                        <input type="text" class="form-control" th:value="${popup?.popup_left_pstn}" name="popup_left_pstn">
+                                                        <input type="text" class="form-control" th:value="${popup?.popup_left_pstn}" name="popup_left_pstn" maxlength="5">
                                                         <span class="input-group-text">px</span>
                                                     </div>
                                                     <div class="input-group mb-2" style="width:275px">
                                                         <span class="input-group-text">Y</span>
-                                                        <input type="text" class="form-control" th:value="${popup?.popup_top_pstn}" name="popup_top_pstn">
+                                                        <input type="text" class="form-control" th:value="${popup?.popup_top_pstn}" name="popup_top_pstn" maxlength="5">
                                                         <span class="input-group-text">px</span>
                                                     </div>
                                                 </div>

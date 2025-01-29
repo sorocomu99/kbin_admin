@@ -173,7 +173,21 @@
                         file_name: selectList[0].file_name
                     });
 
+                    // 중복 건 제외처리용. 파일명으로 필터
+                    // selectList 가 뻥튀기 되는데 이유는??
+                    const processedFileNames = new Set();
+
                     for (let i = 0; i < selectList.length; i++) {
+                        const currentFileName = selectList[i].file_name;
+
+                        // 이미 처리한 file_name인 경우 pass
+                        if (processedFileNames.has(currentFileName)) {
+                            continue;
+                        }
+
+                        // 새로운 file_name을 Set에 추가
+                        processedFileNames.add(currentFileName);
+
                         htmlCode += '           <li class="item" id="order_' + selectList[i].sort_no + '">';
                         htmlCode += '               <div class="block">';
                         htmlCode += '               <div class="image">';

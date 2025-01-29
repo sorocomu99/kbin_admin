@@ -34,14 +34,14 @@
                                             <tr>
                                                 <th class="bg-light">설문 제목</th>
                                                 <td>
-                                                    <input type="text" class="form-control" value="" id="srvy_ttl" name="survey_title">
+                                                    <input type="text" class="form-control" value="" id="srvy_ttl" name="survey_title" maxlength="50">
                                                 </td>
                                             </tr>
                                         </tbody>
                                     </table>
                                     <div class="button-container">
-                                        <button type="button" class="btn btn-primary" onclick="surveyInsert()">등록하기</button>
                                         <a th:href="@{/survey/list/{menuId}(menuId=${menuId})}" class="btn btn-outline-primary">목록보기</a>
+                                        <button type="button" class="btn btn-primary" onclick="surveyInsert()">등록하기</button>
                                     </div>
                                 </form>
                             </div>
@@ -69,6 +69,11 @@
         }
 
         function surveyInsert() {
+            if(document.querySelector('#file_yn').value !== '1') {
+                alert("파일을 선택 해 주세요.");
+                return;
+            }
+
             var srvyTtl = $("#srvy_ttl").val();
             if (srvyTtl === null || srvyTtl === '') {
                 alert("설문 제목을 입력하세요.")

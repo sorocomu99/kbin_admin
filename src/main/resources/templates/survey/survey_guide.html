@@ -29,14 +29,14 @@
                                             <input type="hidden" id="survey_info_no" name="survey_info_no"
                                                    th:value="${surveyInfo.survey_info_no}"/>
                                             <input type="text" class="form-control" name="survey_category"
-                                                   th:value="${surveyInfo.survey_category}">
+                                                   th:value="${surveyInfo.survey_category}" maxlength="50">
                                         </td>
                                     </tr>
                                     <tr>
                                         <th class="bg-light" colspan="2">모집 기간</th>
                                         <td>
                                             <input type="text" class="form-control" name="survey_date_range"
-                                                   th:value="${surveyInfo.survey_date_range}">
+                                                   th:value="${surveyInfo.survey_date_range}" maxlength="50">
                                         </td>
                                     </tr>
                                     <tr>
@@ -44,14 +44,14 @@
                                         <th class="bg-light">메인 텍스트</th>
                                         <td>
                                             <input type="text" class="form-control" name="survey_target_heading"
-                                                   th:value="${surveyInfo.survey_target_heading}">
+                                                   th:value="${surveyInfo.survey_target_heading}" maxlength="50">
                                         </td>
                                     </tr>
                                     <tr>
                                         <th class="bg-light">서브 텍스트</th>
                                         <td>
                                             <input type="text" class="form-control" name="survey_target_sub"
-                                                   th:value="${surveyInfo.survey_target_sub}">
+                                                   th:value="${surveyInfo.survey_target_sub}" maxlength="50">
                                         </td>
                                     </tr>
                                     <tr>
@@ -59,21 +59,21 @@
                                         <th class="bg-light">메인 텍스트</th>
                                         <td>
                                             <input type="text" class="form-control" name="survey_field_heading"
-                                                   th:value="${surveyInfo.survey_field_heading}">
+                                                   th:value="${surveyInfo.survey_field_heading}" maxlength="50">
                                         </td>
                                     </tr>
                                     <tr>
                                         <th class="bg-light">서브 텍스트</th>
                                         <td>
                                             <input type="text" class="form-control" name="survey_field_sub"
-                                                   th:value="${surveyInfo.survey_field_sub}">
+                                                   th:value="${surveyInfo.survey_field_sub}" maxlength="50">
                                         </td>
                                     </tr>
                                     <tr>
                                         <th class="bg-light" colspan="2">선발 절차</th>
                                         <td>
                                             <input type="text" class="form-control" name="survey_select_process"
-                                                   th:value="${surveyInfo.survey_select_process}">
+                                                   th:value="${surveyInfo.survey_select_process}" maxlength="50">
                                         </td>
                                     </tr>
                                     </tbody>
@@ -82,58 +82,58 @@
                                         <th class="bg-light" colspan="2" style="width:25%">모집 구분</th>
                                         <td>
                                             <input type="hidden" name="survey_no" th:value="${surveyNo}"/>
-                                            <input type="text" class="form-control" name="survey_category">
+                                            <input type="text" class="form-control" name="survey_category" maxlength="50">
                                         </td>
                                     </tr>
                                     <tr>
                                         <th class="bg-light" colspan="2">모집 기간</th>
                                         <td>
-                                            <input type="text" class="form-control" name="survey_date_range">
+                                            <input type="text" class="form-control" name="survey_date_range" maxlength="50">
                                         </td>
                                     </tr>
                                     <tr>
                                         <th class="bg-light" rowspan="2">모집 대상</th>
                                         <th class="bg-light">메인 텍스트</th>
                                         <td>
-                                            <input type="text" class="form-control" name="survey_target_heading">
+                                            <input type="text" class="form-control" name="survey_target_heading" maxlength="50">
                                         </td>
                                     </tr>
                                     <tr>
                                         <th class="bg-light">서브 텍스트</th>
                                         <td>
-                                            <input type="text" class="form-control" name="survey_target_sub">
+                                            <input type="text" class="form-control" name="survey_target_sub" maxlength="50">
                                         </td>
                                     </tr>
                                     <tr>
                                         <th class="bg-light" rowspan="2">모집 분야</th>
                                         <th class="bg-light">메인 텍스트</th>
                                         <td>
-                                            <input type="text" class="form-control" name="survey_field_heading">
+                                            <input type="text" class="form-control" name="survey_field_heading" maxlength="50">
                                         </td>
                                     </tr>
                                     <tr>
                                         <th class="bg-light">서브 텍스트</th>
                                         <td>
-                                            <input type="text" class="form-control" name="survey_field_sub">
+                                            <input type="text" class="form-control" name="survey_field_sub" maxlength="50">
                                         </td>
                                     </tr>
                                     <tr>
                                         <th class="bg-light" colspan="2">선발 절차</th>
                                         <td>
-                                            <input type="text" class="form-control" name="survey_select_process">
+                                            <input type="text" class="form-control" name="survey_select_process" maxlength="50">
                                         </td>
                                     </tr>
                                     </tbody>
                                 </table>
                                 <div class="button-container">
                                     <!--<button type="submit" class="btn btn-primary">등록하기</button>-->
-                                    <button type="button" class="btn btn-primary" onclick="guideInsert()">등록하기</button>
                                     <button onclick="preview();"
-                                            class="btn btn-outline-primary">미리보기
+                                    class="btn btn-outline-primary">미리보기
                                     </button>
                                     <!--<a href="javascript:" class="btn btn-outline-primary" onclick="history.back();">목록보기</a>-->
                                     <a th:href="@{/survey/list/{menuId}(menuId=${menuId})}"
-                                       class="btn btn-outline-primary">목록보기</a>
+                                    class="btn btn-outline-primary">목록보기</a>
+                                    <button type="button" class="btn btn-primary" onclick="guideInsert()">등록하기</button>
                                 </div>
                             </form>
                         </div>
@@ -153,6 +153,24 @@
     }
 
     function guideInsert() {
+        let obj = $('input[type=text]');
+        let checkValid = false;
+
+        for(let i = 0; i < obj.length; i++) {
+            if($.trim($(obj[i]).val()) === '') {
+                obj = obj[i];
+                checkValid = true;
+                break;
+            }
+        }
+
+        if(checkValid) {
+            alert($(obj).parent().prev().text() + ' 정보를 입력하세요.');
+            $(obj).focus();
+            return false;
+        }
+
+
         let result = confirm("등록 하시겠습니까?");
         if (result) {
             const form = document.forms['guide_form'];

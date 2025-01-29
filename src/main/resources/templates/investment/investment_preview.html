@@ -91,7 +91,6 @@
 
         // 차트 데이터 배열에 담기
         var data = [[${investment}]];
-
         var graph_yr = [];
         graph_yr.push(data.graph1_yr);
         graph_yr.push(data.graph2_yr);
@@ -102,7 +101,7 @@
 
         var graph_yr2 = [];
         for(var i = 0; i < graph_yr.length; i++) {
-            if(graph_yr[i] != null) {
+            if(graph_yr[i] != null && graph_yr[i] !== '') {
                 graph_yr2.push(graph_yr[i]);
             }
         }

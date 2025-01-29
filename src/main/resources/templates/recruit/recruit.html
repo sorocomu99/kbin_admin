@@ -31,7 +31,7 @@
                                                 <th class="bg-light" width="20%">연도</th>
                                                 <td>
                                                     <select class="form-select" name="employ_yr">
-                                                        <option>선택</option>
+                                                        <option value="">선택</option>
                                                         <!-- <option value="" th:disabled th:hidden="true">-선택-</option> -->
                                                         <option th:each="i : ${#numbers.sequence(#dates.year(#dates.createNow()) - 5, #dates.year(#dates.createNow()) + 5)}" th:value="${i}" th:text="${i}" th:selected="${recruit?.employ_yr} == ${i}"></option>
                                                     </select>
@@ -46,13 +46,13 @@
                                             <tr>
                                                 <th class="bg-light" width="20%">지원 금액</th>
                                                 <td>
-                                                    <input type="text" class="form-control" name="sprt_amt" placeholder=" ex) 6.7" th:value="${recruit?.sprt_amt}">
+                                                    <input type="text" class="form-control" name="sprt_amt" placeholder=" ex) 6.7" th:value="${recruit?.ret_sprt_amt}" maxlength="10">
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <th class="bg-light" width="20%">채용 기업 수</th>
                                                 <td>
-                                                    <input type="number" class="form-control" name="employ_ent_nocs" placeholder=" ex) 116" th:value="${recruit?.employ_ent_nocs}">
+                                                    <input type="number" class="form-control" name="employ_ent_nocs" placeholder=" ex) 116" th:value="${recruit?.employ_ent_nocs}" oninput="if(this.value.length > 5) this.value = this.value.slice(0, 5);">
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -94,10 +94,18 @@
     };
 
     function previewPage() {
+        // 연도 입력 확인
+        if($('select[name=employ_yr]').val() === '') {
+            alert('연도를 선택하세요.');
+            $('select[name=employ_yr]').focus()
+            return false;
+        }
+
         // 채용 수 입력 확인
         var employ_emp_nocs = $('input[name=employ_emp_nocs]').val();
         if(employ_emp_nocs == "") {
             alert("채용 수를 입력하세요.");
+            $('input[name=employ_emp_nocs]').focus();
             return false;
         }
 
@@ -105,6 +113,7 @@
         var sprt_amt = $('input[name=sprt_amt]').val();
         if(sprt_amt.trim() == "") {
             alert("지원 금액을 입력하세요.");
+            $('input[name=sprt_amt]').focus();
             return false;
         }
 
@@ -112,8 +121,11 @@
         var employ_ent_nocs = $('input[name=employ_ent_nocs]').val();
         if(employ_ent_nocs == "") {
             alert("채용 기업 수를 입력하세요.");
+            $('input[name=employ_ent_nocs]').focus();
             return false;
         }
+
+        $('input[name=sprt_amt]').val($('input[name=sprt_amt]').val().replaceAll(',', ''))
 
         const form = document.forms['recruit_form'];
         form.action = window.staticPath + 'recruit/preview'; // 전송할 URL
@@ -124,10 +136,18 @@
 
     // 컨펌 메시지 띄우는 함수
     function confirmMsg() {
+        // 연도 입력 확인
+        if($('select[name=employ_yr]').val() === '') {
+            alert('연도를 선택하세요.');
+            $('select[name=employ_yr]').focus()
+            return false;
+        }
+
         // 채용 수 입력 확인
         var employ_emp_nocs = $('input[name=employ_emp_nocs]').val();
         if(employ_emp_nocs == "") {
             alert("채용 수를 입력하세요.");
+            $('input[name=employ_emp_nocs]').focus();
             return false;
         }
 
@@ -135,6 +155,7 @@
         var sprt_amt = $('input[name=sprt_amt]').val();
         if(sprt_amt.trim() == "") {
             alert("지원 금액을 입력하세요.");
+            $('input[name=sprt_amt]').focus();
             return false;
         }
 
@@ -142,6 +163,7 @@
         var employ_ent_nocs = $('input[name=employ_ent_nocs]').val();
         if(employ_ent_nocs == "") {
             alert("채용 기업 수를 입력하세요.");
+            $('input[name=employ_ent_nocs]').focus();
             return false;
         }
 

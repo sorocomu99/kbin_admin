@@ -15,6 +15,9 @@ import com.kb.inno.admin.DTO.RecruitDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+
 @Service
 @RequiredArgsConstructor
 public class RecruitService {
@@ -24,7 +27,11 @@ public class RecruitService {
 
     // 국내 프로그램 - 채용 지원 조회
     public RecruitDTO select() {
-        return recruitDAO.select();
+        RecruitDTO recruitDTO = recruitDAO.select();
+        BigDecimal amount = BigDecimal.valueOf(recruitDTO.getSprt_amt());
+        DecimalFormat df = new DecimalFormat("####.###");
+        recruitDTO.setRet_sprt_amt(df.format(amount));
+        return recruitDTO;
     }
 
     // 국내 프로그램 - 채용 지원 등록

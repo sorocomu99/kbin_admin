@@ -132,6 +132,7 @@
         var data = [[${promote}]];
 
         var graph_yr = [];
+
         graph_yr.push(data.graph1_yr);
         graph_yr.push(data.graph2_yr);
         graph_yr.push(data.graph3_yr);
@@ -139,9 +140,10 @@
         graph_yr.push(data.graph5_yr);
         graph_yr.push("????");
 
+        var graph_yr2 = [];
         for(var i = 0; i < graph_yr.length; i++) {
-            if(graph_yr[i] == null) {
-                graph_yr.splice(i, 1);
+            if(graph_yr[i] != null && graph_yr[i] !== '') {
+                graph_yr2.push(graph_yr[i]);
             }
         }
 
@@ -166,7 +168,7 @@
         graph_nocs.push(lastValue);
 
         // 차트 데이터
-        const categories = graph_yr;
+        const categories = graph_yr2;
         const dataValues = graph_nocs;
         
         window.addEventListener('resize', () => chart.resize());

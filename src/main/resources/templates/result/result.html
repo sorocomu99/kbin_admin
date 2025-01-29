@@ -33,13 +33,13 @@
                                         <td>
                                             <th:block th:if="${result == null or result == ''}">
 	                                            <div class="d-flex align-items-center">
-	                                                <input type="text" class="form-control w-auto" placeholder="ex) 285" name="ent_nocs" oninput="formatNumber(this)" value="">
+	                                                <input type="text" class="form-control w-auto" placeholder="ex) 285" name="ent_nocs" oninput="formatNumber(this)" value="" maxlength="10">
 	                                                <p class="my-0 ms-2">개사</p>
 	                                            </div>
                                             </th:block>
                                             <th:block th:if="${result != null and result != ''}">
 	                                            <div class="d-flex align-items-center">
-	                                                <input type="text" class="form-control w-auto" placeholder="ex) 285" name="ent_nocs" oninput="formatNumber(this)" th:value="${#numbers.formatInteger(result?.ent_nocs, 0, 'COMMA')}">
+	                                                <input type="text" class="form-control w-auto" placeholder="ex) 285" name="ent_nocs" oninput="formatNumber(this)" th:value="${#numbers.formatInteger(result?.ent_nocs, 0, 'COMMA')}" maxlength="10">
 	                                                <p class="my-0 ms-2">개사</p>
 	                                            </div>
                                             </th:block>
@@ -66,13 +66,13 @@
                                         <td>
                                             <th:block th:if="${result == null or result == ''}">
                                                 <div class="d-flex align-items-center">
-	                                                <input type="text" class="form-control w-auto" placeholder="ex) 2,178" name="invest_nocs" oninput="formatNumber(this)" value="">
+	                                                <input type="text" class="form-control w-auto" placeholder="ex) 2,178" name="invest_nocs" oninput="formatNumber(this)" value="" maxlength="10">
 	                                                <p class="my-0 ms-2">억원</p>
 	                                            </div>
                                             </th:block>
                                             <th:block th:if="${result != null and result != ''}">
 	                                            <div class="d-flex align-items-center">
-	                                                <input type="text" class="form-control w-auto" placeholder="ex) 2,178" name="invest_nocs" oninput="formatNumber(this)" th:value="${#numbers.formatInteger(result?.invest_nocs, 3, 'COMMA')}">
+	                                                <input type="text" class="form-control w-auto" placeholder="ex) 2,178" name="invest_nocs" oninput="formatNumber(this)" th:value="${#numbers.formatInteger(result?.invest_nocs, 3, 'COMMA')}" maxlength="10">
 	                                                <p class="my-0 ms-2">억원</p>
 	                                            </div>
                                             </th:block>
@@ -99,13 +99,13 @@
                                         <td>
                                             <th:block th:if="${result == null or result == ''}">
                                                 <div class="d-flex align-items-center">
-	                                                <input type="text" class="form-control w-auto" placeholder="ex) 330" name="affiliate_nocs" oninput="formatNumber(this)" value="">
+	                                                <input type="text" class="form-control w-auto" placeholder="ex) 330" name="affiliate_nocs" oninput="formatNumber(this)" value="" maxlength="10">
 	                                                <p class="my-0 ms-2">건</p>
 	                                            </div>
                                             </th:block>
                                             <th:block th:if="${result != null and result != ''}">
 	                                            <div class="d-flex align-items-center">
-	                                                <input type="text" class="form-control w-auto" placeholder="ex) 330" name="affiliate_nocs" oninput="formatNumber(this)" th:value="${#numbers.formatInteger(result?.affiliate_nocs, 0, 'COMMA')}">
+	                                                <input type="text" class="form-control w-auto" placeholder="ex) 330" name="affiliate_nocs" oninput="formatNumber(this)" th:value="${#numbers.formatInteger(result?.affiliate_nocs, 0, 'COMMA')}" maxlength="10">
 	                                                <p class="my-0 ms-2">건</p>
 	                                            </div>
 	                                        </th:block>
@@ -167,6 +167,7 @@
         var ent_nocs = $('input[name=ent_nocs]').val();
         if(ent_nocs.trim() == "") {
             alert("선발기업 수를 입력 해 주세요.");
+            $('input[name=ent_nocs]').focus();
             return false;
         }
 
@@ -174,6 +175,7 @@
         var ent_crtr_ymd = $('input[name=ent_crtr_ymd]').val();
         if(ent_crtr_ymd.trim() == "") {
             alert("육성기업 기준년월을 입력 해 주세요.");
+            $('input[name=ent_crtr_ymd]').focus();
             return false;
         }
 
@@ -181,6 +183,7 @@
         var invest_nocs = $('input[name=invest_nocs]').val();
         if(invest_nocs.trim() == "") {
             alert("투자 수를 입력 해 주세요.");
+            $('input[name=invest_nocs]').focus();
             return false;
         }
 
@@ -188,6 +191,7 @@
         var invest_crtr_ymd = $('input[name=invest_crtr_ymd]').val();
         if(invest_crtr_ymd.trim() == "") {
             alert("투자 기준년월을 입력 해 주세요.");
+            $('input[name=invest_crtr_ymd]').focus();
             return false;
         }
 
@@ -195,6 +199,7 @@
         var affiliate_nocs = $('input[name=affiliate_nocs]').val();
         if(affiliate_nocs.trim() == "") {
             alert("제휴 건수를 입력 해 주세요.");
+            $('input[name=affiliate_nocs]').focus();
             return false;
         }
 
@@ -202,6 +207,7 @@
         var affiliate_crtr_ymd = $('input[name=affiliate_crtr_ymd]').val();
         if(affiliate_crtr_ymd.trim() == "") {
             alert("계열사 제휴 기준년월을 입력 해 주세요.");
+            $('input[name=affiliate_crtr_ymd]').focus();
             return false;
         }
         
@@ -220,6 +226,7 @@
         var ent_nocs = $('input[name=ent_nocs]').val();
         if(ent_nocs.trim() == "") {
             alert("선발기업 수를 입력 해 주세요.");
+            $('input[name=ent_nocs]').focus();
             return false;
         }
 
@@ -227,6 +234,7 @@
         var ent_crtr_ymd = $('input[name=ent_crtr_ymd]').val();
         if(ent_crtr_ymd.trim() == "") {
             alert("육성기업 기준년월을 입력 해 주세요.");
+            $('input[name=ent_crtr_ymd]').focus();
             return false;
         }
 
@@ -234,6 +242,7 @@
         var invest_nocs = $('input[name=invest_nocs]').val();
         if(invest_nocs.trim() == "") {
             alert("투자 수를 입력 해 주세요.");
+            $('input[name=invest_nocs]').focus();
             return false;
         }
 
@@ -241,6 +250,7 @@
         var invest_crtr_ymd = $('input[name=invest_crtr_ymd]').val();
         if(invest_crtr_ymd.trim() == "") {
             alert("투자 기준년월을 입력 해 주세요.");
+            $('input[name=invest_crtr_ymd]').focus();
             return false;
         }
 
@@ -248,6 +258,7 @@
         var affiliate_nocs = $('input[name=affiliate_nocs]').val();
         if(affiliate_nocs.trim() == "") {
             alert("제휴 건수를 입력 해 주세요.");
+            $('input[name=affiliate_nocs]').focus();
             return false;
         }
 
@@ -255,6 +266,7 @@
         var affiliate_crtr_ymd = $('input[name=affiliate_crtr_ymd]').val();
         if(affiliate_crtr_ymd.trim() == "") {
             alert("계열사 제휴 기준년월을 입력 해 주세요.");
+            $('input[name=affiliate_crtr_ymd]').focus();
             return false;
         }
 

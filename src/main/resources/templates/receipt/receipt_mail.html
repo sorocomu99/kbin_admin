@@ -31,7 +31,7 @@
                                             <tr>
                                                 <th class="bg-light">메일제목</th>
                                                 <td>
-                                                    <input type="text" name="subject" class="form-control">
+                                                    <input type="text" name="subject" class="form-control" maxlength="150">
                                                 </td>
                                             </tr>
                                             <tr>
@@ -52,8 +52,8 @@
                                         </tbody>
                                     </table>
                                     <div class="button-container">
+                                        <a href="javascript:" class="btn btn-outline-primary" onclick="window.close();">목록보기</a>
                                         <button type="submit" class="btn btn-primary">메일전송</button>
-                                        <a href="javascript:" class="btn btn-outline-primary" onclick="history.back();">목록보기</a>
                                     </div>
                                 </form>
                             </div>

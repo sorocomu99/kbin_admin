@@ -22,25 +22,25 @@
                                             <tr>
                                                 <th class="bg-light" width="20%">기업명</th>
                                                 <td>
-                                                    <input type="text" class="form-control" id="ent_nm" name="ent_nm" th:value="${selectStarterInfo.ent_nm}" placeholder="ex) 리벨리온">
+                                                    <input type="text" class="form-control" id="ent_nm" name="ent_nm" th:value="${selectStarterInfo.ent_nm}" placeholder="ex) 리벨리온" maxlength="50">
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <th class="bg-light" width="20%">제품/서비스</th>
                                                 <td>
-                                                    <input type="text" class="form-control" id="main_biz" name="main_biz" th:value="${selectStarterInfo.main_biz}" placeholder="ex) 가속 전용 저전력 인공지능 반도체 제조">
+                                                    <input type="text" class="form-control" id="main_biz" name="main_biz" th:value="${selectStarterInfo.main_biz}" placeholder="ex) 가속 전용 저전력 인공지능 반도체 제조" maxlength="250">
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <th class="bg-light" width="20%">기업소개</th>
                                                 <td>
-                                                    <input type="text" class="form-control" id="tpbiz" name="tpbiz" th:value="${selectStarterInfo.tpbiz}" placeholder="ex) 비메모리용 기타 전자집적회로 제조업">
+                                                    <input type="text" class="form-control" id="tpbiz" name="tpbiz" th:value="${selectStarterInfo.tpbiz}" placeholder="ex) 비메모리용 기타 전자집적회로 제조업" maxlength="250">
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <th class="bg-light" width="20%">근무자</th>
                                                 <td>
-                                                    <input type="number" class="form-control" name="now_wrkr_nocs" th:value="${selectStarterInfo.now_wrkr_nocs}" placeholder="ex) 128">
+                                                    <input type="number" class="form-control" name="now_wrkr_nocs" th:value="${selectStarterInfo.now_wrkr_nocs}" placeholder="ex) 128" oninput="splitAmt(this, 8)" onblur="splitAmt(this, 8)">
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -52,37 +52,37 @@
                                             <tr>
                                                 <th class="bg-light" width="20%">CEO</th>
                                                 <td>
-                                                    <input type="text" class="form-control" id="rprsv_nm" name="rprsv_nm" th:value="${selectStarterInfo.rprsv_nm}" placeholder="ex) 박성현">
+                                                    <input type="text" class="form-control" id="rprsv_nm" name="rprsv_nm" th:value="${selectStarterInfo.rprsv_nm}" placeholder="ex) 박성현" maxlength="150">
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <th class="bg-light" width="20%">설립일</th>
                                                 <td>
-                                                    <input type="text" class="form-control" id="fndn_ymd" name="fndn_ymd" th:value="${selectStarterInfo.fndn_ymd}" placeholder="ex) 2020-06-23">
+                                                    <input type="number" class="form-control" id="fndn_ymd" name="fndn_ymd" th:value="${selectStarterInfo.fndn_ymd}" placeholder="ex) 20200623 (숫자만 입력)" oninput="splitAmt(this, 8)" onblur="splitAmt(this, 8)">
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <th class="bg-light" width="20%">사업자번호</th>
                                                 <td>
-                                                    <input type="text" class="form-control" id="brno" name="brno" th:value="${selectStarterInfo.brno}" placeholder="ex) 669-870-1717">
+                                                    <input type="text" class="form-control" id="brno" name="brno" th:value="${selectStarterInfo.brno}" placeholder="ex) 6698701717 (숫자만 입력)" maxlength="10">
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <th class="bg-light" width="20%">법인등록번호</th>
                                                 <td>
-                                                    <input type="text" class="form-control" id="corp_no" name="corp_no" th:value="${selectStarterInfo.corp_no}" placeholder="ex) 131111-0596452">
+                                                    <input type="text" class="form-control" id="corp_no" name="corp_no" th:value="${selectStarterInfo.corp_no}" placeholder="ex) 1311110596452 (숫자만 입력)" maxlength="13">
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <th class="bg-light" width="20%">자본금(원)</th>
                                                 <td>
-                                                    <input type="number" class="form-control" id="cptl_amt" name="cptl_amt" th:value="${selectStarterInfo.cptl_amt}" placeholder="ex) 202303000">
+                                                    <input type="number" class="form-control" id="cptl_amt" name="cptl_amt" th:value="${selectStarterInfo.cptl_amt}" placeholder="ex) 10000000" oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)">
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <th class="bg-light" width="20%">형태</th>
                                                 <td>
-                                                    <input type="text" class="form-control" id="ent_shape" name="ent_shape" th:value="${selectStarterInfo.ent_shape}" placeholder="ex) 외감">
+                                                    <input type="text" class="form-control" id="ent_shape" name="ent_shape" th:value="${selectStarterInfo.ent_shape}" placeholder="ex) 외감" maxlength="50">
                                                 </td>
                                             </tr>
                                             <tr>
@@ -100,13 +100,13 @@
                                             <tr>
                                                 <th class="bg-light" width="20%">주소</th>
                                                 <td>
-                                                    <input type="text" class="form-control" id="addr" name="addr" th:value="${selectStarterInfo.addr}" placeholder="ex) 경기도 성남시 분당구 정자일로 239, 102동 801호(정자동, 아이파크분당1) ">
+                                                    <input type="text" class="form-control" id="addr" name="addr" th:value="${selectStarterInfo.addr}" placeholder="ex) 경기도 성남시 분당구 정자일로 239, 102동 801호(정자동, 아이파크분당1)" maxlength="250">
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <th class="bg-light" width="20%">규모</th>
                                                 <td>
-                                                    <input type="text" class="form-control" id="ent_scale" name="ent_scale" th:value="${selectStarterInfo.ent_scale}" placeholder="ex) 중소기업">
+                                                    <input type="text" class="form-control" id="ent_scale" name="ent_scale" th:value="${selectStarterInfo.ent_scale}" placeholder="ex) 중소기업" maxlength="50">
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -118,13 +118,13 @@
                                             <tr>
                                                 <th class="bg-light" width="20%">제품</th>
                                                 <td>
-                                                    <input type="text" class="form-control" id="prdct" name="prdct" th:value="${selectStarterInfo.prdct}" placeholder="ex) ATOM, ION">
+                                                    <input type="text" class="form-control" id="prdct" name="prdct" th:value="${selectStarterInfo.prdct}" placeholder="ex) ATOM, ION" maxlength="250">
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <th class="bg-light" width="20%">홈페이지 링크</th>
                                                 <td>
-                                                    <input type="text" class="form-control" id="hmpg" name="hmpg" th:value="${selectStarterInfo.hmpg}" placeholder="ex) https://rebellions.ai/">
+                                                    <input type="text" class="form-control" id="hmpg" name="hmpg" th:value="${selectStarterInfo.hmpg}" placeholder="ex) https://rebellions.ai/" maxlength="150">
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -136,19 +136,19 @@
                                             <tr>
                                                 <th class="bg-light" width="20%">연간 입사자(명)</th>
                                                 <td>
-                                                    <input type="number" class="form-control" id="mm12_jncmp_nocs" name="mm12_jncmp_nocs" th:value="${selectStarterInfo.mm12_jncmp_nocs}" placeholder="ex) 62">
+                                                    <input type="number" class="form-control" id="mm12_jncmp_nocs" name="mm12_jncmp_nocs" th:value="${selectStarterInfo.mm12_jncmp_nocs}" placeholder="ex) 62"  oninput="splitAmt(this, 5)" onblur="splitAmt(this, 5)">
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <th class="bg-light" width="20%">연간 퇴사자(명)</th>
                                                 <td>
-                                                    <input type="number" class="form-control" id="mm12_rsgntn_nocs" name="mm12_rsgntn_nocs" th:value="${selectStarterInfo.mm12_rsgntn_nocs}" placeholder="ex) 25">
+                                                    <input type="number" class="form-control" id="mm12_rsgntn_nocs" name="mm12_rsgntn_nocs" th:value="${selectStarterInfo.mm12_rsgntn_nocs}" placeholder="ex) 25"  oninput="splitAmt(this, 5)" onblur="splitAmt(this, 5)">
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <th class="bg-light" width="20%">연간 퇴사율(%)</th>
                                                 <td>
-                                                    <input type="text" class="form-control" id="mm12_rsgntn_rt" name="mm12_rsgntn_rt" th:value="${selectStarterInfo.mm12_rsgntn_rt}" placeholder="ex) 22.84">
+                                                    <input type="text" class="form-control" id="mm12_rsgntn_rt" name="mm12_rsgntn_rt" th:value="${selectStarterInfo.mm12_rsgntn_rt}" placeholder="ex) 22.84" maxlength="5">
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -161,36 +161,64 @@
                                                 <i class="me-0" data-feather="plus"></i>
                                                 추가
                                             </button>
-                                            <button type="button" id="removeServeice" class="btn btn-sm btn-outline-danger d-none" onclick="removeInputService()">
+                                            <button type="button" id="removeServeice" th:class="${#lists.isEmpty(selectBizSrvcInfo) or #lists.size(selectBizSrvcInfo) == 1 ? 'btn btn-sm btn-outline-danger d-none' : 'btn btn-sm btn-outline-danger' }" onclick="removeInputService()">
                                                 <i class="me-0" data-feather="minus"></i>
                                                 삭제
                                             </button>
                                         </div>
                                     </div>
+                                    <table class="table-service table table-bordered align-middle" th:if="${#lists.isEmpty(selectBizSrvcInfo)}">
+                                        <tbody>
+                                        <tr>
+                                            <th class="bg-light" width="20%">서비스명</th>
+                                            <td>
+                                                <input type="text" class="form-control" id="srvc_nm" name="srvc_nm" value="" placeholder="ex) ATOM" maxlength="250">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th class="bg-light" width="20%">Web 링크</th>
+                                            <td>
+                                                <input type="text" class="form-control" id="web_srvc_link" name="web_srvc_link" value="" placeholder="ex) https://rebellions.ai/rebellions-product/atom-2/" maxlength="500">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th class="bg-light" width="20%">Android 링크</th>
+                                            <td>
+                                                <input type="text" class="form-control" id="google_app_link" name="google_app_link" value="" placeholder="ex) https://rebellions.ai/rebellions-product/atom-2/" maxlength="500">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th class="bg-light" width="20%">IOS 링크</th>
+                                            <td>
+                                                <input type="text" class="form-control" id="apple_app_link" name="apple_app_link" value="" placeholder="ex) https://rebellions.ai/rebellions-product/atom-2/" maxlength="500">
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
                                     <table class="table-service table table-bordered align-middle" th:each="bizSrvc, status : ${selectBizSrvcInfo}">
                                         <tbody>
                                             <tr>
                                                 <th class="bg-light" width="20%">서비스명</th>
                                                 <td>
-                                                    <input type="text" class="form-control" id="srvc_nm" name="srvc_nm" th:value="${bizSrvc.srvc_nm}" placeholder="ex) ATOM">
+                                                    <input type="text" class="form-control" id="srvc_nm" name="srvc_nm" th:value="${bizSrvc.srvc_nm}" placeholder="ex) ATOM" maxlength="250">
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <th class="bg-light" width="20%">Web 링크</th>
                                                 <td>
-                                                    <input type="text" class="form-control" id="web_srvc_link" name="web_srvc_link" th:value="${bizSrvc.web_srvc_link}" placeholder="ex) https://rebellions.ai/rebellions-product/atom-2/">
+                                                    <input type="text" class="form-control" id="web_srvc_link" name="web_srvc_link" th:value="${bizSrvc.web_srvc_link}" placeholder="ex) https://rebellions.ai/rebellions-product/atom-2/" maxlength="500">
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <th class="bg-light" width="20%">Android 링크</th>
                                                 <td>
-                                                    <input type="text" class="form-control" id="google_app_link" name="google_app_link" th:value="${bizSrvc.google_app_link}" placeholder="ex) https://rebellions.ai/rebellions-product/atom-2/">
+                                                    <input type="text" class="form-control" id="google_app_link" name="google_app_link" th:value="${bizSrvc.google_app_link}" placeholder="ex) https://rebellions.ai/rebellions-product/atom-2/" maxlength="500">
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <th class="bg-light" width="20%">IOS 링크</th>
                                                 <td>
-                                                    <input type="text" class="form-control" id="apple_app_link" name="apple_app_link" th:value="${bizSrvc.apple_app_link}" placeholder="ex) https://rebellions.ai/rebellions-product/atom-2/">
+                                                    <input type="text" class="form-control" id="apple_app_link" name="apple_app_link" th:value="${bizSrvc.apple_app_link}" placeholder="ex) https://rebellions.ai/rebellions-product/atom-2/" maxlength="500">
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -209,7 +237,7 @@
                                         </thead>
                                         <tbody>
                                             <tr th:if="${#lists.isEmpty(selectInvestInfo)}">
-                                                <td><input type="text" class="form-control" id="invest_ymd" name="invest_ymd" placeholder="ex) 2024-08-09"></td>
+                                                <td><input type="text" class="form-control" id="invest_ymd" name="invest_ymd" placeholder="ex) 2024-08-09" maxlength="10"></td>
                                                 <td>
                                                     <select class="form-select" aria-label="" name="series_nm">
                                                         <option value="">해당없음</option>
@@ -227,8 +255,8 @@
                                                         <option value="TIPS">TIPS</option>
                                                     </select>
                                                 </td>
-                                                <td><input type="number" class="form-control" id="invest_amt" name="invest_amt" placeholder="ex) 100000000"></td>
-                                                <td><input type="text" class="form-control" id="investor" name="investor" placeholder="ex) 글로벌팁스"></td>
+                                                <td><input type="number" class="form-control" id="invest_amt" name="invest_amt" placeholder="ex) 100000000"  oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)"></td>
+                                                <td><input type="text" class="form-control" id="investor" name="investor" placeholder="ex) 글로벌팁스" maxlength="500"></td>
                                                 <td class="text-center">
                                                     <button type="button" class="btn btn-sm btn-outline-primary" onclick="addInputInvest()">
                                                         <i class="me-0" data-feather="plus"></i>
@@ -238,7 +266,7 @@
                                             </tr>
 
                                             <tr th:each="invest, status : ${selectInvestInfo}">
-                                                <td><input type="text" class="form-control" id="invest_ymd" name="invest_ymd" th:value="${invest.apple_app_link}" placeholder="ex) 2024-08-09"></td>
+                                                <td><input type="text" class="form-control" id="invest_ymd" name="invest_ymd" th:value="${invest.invest_ymd}" placeholder="ex) 2024-08-09" maxlength="10"></td>
                                                 <td>
                                                     <select class="form-select" aria-label="" name="series_nm">
                                                         <option value="" th:selected="${invest.series_nm == null or invest.series_nm == ''}">해당없음</option>
@@ -256,8 +284,8 @@
                                                         <option value="TIPS" th:selected="${invest.series_nm == 'TIPS'}">TIPS</option>
                                                     </select>
                                                 </td>
-                                                <td><input type="number" class="form-control" id="invest_amt" name="invest_amt" th:value="${invest.invest_amt}" placeholder="ex) 100000000"></td>
-                                                <td><input type="text" class="form-control" id="investor" name="investor" th:value="${invest.investor}" placeholder="ex) 글로벌팁스"></td>
+                                                <td><input type="number" class="form-control" id="invest_amt" name="invest_amt" th:value="${invest.invest_amt}" placeholder="ex) 100000000"  oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)"></td>
+                                                <td><input type="text" class="form-control" id="investor" name="investor" th:value="${invest.investor}" placeholder="ex) 글로벌팁스" maxlength="500"></td>
                                                 <td class="text-center">
                                                     <button type="button" class="btn btn-sm btn-outline-primary" onclick="addInputInvest()">
                                                         <i class="me-0" data-feather="plus"></i>
@@ -281,11 +309,10 @@
                                         </thead>
                                         <tbody>
                                             <tr th:if="${#lists.isEmpty(selectEmploInfo)}">
-                                                <td><input type="number" class="form-control" name="crtr_ym" placeholder="ex) 202008" maxlength="6"
-                                                           oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"></td>
-                                                <td><input type="number" class="form-control" name="jncmp_nocs" placeholder="ex) 4"></td>
-                                                <td><input type="number" class="form-control" name="rsgntn_nocs" placeholder="ex) 0"></td>
-                                                <td><input type="number" class="form-control" name="hdof_nocs" placeholder="ex) 4"></td>
+                                                <td><input type="number" class="form-control" name="crtr_ym" placeholder="ex) 202008 (연도 필수 입력)"   oninput="splitAmt(this, 6)" onblur="splitAmt(this, 6)"></td>
+                                                <td><input type="number" class="form-control" name="jncmp_nocs" placeholder="ex) 4"  oninput="splitAmt(this, 10)" onblur="splitAmt(this, 10)"></td>
+                                                <td><input type="number" class="form-control" name="rsgntn_nocs" placeholder="ex) 0"  oninput="splitAmt(this, 10)" onblur="splitAmt(this, 10)"></td>
+                                                <td><input type="number" class="form-control" name="hdof_nocs" placeholder="ex) 4"  oninput="splitAmt(this, 10)" onblur="splitAmt(this, 10)"></td>
                                                 <td class="text-center">
                                                     <button type="button" class="btn btn-sm btn-outline-primary" onclick="addInputRecruit()">
                                                         <i class="me-0" data-feather="plus"></i>
@@ -295,11 +322,10 @@
                                             </tr>
 
                                             <tr th:each="emplo, status : ${selectEmploInfo}">
-                                                <td><input type="number" class="form-control" name="crtr_ym" th:value="${emplo.crtr_ym}" placeholder="ex) 202008" maxlength="6"
-                                                           oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"></td>
-                                                <td><input type="number" class="form-control" name="jncmp_nocs" th:value="${emplo.jncmp_nocs}" placeholder="ex) 4"></td>
-                                                <td><input type="number" class="form-control" name="rsgntn_nocs" th:value="${emplo.rsgntn_nocs}" placeholder="ex) 0"></td>
-                                                <td><input type="number" class="form-control" name="hdof_nocs" th:value="${emplo.hdof_nocs}" placeholder="ex) 4"></td>
+                                                <td><input type="number" class="form-control" name="crtr_ym" th:value="${emplo.crtr_ym}" placeholder="ex) 202008"   oninput="splitAmt(this, 6)" onblur="splitAmt(this, 6)"></td>
+                                                <td><input type="number" class="form-control" name="jncmp_nocs" th:value="${emplo.jncmp_nocs}" placeholder="ex) 4"  oninput="splitAmt(this, 10)" onblur="splitAmt(this, 10)"></td>
+                                                <td><input type="number" class="form-control" name="rsgntn_nocs" th:value="${emplo.rsgntn_nocs}" placeholder="ex) 0"  oninput="splitAmt(this, 10)" onblur="splitAmt(this, 10)"></td>
+                                                <td><input type="number" class="form-control" name="hdof_nocs" th:value="${emplo.hdof_nocs}" placeholder="ex) 4"  oninput="splitAmt(this, 10)" onblur="splitAmt(this, 10)"></td>
                                                 <td class="text-center">
                                                     <button type="button" class="btn btn-sm btn-outline-primary" onclick="addInputRecruit()">
                                                         <i class="me-0" data-feather="plus"></i>
@@ -321,8 +347,7 @@
                                                             <input type="number" class="form-control" th:name="'sls_yr' + ${iterStat.count}"
                                                                    th:value="${iterStat.index < #lists.size(list)} ? ${list[iterStat.index]?.sls_yr} : ''"
                                                                    th:placeholder="'ex) ' + ${2019 + iterStat.index}"
-                                                                   maxlength="4"
-                                                                   oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
+                                                                   oninput="splitAmt(this, 4)" onblur="splitAmt(this, 4)">
                                                         </th>
                                                     </th:block>
                                                 </th:block>
@@ -336,7 +361,7 @@
                                                         <td>
                                                             <input type="number" class="form-control" th:name="'sls_amt' + ${iterStat.count}"
                                                                    th:value="${iterStat.index < #lists.size(list)} ? ${list[iterStat.index]?.sls_amt} : ''"
-                                                                   placeholder="ex) 100000">
+                                                                   placeholder="ex) 100000"  oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)">
                                                         </td>
                                                     </th:block>
                                                 </th:block>
@@ -348,7 +373,7 @@
                                                         <td>
                                                             <input type="number" class="form-control" th:name="'sls_cost_amt' + ${iterStat.count}"
                                                                    th:value="${iterStat.index < #lists.size(list)} ? ${list[iterStat.index]?.sls_cost_amt} : ''"
-                                                                   placeholder="ex) 100000">
+                                                                   placeholder="ex) 100000"  oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)">
                                                         </td>
                                                     </th:block>
                                                 </th:block>
@@ -360,7 +385,7 @@
                                                         <td>
                                                             <input type="number" class="form-control" th:name="'sls_gramt' + ${iterStat.count}"
                                                                    th:value="${iterStat.index < #lists.size(list)} ? ${list[iterStat.index]?.sls_gramt} : ''"
-                                                                   placeholder="ex) 100000">
+                                                                   placeholder="ex) 100000"  oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)">
                                                         </td>
                                                     </th:block>
                                                 </th:block>
@@ -372,7 +397,7 @@
                                                         <td>
                                                             <input type="number" class="form-control" th:name="'sga_amt' + ${iterStat.count}"
                                                                    th:value="${iterStat.index < #lists.size(list)} ? ${list[iterStat.index]?.sga_amt} : ''"
-                                                                   placeholder="ex) 100000">
+                                                                   placeholder="ex) 100000"  oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)">
                                                         </td>
                                                     </th:block>
                                                 </th:block>
@@ -384,7 +409,7 @@
                                                         <td>
                                                             <input type="number" class="form-control" th:name="'operating_profit' + ${iterStat.count}"
                                                                    th:value="${iterStat.index < #lists.size(list)} ? ${list[iterStat.index]?.operating_profit} : ''"
-                                                                   placeholder="ex) 100000">
+                                                                   placeholder="ex) 100000"  oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)">
                                                         </td>
                                                     </th:block>
                                                 </th:block>
@@ -396,7 +421,7 @@
                                                         <td>
                                                             <input type="number" class="form-control" th:name="'net_profit' + ${iterStat.count}"
                                                                    th:value="${iterStat.index < #lists.size(list)} ? ${list[iterStat.index]?.net_profit} : ''"
-                                                                   placeholder="ex) 100000">
+                                                                   placeholder="ex) 100000"  oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)">
                                                         </td>
                                                     </th:block>
                                                 </th:block>
@@ -415,8 +440,7 @@
                                                             <input type="number" class="form-control" th:name="'ast_yr' + ${iterStat.count}"
                                                                    th:value="${iterStat.index < #lists.size(list)} ? ${list[iterStat.index]?.ast_yr} : ''"
                                                                    th:placeholder="'ex) ' + ${2019 + iterStat.index}"
-                                                                   maxlength="4"
-                                                                   oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
+                                                                   oninput="splitAmt(this, 4)" onblur="splitAmt(this, 4)">
                                                         </th>
                                                     </th:block>
                                                 </th:block>
@@ -430,7 +454,7 @@
                                                         <td>
                                                             <input type="number" class="form-control" th:name="'current_assets' + ${iterStat.count}"
                                                                    th:value="${iterStat.index < #lists.size(list)} ? ${list[iterStat.index]?.current_assets} : ''"
-                                                                   placeholder="ex) 100000">
+                                                                   placeholder="ex) 100000"  oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)">
                                                         </td>
                                                     </th:block>
                                                 </th:block>
@@ -442,7 +466,7 @@
                                                         <td>
                                                             <input type="number" class="form-control" th:name="'non_current_assets' + ${iterStat.count}"
                                                                    th:value="${iterStat.index < #lists.size(list)} ? ${list[iterStat.index]?.non_current_assets} : ''"
-                                                                   placeholder="ex) 100000">
+                                                                   placeholder="ex) 100000"  oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)">
                                                         </td>
                                                     </th:block>
                                                 </th:block>
@@ -454,7 +478,7 @@
                                                         <td>
                                                             <input type="number" class="form-control" th:name="'ast_gramt' + ${iterStat.count}"
                                                                    th:value="${iterStat.index < #lists.size(list)} ? ${list[iterStat.index]?.ast_gramt} : ''"
-                                                                   placeholder="ex) 100000">
+                                                                   placeholder="ex) 100000"  oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)">
                                                         </td>
                                                     </th:block>
                                                 </th:block>
@@ -466,7 +490,7 @@
                                                         <td>
                                                             <input type="number" class="form-control" th:name="'debt_gramt' + ${iterStat.count}"
                                                                    th:value="${iterStat.index < #lists.size(list)} ? ${list[iterStat.index]?.debt_gramt} : ''"
-                                                                   placeholder="ex) 100000">
+                                                                   placeholder="ex) 100000"  oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)">
                                                         </td>
                                                     </th:block>
                                                 </th:block>
@@ -478,7 +502,7 @@
                                                         <td>
                                                             <input type="number" class="form-control" th:name="'cptl' + ${iterStat.count}"
                                                                    th:value="${iterStat.index < #lists.size(list)} ? ${list[iterStat.index]?.cptl} : ''"
-                                                                   placeholder="ex) 100000">
+                                                                   placeholder="ex) 100000"  oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)">
                                                         </td>
                                                     </th:block>
                                                 </th:block>
@@ -490,7 +514,7 @@
                                                         <td>
                                                             <input type="number" class="form-control" th:name="'cptl_gramt' + ${iterStat.count}"
                                                                    th:value="${iterStat.index < #lists.size(list)} ? ${list[iterStat.index]?.cptl_gramt} : ''"
-                                                                   placeholder="ex) 100000">
+                                                                   placeholder="ex) 100000"  oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)">
                                                         </td>
                                                     </th:block>
                                                 </th:block>
@@ -505,12 +529,46 @@
                                                 <i class="me-0" data-feather="plus"></i>
                                                 추가
                                             </button>
-                                            <button type="button" id="removeNews" class="btn btn-sm btn-outline-danger d-none" onclick="removeInputNews()">
+                                            <button type="button" id="removeNews" th:class="${#lists.isEmpty(selectNewsInfo) or #lists.size(selectNewsInfo) == 1 ? 'btn btn-sm btn-outline-danger d-none' : 'btn btn-sm btn-outline-danger' }" onclick="removeInputNews()">
                                                 <i class="me-0" data-feather="minus"></i>
                                                 삭제
                                             </button>
                                         </div>
                                     </div>
+                                    <table class="table-news table table-bordered align-middle" th:if="${#lists.isEmpty(selectNewsInfo)}">
+                                        <tbody>
+                                        <tr>
+                                            <th class="bg-light">썸네일 이미지 링크</th>
+                                            <td>
+                                                <input type="text" class="form-control" name="thumb_url" value="" placeholder="ex) https://www.dt.co.kr/contents.html?article_no=2024110602109931092006&ref=jeadan" maxlength="1000">
+                                                <!--<div class="d-flex">
+                                                    <input class="form-control w-auto" type="file" id="formFile" onchange="preview()">
+                                                </div>
+                                                <img id="previewFrame" src="" class="img-fluid mt-2" style="display:none" />
+                                                <p class="mb-0 mt-2">* 권장 사이즈 : 588x360px </p>-->
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th class="bg-light" width="20%">기사 제목</th>
+                                            <td>
+                                                <input type="text" class="form-control" name="news_ttl" value="" placeholder="ex) 티맥스클라우드, 리벨리온과 AI 반도체 기반 IaaS 사업 협력" maxlength="250">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th class="bg-light" width="20%">출처</th>
+                                            <td>
+                                                <input type="text" class="form-control" name="provider" value="" placeholder="ex) 디지털타임스" maxlength="50">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th class="bg-light" width="20%">링크</th>
+                                            <td>
+                                                <input type="text" class="form-control" name="news_link" value="" placeholder="ex) https://www.dt.co.kr/contents.html?article_no=2024110602109931092006&ref=jeadan" maxlength="500">
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+
                                     <table class="table-news table table-bordered align-middle" th:each="news, status : ${selectNewsInfo}">
                                         <tbody>
                                         <!-- 첫 번째 항목에만 썸네일 필드 포함 -->
@@ -519,7 +577,7 @@
                                             <td>
                                                 <input type="text" class="form-control" name="thumb_url"
                                                        th:value="${news.thumb_url}"
-                                                       placeholder="ex) https://www.dt.co.kr/contents.html?article_no=2024110602109931092006&ref=jeadan">
+                                                       placeholder="ex) https://www.dt.co.kr/contents.html?article_no=2024110602109931092006&ref=jeadan" maxlength="1000">
                                             </td>
                                         </tr>
                                         <tr>
@@ -527,7 +585,7 @@
                                             <td>
                                                 <input type="text" class="form-control" name="news_ttl"
                                                        th:value="${news.news_ttl}"
-                                                       placeholder="ex) 티맥스클라우드, 리벨리온과 AI 반도체 기반 IaaS 사업 협력">
+                                                       placeholder="ex) 티맥스클라우드, 리벨리온과 AI 반도체 기반 IaaS 사업 협력" maxlength="250">
                                             </td>
                                         </tr>
                                         <tr>
@@ -535,7 +593,7 @@
                                             <td>
                                                 <input type="text" class="form-control" name="provider"
                                                        th:value="${news.provider}"
-                                                       placeholder="ex) 디지털타임스">
+                                                       placeholder="ex) 디지털타임스" maxlength="50">
                                             </td>
                                         </tr>
                                         <tr>
@@ -543,7 +601,7 @@
                                             <td>
                                                 <input type="text" class="form-control" name="news_link"
                                                        th:value="${news.news_link}"
-                                                       placeholder="ex) https://www.dt.co.kr/contents.html?article_no=2024110602109931092006&ref=jeadan">
+                                                       placeholder="ex) https://www.dt.co.kr/contents.html?article_no=2024110602109931092006&ref=jeadan" maxlength="500">
                                             </td>
                                         </tr>
                                         </tbody>
@@ -558,32 +616,32 @@
                                         </tbody>
                                     </table>
                                     -->
-                                    <table class="table-news table table-bordered align-middle">
+                                    <table class="table-keyword table table-bordered align-middle">
                                         <tbody>
                                             <tr>
                                                 <th class="bg-light" rowspan="2" style="width:10%">키워드 1</th>
                                                 <th class="bg-light" style="width:10%">키워드명</th>
                                                 <td>
-                                                    <input type="text" class="form-control w-auto" name="keywd1" th:value="${selectKeywdInfo != null && selectKeywdInfo.size() > 0 ? selectKeywdInfo[0].keywd : ''}" placeholder="ex) AI">
+                                                    <input type="text" class="form-control w-auto" name="keywd1" th:value="${selectKeywdInfo != null && selectKeywdInfo.size() > 0 ? selectKeywdInfo[0].keywd : ''}" placeholder="ex) AI" maxlength="150">
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <th class="bg-light">숫자</th>
                                                 <td>
-                                                    <input type="number" class="form-control w-auto" name="nocs1" th:value="${selectKeywdInfo != null && selectKeywdInfo.size() > 0 ? selectKeywdInfo[0].nocs : ''}" placeholder="ex) 500">
+                                                    <input type="number" class="form-control w-auto" name="nocs1" th:value="${selectKeywdInfo != null && selectKeywdInfo.size() > 0 ? selectKeywdInfo[0].nocs : ''}" placeholder="ex) 500"  oninput="splitAmt(this, 10)" onblur="splitAmt(this, 10)">
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <th class="bg-light" rowspan="2">키워드 2</th>
                                                 <th class="bg-light">키워드명</th>
                                                 <td>
-                                                    <input type="text" class="form-control w-auto" name="keywd2" th:value="${selectKeywdInfo != null && selectKeywdInfo.size() > 1 ? selectKeywdInfo[1].keywd : ''}" placeholder="ex) 리벨리온">
+                                                    <input type="text" class="form-control w-auto" name="keywd2" th:value="${selectKeywdInfo != null && selectKeywdInfo.size() > 1 ? selectKeywdInfo[1].keywd : ''}" placeholder="ex) 리벨리온" maxlength="150">
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <th class="bg-light">숫자</th>
                                                 <td>
-                                                    <input type="number" class="form-control w-auto" name="nocs2" th:value="${selectKeywdInfo != null && selectKeywdInfo.size() > 1 ? selectKeywdInfo[1].nocs : ''}" placeholder="ex) 450">
+                                                    <input type="number" class="form-control w-auto" name="nocs2" th:value="${selectKeywdInfo != null && selectKeywdInfo.size() > 1 ? selectKeywdInfo[1].nocs : ''}" placeholder="ex) 450"  oninput="splitAmt(this, 10)" onblur="splitAmt(this, 10)">
                                                 </td>
                                             </tr>
                                             <tr>
@@ -592,7 +650,7 @@
                                                 <td>
                                                     <input type="text" class="form-control w-auto" name="keywd3"
                                                            th:value="${selectKeywdInfo != null && selectKeywdInfo.size() > 2 ? selectKeywdInfo[2].keywd : ''}"
-                                                           placeholder="ex) 반도체">
+                                                           placeholder="ex) 반도체" maxlength="150">
                                                 </td>
                                             </tr>
                                             <tr>
@@ -600,7 +658,7 @@
                                                 <td>
                                                     <input type="number" class="form-control w-auto" name="nocs3"
                                                            th:value="${selectKeywdInfo != null && selectKeywdInfo.size() > 2 ? selectKeywdInfo[2].nocs : ''}"
-                                                           placeholder="ex) 400">
+                                                           placeholder="ex) 400"  oninput="splitAmt(this, 10)" onblur="splitAmt(this, 10)">
                                                 </td>
                                             </tr>
                                             <tr>
@@ -609,7 +667,7 @@
                                                 <td>
                                                     <input type="text" class="form-control w-auto" name="keywd4"
                                                            th:value="${selectKeywdInfo != null && selectKeywdInfo.size() > 3 ? selectKeywdInfo[3].keywd : ''}"
-                                                           placeholder="ex) 기업">
+                                                           placeholder="ex) 기업" maxlength="150">
                                                 </td>
                                             </tr>
                                             <tr>
@@ -617,7 +675,7 @@
                                                 <td>
                                                     <input type="number" class="form-control w-auto" name="nocs4"
                                                            th:value="${selectKeywdInfo != null && selectKeywdInfo.size() > 3 ? selectKeywdInfo[3].nocs : ''}"
-                                                           placeholder="ex) 350">
+                                                           placeholder="ex) 350"  oninput="splitAmt(this, 10)" onblur="splitAmt(this, 10)">
                                                 </td>
                                             </tr>
                                             <tr>
@@ -626,7 +684,7 @@
                                                 <td>
                                                     <input type="text" class="form-control w-auto" name="keywd5"
                                                            th:value="${selectKeywdInfo != null && selectKeywdInfo.size() > 4 ? selectKeywdInfo[4].keywd : ''}"
-                                                           placeholder="ex) 사업">
+                                                           placeholder="ex) 사업" maxlength="150">
                                                 </td>
                                             </tr>
                                             <tr>
@@ -634,7 +692,7 @@
                                                 <td>
                                                     <input type="number" class="form-control w-auto" name="nocs5"
                                                            th:value="${selectKeywdInfo != null && selectKeywdInfo.size() > 4 ? selectKeywdInfo[4].nocs : ''}"
-                                                           placeholder="ex) 300">
+                                                           placeholder="ex) 300"  oninput="splitAmt(this, 10)" onblur="splitAmt(this, 10)">
                                                 </td>
                                             </tr>
                                             <tr>
@@ -643,7 +701,7 @@
                                                 <td>
                                                     <input type="text" class="form-control w-auto" name="keywd6"
                                                            th:value="${selectKeywdInfo != null && selectKeywdInfo.size() > 5 ? selectKeywdInfo[5].keywd : ''}"
-                                                           placeholder="ex) 협력">
+                                                           placeholder="ex) 협력" maxlength="150">
                                                 </td>
                                             </tr>
                                             <tr>
@@ -651,7 +709,7 @@
                                                 <td>
                                                     <input type="number" class="form-control w-auto" name="nocs6"
                                                            th:value="${selectKeywdInfo != null && selectKeywdInfo.size() > 5 ? selectKeywdInfo[5].nocs : ''}"
-                                                           placeholder="ex) 250">
+                                                           placeholder="ex) 250"  oninput="splitAmt(this, 10)" onblur="splitAmt(this, 10)">
                                                 </td>
                                             </tr>
                                             <tr>
@@ -660,7 +718,7 @@
                                                 <td>
                                                     <input type="text" class="form-control w-auto" name="keywd7"
                                                            th:value="${selectKeywdInfo != null && selectKeywdInfo.size() > 6 ? selectKeywdInfo[6].keywd : ''}"
-                                                           placeholder="ex) NPU">
+                                                           placeholder="ex) NPU" maxlength="150">
                                                 </td>
                                             </tr>
                                             <tr>
@@ -668,7 +726,7 @@
                                                 <td>
                                                     <input type="number" class="form-control w-auto" name="nocs7"
                                                            th:value="${selectKeywdInfo != null && selectKeywdInfo.size() > 6 ? selectKeywdInfo[6].nocs : ''}"
-                                                           placeholder="ex) 200">
+                                                           placeholder="ex) 200"  oninput="splitAmt(this, 10)" onblur="splitAmt(this, 10)">
                                                 </td>
                                             </tr>
                                             <tr>
@@ -677,7 +735,7 @@
                                                 <td>
                                                     <input type="text" class="form-control w-auto" name="keywd8"
                                                            th:value="${selectKeywdInfo != null && selectKeywdInfo.size() > 7 ? selectKeywdInfo[7].keywd : ''}"
-                                                           placeholder="ex) 대표">
+                                                           placeholder="ex) 대표"maxlength="150">
                                                 </td>
                                             </tr>
                                             <tr>
@@ -685,7 +743,7 @@
                                                 <td>
                                                     <input type="number" class="form-control w-auto" name="nocs8"
                                                            th:value="${selectKeywdInfo != null && selectKeywdInfo.size() > 7 ? selectKeywdInfo[7].nocs : ''}"
-                                                           placeholder="ex) 150">
+                                                           placeholder="ex) 150"  oninput="splitAmt(this, 10)" onblur="splitAmt(this, 10)">
                                                 </td>
                                             </tr>
                                             <tr>
@@ -694,7 +752,7 @@
                                                 <td>
                                                     <input type="text" class="form-control w-auto" name="keywd9"
                                                            th:value="${selectKeywdInfo != null && selectKeywdInfo.size() > 8 ? selectKeywdInfo[8].keywd : ''}"
-                                                           placeholder="ex) 코오롱베니트">
+                                                           placeholder="ex) 코오롱베니트" maxlength="150">
                                                 </td>
                                             </tr>
                                             <tr>
@@ -702,7 +760,7 @@
                                                 <td>
                                                     <input type="number" class="form-control w-auto" name="nocs9"
                                                            th:value="${selectKeywdInfo != null && selectKeywdInfo.size() > 8 ? selectKeywdInfo[8].nocs : ''}"
-                                                           placeholder="ex) 100">
+                                                           placeholder="ex) 100"  oninput="splitAmt(this, 10)" onblur="splitAmt(this, 10)">
                                                 </td>
                                             </tr>
                                             <tr>
@@ -711,7 +769,7 @@
                                                 <td>
                                                     <input type="text" class="form-control w-auto" name="keywd10"
                                                            th:value="${selectKeywdInfo != null && selectKeywdInfo.size() > 9 ? selectKeywdInfo[9].keywd : ''}"
-                                                           placeholder="ex) 시장">
+                                                           placeholder="ex) 시장" maxlength="150">
                                                 </td>
                                             </tr>
                                             <tr>
@@ -719,7 +777,7 @@
                                                 <td>
                                                     <input type="number" class="form-control w-auto" name="nocs10"
                                                            th:value="${selectKeywdInfo != null && selectKeywdInfo.size() > 9 ? selectKeywdInfo[9].nocs : ''}"
-                                                           placeholder="ex) 50">
+                                                           placeholder="ex) 50"  oninput="splitAmt(this, 10)" onblur="splitAmt(this, 10)">
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -750,7 +808,6 @@
 
         // 제공 서비스/제품
         const removeServeiceButton = $('#removeServeice');
-        let serviceIndex = 0;
 
         function addInputService() {
             const dom =
@@ -759,57 +816,50 @@
                     '<tr>' +
                         '<th class="bg-light" width="20%">서비스명</th>' +
                         '<td>' +
-                            '<input type="text" class="form-control" name="srvc_nm" value="" placeholder="ex) ATOM">' +
+                            '<input type="text" class="form-control" name="srvc_nm" value="" placeholder="ex) ATOM" maxlength="250">' +
                         '</td>' +
                     '</tr>' +
                     '<tr>' +
                         '<th class="bg-light" width="20%">Web 링크</th>' +
                         '<td>' +
-                            '<input type="text" class="form-control" name="web_srvc_link" value="" placeholder="ex) https://rebellions.ai/rebellions-product/atom-2/">' +
+                            '<input type="text" class="form-control" name="web_srvc_link" value="" placeholder="ex) https://rebellions.ai/rebellions-product/atom-2/" maxlength="500">' +
                         '</td>' +
                     '</tr>' +
                     '<tr>' +
                         '<th class="bg-light" width="20%">Android 링크</th>' +
                         '<td>' +
-                            '<input type="text" class="form-control" name="google_app_link" value="" placeholder="ex) https://rebellions.ai/rebellions-product/atom-2/">' +
+                            '<input type="text" class="form-control" name="google_app_link" value="" placeholder="ex) https://rebellions.ai/rebellions-product/atom-2/" maxlength="500">' +
                         '</td>' +
                     '</tr>' +
                     '<tr>' +
                         '<th class="bg-light" width="20%">IOS 링크</th>' +
                         '<td>' +
-                            '<input type="text" class="form-control" name="apple_app_link" value="" placeholder="ex) https://rebellions.ai/rebellions-product/atom-2/">' +
+                            '<input type="text" class="form-control" name="apple_app_link" value="" placeholder="ex) https://rebellions.ai/rebellions-product/atom-2/" maxlength="500">' +
                         '</td>' +
                     '</tr>' +
                 '</tbody>' +
             '</table>';
 
-            $('.table-service').eq(serviceIndex).after(dom);
+            $('.table-service').last().after(dom);
 
             removeServeiceButton.removeClass('d-none');
 
-            serviceIndex++;
+            $('.table-service').last().prev()[0].scrollIntoView({ behavior: 'smooth' });
         }
 
         function removeInputService(e) {
-            if(serviceIndex > 0) {
-                $('.table-service').eq(serviceIndex).remove();
+            $('.table-service').last().remove();
 
-                serviceIndex--;
-            }
-
-            if(serviceIndex === 0) {
+            if($('.table-service').length === 1) {
                 removeServeiceButton.addClass('d-none');
             }
-
         }
 
         // 투자유치
-        let investIndex = 0;
-
         function addInputInvest() {
             const dom =
             '<tr>' +
-                '<td><input type="text" class="form-control" name="invest_ymd" value="" placeholder="ex) 2024-08-09"></td>' +
+                '<td><input type="text" class="form-control" name="invest_ymd" value="" placeholder="ex) 2024-08-09" maxlength="10"></td>' +
                 '<td>' +
                     '<select class="form-select" aria-label="" name="series_nm">' +
                         '<option value="">해당없음</option>' +
@@ -827,8 +877,8 @@
                         '<option value="TIPS">TIPS</option>' +
                     '</select>' +
                 '</td>' +
-                '<td><input type="text" class="form-control" id="invest_amt" name="invest_amt" value="" placeholder="ex) 100,000,000"></td>' +
-                '<td><input type="text" class="form-control" id="investor" name="investor" value="" placeholder="ex) 글로벌팁스"></td>' +
+                '<td><input type="number" class="form-control" id="invest_amt" name="invest_amt" value="" placeholder="ex) 10.5" onInput="splitAmt(this, 15)" onBlur="splitAmt(this, 15)"></td>' +
+                '<td><input type="text" class="form-control" id="investor" name="investor" value="" placeholder="ex) 글로벌팁스" maxlength="500"></td>' +
                 '<td class="text-center">' +
                     '<button type="button" class="btn btn-sm btn-outline-primary" onclick="addInputInvest()">' +
                         '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus me-0"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>' +
@@ -842,8 +892,6 @@
             '</tr>';
 
             $('.table-invest tbody').append(dom);
-
-            investIndex++;
         }
 
         function removeInputInvest(e) {
@@ -851,15 +899,13 @@
         }
 
         // 조직분석-고용현황
-        let recruitIndex = 0;
-
         function addInputRecruit() {
             const dom =
             '<tr>' +
-                '<td><input type="text" class="form-control" name="crtr_ym" value="" placeholder="ex) 2020.08"></td>' +
-                '<td><input type="text" class="form-control" name="jncmp_nocs" value="" placeholder="ex) 4"></td>' +
-                '<td><input type="text" class="form-control" name="rsgntn_nocs" value="" placeholder="ex) 0"></td>' +
-                '<td><input type="text" class="form-control" name="hdof_nocs" value="" placeholder="ex) 4"></td>' +
+                '<td><input type="number" class="form-control" name="crtr_ym" placeholder="ex) 202008 (연도 필수 입력)"   oninput="splitAmt(this, 6)" onblur="splitAmt(this, 6)"></td>' +
+                '<td><input type="number" class="form-control" name="jncmp_nocs" placeholder="ex) 4"  oninput="splitAmt(this, 10)" onblur="splitAmt(this, 10)"></td>' +
+                '<td><input type="number" class="form-control" name="rsgntn_nocs" placeholder="ex) 0"  oninput="splitAmt(this, 10)" onblur="splitAmt(this, 10)"></td>' +
+                '<td><input type="number" class="form-control" name="hdof_nocs" placeholder="ex) 4"  oninput="splitAmt(this, 10)" onblur="splitAmt(this, 10)"></td>' +
                 '<td class="text-center">' +
                     '<button type="button" class="btn btn-sm btn-outline-primary" onclick="addInputRecruit()">' +
                         '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus me-0"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>' +
@@ -873,8 +919,6 @@
             '</tr>';
 
             $('.table-recruit tbody').append(dom);
-
-            recruitIndex++;
         }
 
         function removeInputRecruit(e) {
@@ -883,7 +927,6 @@
 
         // 뉴스
         const removeNewsButton = $('#removeNews');
-        let newsIndex = 0;
 
         function addInputNews() {
             const dom =
@@ -892,45 +935,64 @@
                     '<tr>' +
                         '<th class="bg-light" width="20%">기사 제목</th>' +
                         '<td>' +
-                            '<input type="text" class="form-control" name="news_ttl" value="" placeholder="ex) 티맥스클라우드, 리벨리온과 AI 반도체 기반 IaaS 사업 협력">' +
+                            '<input type="text" class="form-control" name="news_ttl" value="" placeholder="ex) 티맥스클라우드, 리벨리온과 AI 반도체 기반 IaaS 사업 협력" maxlength="250">' +
                         '</td>' +
                     '</tr>' +
                     '<tr>' +
                         '<th class="bg-light" width="20%">출처</th>' +
                         '<td>' +
-                            '<input type="text" class="form-control" name="provider" value="" placeholder="ex) 디지털타임스">' +
+                            '<input type="text" class="form-control" name="provider" value="" placeholder="ex) 디지털타임스" maxlength="50">' +
                         '</td>' +
                     '</tr>' +
                     '<tr>' +
                         '<th class="bg-light" width="20%">링크</th>' +
                         '<td>' +
-                            '<input type="text" class="form-control" name="news_link" value="" placeholder="ex) https://www.dt.co.kr/contents.html?article_no=2024110602109931092006&ref=jeadan">' +
+                            '<input type="text" class="form-control" name="news_link" value="" placeholder="ex) https://www.dt.co.kr/contents.html?article_no=2024110602109931092006&ref=jeadan" maxlength="500">' +
                         '</td>' +
                     '</tr>' +
                 '</tbody>' +
             '</table>';
 
-            $('.table-news').eq(newsIndex).after(dom);
+            $('.table-news').last().after(dom);
 
             removeNewsButton.removeClass('d-none');
-
-            newsIndex++;
         }
 
         function removeInputNews(e) {
-            if(newsIndex > 0) {
-                $('.table-news').eq(newsIndex).remove();
+            $('.table-news').last().remove();
 
-                newsIndex--;
-            }
-
-            if(newsIndex === 0) {
+            if($('.table-news').length === 1) {
                 removeNewsButton.addClass('d-none');
             }
+        }
 
+        function checkDupYear(obj_nm) {
+            let values = new Set();
+
+            return $('input[name^=' + obj_nm + ']').toArray().some(input => {
+                const value = $(input).val();
+                if (value && values.has(value)) {
+                    return true;
+                }
+                values.add(value);
+                return false;
+            });
         }
 
         function startupUpdate() {
+
+            if(checkDupYear('sls_yr')){
+                alert('주요 손익계산서의 항목(연도)은 중복될 수 없습니다\n항목 입력값을 확인하세요.');
+                $('input[name=sls_yr1]').focus();
+                return false;
+            }
+
+            if(checkDupYear('ast_yr')){
+                alert('주요 재무상태표의 항목(연도)은 중복될 수 없습니다\n항목 입력값을 확인하세요.');
+                $('input[name=ast_yr1]').focus();
+                return false;
+            }
+
             //제공 서비스 입력값 콤마를 파이프 라인으로 변경
             const srvc_nm_inputs = document.querySelectorAll('input[name="srvc_nm"]');
             srvc_nm_inputs.forEach(input => {
@@ -968,6 +1030,12 @@
                 form.method = 'POST';                                    //전송 방식
                 form.target = '';                                        //새 창에서 열기
                 form.submit();                                           //폼 제출
+            }
+        }
+
+        function splitAmt(obj, len) {
+            if(obj.value.length > len) {
+                obj.value = obj.value.slice(0, len);
             }
         }
     </script>

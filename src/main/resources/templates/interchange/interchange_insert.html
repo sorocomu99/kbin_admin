@@ -44,14 +44,14 @@
                                                 <th class="bg-light">제목</th>
                                                 <td>
                                                     <p class="mb-2">최대 26자까지 입력 가능합니다.</p>
-                                                    <input type="text" class="form-control" name="exch_ttl">
+                                                    <input type="text" class="form-control" name="exch_ttl" maxlength="26">
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <th class="bg-light">내용</th>
                                                 <td>
                                                     <p class="mb-2">최대 140자까지 입력 가능합니다.</p>
-                                                    <textarea class="form-control" id="exch_cn" name="exch_cn" rows="2"></textarea>
+                                                    <textarea class="form-control" id="exch_cn" name="exch_cn" rows="2" maxlength="140"></textarea>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -71,7 +71,7 @@
                                                 <th class="bg-light">정렬</th>
                                                 <td>
                                                     <div class="d-flex">
-                                                        <input class="form-control" type="number" name="sort_no" value="1" style="width:100px">
+                                                        <input class="form-control" type="number" name="sort_no" oninput="if(this.value.length > 3) this.value = this.value.slice(0, 3);" value="1" style="width:100px">
                                                         <p class="mb-0 mt-2 ms-3">* 숫자가 낮을수록 상위 노출됩니다.</p>
                                                     </div>
                                                 </td>
@@ -113,6 +113,7 @@
             var exch_ttl = $('input[name=exch_ttl]').val();
             if(exch_ttl.trim() == "") {
                 alert("제목을 입력하세요.");
+                $('input[name=exch_ttl]').focus();
                 return false;
             }
 
@@ -120,6 +121,7 @@
             var exch_cn = $('input[name=exch_cn]').val();
             if(exch_cn == "") {
                 alert("내용을 입력하세요.");
+                $('input[name=exch_cn]').focus();
                 return false;
             }
 
@@ -155,6 +157,7 @@
             var exch_ttl = $('input[name=exch_ttl]').val();
             if(exch_ttl.trim() == "") {
                 alert("제목을 입력하세요.");
+                $('input[name=exch_ttl]').focus();
                 return false;
             }
 
@@ -162,6 +165,7 @@
             var exch_cn = $('#exch_cn').val();
             if(exch_cn == "") {
                 alert("내용을 입력하세요.");
+                $('input[name=exch_cn]').focus();
                 return false;
             }
 

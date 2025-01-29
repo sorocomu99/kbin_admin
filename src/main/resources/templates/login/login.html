@@ -53,7 +53,7 @@
                 1. input: is-invalid 클래스 추가
                 2. 텍스트: input 하단에 'invalid-feedback' 이름으로 div 안에 텍스트 추가
             -->
-            <input type="text" class="form-control" id="mngr_id" name="mngr_id" placeholder="아이디">
+            <input type="text" class="form-control" id="mngr_id" name="mngr_id" placeholder="아이디" maxlength="10">
             <label for="mngr_id">아이디</label>
             <!-- 유효성 체크 -->
             <div class="invalid-feedback" id="idVal">아이디가 일치하지 않습니다.</div>
@@ -83,11 +83,11 @@
                 <form>
                     <p>괸리자에 등록된 이메일을 입력해 주세요.</p>
                     <div class="form-floating">
-                        <input type="text" class="form-control" id="pwdMailId" name="pwdMailId" placeholder="아이디">
+                        <input type="text" class="form-control" id="pwdMailId" name="pwdMailId" placeholder="아이디" maxlength="10">
                         <label for="pwdMailId">아이디</label>
                     </div>
                     <div class="form-floating">
-                        <input type="email" class="form-control" id="pwdMailAddr" name="pwdMailAddr" placeholder="이메일">
+                        <input type="email" class="form-control" id="pwdMailAddr" name="pwdMailAddr" placeholder="이메일" maxlength="50">
                         <label for="pwdMailAddr">이메일</label>
                     </div>
                 </form>

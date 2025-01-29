@@ -1,6 +1,16 @@
 <!doctype html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragment/config :: configFragment"></head>
+<style>
+    .button-wrap > .btn {
+        padding: 9px 18px !important;
+        margin: 0 5px;
+    }
+
+    .search-btn {
+        margin-right: 5px;
+    }
+</style>
 <body>
 <div class="wrap">
     <div th:replace="fragment/header :: headerFragment"></div>
@@ -19,7 +29,7 @@
                                         <input type="hidden" name="surveyNo" th:value="${surveyNo}"/>
                                         <div class="d-flex align-items-center">
                                             <div class="input-group">
-                                                <div class="title">처리상태</div>
+                                                <div class="title" style="margin-right: 1rem;">처리상태</div>
                                                 <select id="filterType" class="form-select" aria-label="" name="type">
                                                     <option value="">전체</option>
                                                     <option value="접수" th:selected="${search.type} == '접수'">접수</option>
@@ -33,7 +43,7 @@
                                                     <option value="불합격" th:selected="${search.type} == '불합격'">불합격
                                                     </option>
                                                 </select>
-                                                <button type="submit" class="btn btn-dark"><span
+                                                <button type="submit" class="btn btn-dark search-btn"><span
                                                         data-feather="search"></span></button>
                                             </div>
                                         </div>
@@ -56,8 +66,7 @@
                                         <a href="javascript:selectMailSend()" class="btn btn-outline-dark">
                                             <i data-feather="mail"></i> 선택 메일 발송
                                         </a>
-                                        <a th:href="@{/receipt/sendMail/{menuId}(menuId=${menuId})}"
-                                           class="btn btn-outline-dark">
+                                        <a href="javascript:moveMailSend()" class="btn btn-outline-dark">
                                             <i data-feather="mail"></i> 메일 발송
                                         </a>
                                         <a th:href="@{/receipt/list/{menuId}(menuId=${menuId})}"
@@ -233,6 +242,11 @@
         let moveUrl = /*[[@{/receipt/sendMail/{menuId}(menuId=${menuId})}]]*/;
         moveUrl += "?receivers=" + receivers.join(",");
 
+        window.open(moveUrl, "_blank");
+    }
+
+    function moveMailSend() {
+        let moveUrl = /*[[@{/receipt/sendMail/{menuId}(menuId=${menuId})}]]*/;
         window.open(moveUrl, "_blank");
     }
 

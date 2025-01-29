@@ -170,12 +170,12 @@
                             </div>
                         </div>
                         <div class="button-container">
-                            <button type="button" class="btn btn-primary" onclick="surveyQuestionInsert()">등록하기</button>
                             <button type="button" onclick="preview();"
                                     class="btn btn-outline-primary">미리보기
                             </button>
                             <a th:href="@{/survey/list/{menuId}(menuId=${menuId})}"
                                class="btn btn-outline-primary">목록보기</a>
+                            <button type="button" class="btn btn-primary" onclick="surveyQuestionInsert()">등록하기</button>
                             <button id="buttonAddList" type="button" class="btn btn-dark add-list"><i
                                     data-feather="plus"></i> 문항 추가
                             </button>
@@ -200,7 +200,6 @@
                 return false;
             }
             let form = document.createElement("form");
-
 
             questionData.data.forEach(function (question, idx) {
                 form.appendChild(makeInput("data["+idx+"].survey_no", question.survey_no));
@@ -316,21 +315,27 @@
             if (questionData === false) {
                 return false;
             }
-            $.ajax({
-                url: /*[[@{/survey/question/save}]]*/,
-                type: "POST",
-                contentType: "application/json",
-                data: JSON.stringify(questionData),
-                dataType: "JSON",
-                success: function (data) {
-                    if (data.result == "success") {
-                        alert("등록되었습니다.");
-                        location.href = /*[[@{/survey/list/{menuId}(menuId=${menuId})}]]*/;
-                    } else {
-                        alert("등록에 실패하였습니다.");
-                    }
-                },
-            });
+            if(questionData.data.length == 0){
+                alert("문항을 추가해 주세요.");
+                return false;
+            }
+            if(confirm('등록 하시겠습니까?')){
+                $.ajax({
+                    url: /*[[@{/survey/question/save}]]*/,
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify(questionData),
+                    dataType: "JSON",
+                    success: function (data) {
+                        if (data.result == "success") {
+                            alert("등록되었습니다.");
+                            location.href = /*[[@{/survey/list/{menuId}(menuId=${menuId})}]]*/;
+                        } else {
+                            alert("등록에 실패하였습니다.");
+                        }
+                    },
+                });
+            }
         }
 
         $(function () {

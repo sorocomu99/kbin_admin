@@ -54,13 +54,13 @@
                                             <tr>
                                                 <th class="bg-light" width="20%">카테고리</th>
                                                 <td>
-                                                    <input type="text" class="form-control" name="ctgry">
+                                                    <input type="text" class="form-control" name="ctgry" maxlength="25">
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <th class="bg-light" width="20%">제목</th>
                                                 <td>
-                                                    <input type="text" class="form-control" name="hub_ttl">
+                                                    <input type="text" class="form-control" name="hub_ttl" maxlength="100">
                                                 </td>
                                             </tr>
                                             <tr>
@@ -97,7 +97,7 @@
                                                 <th class="bg-light">정렬</th>
                                                 <td>
                                                     <div class="d-flex">
-                                                        <input class="form-control" type="number" name="sort_no" style="width:100px" value="1">
+                                                        <input class="form-control" type="number" name="sort_no" oninput="if(this.value.length > 3) this.value = this.value.slice(0, 3);" style="width:100px" value="1">
                                                         <p class="mb-0 mt-2 ms-3">* 숫자가 낮을수록 상위 노출됩니다.</p>
                                                     </div>
                                                 </td>
@@ -198,6 +198,7 @@
             var hub_ttl = $('input[name=hub_ttl]').val();
             if(hub_ttl.trim() == "") {
                 alert("제목을 입력하세요.");
+                $('input[name=hub_ttl]').focus()
                 return false;
             }
 
@@ -205,6 +206,7 @@
             var ctgry = $('input[name=ctgry]').val();
             if(ctgry.trim() == "") {
                 alert("카테고리를 입력하세요.");
+                $('input[name=ctgry]').focus()
                 return false;
             }
 

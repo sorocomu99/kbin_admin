@@ -20,20 +20,20 @@
                     <th class="bg-light" width="20%">아이디</th>
                     <td>
                       <!-- <span>admin</span> -->
-                      <input type="text" class="form-control w-auto" name="mngr_id" />
+                      <input type="text" class="form-control w-auto" name="mngr_id" maxlength="10">
                     </td>
                   </tr>
                   <tr></tr>
                   <th class="bg-light" width="20%">이름</th>
                   <td>
                     <!-- <span>admin</span> -->
-                    <input type="text" class="form-control w-auto" name="mngr_nm">
+                    <input type="text" class="form-control w-auto" name="mngr_nm" maxlength="25">
                   </td>
                   </tr>
                   <tr>
                     <th class="bg-light" width="20%">비밀번호</th>
                     <td>
-                      <input type="password" class="form-control w-auto" id="mngr_pswd" name="mngr_pswd">
+                      <input type="password" class="form-control w-auto" id="mngr_pswd" name="mngr_pswd" maxlength="20">
                     </td>
                   </tr>
                   <tr>
@@ -44,14 +44,14 @@
                           1. input: is-invalid 클래스 추가
                           2. 텍스트: input 하단에 'invalid-feedback' 이름으로 div 안에 텍스트 추가
                       -->
-                      <input type="password" class="form-control w-auto" id="mngr_pswd2" name="mngr_pswd2">
+                      <input type="password" class="form-control w-auto" id="mngr_pswd2" name="mngr_pswd2" maxlength="20">
                       <div class="invalid-feedback">비밀번호가 일치하지 않습니다.</div>
                     </td>
                   </tr>
                   <tr>
                     <th class="bg-light" width="20%">이메일</th>
                     <td>
-                      <input type="email" class="form-control w-auto" name="mngr_eml">
+                      <input type="email" class="form-control w-auto" name="mngr_eml" maxlength="50">
                     </td>
                   </tr>
                   </tbody>

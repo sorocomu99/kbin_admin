@@ -279,7 +279,7 @@
         ( #{ent_cd}
         , #{keywd}
         , #{nocs}
-        , SYSDATE
+        , CURRENT_TIMESTAMP
         , SYSDATE
         )
     </insert>
@@ -452,6 +452,7 @@
              , THUMB_URL
           FROM KB_API_NEWS_INFO
          WHERE ENT_CD = #{ent_cd}
+         ORDER BY THUMB_URL
     </select>
 
     <select id="selectKeywdInfo" parameterType="com.kb.inno.admin.DTO.StartupDTO" resultType="com.kb.inno.admin.DTO.StartupDTO">
@@ -460,5 +461,6 @@
              , NOCS
           FROM KB_API_KEYWD_INFO
          WHERE ENT_CD = #{ent_cd}
+         ORDER BY FRST_REG_DT
     </select>
 </mapper>

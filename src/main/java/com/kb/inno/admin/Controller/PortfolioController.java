@@ -91,6 +91,12 @@ public class PortfolioController {
         }
     }
 
+    @ResponseBody
+    @RequestMapping("/existYearData")
+    public String existYearData (@RequestParam("port_yr") String port_yr) {
+        return portfolioService.existYearData(port_yr);
+    }
+
     /**
      * 포트폴리오 년도 상세
      * @param menuId

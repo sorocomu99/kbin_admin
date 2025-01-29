@@ -39,7 +39,7 @@
                                             <tr>
                                                 <th class="bg-light" width="20%">업체명</th>
                                                 <td>
-                                                    <input type="text" class="form-control" id="bzenty_nm" name="bzenty_nm" th:value="${portListDet.bzenty_nm}">
+                                                    <input type="text" class="form-control" id="bzenty_nm" name="bzenty_nm" th:value="${portListDet.bzenty_nm}" maxlength="150">
                                                 </td>
                                             </tr>
                                             <tr>
@@ -47,20 +47,20 @@
                                                 <td>
                                                     <!-- 에디터 -->
                                                     <!-- <div id="summernote"></div> -->
-                                                    <input type="text" class="form-control" id="intro_cn" name="intro_cn" th:value="${portListDet.intro_cn}">
+                                                    <input type="text" class="form-control" id="intro_cn" name="intro_cn" th:value="${portListDet.intro_cn}" maxlength="1000">
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <th class="bg-light" width="20%">홈페이지 링크</th>
                                                 <td>
-                                                    <input type="text" class="form-control" id="hmpg_link" name="hmpg_link" th:value="${portListDet.hmpg_link}">
+                                                    <input type="text" class="form-control" id="hmpg_link" name="hmpg_link" th:value="${portListDet.hmpg_link}" maxlength="1000">
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <th class="bg-light">정렬</th>
                                                 <td>
                                                     <div class="d-flex">
-                                                        <input class="form-control" type="number" id="formIndex" name="sort_no" th:value="${portListDet.sort_no}" style="width:100px">
+                                                        <input class="form-control" type="number" id="formIndex" name="sort_no" oninput="if(this.value.length > 3) this.value = this.value.slice(0, 3);" th:value="${portListDet.sort_no}" style="width:100px">
                                                         <p class="mb-0 mt-2 ms-3">* 숫자가 낮을수록 상위 노출됩니다.</p>
                                                     </div>
                                                 </td>
@@ -72,7 +72,7 @@
                                         <!--<a href="javascript:" class="btn btn-outline-dark" onclick="history.back();">목록보기</a>-->
                                         <!--<a th:href="@{/portfolio/portList/{menuId}(menuId=${menuId})?port_yr=${port_yr}}" class="btn btn-outline-primary">목록보기</a>-->
                                         <button type="button" class="btn btn-outline-primary" th:onclick="|portListMove('${menuId}', '${port_yr}')|">목록보기</button>
-                                        <button type="submit" class="btn btn-primary" onclick="portListUpdate()">수정하기</button>
+                                        <button type="button" class="btn btn-primary" onclick="portListUpdate()">수정하기</button>
                                     </div>
                                 </form>
                             </div>
@@ -167,7 +167,7 @@
 
         function previewPage(){
             var main_file = $('input[name=main_file]').val();
-            if(main_file == null || main_file == "") {
+            if((main_file == null || main_file == "") && $.trim($('input[name=atch_file_sn]').val()) == '') {
                 alert("파일을 선택 해 주세요.");
                 return;
             }

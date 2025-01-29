@@ -46,6 +46,11 @@
                          WHERE 1 = 1
                         <if test='keyword != null and keyword != ""'>
                             <choose>
+                                <when test="type == 'all'">
+                                    AND MAIL_TTL LIKE '%'|| #{keyword} ||'%'
+                                    OR MAIL_CN   LIKE '%'|| #{keyword} ||'%'
+                                    OR MAIL_RCVR LIKE '%'|| #{keyword} ||'%'
+                                </when>
                                 <when test="type == 'title'">
                                     AND MAIL_TTL LIKE '%'|| #{keyword} ||'%'
                                 </when>

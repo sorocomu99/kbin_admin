@@ -12,6 +12,7 @@ package com.kb.inno.admin.DTO;
 
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Data
@@ -20,6 +21,7 @@ public class RecruitDTO {
     private String employ_yr;    // 연도
     private int employ_emp_nocs; // 채용 직원 수
     private double sprt_amt;        // 지원 금액
+    private String ret_sprt_amt;
     private int employ_ent_nocs; // 채용 기업 수
     private int frst_rgtr;       // 최초 등록자
     private Date frst_reg_dt;    // 최초 등록 일시

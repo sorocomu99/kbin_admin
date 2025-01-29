@@ -20,15 +20,15 @@
                                             <tr>
                                                 <th class="bg-light">년도</th>
                                                 <td>
-                                                    <input type="text" class="form-control" id="port_yr" name="port_yr" value="">
+                                                    <input type="number" class="form-control" id="port_yr" name="port_yr" value="" oninput="if(this.value.length > 4) this.value = this.value.slice(0, 4);">
                                                 </td>
                                             </tr>
                                         </tbody>
                                     </table>
                                     <div class="button-container">
-                                        <button type="button" class="btn btn-primary" onclick="yearInsert()">등록하기</button>
                                         <!--<a href="javascript:" class="btn btn-outline-primary" onclick="history.back();">목록보기</a>-->
                                         <a th:href="@{/portfolio/list/{menuId}(menuId=${menuId})}" class="btn btn-outline-primary">목록보기</a>
+                                        <button type="button" class="btn btn-primary" onclick="yearInsert()">등록하기</button>
                                     </div>
                                 </form>
                             </div>
@@ -56,14 +56,27 @@
                 return false;
             }
 
-            let result = confirm("등록 하시겠습니까?");
-            if (result) {
-                const form = document.forms['portfolio_year_form'];
-                form.action = window.staticPath + 'portfolio/yearInsert';   //전송할 URL
-                form.method = 'POST';                                    //전송 방식
-                form.target = '';                                        //새 창에서 열기
-                form.submit();                                           //폼 제출
-            }
+            $.ajax({
+                url: window.staticPath + 'portfolio/existYearData', // 요청 URL
+                type: 'GET', // HTTP 메서드
+                data: { port_yr: port_yr }, // 보내는 데이터
+                success: function(response) {
+                    if(response === 'N') {
+                        let result = confirm("등록 하시겠습니까?");
+                        if (result) {
+                            const form = document.forms['portfolio_year_form'];
+                            form.action = window.staticPath + 'portfolio/yearInsert';   //전송할 URL
+                            form.method = 'POST';                                    //전송 방식
+                            form.target = '';                                        //새 창에서 열기
+                            form.submit();                                           //폼 제출
+                        }
+                    }else{
+                        alert('입력하신 년도의 포트폴리오가 존재합니다');
+                    }
+                },
+                error: function(xhr, status, error) {
+                }
+            });
         }
     </script>
 </body>

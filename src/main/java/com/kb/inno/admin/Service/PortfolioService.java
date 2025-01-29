@@ -11,10 +11,7 @@
 package com.kb.inno.admin.Service;
 
 import com.kb.inno.admin.DAO.PortfolioDAO;
-import com.kb.inno.admin.DTO.FileDTO;
-import com.kb.inno.admin.DTO.NoticeDTO;
-import com.kb.inno.admin.DTO.PortfolioDTO;
-import com.kb.inno.admin.DTO.SearchDTO;
+import com.kb.inno.admin.DTO.*;
 import com.kb.inno.common.FileUploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -64,13 +61,21 @@ public class PortfolioService {
 
         if (yearIns == 1) {
             resultMap.put("errorCd", "00");
-            resultMap.put("errorMsg", "설문정보가 정상적으로 등록되었습니다.");
+            resultMap.put("errorMsg", "포트폴리오 년도 정보가 정상적으로 등록되었습니다.");
         } else {
             resultMap.put("errorCd", "99");
-            resultMap.put("errorMsg", "설문정보가 등록 중 오류가 발생되었습니다.");
+            resultMap.put("errorMsg", "포트폴리오 년도 등록 중 오류가 발생되었습니다.");
         }
 
         return resultMap;
+    }
+
+    public String existYearData(String port_yr) {
+        //해당년도의 데이터 존재 여부 확인
+        PortfolioDTO portfolioDTO = new PortfolioDTO();
+        portfolioDTO.setPort_yr(port_yr);
+        PortfolioDTO selectYearDetail = portfolioDAO.selectYearDetail(portfolioDTO);
+        return selectYearDetail != null ? "Y" : "N";
     }
 
     /**

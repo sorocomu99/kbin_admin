@@ -84,7 +84,7 @@
                                             <th class="bg-light">정렬</th>
                                             <td>
                                                 <div class="d-flex">
-                                                    <input class="form-control" type="number" style="width:100px" name="sort_no" value="1">
+                                                    <input class="form-control" type="number" style="width:100px" name="sort_no" oninput="if(this.value.length > 3) this.value = this.value.slice(0, 3);" value="1">
                                                     <p class="mb-0 mt-2 ms-3">* 숫자가 낮을수록 상위 노출됩니다.</p>
                                                 </div>
                                             </td>

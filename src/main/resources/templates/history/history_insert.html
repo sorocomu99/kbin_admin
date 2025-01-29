@@ -36,7 +36,7 @@
                                     <div class="question-body on" data-question-type="1">
                                         <div class="row">
                                             <div class="col">
-                                                <input type="text" class="form-control" value="" id="main_input1" name="main_input1" placeholder="메인텍스트를 입력해 주세요.">
+                                                <input type="text" class="form-control" value="" id="main_input1" name="main_input1" placeholder="메인텍스트를 입력해 주세요." maxlength="150">
                                             </div>
                                         </div>
                                         <div class="row">
@@ -44,7 +44,7 @@
                                                 <div class="item-list">
                                                     <div class="item">
                                                         <div class="column">
-                                                            <input type="text" class="form-control form-control-sm" id="sub_input1_1" name="sub_input1" value="" placeholder="서브텍스트를 입력해 주세요." onchange="changeTxt(this)">
+                                                            <input type="text" class="form-control form-control-sm" id="sub_input1_1" name="sub_input1" value="" placeholder="서브텍스트를 입력해 주세요." onchange="changeTxt(this)" maxlength="150">
                                                         </div>
                                                         <div class="column">
                                                             <button type="button" class="btn remove-item" onclick="removeItem(this)"><i data-feather="x-circle"></i></button>
@@ -253,7 +253,7 @@
                     '<div class="question-body on" data-question-type="1">' +
                         '<div class="row">' +
                             '<div class="col">' +
-                                '<input type="text" class="form-control" value="" id="main_input'+ listIndex +'" name="main_input'+ listIndex +'" placeholder="메인텍스트를 입력해 주세요.">' +
+                                '<input type="text" class="form-control" value="" id="main_input'+ listIndex +'" name="main_input'+ listIndex +'" placeholder="메인텍스트를 입력해 주세요." maxlength="150">' +
                             '</div>' +
                         '</div>' +
                         '<div class="row">' +
@@ -261,7 +261,7 @@
                                 '<div class="item-list">' +
                                     '<div class="item">' +
                                         '<div class="column">' +
-                                            '<input type="text" class="form-control form-control-sm" id="sub_input'+ listIndex +'_1" name="sub_input'+ listIndex +'" value="" placeholder="서브텍스트를 입력해 주세요.">' +
+                                            '<input type="text" class="form-control form-control-sm" id="sub_input'+ listIndex +'_1" name="sub_input'+ listIndex +'" value="" placeholder="서브텍스트를 입력해 주세요."  maxlength="150">' +
                                         '</div>' +
                                         '<div class="column">' +
                                             '<button type="button" class="btn remove-item" onclick="removeItem(this)"><i data-feather="x-circle"></i></button>' +
@@ -319,7 +319,7 @@
             element.closest('.col').find('.item-list').append(
                 '<div class="item">' +
                     '<div class="column">' +
-                        '<input type="text" class="form-control form-control-sm" id="sub_input'+index+'_'+e.dataset.idx+'" name="sub_input'+index+'" value="" placeholder="서브텍스트를 입력해 주세요." onchange="changeTxt(this)">' +
+                        '<input type="text" class="form-control form-control-sm" id="sub_input'+index+'_'+e.dataset.idx+'" name="sub_input'+index+'" value="" placeholder="서브텍스트를 입력해 주세요." onchange="changeTxt(this)" maxlength="150">' +
                     '</div>' +
                     '<div class="column">' +
                         '<button type="button" class="btn remove-item" onclick="removeItem(this)"><i data-feather="x-circle"></i></button>' +
@@ -382,7 +382,7 @@
                             form.submit();                                           //폼 제출
                         }
                     }else{
-                        alert('입력하신 해당년도의 연혁이 존재합니다');
+                        alert('입력하신 연도의 연혁이 존재합니다');
                     }
                 },
                 error: function(xhr, status, error) {

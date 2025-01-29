@@ -72,21 +72,21 @@
                                                 <th class="bg-light">공간 이름</th>
                                                 <td>
                                                     <p class="mb-2">최대 10자까지 입력 가능합니다.</p>
-                                                    <input type="text" class="form-control" name="plc_nm">
+                                                    <input type="text" class="form-control" name="plc_nm" maxlength="10">
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <th class="bg-light">주소</th>
                                                 <td>
                                                     <p class="mb-2">최대 44자까지 입력 가능합니다.</p>
-                                                    <input type="text" class="form-control" name="plc_addr">
+                                                    <input type="text" class="form-control" name="plc_addr" maxlength="44">
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <th class="bg-light">정렬</th>
                                                 <td>
                                                     <div class="d-flex">
-                                                        <input class="form-control" type="number" name="sort_no" style="width:100px" value="1">
+                                                        <input class="form-control" type="number" name="sort_no" oninput="if(this.value.length > 3) this.value = this.value.slice(0, 3);" style="width:100px" value="1">
                                                         <p class="mb-0 mt-2 ms-3">* 숫자가 낮을수록 상위 노출됩니다.</p>
                                                     </div>
                                                 </td>
@@ -129,6 +129,7 @@
             var plc_nm = $('input[name=plc_nm]').val();
             if(plc_nm == null || plc_nm == "") {
                 alert("공간 이름을 입력 해 주세요.");
+                $('input[name=plc_nm]').focus()
                 return false;
             }
 
@@ -165,6 +166,7 @@
             var plc_nm = $('input[name=plc_nm]').val();
             if(plc_nm == null || plc_nm == "") {
                 alert("공간 이름을 입력 해 주세요.");
+                $('input[name=plc_nm]').focus()
                 return false;
             }
 

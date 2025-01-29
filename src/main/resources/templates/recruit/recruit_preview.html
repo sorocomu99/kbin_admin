@@ -66,8 +66,8 @@
                                         <div class="data">
                                             <p class="text">
                                                 <i class="icon icon-1"></i>
-                                                <span th:if="${recruit.sprt_amt % 1 != 0}" th:text="${recruit.sprt_amt + '억원'}"></span>
-                                                <span th:if="${recruit.sprt_amt % 1 == 0}" th:text="${#numbers.formatInteger(recruit.sprt_amt, 3, 'COMMA') + '억원'}"></span>
+                                                <span th:if="${recruit.sprt_amt % 1 != 0}" th:text="${recruit.ret_sprt_amt + '억원'}"></span>
+                                                <span th:if="${recruit.sprt_amt % 1 == 0}" th:text="${#numbers.formatInteger(recruit.ret_sprt_amt, 3, 'COMMA') + '억원'}"></span>
                                             </p>
                                             <p class="text">
                                                 <i class="icon icon-2"></i>

@@ -46,7 +46,7 @@
                                             <tr>
                                                 <th class="bg-light">업체명</th>
                                                 <td>
-                                                    <input type="text" class="form-control" name="bzenty_nm" th:value="${cooperation?.bzenty_nm}">
+                                                    <input type="text" class="form-control" name="bzenty_nm" th:value="${cooperation?.bzenty_nm}" maxlength="50">
                                                 </td>
                                             </tr>
                                             <tr>
@@ -66,7 +66,7 @@
                                                 <th class="bg-light">정렬</th>
                                                 <td>
                                                     <div class="d-flex">
-                                                        <input class="form-control" type="number" name="sort_no" style="width:100px" th:value="${cooperation?.sort_no}">
+                                                        <input class="form-control" type="number" name="sort_no" oninput="if(this.value.length > 3) this.value = this.value.slice(0, 3);" style="width:100px" th:value="${cooperation?.sort_no}">
                                                         <p class="mb-0 mt-2 ms-3">* 숫자가 낮을수록 상위 노출됩니다.</p>
                                                     </div>
                                                 </td>
@@ -142,6 +142,7 @@
             if($("input[name=sort_no]").val() == '') {
                 $("input[name=sort_no]").val(1)
             }
+
             let result = confirm('수정 하시겠습니까?');
             if(!result) {
                 return false;

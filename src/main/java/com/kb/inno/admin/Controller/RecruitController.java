@@ -24,6 +24,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 
 @Controller
 @RequiredArgsConstructor
@@ -49,6 +51,9 @@ public class RecruitController {
     // 국내 프로그램 - 채용 지원 미리보기
     @PostMapping("/preview")
     public String preview(RecruitDTO recruitDTO, Model model) {
+        BigDecimal amount = BigDecimal.valueOf(recruitDTO.getSprt_amt());
+        DecimalFormat df = new DecimalFormat("####.###");
+        recruitDTO.setRet_sprt_amt(df.format(amount));
         model.addAttribute("recruit", recruitDTO);
         return directory + "/recruit_preview";
     }
