@@ -8,8 +8,15 @@ public class PropertiesValue {
 
     public static String profilesActive;
 
+    public static String staticPath;
+
     @Value("${spring.profiles.active}")
     public void setProfilesActive(String value) {
         profilesActive = value;
+    }
+
+    @Value("${staticpath}")
+    public void setStaticPath(String value) {
+        staticPath = value;
     }
 }
