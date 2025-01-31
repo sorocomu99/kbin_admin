@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KB Innovation HUB | 미리보기</title>
+
+    <!-- 공통 스타일 시트 -->
+    <link rel="stylesheet" th:href="@{/css/swiper-bundle.min.css}">
+    <link rel="stylesheet" th:href="@{/css/base.css}">
+    <link rel="stylesheet" th:href="@{/css/board.css}">
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+    <link rel="stylesheet" th:href="@{/css/sub.css}">
+
+    <script th:src="@{/js/jquery-3.6.4.min.js}"></script>
+
+    <!-- 임시 스크립트: 헤더/푸터 컴포넌트 (작업용 임시 파일이므로 개발단계부터는 스크립트 파일 안에 HTML 코드 사용) -->
+    <script th:src="@{/component/footer_preview.js}"></script>
+
+    <!-- 공통 스크립트 -->
+    <script th:src="@{/js/scrollreveal.min.js}"></script>
+    <script th:src="@{/js/gsap.min.js}"></script>
+    <script th:src="@{/js/ScrollToPlugin.min.js}"></script>
+    <script th:src="@{/js/ScrollTrigger.min.js}"></script>
+    <script th:src="@{/js/lenis.min.js}"></script>
+    <script th:src="@{/js/split-type.min.js}"></script>
+    <script th:src="@{/js/echarts.min.js}"></script>
+    <script th:src="@{/js/echarts-wordcloud.min.js}"></script>
+    <script th:src="@{/js/flatpickr.js}"></script>
+    <script th:src="@{/js/ko.js}"></script>
+    <script th:src="@{/js/swiper-bundle.min.js}"></script>
+    <script th:src="@{/js/countUp.umd.js}"></script>
+    <script th:src="@{/js/common.js}"></script>
+</head>
+<body>
+<!-- 헤더 -->
+<header class="header" data-header-theme="light">
+    <div class="header-primary">
+        <div class="header-primary-wrap">
+            <h1>
+                <a class="logo" href="#"><span class="blind">KB Innovation HUB</span></a>
+            </h1>
+            <div class="gnb">
+                <nav class="nav">
+                    <ul class="depth1">
+                        <li>
+                            <div class="title">KB Innovation HUB</div>
+                            <ul class="depth2">
+                                <li><a href="#">HUB센터 소개</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <div class="title">스타트업 육성</div>
+                            <ul class="depth2">
+                                <li><a href="#">국내 프로그램</a></li>
+                                <li><a href="#">글로벌 프로그램</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <div class="title">KB스타터스</div>
+                            <ul class="depth2">
+                                <li><a href="#">지원하기</a></li>
+                                <li><a href="#">포트폴리오</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <div class="title">커뮤니티</div>
+                            <ul class="depth2">
+                                <li><a href="#">공지사항</a></li>
+                                <li><a href="#">HUB센터 소식</a></li>
+                                <li><a href="#">FAQ</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <div class="title">스타트업 정보</div>
+                            <ul class="depth2">
+                                <li><a href="#">정보검색</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </nav>
+                <div class="close">
+                    <a href="javascript:">
+                        <span class="circle"></span>
+                        <span class="blind">전체메뉴 닫기</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="background"></div>
+        <div class="hamburger">
+            <a href="javascript:">
+                <span class="circle"></span>
+                <span class="blind">전체메뉴 열기</span>
+            </a>
+        </div>
+    </div>
+</header>
+<main class="main">
+</main>
+
+<script th:inline="javascript">
+    window.staticPath = /*[[${@environment.getProperty('staticpath')} + '/']]*/'/';
+    if (window.staticPath === '//') {
+        window.staticPath = '/';
+    }
+</script>
+<!-- 푸터 -->
+<app-footer></app-footer>
+
+<script th:inline="javascript">
+    $(document).ready(function () {
+        const menuData = /*[[${selectList}]]*/'';
+
+        const depth1Ul = document.createElement('ul');
+        depth1Ul.className = 'depth1';
+
+        // 1단계 메뉴 필터링
+        const depth1Menus = menuData.filter(menu => menu.menu_depth === 1);
+
+        depth1Menus.forEach(depth1Menu => {
+            if(depth1Menu.use_yn === 'Y') {
+                const depth1Li = document.createElement('li');
+                const titleDiv = document.createElement('div');
+                titleDiv.className = 'title';
+                titleDiv.textContent = depth1Menu.menu_nm;
+                depth1Li.appendChild(titleDiv);
+
+                const depth2Ul = document.createElement('ul');
+                depth2Ul.className = 'depth2';
+
+                // 2단계 메뉴 필터링
+                const depth2Menus = menuData.filter(menu => menu.menu_up_sn === depth1Menu.menu_sn);
+
+                depth2Menus.forEach(depth2Menu => {
+                    if(depth2Menu.use_yn === 'Y') {
+                        const depth2Li = document.createElement('li');
+                        const anchor = document.createElement('a');
+                        anchor.href = '#';
+                        anchor.textContent = depth2Menu.menu_nm;
+                        depth2Li.appendChild(anchor);
+                        depth2Ul.appendChild(depth2Li);
+                    }
+                });
+
+                depth1Li.appendChild(depth2Ul);
+                depth1Ul.appendChild(depth1Li);
+            }
+        });
+
+        $('.nav').html(depth1Ul.outerHTML);
+    })
+</script>
+</body>
+</html>

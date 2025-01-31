@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="ko">
+<head th:replace="fragment/config :: configFragment"></head>
+
+<body>
+<div class="wrap">
+    <div th:replace="fragment/header :: headerFragment"></div>
+
+    <main class="main">
+        <div class="container">
+            <h1>페이지를 찾을 수 없습니다.</h1>
+            <p>
+                서비스 이용에 불편을 드려 죄송합니다.<br class="hidden-m">
+                새로고침 버튼을 클릭하여 다시 한번 시도해 주시기 바랍니다.<br class="hidden-m">
+                계속 같은 현상이 발생할 경우 2-3분후 다시 시도해 주시기 바랍니다.<br class="hidden-m">
+                감사합니다.
+            </p>
+            <div class="item-btn">
+                <div class="btn-area">
+                    <ul class="btn-list">
+                        <li><a href="javascript:history.back()" class="icon-ko"><span>돌아가기</span></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+<script th:src="@{/js/admin.js}"></script>
+</body>
+<script>
+    $(document).ready(function () {
+        $('#sidebarMenu').remove();
+    })
+</script>
+</html>
