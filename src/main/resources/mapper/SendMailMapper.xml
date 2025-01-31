@@ -102,24 +102,50 @@
            AND SEND_MAIL_SN = ${send_mail_sn}
     </delete>
 
+    <insert id="saveMailInfo" parameterType="com.kb.inno.admin.DTO.SendMailDTO" useGeneratedKeys="true" keyProperty="send_mail_sn">
+        INSERT INTO KB_SEND_MAIL
+        ( SEND_YMD
+        , SEND_MAIL_SN
+        , MAIL_RCVR
+        , MAIL_TTL
+        , MAIL_CN
+        , FRST_RGTR
+        , FRST_REG_DT
+        , LAST_MDFR
+        , LAST_MDFCN_DT)
+        VALUES ( #{send_ymd}
+               , SEND_MAIL_SN_SEQ.NEXTVAL
+               , #{mail_rcvr}
+               , #{mail_ttl}
+               , #{mail_cn}
+               , #{frst_rgtr}
+               , SYSDATE
+               , #{last_mdfr}
+               , SYSDATE)
+        <selectKey keyProperty="send_mail_sn" resultType="int" order="AFTER">
+            /* 저장한 파일 중 제일 큰 것 조회(키 조회) */
+            SELECT MAX(SEND_MAIL_SN) AS SEND_MAIL_SN
+            FROM KB_SEND_MAIL
+        </selectKey>
+    </insert>
+
     <insert id="saveHistory" parameterType="com.kb.inno.admin.DTO.SendMailDTO">
         INSERT INTO KB_SEND_MAIL_HIST
-        (
-            SEND_YMD
-          , SEND_MAIL_SN
-          , MAIL_RCVR
-          , MAIL_TTL
-          , MAIL_CN
-          , FRST_REG_DT
-        )
-        VALUES
-        (
-            #{send_ymd}
-          , #{send_mail_sn}
-          , #{mail_rcvr}
-          , #{mail_ttl}
-          , #{mail_cn}
-          , SYSDATE
-        )
+        ( SEND_YMD
+        , SEND_MAIL_SN
+        , SEND_MAIL_HIST_SN
+        , MAIL_RCVR
+        , FRST_RGTR
+        , FRST_REG_DT
+        , LAST_MDFR
+        , LAST_MDFCN_DT)
+        VALUES ( #{send_ymd}
+               , #{send_mail_sn}
+               , #{send_mail_hist_sn}
+               , #{mail_rcvr}
+               , #{frst_rgtr}
+               , SYSDATE
+               , #{last_mdfr}
+               , SYSDATE)
     </insert>
 </mapper>

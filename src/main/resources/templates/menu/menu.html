@@ -69,6 +69,7 @@
                                                 </tbody>
                                             </table>
                                             <div class="text-center">
+                                                <a id="preview-button" href="javascript:previewPage()" class="btn btn-outline-primary">미리보기</a>
                                                 <button type="button" class="btn btn-primary" onclick="confirmMsg()">저장</button>
                                             </div>
                                         </form>
@@ -157,6 +158,19 @@
             });
         });
     });
+
+    // 프리뷰 페이지로 이동
+    function previewPage() {
+        if($.trim($('form[name=menu_form] > input[name=menu_sn]').val()) === ''){
+            $('input[name=menu_sn]').val(0);
+        }
+
+        const form = document.forms['menu_form'];
+        form.action = window.staticPath + 'menu/preview'; // 전송할 URL
+        form.method = 'POST';            // 전송 방식
+        form.target = '_blank';          // 새 창에서 열기
+        form.submit();                   // 폼 제출
+    }
 </script>
 <script th:src="@{/js/admin.js}"></script>
 </body>

@@ -13,6 +13,7 @@ package com.kb.inno.admin.DTO;
 import lombok.Data;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 
 @Data
 public class HistoryDTO implements Serializable {
@@ -60,4 +61,19 @@ public class HistoryDTO implements Serializable {
     private String sub_input10;
     private int start;
     private int end;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        HistoryDTO that = (HistoryDTO) o;
+        return Objects.equals(getHstry_yr(), that.getHstry_yr()) &&
+                Objects.equals(getHstry_lclsf_sort_no(), that.getHstry_lclsf_sort_no()) &&
+                Objects.equals(getHstry_sclsf_sort_no(), that.getHstry_sclsf_sort_no());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getHstry_yr(), getHstry_lclsf_sort_no(), getHstry_sclsf_sort_no());
+    }
 }

@@ -166,16 +166,23 @@
         <div class="modal-wrapper">
             <div class="modal">
                 <div class="modal-body">
-                    <p class="heading">제출하기</p>
-                    <p class="title p5">모든 접수 단계가 완료되었습니다.</p>
-                    <p class="p">최종 제출 하시겠습니까? <br>예를 누르면, 입력 내용으로 최종 접수됩니다.</p>
-                    <div class="button-wrap">
-                        <button class="button button-border" type="button" onclick="closeModal('modalComplete')">아니오</button>
-                        <button class="button button-primary" type="button" onclick="finalSubmit()">예</button>
-                    </div>
+                    <form>
+                        <p class="heading">제출하기</p>
+                        <p class="title p5 text-center">모든 접수 단계가 완료되었습니다.</p>
+                        <p class="p text-center">최종 제출 하시겠습니까? <br><span class="color-primary fw-medium">회사명과 이메일 주소</span>를 입력 후 제출하기를 누르면, <br class="br-small">입력 내용으로 최종 접수됩니다.</p>
+                        <div class="input-wrap">
+                            <input name="companyName" type="text" placeholder="회사명을 입력하세요.">
+                            <input name="email" type="email" placeholder="이메일 주소를 입력하세요.">
+                        </div>
+                        <div class="button-wrap">
+                            <button class="button button-border" type="button" onclick="closeModal('modalComplete')">아니오
+                            </button>
+                            <button class="button button-primary" type="button" onclick="apply()">예</button>
+                        </div>
+                    </form>
                 </div>
                 <div class="modal-foot">
-                    <a class="close" href="javascript:void(0);" onclick="closeModal('modalComplete')"><span class="blind">팝업 닫기</span></a>
+                    <a class="close" href="javascript:" onclick="closeModal('modalComplete')"><span class="blind">팝업 닫기</span></a>
                 </div>
             </div>
         </div>
@@ -276,21 +283,28 @@
 
     // 페이지 로드 시 초기화
     $(document).ready(function () {
-        let hash = window.location.hash;
-
-        if (hash.startsWith("#step-")) {
-            let step = parseInt(hash.replace("#step-", ""));
-            if (!isNaN(step)) {
-                // 초기 로드 시 해시가 있으면 해당 스텝으로 이동
-                changeContent(null, step);
+        if(!sessionStorage.getItem('reload')) {
+            let hash = window.location.hash;
+            if (hash.startsWith("#step-")) {
+                let step = parseInt(hash.replace("#step-", ""));
+                if (!isNaN(step)) {
+                    // 초기 로드 시 해시가 있으면 해당 스텝으로 이동
+                    changeContent(null, step);
+                }
+            } else {
+                // 초기 스텝으로 설정
+                window.location.hash = "step-1";
             }
-        } else {
-            // 초기 스텝으로 설정
+        }else{
+            sessionStorage.removeItem('reload');
             window.location.hash = "step-1";
         }
     });
 
-
+    $(window).on('beforeunload', function() {
+        // 새로고침시 해시 초기화 용도
+        sessionStorage.setItem('reload', 'Y')
+    });
 </script>
 
 </body>

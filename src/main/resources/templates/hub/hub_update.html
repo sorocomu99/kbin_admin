@@ -196,7 +196,10 @@
 
         // 썸머노트 이미지 서버에 저장 후 가져와서 화면에 출력
         $('#summernote').summernote({
-            height: 300, // 에디터 높이 설정
+            height: 300, // 에디터 높이 설정,
+            styleTags: ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
+            fontNames: ['KBFG Text', 'Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Helvetica', 'Impact', 'Tahoma', 'Times New Roman', 'Verdana'],
+            fontNamesIgnoreCheck: ['KBFG Text'],
             callbacks : {
                 onImageUpload: function(files) {
                     uploadImage(files[0], this);

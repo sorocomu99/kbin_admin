@@ -118,7 +118,8 @@ public class InterchangeService {
         // 최종 수정자 대입
         interchangeDTO.setLast_mdfr(loginId);
         resultUpd = interchangeDAO.update(interchangeDTO);
-        interchangeDAO.sortUpdate(interchangeDTO);
+        // 정렬 알고리즘 수정 및 전체 case 일괄 적용 필요
+        // interchangeDAO.sortUpdate(interchangeDTO);
         //return interchangeDAO.update(interchangeDTO);
         return resultUpd;
     }

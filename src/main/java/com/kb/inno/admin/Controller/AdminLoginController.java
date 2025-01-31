@@ -63,19 +63,19 @@ public class AdminLoginController {
     @PostMapping(value = "/loginProc")
     @ResponseBody
     public HashMap<String, Object> loginProc(@RequestParam Map<String, Object> params, HttpServletRequest request) {
-    	System.out.println("================여기1");
+    	// System.out.println("================여기1");
         HashMap<String, Object> resultMap = new HashMap<>();
 
         //입력받은 아이디와 패스워드 세팅
         String mngrId   = (String)params.get("mngr_id");
         String mngrPswd = (String)params.get("mngr_pswd");
-        
-        System.out.println("================여기2");
+
+        // System.out.println("================여기2");
 
         //아이디로 관리자 정보 조회
         AdminLoginDTO adminLoginDTO = adminLoginService.adminSelectOne(mngrId);
-        
-        System.out.println("================여기3");
+
+        // System.out.println("================여기3");
 
         //관리자 정보가 없으면 리턴
         if (adminLoginDTO == null) {
@@ -91,8 +91,8 @@ public class AdminLoginController {
         String dbMngrPswd = adminLoginDTO.getMngr_pswd();  //DB에서 가져온 비밀번호
         String dbMngrNm = adminLoginDTO.getMngr_nm();      //DB에서 가져온 이름
         String dbMngrEml = adminLoginDTO.getMngr_eml();    //DB에서 가져온 이메일 주소
-        
-        System.out.println("================여기4");
+
+        // System.out.println("================여기4");
 
         //DB에서 가져온 아이디와 입력받은 아이디를 비교
         if (!dbMngrId.equals(mngrId)) {
@@ -101,14 +101,14 @@ public class AdminLoginController {
 
             return resultMap;
         }
-        
-        System.out.println("================여기5");
+
+        // System.out.println("================여기5");
 
         //입력받은 비밀번호를 암호화 해서 DB에서 가져온 비밀번호와 비교
         try {
             String shaPw = Sha256.encrypt(mngrPswd);  //입력받은 비밀번호 암호화
 
-            System.out.println("================여기6");
+            // System.out.println("================여기6");
 
             //입력한 비밀번호와 DB의 비밀번호가 틀리면 실패 리턴
             if (!shaPw.equals(dbMngrPswd)) {
@@ -117,14 +117,14 @@ public class AdminLoginController {
                 return resultMap;
             }
         } catch (Exception e) {
-        	System.out.println("================여기7");
+            // System.out.println("================여기7");
             resultMap.put("success", "fail");
             resultMap.put("message", "비밀번호 검증 중 시스템 오류가 발생했습니다.");
 
             return resultMap;
         }
-        
-        System.out.println("================여기8");
+
+        // System.out.println("================여기8");
 
         //세션 생성
         HttpSession session = request.getSession();
@@ -135,14 +135,14 @@ public class AdminLoginController {
         session.setAttribute("mngrEml", dbMngrEml);  //이메일
 
         session.setMaxInactiveInterval(3600);  //세션타임 1시간
-        
-        System.out.println("================여기9");
+
+        // System.out.println("================여기9");
 
         //정상적으로 로그인 처리 완료되면 리턴
         resultMap.put("success", "success");
         resultMap.put("message", "환영합니다. "+ dbMngrNm + " 님");
-        
-        System.out.println("================여기10");
+
+        // System.out.println("================여기10");
 
         return resultMap;
     }

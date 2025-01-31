@@ -36,6 +36,15 @@ public class HistoryController {
     private final HistoryService historyService;
 
     /**
+     * 연혁 미리보기
+     */
+    @PostMapping("/preview")
+    public String preview(HistoryDTO historyDTO, Model model) {
+        historyService.getPreview(historyDTO, model);
+        return directory + "/history_preview";
+    }
+
+    /**
      * @param menuId
      * @param model
      * @return

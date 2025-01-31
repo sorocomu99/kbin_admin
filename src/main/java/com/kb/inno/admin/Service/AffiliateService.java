@@ -130,7 +130,8 @@ public class AffiliateService {
         // 최종 수정자 대입
         affiliateDTO.setLast_mdfr(loginId);
         resultUpd = affiliateDAO.update(affiliateDTO);
-        affiliateDAO.sortUpdate(affiliateDTO);
+        // 정렬 알고리즘 수정 및 전체 case 일괄 적용 필요
+        // affiliateDAO.sortUpdate(affiliateDTO);
         return resultUpd;
     }
 

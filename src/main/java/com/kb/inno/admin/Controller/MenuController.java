@@ -10,6 +10,7 @@
  */
 package com.kb.inno.admin.Controller;
 
+import com.kb.inno.admin.DTO.HistoryDTO;
 import com.kb.inno.admin.DTO.MenuDTO;
 import com.kb.inno.admin.Service.MenuService;
 import lombok.RequiredArgsConstructor;
@@ -73,5 +74,15 @@ public class MenuController {
             e.printStackTrace();
         }
         return null;
+    }
+
+    /**
+     * 메뉴 미리보기
+     */
+    @PostMapping("/preview")
+    public String preview(MenuDTO menuDTO, Model model) {
+        menuService.getPreview(menuDTO, model);
+
+        return directory + "/menu_preview";
     }
 }

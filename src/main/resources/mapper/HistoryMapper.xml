@@ -76,10 +76,10 @@
         VALUES
         ( #{hstry_yr}
         , #{hstry_lclsf_sn}
-        , #{hstry_lclsf_ttl}
+        , REPLACE(#{hstry_lclsf_ttl}, '@@RP@@', ',')
         , #{hstry_lclsf_sort_no}
         , #{hstry_sclsf_sn}
-        , #{hstry_sclsf_ttl}
+        , REPLACE(#{hstry_sclsf_ttl}, '@@RP@@', ',')
         , #{hstry_sclsf_sort_no}
         , #{hstry_sclsf_up_lclsf_sn}
         , #{frst_rgtr}
@@ -123,4 +123,25 @@
          WHERE 1 = 1
           AND HSTRY_YR = #{hstry_yr}
     </delete>
+
+    <select id="selectHistory" resultType="com.kb.inno.admin.DTO.HistoryDTO">
+        SELECT HSTRY_YR
+             , HSTRY_LCLSF_SN
+             , HSTRY_LCLSF_TTL
+             , HSTRY_LCLSF_SORT_NO
+             , HSTRY_SCLSF_SN
+             , HSTRY_SCLSF_TTL
+             , HSTRY_SCLSF_SORT_NO
+             , HSTRY_SCLSF_UP_LCLSF_SN
+             , CASE WHEN LAG(HSTRY_LCLSF_SN) OVER (PARTITION BY HSTRY_YR ORDER BY HSTRY_LCLSF_SN ASC, HSTRY_SCLSF_SN ASC) IS NULL THEN 0
+               ELSE LAG(HSTRY_LCLSF_SN) OVER (PARTITION BY HSTRY_YR ORDER BY HSTRY_LCLSF_SN ASC, HSTRY_SCLSF_SN ASC)
+        END AS DISPLAY_YN
+             , '항목 ' || HSTRY_LCLSF_SN AS H_TITLE
+             , 'main_sn' || HSTRY_LCLSF_SN AS MAIN_SN
+             , 'sub_sn' || HSTRY_SCLSF_SN AS SUB_SN
+             , COUNT(HSTRY_LCLSF_SN) OVER (PARTITION BY HSTRY_YR ORDER BY HSTRY_LCLSF_SN ASC) CNT_OVER
+          FROM KB_CO_HSTRY_INFO
+         WHERE 1 = 1
+         ORDER BY HSTRY_YR DESC, HSTRY_LCLSF_SN ASC, HSTRY_SCLSF_SN ASC
+    </select>
 </mapper>

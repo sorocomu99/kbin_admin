@@ -5,17 +5,23 @@
  * 최초개발일  : 2024.12.31
  * 최초개발자  : 이훈희
  * ==========================================================
- *   수정일            수정자           설명
+ * 수정일            수정자           설명
  * ==========================================================
  */
 package com.kb.inno.admin.Service;
 
 import com.kb.inno.admin.DAO.HistoryDAO;
 import com.kb.inno.admin.DTO.HistoryDTO;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.rmi.server.ExportException;
 import java.util.*;
 
 @Service
@@ -24,7 +30,7 @@ public class HistoryService {
 
     // DAO 연결
     private final HistoryDAO historyDAO;
-    
+
     /**
      * @return
      * 연혁 리스트 조회
@@ -42,23 +48,23 @@ public class HistoryService {
         //전체 글 갯수 / 한 페이지에 나올 글 갯수
         int repeat = allCount / pageLetter;
         //나머지가 0이 아니면
-        if(allCount % pageLetter != 0){
+        if (allCount % pageLetter != 0) {
             //더하기
             repeat += 1;
         }
 
         //repeat이 0이면
-        if(repeat == 0) {
+        if (repeat == 0) {
             repeat = 1;
         }
 
         //만약 가져온 페이지가 repeat 보다 크다면
-        if(repeat < page) {
+        if (repeat < page) {
             page = repeat;
         }
 
         //만약 가져온 페이지가 0이라면
-        if(page < 1) {
+        if (page < 1) {
             page = 1;
         }
 
@@ -66,7 +72,6 @@ public class HistoryService {
         int end = page * pageLetter;
         historyDTO.setEnd(end);
         int start = end + 1 - pageLetter;
-
 
 
         List<HistoryDTO> selectList = historyDAO.selectListOne(historyDTO);
@@ -104,12 +109,15 @@ public class HistoryService {
         try {
             int mainSn = 1;
             //항목 1 저장
-            if (map.get("main_input1") != null && !map.get("main_input1").equals("")) {
+            if (map.get("main_input1") != null && !map.get("main_input1")
+                                                      .equals("")) {
                 historyDTO.setHstry_lclsf_sn(mainSn);  //연혁 대분류 일련번호
-                historyDTO.setHstry_lclsf_ttl(map.get("main_input1").toString());  //연혁 대분류 제목
+                historyDTO.setHstry_lclsf_ttl(map.get("main_input1")
+                                                 .toString());  //연혁 대분류 제목
                 historyDTO.setHstry_lclsf_sort_no(mainSn);  //연혁 대분류 정렬번호
 
-                if (map.get("subInputList1") != null && !map.get("subInputList1").equals("")) {
+                if (map.get("subInputList1") != null && !map.get("subInputList1")
+                                                            .equals("")) {
                     int subSn1 = 1;
                     List<String> subInput1 = new ArrayList<>();
                     subInput1 = (List) map.get("subInputList1");
@@ -128,17 +136,26 @@ public class HistoryService {
                         }
                         subSn1 = subSn1 + 1;
                     }
+                } else {
+                    historyDTO.setHstry_sclsf_sn(1);  //연혁 소분류 일련번호
+                    historyDTO.setHstry_sclsf_ttl(null);  //연혁 소분류 제목
+                    historyDTO.setHstry_sclsf_sort_no(1);  //연혁 소분류 정렬번호
+                    historyDTO.setHstry_sclsf_up_lclsf_sn(mainSn);  //연혁 소분류 상위 대분류 일련번호
+                    historyDAO.insert(historyDTO);
                 }
             }
 
             //항목 2 저장
-            if (map.get("main_input2") != null && !map.get("main_input2").equals("")) {
+            if (map.get("main_input2") != null && !map.get("main_input2")
+                                                      .equals("")) {
                 mainSn = mainSn + 1;
                 historyDTO.setHstry_lclsf_sn(mainSn);  //연혁 대분류 일련번호
-                historyDTO.setHstry_lclsf_ttl(map.get("main_input2").toString());  //연혁 대분류 제목
+                historyDTO.setHstry_lclsf_ttl(map.get("main_input2")
+                                                 .toString());  //연혁 대분류 제목
                 historyDTO.setHstry_lclsf_sort_no(mainSn);  //연혁 대분류 정렬번호
 
-                if (map.get("subInputList2") != null && !map.get("subInputList2").equals("")) {
+                if (map.get("subInputList2") != null && !map.get("subInputList2")
+                                                            .equals("")) {
                     int subSn2 = 1;
                     List<String> subInput2 = new ArrayList<>();
                     subInput2 = (List) map.get("subInputList2");
@@ -157,17 +174,26 @@ public class HistoryService {
                         }
                         subSn2 = subSn2 + 1;
                     }
+                } else {
+                    historyDTO.setHstry_sclsf_sn(1);  //연혁 소분류 일련번호
+                    historyDTO.setHstry_sclsf_ttl(null);  //연혁 소분류 제목
+                    historyDTO.setHstry_sclsf_sort_no(1);  //연혁 소분류 정렬번호
+                    historyDTO.setHstry_sclsf_up_lclsf_sn(mainSn);  //연혁 소분류 상위 대분류 일련번호
+                    historyDAO.insert(historyDTO);
                 }
             }
 
             //항목 3 저장
-            if (map.get("main_input3") != null && !map.get("main_input3").equals("")) {
+            if (map.get("main_input3") != null && !map.get("main_input3")
+                                                      .equals("")) {
                 mainSn = mainSn + 1;
                 historyDTO.setHstry_lclsf_sn(mainSn);  //연혁 대분류 일련번호
-                historyDTO.setHstry_lclsf_ttl(map.get("main_input3").toString());  //연혁 대분류 제목
+                historyDTO.setHstry_lclsf_ttl(map.get("main_input3")
+                                                 .toString());  //연혁 대분류 제목
                 historyDTO.setHstry_lclsf_sort_no(mainSn);  //연혁 대분류 정렬번호
 
-                if (map.get("subInputList3") != null && !map.get("subInputList3").equals("")) {
+                if (map.get("subInputList3") != null && !map.get("subInputList3")
+                                                            .equals("")) {
                     int subSn3 = 1;
                     List<String> subInput3 = new ArrayList<>();
                     subInput3 = (List) map.get("subInputList3");
@@ -186,17 +212,26 @@ public class HistoryService {
                         }
                         subSn3 = subSn3 + 1;
                     }
+                } else {
+                    historyDTO.setHstry_sclsf_sn(1);  //연혁 소분류 일련번호
+                    historyDTO.setHstry_sclsf_ttl(null);  //연혁 소분류 제목
+                    historyDTO.setHstry_sclsf_sort_no(1);  //연혁 소분류 정렬번호
+                    historyDTO.setHstry_sclsf_up_lclsf_sn(mainSn);  //연혁 소분류 상위 대분류 일련번호
+                    historyDAO.insert(historyDTO);
                 }
             }
 
             //항목 4 저장
-            if (map.get("main_input4") != null && !map.get("main_input4").equals("")) {
+            if (map.get("main_input4") != null && !map.get("main_input4")
+                                                      .equals("")) {
                 mainSn = mainSn + 1;
                 historyDTO.setHstry_lclsf_sn(mainSn);  //연혁 대분류 일련번호
-                historyDTO.setHstry_lclsf_ttl(map.get("main_input4").toString());  //연혁 대분류 제목
+                historyDTO.setHstry_lclsf_ttl(map.get("main_input4")
+                                                 .toString());  //연혁 대분류 제목
                 historyDTO.setHstry_lclsf_sort_no(mainSn);  //연혁 대분류 정렬번호
 
-                if (map.get("subInputList4") != null && !map.get("subInputList4").equals("")) {
+                if (map.get("subInputList4") != null && !map.get("subInputList4")
+                                                            .equals("")) {
                     int subSn4 = 1;
                     List<String> subInput4 = new ArrayList<>();
                     subInput4 = (List) map.get("subInputList4");
@@ -215,17 +250,26 @@ public class HistoryService {
                         }
                         subSn4 = subSn4 + 1;
                     }
+                } else {
+                    historyDTO.setHstry_sclsf_sn(1);  //연혁 소분류 일련번호
+                    historyDTO.setHstry_sclsf_ttl(null);  //연혁 소분류 제목
+                    historyDTO.setHstry_sclsf_sort_no(1);  //연혁 소분류 정렬번호
+                    historyDTO.setHstry_sclsf_up_lclsf_sn(mainSn);  //연혁 소분류 상위 대분류 일련번호
+                    historyDAO.insert(historyDTO);
                 }
             }
 
             //항목 5 저장
-            if (map.get("main_input5") != null && !map.get("main_input5").equals("")) {
+            if (map.get("main_input5") != null && !map.get("main_input5")
+                                                      .equals("")) {
                 mainSn = mainSn + 1;
                 historyDTO.setHstry_lclsf_sn(mainSn);  //연혁 대분류 일련번호
-                historyDTO.setHstry_lclsf_ttl(map.get("main_input5").toString());  //연혁 대분류 제목
+                historyDTO.setHstry_lclsf_ttl(map.get("main_input5")
+                                                 .toString());  //연혁 대분류 제목
                 historyDTO.setHstry_lclsf_sort_no(mainSn);  //연혁 대분류 정렬번호
 
-                if (map.get("subInputList5") != null && !map.get("subInputList5").equals("")) {
+                if (map.get("subInputList5") != null && !map.get("subInputList5")
+                                                            .equals("")) {
                     int subSn5 = 1;
                     List<String> subInput5 = new ArrayList<>();
                     subInput5 = (List) map.get("subInputList5");
@@ -244,17 +288,26 @@ public class HistoryService {
                         }
                         subSn5 = subSn5 + 1;
                     }
+                } else {
+                    historyDTO.setHstry_sclsf_sn(1);  //연혁 소분류 일련번호
+                    historyDTO.setHstry_sclsf_ttl(null);  //연혁 소분류 제목
+                    historyDTO.setHstry_sclsf_sort_no(1);  //연혁 소분류 정렬번호
+                    historyDTO.setHstry_sclsf_up_lclsf_sn(mainSn);  //연혁 소분류 상위 대분류 일련번호
+                    historyDAO.insert(historyDTO);
                 }
             }
 
             //항목 6 저장
-            if (map.get("main_input6") != null && !map.get("main_input6").equals("")) {
+            if (map.get("main_input6") != null && !map.get("main_input6")
+                                                      .equals("")) {
                 mainSn = mainSn + 1;
                 historyDTO.setHstry_lclsf_sn(mainSn);  //연혁 대분류 일련번호
-                historyDTO.setHstry_lclsf_ttl(map.get("main_input6").toString());  //연혁 대분류 제목
+                historyDTO.setHstry_lclsf_ttl(map.get("main_input6")
+                                                 .toString());  //연혁 대분류 제목
                 historyDTO.setHstry_lclsf_sort_no(mainSn);  //연혁 대분류 정렬번호
 
-                if (map.get("subInputList6") != null && !map.get("subInputList6").equals("")) {
+                if (map.get("subInputList6") != null && !map.get("subInputList6")
+                                                            .equals("")) {
                     int subSn6 = 1;
                     List<String> subInput6 = new ArrayList<>();
                     subInput6 = (List) map.get("subInputList6");
@@ -273,17 +326,26 @@ public class HistoryService {
                         }
                         subSn6 = subSn6 + 1;
                     }
+                } else {
+                    historyDTO.setHstry_sclsf_sn(1);  //연혁 소분류 일련번호
+                    historyDTO.setHstry_sclsf_ttl(null);  //연혁 소분류 제목
+                    historyDTO.setHstry_sclsf_sort_no(1);  //연혁 소분류 정렬번호
+                    historyDTO.setHstry_sclsf_up_lclsf_sn(mainSn);  //연혁 소분류 상위 대분류 일련번호
+                    historyDAO.insert(historyDTO);
                 }
             }
 
             //항목 7 저장
-            if (map.get("main_input7") != null && !map.get("main_input7").equals("")) {
+            if (map.get("main_input7") != null && !map.get("main_input7")
+                                                      .equals("")) {
                 mainSn = mainSn + 1;
                 historyDTO.setHstry_lclsf_sn(mainSn);  //연혁 대분류 일련번호
-                historyDTO.setHstry_lclsf_ttl(map.get("main_input7").toString());  //연혁 대분류 제목
+                historyDTO.setHstry_lclsf_ttl(map.get("main_input7")
+                                                 .toString());  //연혁 대분류 제목
                 historyDTO.setHstry_lclsf_sort_no(mainSn);  //연혁 대분류 정렬번호
 
-                if (map.get("subInputList7") != null && !map.get("subInputList7").equals("")) {
+                if (map.get("subInputList7") != null && !map.get("subInputList7")
+                                                            .equals("")) {
                     int subSn7 = 1;
                     List<String> subInput7 = new ArrayList<>();
                     subInput7 = (List) map.get("subInputList7");
@@ -302,17 +364,26 @@ public class HistoryService {
                         }
                         subSn7 = subSn7 + 1;
                     }
+                } else {
+                    historyDTO.setHstry_sclsf_sn(1);  //연혁 소분류 일련번호
+                    historyDTO.setHstry_sclsf_ttl(null);  //연혁 소분류 제목
+                    historyDTO.setHstry_sclsf_sort_no(1);  //연혁 소분류 정렬번호
+                    historyDTO.setHstry_sclsf_up_lclsf_sn(mainSn);  //연혁 소분류 상위 대분류 일련번호
+                    historyDAO.insert(historyDTO);
                 }
             }
 
             //항목 8 저장
-            if (map.get("main_input8") != null && !map.get("main_input8").equals("")) {
+            if (map.get("main_input8") != null && !map.get("main_input8")
+                                                      .equals("")) {
                 mainSn = mainSn + 1;
                 historyDTO.setHstry_lclsf_sn(mainSn);  //연혁 대분류 일련번호
-                historyDTO.setHstry_lclsf_ttl(map.get("main_input8").toString());  //연혁 대분류 제목
+                historyDTO.setHstry_lclsf_ttl(map.get("main_input8")
+                                                 .toString());  //연혁 대분류 제목
                 historyDTO.setHstry_lclsf_sort_no(mainSn);  //연혁 대분류 정렬번호
 
-                if (map.get("subInputList8") != null && !map.get("subInputList8").equals("")) {
+                if (map.get("subInputList8") != null && !map.get("subInputList8")
+                                                            .equals("")) {
                     int subSn8 = 1;
                     List<String> subInput8 = new ArrayList<>();
                     subInput8 = (List) map.get("subInputList8");
@@ -331,17 +402,26 @@ public class HistoryService {
                         }
                         subSn8 = subSn8 + 1;
                     }
+                } else {
+                    historyDTO.setHstry_sclsf_sn(1);  //연혁 소분류 일련번호
+                    historyDTO.setHstry_sclsf_ttl(null);  //연혁 소분류 제목
+                    historyDTO.setHstry_sclsf_sort_no(1);  //연혁 소분류 정렬번호
+                    historyDTO.setHstry_sclsf_up_lclsf_sn(mainSn);  //연혁 소분류 상위 대분류 일련번호
+                    historyDAO.insert(historyDTO);
                 }
             }
 
             //항목 9 저장
-            if (map.get("main_input9") != null && !map.get("main_input9").equals("")) {
+            if (map.get("main_input9") != null && !map.get("main_input9")
+                                                      .equals("")) {
                 mainSn = mainSn + 1;
                 historyDTO.setHstry_lclsf_sn(mainSn);  //연혁 대분류 일련번호
-                historyDTO.setHstry_lclsf_ttl(map.get("main_input9").toString());  //연혁 대분류 제목
+                historyDTO.setHstry_lclsf_ttl(map.get("main_input9")
+                                                 .toString());  //연혁 대분류 제목
                 historyDTO.setHstry_lclsf_sort_no(mainSn);  //연혁 대분류 정렬번호
 
-                if (map.get("subInputList9") != null && !map.get("subInputList9").equals("")) {
+                if (map.get("subInputList9") != null && !map.get("subInputList9")
+                                                            .equals("")) {
                     int subSn9 = 1;
                     List<String> subInput9 = new ArrayList<>();
                     subInput9 = (List) map.get("subInputList9");
@@ -360,17 +440,26 @@ public class HistoryService {
                         }
                         subSn9 = subSn9 + 1;
                     }
+                } else {
+                    historyDTO.setHstry_sclsf_sn(1);  //연혁 소분류 일련번호
+                    historyDTO.setHstry_sclsf_ttl(null);  //연혁 소분류 제목
+                    historyDTO.setHstry_sclsf_sort_no(1);  //연혁 소분류 정렬번호
+                    historyDTO.setHstry_sclsf_up_lclsf_sn(mainSn);  //연혁 소분류 상위 대분류 일련번호
+                    historyDAO.insert(historyDTO);
                 }
             }
 
             //항목 10 저장
-            if (map.get("main_input10") != null && !map.get("main_input10").equals("")) {
+            if (map.get("main_input10") != null && !map.get("main_input10")
+                                                       .equals("")) {
                 mainSn = mainSn + 1;
                 historyDTO.setHstry_lclsf_sn(mainSn);  //연혁 대분류 일련번호
-                historyDTO.setHstry_lclsf_ttl(map.get("main_input10").toString());  //연혁 대분류 제목
+                historyDTO.setHstry_lclsf_ttl(map.get("main_input10")
+                                                 .toString());  //연혁 대분류 제목
                 historyDTO.setHstry_lclsf_sort_no(mainSn);  //연혁 대분류 정렬번호
 
-                if (map.get("subInputList10") != null && !map.get("subInputList10").equals("")) {
+                if (map.get("subInputList10") != null && !map.get("subInputList10")
+                                                             .equals("")) {
                     int subSn10 = 1;
                     List<String> subInput10 = new ArrayList<>();
                     subInput10 = (List) map.get("subInputList10");
@@ -389,6 +478,12 @@ public class HistoryService {
                         }
                         subSn10 = subSn10 + 1;
                     }
+                } else {
+                    historyDTO.setHstry_sclsf_sn(1);  //연혁 소분류 일련번호
+                    historyDTO.setHstry_sclsf_ttl(null);  //연혁 소분류 제목
+                    historyDTO.setHstry_sclsf_sort_no(1);  //연혁 소분류 정렬번호
+                    historyDTO.setHstry_sclsf_up_lclsf_sn(mainSn);  //연혁 소분류 상위 대분류 일련번호
+                    historyDAO.insert(historyDTO);
                 }
             }
         } catch (Exception e) {
@@ -455,7 +550,7 @@ public class HistoryService {
         model.addAttribute("selectDetail10", selectDetail10);
 
         int maxLcl = historyDAO.selectMaxLcl(historyDTO);
-        model.addAttribute("maxLcl", maxLcl+1);
+        model.addAttribute("maxLcl", maxLcl + 1);
         //return selectDetail;
     }
 
@@ -477,12 +572,15 @@ public class HistoryService {
         historyDAO.delete(historyDTO);
         int mainSn = 1;
         //항목 1 저장
-        if (map.get("main_input1") != null && !map.get("main_input1").equals("")) {
+        if (map.get("main_input1") != null && !map.get("main_input1")
+                                                  .equals("")) {
             historyDTO.setHstry_lclsf_sn(mainSn);  //연혁 대분류 일련번호
-            historyDTO.setHstry_lclsf_ttl(map.get("main_input1").toString());  //연혁 대분류 제목
+            historyDTO.setHstry_lclsf_ttl(map.get("main_input1")
+                                             .toString());  //연혁 대분류 제목
             historyDTO.setHstry_lclsf_sort_no(mainSn);  //연혁 대분류 정렬번호
 
-            if (map.get("subInputList1") != null && !map.get("subInputList1").equals("")) {
+            if (map.get("subInputList1") != null && !map.get("subInputList1")
+                                                        .equals("")) {
                 int subSn1 = 1;
                 List<String> subInput1 = new ArrayList<>();
                 subInput1 = (List) map.get("subInputList1");
@@ -501,17 +599,26 @@ public class HistoryService {
                     }
                     subSn1 = subSn1 + 1;
                 }
+            } else {
+                historyDTO.setHstry_sclsf_sn(1);  //연혁 소분류 일련번호
+                historyDTO.setHstry_sclsf_ttl(null);  //연혁 소분류 제목
+                historyDTO.setHstry_sclsf_sort_no(1);  //연혁 소분류 정렬번호
+                historyDTO.setHstry_sclsf_up_lclsf_sn(mainSn);  //연혁 소분류 상위 대분류 일련번호
+                historyDAO.insert(historyDTO);
             }
         }
 
         //항목 2 저장
-        if (map.get("main_input2") != null && !map.get("main_input2").equals("")) {
+        if (map.get("main_input2") != null && !map.get("main_input2")
+                                                  .equals("")) {
             mainSn = mainSn + 1;
             historyDTO.setHstry_lclsf_sn(mainSn);  //연혁 대분류 일련번호
-            historyDTO.setHstry_lclsf_ttl(map.get("main_input2").toString());  //연혁 대분류 제목
+            historyDTO.setHstry_lclsf_ttl(map.get("main_input2")
+                                             .toString());  //연혁 대분류 제목
             historyDTO.setHstry_lclsf_sort_no(mainSn);  //연혁 대분류 정렬번호
 
-            if (map.get("subInputList2") != null && !map.get("subInputList2").equals("")) {
+            if (map.get("subInputList2") != null && !map.get("subInputList2")
+                                                        .equals("")) {
                 int subSn2 = 1;
                 List<String> subInput2 = new ArrayList<>();
                 subInput2 = (List) map.get("subInputList2");
@@ -530,17 +637,26 @@ public class HistoryService {
                     }
                     subSn2 = subSn2 + 1;
                 }
+            } else {
+                historyDTO.setHstry_sclsf_sn(1);  //연혁 소분류 일련번호
+                historyDTO.setHstry_sclsf_ttl(null);  //연혁 소분류 제목
+                historyDTO.setHstry_sclsf_sort_no(1);  //연혁 소분류 정렬번호
+                historyDTO.setHstry_sclsf_up_lclsf_sn(mainSn);  //연혁 소분류 상위 대분류 일련번호
+                historyDAO.insert(historyDTO);
             }
         }
 
         //항목 3 저장
-        if (map.get("main_input3") != null && !map.get("main_input3").equals("")) {
+        if (map.get("main_input3") != null && !map.get("main_input3")
+                                                  .equals("")) {
             mainSn = mainSn + 1;
             historyDTO.setHstry_lclsf_sn(mainSn);  //연혁 대분류 일련번호
-            historyDTO.setHstry_lclsf_ttl(map.get("main_input3").toString());  //연혁 대분류 제목
+            historyDTO.setHstry_lclsf_ttl(map.get("main_input3")
+                                             .toString());  //연혁 대분류 제목
             historyDTO.setHstry_lclsf_sort_no(mainSn);  //연혁 대분류 정렬번호
 
-            if (map.get("subInputList3") != null && !map.get("subInputList3").equals("")) {
+            if (map.get("subInputList3") != null && !map.get("subInputList3")
+                                                        .equals("")) {
                 int subSn3 = 1;
                 List<String> subInput3 = new ArrayList<>();
                 subInput3 = (List) map.get("subInputList3");
@@ -559,17 +675,26 @@ public class HistoryService {
                     }
                     subSn3 = subSn3 + 1;
                 }
+            } else {
+                historyDTO.setHstry_sclsf_sn(1);  //연혁 소분류 일련번호
+                historyDTO.setHstry_sclsf_ttl(null);  //연혁 소분류 제목
+                historyDTO.setHstry_sclsf_sort_no(1);  //연혁 소분류 정렬번호
+                historyDTO.setHstry_sclsf_up_lclsf_sn(mainSn);  //연혁 소분류 상위 대분류 일련번호
+                historyDAO.insert(historyDTO);
             }
         }
 
         //항목 4 저장
-        if (map.get("main_input4") != null && !map.get("main_input4").equals("")) {
+        if (map.get("main_input4") != null && !map.get("main_input4")
+                                                  .equals("")) {
             mainSn = mainSn + 1;
             historyDTO.setHstry_lclsf_sn(mainSn);  //연혁 대분류 일련번호
-            historyDTO.setHstry_lclsf_ttl(map.get("main_input4").toString());  //연혁 대분류 제목
+            historyDTO.setHstry_lclsf_ttl(map.get("main_input4")
+                                             .toString());  //연혁 대분류 제목
             historyDTO.setHstry_lclsf_sort_no(mainSn);  //연혁 대분류 정렬번호
 
-            if (map.get("subInputList4") != null && !map.get("subInputList4").equals("")) {
+            if (map.get("subInputList4") != null && !map.get("subInputList4")
+                                                        .equals("")) {
                 int subSn4 = 1;
                 List<String> subInput4 = new ArrayList<>();
                 subInput4 = (List) map.get("subInputList4");
@@ -588,17 +713,26 @@ public class HistoryService {
                     }
                     subSn4 = subSn4 + 1;
                 }
+            } else {
+                historyDTO.setHstry_sclsf_sn(1);  //연혁 소분류 일련번호
+                historyDTO.setHstry_sclsf_ttl(null);  //연혁 소분류 제목
+                historyDTO.setHstry_sclsf_sort_no(1);  //연혁 소분류 정렬번호
+                historyDTO.setHstry_sclsf_up_lclsf_sn(mainSn);  //연혁 소분류 상위 대분류 일련번호
+                historyDAO.insert(historyDTO);
             }
         }
 
         //항목 5 저장
-        if (map.get("main_input5") != null && !map.get("main_input5").equals("")) {
+        if (map.get("main_input5") != null && !map.get("main_input5")
+                                                  .equals("")) {
             mainSn = mainSn + 1;
             historyDTO.setHstry_lclsf_sn(mainSn);  //연혁 대분류 일련번호
-            historyDTO.setHstry_lclsf_ttl(map.get("main_input5").toString());  //연혁 대분류 제목
+            historyDTO.setHstry_lclsf_ttl(map.get("main_input5")
+                                             .toString());  //연혁 대분류 제목
             historyDTO.setHstry_lclsf_sort_no(mainSn);  //연혁 대분류 정렬번호
 
-            if (map.get("subInputList5") != null && !map.get("subInputList5").equals("")) {
+            if (map.get("subInputList5") != null && !map.get("subInputList5")
+                                                        .equals("")) {
                 int subSn5 = 1;
                 List<String> subInput5 = new ArrayList<>();
                 subInput5 = (List) map.get("subInputList5");
@@ -617,17 +751,26 @@ public class HistoryService {
                     }
                     subSn5 = subSn5 + 1;
                 }
+            } else {
+                historyDTO.setHstry_sclsf_sn(1);  //연혁 소분류 일련번호
+                historyDTO.setHstry_sclsf_ttl(null);  //연혁 소분류 제목
+                historyDTO.setHstry_sclsf_sort_no(1);  //연혁 소분류 정렬번호
+                historyDTO.setHstry_sclsf_up_lclsf_sn(mainSn);  //연혁 소분류 상위 대분류 일련번호
+                historyDAO.insert(historyDTO);
             }
         }
 
         //항목 6 저장
-        if (map.get("main_input6") != null && !map.get("main_input6").equals("")) {
+        if (map.get("main_input6") != null && !map.get("main_input6")
+                                                  .equals("")) {
             mainSn = mainSn + 1;
             historyDTO.setHstry_lclsf_sn(mainSn);  //연혁 대분류 일련번호
-            historyDTO.setHstry_lclsf_ttl(map.get("main_input6").toString());  //연혁 대분류 제목
+            historyDTO.setHstry_lclsf_ttl(map.get("main_input6")
+                                             .toString());  //연혁 대분류 제목
             historyDTO.setHstry_lclsf_sort_no(mainSn);  //연혁 대분류 정렬번호
 
-            if (map.get("subInputList6") != null && !map.get("subInputList6").equals("")) {
+            if (map.get("subInputList6") != null && !map.get("subInputList6")
+                                                        .equals("")) {
                 int subSn6 = 1;
                 List<String> subInput6 = new ArrayList<>();
                 subInput6 = (List) map.get("subInputList6");
@@ -646,17 +789,26 @@ public class HistoryService {
                     }
                     subSn6 = subSn6 + 1;
                 }
+            } else {
+                historyDTO.setHstry_sclsf_sn(1);  //연혁 소분류 일련번호
+                historyDTO.setHstry_sclsf_ttl(null);  //연혁 소분류 제목
+                historyDTO.setHstry_sclsf_sort_no(1);  //연혁 소분류 정렬번호
+                historyDTO.setHstry_sclsf_up_lclsf_sn(mainSn);  //연혁 소분류 상위 대분류 일련번호
+                historyDAO.insert(historyDTO);
             }
         }
 
         //항목 7 저장
-        if (map.get("main_input7") != null && !map.get("main_input7").equals("")) {
+        if (map.get("main_input7") != null && !map.get("main_input7")
+                                                  .equals("")) {
             mainSn = mainSn + 1;
             historyDTO.setHstry_lclsf_sn(mainSn);  //연혁 대분류 일련번호
-            historyDTO.setHstry_lclsf_ttl(map.get("main_input7").toString());  //연혁 대분류 제목
+            historyDTO.setHstry_lclsf_ttl(map.get("main_input7")
+                                             .toString());  //연혁 대분류 제목
             historyDTO.setHstry_lclsf_sort_no(mainSn);  //연혁 대분류 정렬번호
 
-            if (map.get("subInputList7") != null && !map.get("subInputList7").equals("")) {
+            if (map.get("subInputList7") != null && !map.get("subInputList7")
+                                                        .equals("")) {
                 int subSn7 = 1;
                 List<String> subInput7 = new ArrayList<>();
                 subInput7 = (List) map.get("subInputList7");
@@ -675,17 +827,26 @@ public class HistoryService {
                     }
                     subSn7 = subSn7 + 1;
                 }
+            } else {
+                historyDTO.setHstry_sclsf_sn(1);  //연혁 소분류 일련번호
+                historyDTO.setHstry_sclsf_ttl(null);  //연혁 소분류 제목
+                historyDTO.setHstry_sclsf_sort_no(1);  //연혁 소분류 정렬번호
+                historyDTO.setHstry_sclsf_up_lclsf_sn(mainSn);  //연혁 소분류 상위 대분류 일련번호
+                historyDAO.insert(historyDTO);
             }
         }
 
         //항목 8 저장
-        if (map.get("main_input8") != null && !map.get("main_input8").equals("")) {
+        if (map.get("main_input8") != null && !map.get("main_input8")
+                                                  .equals("")) {
             mainSn = mainSn + 1;
             historyDTO.setHstry_lclsf_sn(mainSn);  //연혁 대분류 일련번호
-            historyDTO.setHstry_lclsf_ttl(map.get("main_input8").toString());  //연혁 대분류 제목
+            historyDTO.setHstry_lclsf_ttl(map.get("main_input8")
+                                             .toString());  //연혁 대분류 제목
             historyDTO.setHstry_lclsf_sort_no(mainSn);  //연혁 대분류 정렬번호
 
-            if (map.get("subInputList8") != null && !map.get("subInputList8").equals("")) {
+            if (map.get("subInputList8") != null && !map.get("subInputList8")
+                                                        .equals("")) {
                 int subSn8 = 1;
                 List<String> subInput8 = new ArrayList<>();
                 subInput8 = (List) map.get("subInputList8");
@@ -704,17 +865,26 @@ public class HistoryService {
                     }
                     subSn8 = subSn8 + 1;
                 }
+            } else {
+                historyDTO.setHstry_sclsf_sn(1);  //연혁 소분류 일련번호
+                historyDTO.setHstry_sclsf_ttl(null);  //연혁 소분류 제목
+                historyDTO.setHstry_sclsf_sort_no(1);  //연혁 소분류 정렬번호
+                historyDTO.setHstry_sclsf_up_lclsf_sn(mainSn);  //연혁 소분류 상위 대분류 일련번호
+                historyDAO.insert(historyDTO);
             }
         }
 
         //항목 9 저장
-        if (map.get("main_input9") != null && !map.get("main_input9").equals("")) {
+        if (map.get("main_input9") != null && !map.get("main_input9")
+                                                  .equals("")) {
             mainSn = mainSn + 1;
             historyDTO.setHstry_lclsf_sn(mainSn);  //연혁 대분류 일련번호
-            historyDTO.setHstry_lclsf_ttl(map.get("main_input9").toString());  //연혁 대분류 제목
+            historyDTO.setHstry_lclsf_ttl(map.get("main_input9")
+                                             .toString());  //연혁 대분류 제목
             historyDTO.setHstry_lclsf_sort_no(mainSn);  //연혁 대분류 정렬번호
 
-            if (map.get("subInputList9") != null && !map.get("subInputList9").equals("")) {
+            if (map.get("subInputList9") != null && !map.get("subInputList9")
+                                                        .equals("")) {
                 int subSn9 = 1;
                 List<String> subInput9 = new ArrayList<>();
                 subInput9 = (List) map.get("subInputList9");
@@ -733,17 +903,26 @@ public class HistoryService {
                     }
                     subSn9 = subSn9 + 1;
                 }
+            } else {
+                historyDTO.setHstry_sclsf_sn(1);  //연혁 소분류 일련번호
+                historyDTO.setHstry_sclsf_ttl(null);  //연혁 소분류 제목
+                historyDTO.setHstry_sclsf_sort_no(1);  //연혁 소분류 정렬번호
+                historyDTO.setHstry_sclsf_up_lclsf_sn(mainSn);  //연혁 소분류 상위 대분류 일련번호
+                historyDAO.insert(historyDTO);
             }
         }
 
         //항목 10 저장
-        if (map.get("main_input10") != null && !map.get("main_input10").equals("")) {
+        if (map.get("main_input10") != null && !map.get("main_input10")
+                                                   .equals("")) {
             mainSn = mainSn + 1;
             historyDTO.setHstry_lclsf_sn(mainSn);  //연혁 대분류 일련번호
-            historyDTO.setHstry_lclsf_ttl(map.get("main_input10").toString());  //연혁 대분류 제목
+            historyDTO.setHstry_lclsf_ttl(map.get("main_input10")
+                                             .toString());  //연혁 대분류 제목
             historyDTO.setHstry_lclsf_sort_no(mainSn);  //연혁 대분류 정렬번호
 
-            if (map.get("subInputList10") != null && !map.get("subInputList10").equals("")) {
+            if (map.get("subInputList10") != null && !map.get("subInputList10")
+                                                         .equals("")) {
                 int subSn10 = 1;
                 List<String> subInput10 = new ArrayList<>();
                 subInput10 = (List) map.get("subInputList10");
@@ -762,6 +941,12 @@ public class HistoryService {
                     }
                     subSn10 = subSn10 + 1;
                 }
+            } else {
+                historyDTO.setHstry_sclsf_sn(1);  //연혁 소분류 일련번호
+                historyDTO.setHstry_sclsf_ttl(null);  //연혁 소분류 제목
+                historyDTO.setHstry_sclsf_sort_no(1);  //연혁 소분류 정렬번호
+                historyDTO.setHstry_sclsf_up_lclsf_sn(mainSn);  //연혁 소분류 상위 대분류 일련번호
+                historyDAO.insert(historyDTO);
             }
         }
 
@@ -788,5 +973,148 @@ public class HistoryService {
         historyDTO.setHstry_yr(hstryYr);
         int totalCnt = historyDAO.selectCount(historyDTO);
         return totalCnt > 0 ? "Y" : "N";
+    }
+
+    public void getPreview(HistoryDTO dto, Model model) {
+        List<HistoryDTO> previewList = new ArrayList<>();
+
+        int displayYn = 0;
+
+        for (int i = 1; i <= 10; i++) {
+            try {
+                Field field = dto.getClass()
+                                 .getDeclaredField("sub_input" + i);
+                field.setAccessible(true);
+                String subValue = (String) field.get(dto);
+
+                if(subValue != null) {
+                    String[] splitSubValue = subValue.split(",");
+
+                    for(int j = 0; j < splitSubValue.length; j++) {
+                        field = dto.getClass()
+                                   .getDeclaredField("main_input" + i);
+                        field.setAccessible(true);
+
+                        String mainValue = (String) field.get(dto);
+
+                        HistoryDTO newDto = new HistoryDTO();
+                        newDto.setHstry_yr(dto.getHstry_yr());
+                        newDto.setHstry_lclsf_sn(i);
+                        newDto.setHstry_lclsf_ttl(mainValue.replace("@@RP@@", ","));
+                        newDto.setHstry_lclsf_sort_no(i);
+                        newDto.setHstry_sclsf_sn(j + 1);
+                        newDto.setHstry_sclsf_ttl(splitSubValue[j].replace("@@RP@@", ","));
+                        newDto.setHstry_sclsf_sort_no(j + 1);
+                        newDto.setHstry_sclsf_up_lclsf_sn(i);
+                        newDto.setDisplay_yn(displayYn);
+                        newDto.setH_title("항목 " + i);
+                        newDto.setMain_sn("main_sn" + i);
+                        newDto.setSub_sn("sub_sn" + j);
+
+                        previewList.add(newDto);
+                    }
+                }else{
+                    field = dto.getClass()
+                               .getDeclaredField("main_input" + i);
+                    field.setAccessible(true);
+
+                    String mainValue = (String) field.get(dto);
+
+                    if(mainValue != null) {
+                        HistoryDTO newDto = new HistoryDTO();
+                        newDto.setHstry_yr(dto.getHstry_yr());
+                        newDto.setHstry_lclsf_sn(i);
+                        newDto.setHstry_lclsf_ttl(mainValue.replace("@@RP@@", ","));
+                        newDto.setHstry_lclsf_sort_no(i);
+                        newDto.setHstry_sclsf_ttl(null);
+                        newDto.setHstry_sclsf_sort_no(1);
+                        newDto.setHstry_sclsf_up_lclsf_sn(i);
+                        newDto.setDisplay_yn(displayYn);
+                        newDto.setH_title("항목 " + i);
+                        newDto.setMain_sn("main_sn" + i);
+                        newDto.setSub_sn("sub_sn1");
+
+                        previewList.add(newDto);
+                    }
+                }
+
+                displayYn++;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        List<HistoryDTO> historyList = historyDAO.selectHistory();
+        previewList.addAll(historyList);
+
+        // 중복 제거
+        Set<HistoryDTO> set = new HashSet<HistoryDTO>(previewList);
+        previewList = new ArrayList<HistoryDTO>(set);
+
+        if(previewList != null) {
+            Collections.sort(previewList, new Comparator<HistoryDTO>() {
+                @Override
+                public int compare(HistoryDTO h1, HistoryDTO h2) {
+                    // Hstry_yr 내림차순 비교
+                    int yearCompare = h2.getHstry_yr().compareTo(h1.getHstry_yr());
+                    if (yearCompare != 0) {
+                        return yearCompare;
+                    }
+
+                    // HSTRY_LCLSF_SORT_NO 오름차순 비교
+                    int lclsfCompare = Integer.compare(h1.getHstry_lclsf_sort_no(), h2.getHstry_lclsf_sort_no());
+                    if (lclsfCompare != 0) {
+                        return lclsfCompare;
+                    }
+
+                    // HSTRY_SCLSF_SORT_NO 오름차순 비교
+                    return Integer.compare(h1.getHstry_sclsf_sort_no(), h2.getHstry_sclsf_sort_no());
+                }
+            });
+
+            // 연도별, 대분류별로 그룹화
+            Map<String, List<HistoryGroup>> historyGroups = new HashMap<String, List<HistoryGroup>>();
+
+            // 임시로 대분류 정보를 저장할 Map
+            Map<String, HistoryGroup> tempGroups = new HashMap<String, HistoryGroup>();
+            List<String> yearList = new ArrayList<>();
+            for (HistoryDTO history : previewList) {
+                String year = history.getHstry_yr();
+                String key = year + "_" + history.getHstry_lclsf_sort_no();
+
+                // 해당 연도의 그룹 리스트가 없으면 생성
+                if (!historyGroups.containsKey(year)) {
+                    historyGroups.put(year, new ArrayList<HistoryGroup>());
+                    yearList.add(year);
+                }
+
+                // 대분류 그룹이 없으면 생성
+                if (!tempGroups.containsKey(key)) {
+                    HistoryGroup group = new HistoryGroup();
+                    group.setHstry_lclsf_ttl(history.getHstry_lclsf_ttl());
+                    group.setHstry_lclsf_sort_no(history.getHstry_lclsf_sort_no());
+                    group.setHstry_lclsf_ttlList(new ArrayList<String>());
+                    tempGroups.put(key, group);
+                    historyGroups.get(year)
+                                 .add(group);
+                }
+
+                // 소분류 정보 추가
+                tempGroups.get(key)
+                          .getHstry_lclsf_ttlList()
+                          .add(history.getHstry_sclsf_ttl());
+            }
+
+            model.addAttribute("yearList", yearList);
+            model.addAttribute("historyGroups", historyGroups);
+        }
+    }
+
+    @Getter
+    @Setter
+    public static class HistoryGroup {
+        private String hstry_lclsf_ttl;
+        private int hstry_lclsf_sort_no;
+        private List<String> hstry_lclsf_ttlList;
     }
 }

@@ -30,4 +30,6 @@ public interface SendMailDAO {
     int deleteDetail(SendMailDTO sendMailDTO);
     //보낸 메일함 보낸사람 조회
     List<SendMailDTO> selectDetailMailList(SendMailDTO sendMailDTO);
+    int saveMailInfo(SendMailDTO sendMailDTO);
+    int saveHistory(SendMailDTO sendMailDTO);
 }

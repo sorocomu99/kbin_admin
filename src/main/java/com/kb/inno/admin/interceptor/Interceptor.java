@@ -26,9 +26,9 @@ import javax.servlet.http.HttpSession;
 public class Interceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        log.info("===============================================");
-        log.info("==================== BEGIN ====================");
-        log.info("Request URI ===> " + request.getRequestURI());
+//        log.info("===============================================");
+//        log.info("==================== BEGIN ====================");
+//        log.info("Request URI ===> " + request.getRequestURI());
 
         //세션 정보 가져오기
         String requestURI = request.getRequestURI();
@@ -47,8 +47,8 @@ public class Interceptor implements HandlerInterceptor {
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-        log.info("==================== END ======================");
-        log.info("===============================================");
+//        log.info("==================== END ======================");
+//        log.info("===============================================");
         //HandlerInterceptor.super.postHandle(request, response, handler, modelAndView);
     }
 

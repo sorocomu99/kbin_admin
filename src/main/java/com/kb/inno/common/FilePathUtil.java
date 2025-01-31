@@ -21,6 +21,8 @@ public class FilePathUtil {
         String rootPath = "";
         if(CommonUtil.isLocal(profile)) {
             rootPath = FilePathEnum.LOCAL_UPLOAD_ROOT.getPath();
+        }else if(CommonUtil.isLocalDev(profile)) {
+            rootPath = FilePathEnum.LOCAL_DEV_UPLOAD_ROOT.getPath();
         }else if(CommonUtil.isDev(profile)) {
             rootPath = FilePathEnum.DEV_UPLOAD_ROOT.getPath();
         }else if(CommonUtil.isProd(profile)) {
@@ -32,6 +34,8 @@ public class FilePathUtil {
     private static String getFilePath(String profile) {
         if(CommonUtil.isLocal(profile)) {
             return FilePathEnum.LOCAL_UPLOAD_FILE.getPath();
+        }else if(CommonUtil.isLocalDev(profile)) {
+            return FilePathEnum.LOCAL_DEV_UPLOAD_FILE.getPath();
         }else if(CommonUtil.isDev(profile)) {
             return FilePathEnum.DEV_UPLOAD_FILE.getPath();
         }else if(CommonUtil.isProd(profile)) {

@@ -5,14 +5,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.kb.inno.admin.DAO.SendMailDAO;
+import com.kb.inno.admin.DTO.*;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
 import com.kb.inno.admin.DAO.ReceiptDAO;
-import com.kb.inno.admin.DTO.ReceiptConmDTO;
-import com.kb.inno.admin.DTO.ReceiptDTO;
-import com.kb.inno.admin.DTO.ReceiptListDTO;
-import com.kb.inno.admin.DTO.SurveyDTO;
 
 import lombok.RequiredArgsConstructor;
 
@@ -21,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 public class ReceiptService {
     // DAO 연결
     private final ReceiptDAO receiptDAO;
+    private final SendMailDAO sendMailDAO;
 
     /**
      * 설문정보 삭제 (하위 모든 정보 삭제)
@@ -284,5 +283,16 @@ System.out.println("ReceiptService : receiptTenList--------------type["+type+"] 
     
 
     }
-    
+
+    public void insertSendMailInfo(SendMailDTO sendMailDTO, List<String> receivers) {
+        try{
+            sendMailDAO.saveMailInfo(sendMailDTO);
+            for(int i = 0; i < receivers.size(); i++) {
+                sendMailDTO.setSend_mail_hist_sn(i + 1);
+                sendMailDTO.setMail_rcvr(receivers.get(i));
+                sendMailDAO.saveHistory(sendMailDTO);
+            }
+        }catch (Exception ignored) {
+        }
+    }
 }

@@ -21,6 +21,10 @@ public class CommonUtil {
         return StringUtils.hasText(profile) && ("local".equals(profile));
     }
 
+    public static boolean isLocalDev(String profile){
+        return StringUtils.hasText(profile) && ("localdev".equals(profile));
+    }
+
     public static boolean isDev(String profile){
         return StringUtils.hasText(profile) && ("dev".equals(profile));
     }

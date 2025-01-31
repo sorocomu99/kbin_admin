@@ -4,10 +4,7 @@ package com.kb.inno.admin.Controller;
 import com.kb.inno.admin.DAO.KbStartersSurvey;
 import com.kb.inno.admin.DTO.*;
 import com.kb.inno.admin.Service.SurveyService;
-import com.kb.inno.common.FilePathUtil;
-import com.kb.inno.common.MailUtil;
-import com.kb.inno.common.Pagination;
-import com.kb.inno.common.PropertiesValue;
+import com.kb.inno.common.*;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,9 +30,12 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -221,8 +221,23 @@ public class ReceiptController {
     public ModelAndView sendMail(@RequestParam("receivers[]") List<String> receivers, String subject, String content, MultipartFile attachment, HttpServletRequest request) {
         ModelAndView mv = new ModelAndView("alert");
         MailUtil mailUtil = new MailUtil();
+
         if(mailUtil.sendMail(receivers, subject, content, attachment)){
             String referer = request.getHeader("Referer");
+
+            HttpSession session = request.getSession(false);
+            int loginId = (int) session.getAttribute("mngrSn");
+
+            //receivers 사이즈는 mailUtil.sendMail 에서 이미 처리함
+            SendMailDTO sendMailDTO = new SendMailDTO();
+            sendMailDTO.setSend_ymd(DateUtil.getToDay("yyyyMMdd"));
+            sendMailDTO.setMail_rcvr(receivers.get(0));
+            sendMailDTO.setMail_ttl(subject);
+            sendMailDTO.setMail_cn(content);
+            sendMailDTO.setFrst_rgtr(loginId);
+            sendMailDTO.setLast_mdfr(loginId);
+
+            receiptService.insertSendMailInfo(sendMailDTO, receivers);
             mv.addObject("message", "메일 전송이 완료되었습니다.");
             mv.addObject("url", referer);
             return mv;

@@ -35,4 +35,5 @@ public interface HistoryDAO {
     //삭제 처리
     int delete(HistoryDTO historyDTO);
     int selectMaxLcl(HistoryDTO historyDTO);
+    List<HistoryDTO> selectHistory();
 }

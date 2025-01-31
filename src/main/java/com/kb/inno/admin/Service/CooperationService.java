@@ -175,7 +175,8 @@ public class CooperationService {
         // 최종 수정자 대입
         cooperationDTO.setLast_mdfr(loginId);
         resultUpd = cooperationDAO.update(cooperationDTO);
-        cooperationDAO.sortUpdate(cooperationDTO);
+        // 정렬 알고리즘 수정 및 전체 case 일괄 적용 필요
+        // cooperationDAO.sortUpdate(cooperationDTO);
         //return cooperationDAO.update(cooperationDTO);
         return resultUpd;
     }
