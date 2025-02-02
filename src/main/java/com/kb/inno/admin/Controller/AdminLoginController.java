@@ -79,7 +79,7 @@ public class AdminLoginController {
 
         //관리자 정보가 없으면 리턴
         if (adminLoginDTO == null) {
-            resultMap.put("seccess", "fail");
+            resultMap.put("success", "fail");
             resultMap.put("message", "관리자로 등록되어 있지 않습니다.");
 
             return resultMap;

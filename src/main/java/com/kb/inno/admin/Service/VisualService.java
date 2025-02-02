@@ -14,6 +14,7 @@ import com.kb.inno.admin.DAO.VisualDAO;
 import com.kb.inno.admin.DTO.FileDTO;
 import com.kb.inno.admin.DTO.VisualDTO;
 import com.kb.inno.common.FileUploader;
+import com.kb.inno.common.StringUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,6 +25,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -147,7 +150,6 @@ public class VisualService {
     	int main_sn = visualDTO.getMain_sn();
         //List<VisualDTO> selectList = visualDAO.selectListAll(main_sn);
         List<VisualDTO> selectList = visualDAO.selectListAll(visualDTO);
-        model.addAttribute("selectList", selectList);
 
         // 기존 파일 확인
         if(main_sn > 0) {
@@ -167,6 +169,21 @@ public class VisualService {
         }
 
         // 파일 화면에 전달
-        model.addAttribute("visual", visualDTO);
+        //model.addAttribute("visual", visualDTO);
+        // 기존 데이터와 현재 처리중인 데이터를 병합하고 sort_no 기준 재정렬
+        // 노출중인 경우 표출
+        if(StringUtil.hasText(visualDTO.getExpsr_yn())
+                && visualDTO.getExpsr_yn().equals("Y")) {
+            selectList.add(visualDTO);
+
+            Collections.sort(selectList, new Comparator<VisualDTO>() {
+                @Override
+                public int compare(VisualDTO v1, VisualDTO v2) {
+                    return Integer.compare(v1.getSort_no(), v2.getSort_no());
+                }
+            });
+        }
+
+        model.addAttribute("selectList", selectList);
     }
 }

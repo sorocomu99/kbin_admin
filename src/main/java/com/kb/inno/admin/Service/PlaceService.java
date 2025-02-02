@@ -26,9 +26,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -289,8 +287,8 @@ public class PlaceService {
     public void selectListAll(Model model, PlaceDTO placeDTO) {
         int main_sn = placeDTO.getPlc_sn();
         //List<VisualDTO> selectList = placeDAO.selectListAll(main_sn);
-        List<VisualDTO> selectList = placeDAO.selectListAll(placeDTO);
-        model.addAttribute("selectList", selectList);
+        List<PlaceDTO> selectList = placeDAO.selectListAll(placeDTO);
+        //model.addAttribute("selectList", selectList);
 
         // 기존 파일 확인
         if(main_sn > 0) {
@@ -330,6 +328,17 @@ public class PlaceService {
         }
 
         // 파일 화면에 전달
-        model.addAttribute("place", placeDTO);
+        //model.addAttribute("place", placeDTO);
+        // 기존 데이터와 현재 처리중인 데이터를 병합하고 sort_no 기준 재정렬
+        selectList.add(placeDTO);
+
+        Collections.sort(selectList, new Comparator<PlaceDTO>() {
+            @Override
+            public int compare(PlaceDTO v1, PlaceDTO v2) {
+                return Integer.compare(v1.getSort_no(), v2.getSort_no());
+            }
+        });
+
+        model.addAttribute("selectList", selectList);
     }
 }

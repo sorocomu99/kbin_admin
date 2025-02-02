@@ -1056,7 +1056,7 @@ public class HistoryService {
                 @Override
                 public int compare(HistoryDTO h1, HistoryDTO h2) {
                     // Hstry_yr 내림차순 비교
-                    int yearCompare = h2.getHstry_yr().compareTo(h1.getHstry_yr());
+                    int yearCompare = Integer.compare(Integer.parseInt(h2.getHstry_yr()), (Integer.parseInt(h1.getHstry_yr())));
                     if (yearCompare != 0) {
                         return yearCompare;
                     }

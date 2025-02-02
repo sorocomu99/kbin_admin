@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KB Innovation HUB | 미리보기</title>
+
+    <!-- 공통 스타일 시트 -->
+    <link rel="stylesheet" th:href="@{/css/swiper-bundle.min.css}">
+    <link rel="stylesheet" th:href="@{/css/base.css}">
+    <link rel="stylesheet" th:href="@{/css/board.css}">
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+    <link rel="stylesheet" th:href="@{/css/sub.css}">
+
+    <script th:src="@{/js/jquery-3.6.4.min.js}"></script>
+
+    <!-- 임시 스크립트: 헤더/푸터 컴포넌트 (작업용 임시 파일이므로 개발단계부터는 스크립트 파일 안에 HTML 코드 사용) -->
+    <script th:src="@{/component/header_preview.js}"></script>
+    <script th:src="@{/component/footer_preview.js}"></script>
+
+    <!-- 공통 스크립트 -->
+    <script th:src="@{/js/scrollreveal.min.js}"></script>
+    <script th:src="@{/js/gsap.min.js}"></script>
+    <script th:src="@{/js/ScrollToPlugin.min.js}"></script>
+    <script th:src="@{/js/ScrollTrigger.min.js}"></script>
+    <script th:src="@{/js/lenis.min.js}"></script>
+    <script th:src="@{/js/split-type.min.js}"></script>
+    <script th:src="@{/js/echarts.min.js}"></script>
+    <script th:src="@{/js/echarts-wordcloud.min.js}"></script>
+    <script th:src="@{/js/flatpickr.js}"></script>
+    <script th:src="@{/js/ko.js}"></script>
+    <script th:src="@{/js/swiper-bundle.min.js}"></script>
+    <script th:src="@{/js/countUp.umd.js}"></script>
+    <script th:src="@{/js/common.js}"></script>
+</head>
+<body>
+<!-- 헤더 -->
+<app-header></app-header>
+<!-- 본문 -->
+<main class="main">
+    <div class="section-top">
+        <div class="section-top-wrap">
+            <nav aria-label="Breadcrumb" class="breadcrumb" data-breadcrub-theme="light">
+                <ul>
+                    <li><a href="#"><i class="icon icon-home"></i><span class="blind">HOME</span></a></li>
+                    <li><a href="#">커뮤니티</a></li>
+                    <li><span aria-current="page">FAQ</span></li>
+                </ul>
+            </nav>
+            <h2 class="title">FAQ</h2>
+        </div>
+    </div>
+    <div class="board">
+        <div class="board-list">
+            <div class="board-list-head">
+                <div class="col">
+                    <div class="search">
+                        <select class="form-select" aria-label="" name="type">
+                            <option value="all">전체</option>
+                            <option value="title">제목</option>
+                            <option value="content">내용</option>
+                        </select>
+                        <div class="box">
+                            <input type="text" placeholder="검색어를 입력해주세요." name="keyword">
+                            <button type="submit">
+                                <span class="blind">검색</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="board-list-body">
+                <div class="board-card">
+                    <div class="swiper category-list">
+                        <ul class="swiper-wrapper category-wrap">
+                            <li class="swiper-slide category-item" th:classappend="${ctgry} == 0 ? 'category-item--active' : ''">
+                                <a class="category-button" th:href="@{/community/faq/list}" th:classappend="${ctgry} == 0 ? 'category-button--selected' : ''">전체보기</a>
+                            </li>
+                            <li class="swiper-slide category-item" th:each="category : ${selectCategory}" th:classappend="${category.ctgry_sn == ctgry} ? 'category-item--active' : ''">
+                                <a th:id="${#ids.next('tabs')}" class="category-button" th:classappend="${category.ctgry_sn == ctgry} ? 'category-button--selected' : ''" href="#" th:text="${category.ctgry_nm}"></a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="accordion">
+                        <ul class="accordion-list">
+                            <!-- 아코디언 id와 aria-* 애트리뷰트에 리스트 인덱스값 늘려주시면 됩니다. tab1... tab2... (개당 총 4군데에요.) -->
+                            <li class="accordion-group" th:each="list : ${selectList}">
+                                <div role="heading" aria-level="3" class="accordion-heading" th:with="faq_sec='abcde'">
+                                    <!-- <button type="button" class="accordion-tab" th:id="${list.faq_id}" th:aria-controls="${list.faq_sec}" aria-expanded="false"> -->
+                                    <!--<button type="button" class="accordion-tab" th:id="${list.faq_id}" aria-controls=[[${faq_sec}]] aria-expanded="false">-->
+                                    <button type="button" class="accordion-tab" th:id="${list.faq_id}" th:src="${list.faq_sec}" aria-controls="" aria-expanded="false">
+                                        <span class="category" th:text="${list.ctgry_nm}"></span>
+                                        <span class="type">Q.</span>
+                                        <span th:text="${list.faq_qstn}"></span>
+                                        <i class="icon"></i>
+                                    </button>
+                                </div>
+                                <!-- <section class="accordion-panel" th:id="'tab' + ${list.faq_sn} + '-section'" aria-hidden="true" th:aria-labelledby="'tab' + ${list.faq_sn}"> -->
+                                <section class="accordion-panel" th:id="${list.faq_sec}" aria-hidden="true" th:aria-labelledby="${list.faq_id}">
+                                    <div class="accordion-contents">
+                                        <span class="type">A.</span>
+                                        <div class="context" th:text="${list.faq_ans}"></div>
+                                    </div>
+                                </section>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="board-list-foot">
+                <ul class="pagination">
+                    <!--
+                        #클래스 가이드
+                        1. 이전/다음 버튼 비활성화: li 태그에 "disabled" 클래스 추가
+                        2. 활성화 상태: li태그에 "active" 클래스 및 "aria-current='page'" 추가
+                     -->
+                    <li class="page-item disabled">
+                        <a aria-label="맨 앞 페이지" class="page-link" href="#">
+                            <span class="first"></span>
+                        </a>
+                    </li>
+                    <li class="page-item disabled">
+                        <a aria-label="이전 페이지" class="page-link" href="#">
+                            <span class="previous"></span>
+                        </a>
+                    </li>
+
+                    <li aria-current="page" class="page-item active">
+                        <a aria-label="" class="page-link" href="#" id="page1">1</a>
+                    </li>
+
+                    <!-- 다음으로 이동하는 버튼 -->
+                    <li class="page-item disabled">
+                        <a aria-label="다음 페이지" class="page-link" href="#">
+                            <span class="next"></span>
+                        </a>
+                    </li>
+                    <!-- 맨 끝페이지 이동 버튼 -->
+                    <li class="page-item disabled">
+                        <a aria-label="맨 뒤 페이지" class="page-link" href="#">
+                            <span class="last"></span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script th:inline="javascript">
+    window.staticPath = /*[[${@environment.getProperty('staticpath')} + '/']]*/'/';
+    if(window.staticPath === '//') {
+        window.staticPath = '/';
+    }
+    const faq_sn = /*[[${faq_sn}]]*/'';
+</script>
+<!-- 푸터 -->
+<app-footer></app-footer>
+
+<!-- 스크립트 -->
+<script>
+    $(document).ready(function () {
+        $('#' + faq_sn).trigger('click');
+    })
+    window.addEventListener('DOMContentLoaded', () => {
+        accordion();
+    });
+
+    function accordion(){
+        const opened = document.querySelectorAll('[aria-expanded=true]');
+
+        for (let i = 0, l = opened.length; i < l; i++) {
+            const panel = document.getElementById(opened[i].id + '-section');
+            //const panel = document.getElementById(opened[i].id);
+
+            panel.style.height = panel.scrollHeight + 'px';
+        }
+
+        function toggleExpanded(element, show) {
+            //const target = document.getElementById(element.getAttribute('aria-controls'));
+            //const target = document.getElementById(element.getAttribute('accordion-tab'));
+            const target = document.getElementById(element.getAttribute('src'));
+            const height = target.scrollHeight;
+
+            if (target) {
+                element.setAttribute('aria-expanded', show);
+                target.setAttribute('aria-hidden', !show);
+                show ? target.style.height = height + 'px' : target.style.removeProperty('height');
+            }
+        }
+
+        function setupAccordion(accordionContainer) {
+            function closeAllPanels() {
+                const openPanels = accordionContainer.querySelectorAll('[aria-expanded=true]');
+
+                for (let i = 0, l = openPanels.length; i < l; i++) {
+                    toggleExpanded(openPanels[i], false);
+                }
+            }
+
+            accordionContainer.addEventListener('click', function (event) {
+                let target = event.target;
+
+                if (target.closest) {
+                    target = target.closest('[class*="accordion-tab"]');
+                }
+
+                if (target) {
+                    const isTargetOpen = target.getAttribute('aria-expanded') === 'true';
+                    closeAllPanels();
+                    toggleExpanded(target, !isTargetOpen);
+                }
+            });
+        }
+
+        const accordions = document.querySelectorAll('.accordion');
+
+        for (let i = 0, l = accordions.length; i < l; i++) {
+            setupAccordion(accordions[i]);
+        }
+    }
+</script>
+</body>
+</html>

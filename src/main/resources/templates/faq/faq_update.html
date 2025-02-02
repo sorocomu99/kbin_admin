@@ -73,6 +73,7 @@
                                     </table>
                                     <div class="button-container">
                                         <!-- <a href="javascript:" class="btn btn-outline-primary">미리보기</a> -->
+                                        <a id="preview-button" href="javascript:previewPage()" class="btn btn-outline-primary">미리보기</a>
                                         <a class="btn btn-outline-dark" th:href="@{|/faq/list/${menuId}?ctgry=${ctgry}|}">목록보기</a>
                                         <!-- <a class="btn btn-outline-dark" th:href="@{/faq/list/{menuId}(menuId=${menuId})}">목록보기</a> -->
                                         <button type="button" class="btn btn-primary" onclick="confirmMsg()">수정하기</button>
@@ -126,6 +127,36 @@
                 f=document.faq_form;
                 f.submit();
             }
+        }
+
+        // 프리뷰 페이지로 이동
+        function previewPage() {
+            // 질문 텍스트 입력 확인
+            var faq_qstn = $('textarea[name=faq_qstn]').val();
+            if(faq_qstn.trim() == "") {
+                alert("질문 텍스트를 입력하세요.");
+                $('textarea[name=faq_qstn]').focus()
+                return false;
+            }
+
+            // 답변 텍스트 입력 확인
+            var faq_ans = $('textarea[name=faq_ans]').val();
+            if(faq_ans.trim() == "") {
+                alert("답변 텍스트를 입력하세요.");
+                $('textarea[name=faq_ans]').focus()
+                return false;
+            }
+
+            // sort_no를 비웠을 경우 1을 대입
+            if($("input[name=sort_no]").val() == '') {
+                $("input[name=sort_no]").val(1)
+            }
+
+            const form = document.forms['faq_form'];
+            form.action = window.staticPath + 'faq/preview'; // 전송할 URL
+            form.method = 'POST';            // 전송 방식
+            form.target = '_blank';          // 새 창에서 열기
+            form.submit();                   // 폼 제출
         }
     </script>
     <script th:src="@{/js/admin.js}"></script>

@@ -185,41 +185,41 @@
                 }
             });
         }
-
-        const previewOpenBtn = document.querySelector('#preview_open');
-        const previewCLoseBtn = document.querySelector('#preview_close');
-
-        previewOpenBtn.addEventListener('click', () => {
-            document.querySelector('.preview_container').classList.add('show');
-
-            const getPageHistoryItem = () => {
-                const copyData = {...modifyedData};
-                delete copyData[selectedYear];
-
-                const pageData = {};
-                pageData[hstry_yr.value] = {};
-
-                document.querySelectorAll('.question-list').forEach(el => {
-                    const rowArray = [...el.querySelectorAll('.row')];
-                    const [title, lists] = rowArray;
-
-                    pageData[hstry_yr.value][title.querySelector('input').value] = [];
-
-                    lists.querySelectorAll('input').forEach(input => {
-                        pageData[hstry_yr.value][title.querySelector('input').value].push(input.value);
-                    })
-                })
-
-                copyData[hstry_yr.value] = pageData[hstry_yr.value];
-                renderPreviewModal(copyData)
-            }
-            getPageHistoryItem()
-
-            brandHistory();
-        });
-        previewCLoseBtn.addEventListener('click', () => {
-            document.querySelector('.preview_container').classList.remove('show');
-        });
+        //
+        // const previewOpenBtn = document.querySelector('#preview_open');
+        // const previewCLoseBtn = document.querySelector('#preview_close');
+        //
+        // previewOpenBtn.addEventListener('click', () => {
+        //     document.querySelector('.preview_container').classList.add('show');
+        //
+        //     const getPageHistoryItem = () => {
+        //         const copyData = {...modifyedData};
+        //         delete copyData[selectedYear];
+        //
+        //         const pageData = {};
+        //         pageData[hstry_yr.value] = {};
+        //
+        //         document.querySelectorAll('.question-list').forEach(el => {
+        //             const rowArray = [...el.querySelectorAll('.row')];
+        //             const [title, lists] = rowArray;
+        //
+        //             pageData[hstry_yr.value][title.querySelector('input').value] = [];
+        //
+        //             lists.querySelectorAll('input').forEach(input => {
+        //                 pageData[hstry_yr.value][title.querySelector('input').value].push(input.value);
+        //             })
+        //         })
+        //
+        //         copyData[hstry_yr.value] = pageData[hstry_yr.value];
+        //         renderPreviewModal(copyData)
+        //     }
+        //     getPageHistoryItem()
+        //
+        //     brandHistory();
+        // });
+        // previewCLoseBtn.addEventListener('click', () => {
+        //     document.querySelector('.preview_container').classList.remove('show');
+        // });
 
     </script>
 

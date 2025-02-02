@@ -31,4 +31,5 @@ public interface MemberDAO {
     int selectId(String memberId);
     // 관리자 계정 삭제
     int delete(int memberId);
+    int updateMemberDeleteStatus(MemberDTO memberDTO);
 }

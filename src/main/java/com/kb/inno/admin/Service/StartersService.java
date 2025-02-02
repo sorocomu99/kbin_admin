@@ -14,6 +14,7 @@ import com.kb.inno.admin.DAO.StartersDAO;
 import com.kb.inno.admin.DTO.StartersDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
 @Service
 @RequiredArgsConstructor
@@ -42,5 +43,9 @@ public class StartersService {
         startersDTO.setLast_mdfr(loginId);
 
         return startersDAO.update(startersDTO);
+    }
+
+    public void getPreview(StartersDTO startersDTO, Model model) {
+
     }
 }

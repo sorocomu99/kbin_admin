@@ -30,23 +30,25 @@
                                             <tr>
                                                 <th class="bg-light" width="20%">연도</th>
                                                 <td>
-                                                    <select class="form-select" name="employ_yr">
-                                                        <option value="">선택</option>
-                                                        <!-- <option value="" th:disabled th:hidden="true">-선택-</option> -->
-                                                        <option th:each="i : ${#numbers.sequence(#dates.year(#dates.createNow()) - 5, #dates.year(#dates.createNow()) + 5)}" th:value="${i}" th:text="${i}" th:selected="${recruit?.employ_yr} == ${i}"></option>
-                                                    </select>
+                                                    <input type="number" class="form-control" id="employ_yr" name="employ_yr" th:value="${recruit?.employ_yr}" placeholder=" ex) 2020" oninput="splitAmt(this, 4)" onblur="splitAmt(this, 4)">
+<!--                                                    -->
+<!--                                                    <select class="form-select" name="employ_yr">-->
+<!--                                                        <option value="">선택</option>-->
+<!--                                                        &lt;!&ndash; <option value="" th:disabled th:hidden="true">-선택-</option> &ndash;&gt;-->
+<!--                                                        <option th:each="i : ${#numbers.sequence(#dates.year(#dates.createNow()) - 5, #dates.year(#dates.createNow()) + 5)}" th:value="${i}" th:text="${i}" th:selected="${recruit?.employ_yr} == ${i}"></option>-->
+<!--                                                    </select>-->
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <th class="bg-light" width="20%">채용 수(명)</th>
                                                 <td>
-                                                    <input type="number" class="form-control" name="employ_emp_nocs" placeholder="ex) 1,142" th:value="${recruit?.employ_emp_nocs}">
+                                                    <input type="number" class="form-control" name="employ_emp_nocs" placeholder="ex) 142" th:value="${recruit?.employ_emp_nocs}" oninput="splitAmt(this, 7)" onblur="splitAmt(this, 7)">
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <th class="bg-light" width="20%">지원 금액(억원)</th>
                                                 <td>
-                                                    <input type="text" class="form-control" name="sprt_amt" placeholder=" ex) 6.7" th:value="${recruit?.ret_sprt_amt}" maxlength="10">
+                                                    <input type="number" class="form-control" name="sprt_amt" placeholder=" ex) 6.7" th:value="${recruit?.ret_sprt_amt}" oninput="splitAmt(this, 7)" onblur="splitAmt(this, 7)">
                                                 </td>
                                             </tr>
                                             <tr>
@@ -79,25 +81,30 @@
         // 수정 및 등록 시 띄울 알림창
         const msg = /*[[${msg}]]*/ '';
         if (msg) alert(msg);
-
-        // 현재 년도 기준으로 셀렉트 박스 선택 되게 하기
-        // 만약 값이 없으면 세팅(등록)
-        var year = new Date().getFullYear();
-        var select = document.getElementsByName("employ_yr");
-        var options = select[0].options;
-        // 옵션들 중에서 해당 되는 년도를 선택
-        for(var i = 0; i < options.length; i++) {
-            if(options[i].value == String(year) && options[options.selectedIndex].value == '') {
-                options[i].selected = true;
-            }
-        }
+        //
+        // // 현재 년도 기준으로 셀렉트 박스 선택 되게 하기
+        // // 만약 값이 없으면 세팅(등록)
+        // var year = new Date().getFullYear();
+        // var select = document.getElementsByName("employ_yr");
+        // var options = select[0].options;
+        // // 옵션들 중에서 해당 되는 년도를 선택
+        // for(var i = 0; i < options.length; i++) {
+        //     if(options[i].value == String(year) && options[options.selectedIndex].value == '') {
+        //         options[i].selected = true;
+        //     }
+        // }
     };
 
     function previewPage() {
         // 연도 입력 확인
-        if($('select[name=employ_yr]').val() === '') {
-            alert('연도를 선택하세요.');
-            $('select[name=employ_yr]').focus()
+        // if($('select[name=employ_yr]').val() === '') {
+        //     alert('연도를 선택하세요.');
+        //     $('select[name=employ_yr]').focus()
+        //     return false;
+        // }
+        if($('input[name=employ_yr]').val() == "") {
+            alert('연도를 입력하세요.');
+            $('input[name=employ_yr]').focus();
             return false;
         }
 
@@ -137,9 +144,14 @@
     // 컨펌 메시지 띄우는 함수
     function confirmMsg() {
         // 연도 입력 확인
-        if($('select[name=employ_yr]').val() === '') {
-            alert('연도를 선택하세요.');
-            $('select[name=employ_yr]').focus()
+        // if($('select[name=employ_yr]').val() === '') {
+        //     alert('연도를 선택하세요.');
+        //     $('select[name=employ_yr]').focus()
+        //     return false;
+        // }
+        if($('input[name=employ_yr]').val() == "") {
+            alert('연도를 입력하세요.');
+            $('input[name=employ_yr]').focus();
             return false;
         }
 
@@ -182,6 +194,12 @@
             form.method = 'POST';            // 전송 방식
             form.target = '';          // 새 창에서 열기
             form.submit();                   // 폼 제출
+        }
+    }
+
+    function splitAmt(obj, len) {
+        if(obj.value.length > len) {
+            obj.value = obj.value.slice(0, len);
         }
     }
 </script>

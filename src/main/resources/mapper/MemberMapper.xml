@@ -26,6 +26,7 @@
                    , LAST_MDFR
                    , LAST_MDFCN_DT
               FROM KB_MNGR_MBR_INFO
+              WHERE UPPER(MNGR_ID) NOT LIKE 'DEL_SORO_%'
               ORDER BY MNGR_SN DESC) as MEMBER
         ORDER BY ROWNUMBER DESC
     </select>
@@ -102,4 +103,17 @@
         FROM KB_MNGR_MBR_INFO
         WHERE MNGR_SN = #{memberId}
     </delete>
+
+    <!-- 관리자 계정 삭제 정보로 업데이트 -->
+    <update id="updateMemberDeleteStatus" parameterType="com.kb.inno.admin.DTO.MemberDTO">
+        update KB_MNGR_MBR_INFO
+        SET LAST_CNTN_DT  = #{last_cntn_dt},
+            LAST_MDFR     = #{last_mdfr},
+            LAST_MDFCN_DT = SYSDATE,
+            MNGR_ID = SUBSTR('DEL_SORO_' || MNGR_ID, 1, 15)
+        <if test="mngr_pswd != null and mngr_pswd != ''">
+            , MNGR_PSWD = #{mngr_pswd}
+        </if>
+        WHERE MNGR_SN       = #{mngr_sn}
+    </update>
 </mapper>

@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KB Innovation HUB | 미리보기</title>
+
+    <!-- 공통 스타일 시트 -->
+    <link rel="stylesheet" th:href="@{/css/swiper-bundle.min.css}">
+    <link rel="stylesheet" th:href="@{/css/base.css}">
+    <link rel="stylesheet" th:href="@{/css/board.css}">
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+    <link rel="stylesheet" th:href="@{/css/sub.css}">
+
+    <!-- 임시 스크립트: 헤더/푸터 컴포넌트 (작업용 임시 파일이므로 개발단계부터는 스크립트 파일 안에 HTML 코드 사용) -->
+    <script th:src="@{/component/header_preview.js}"></script>
+    <script th:src="@{/component/footer_preview.js}"></script>
+
+    <!-- 공통 스크립트 -->
+    <script th:src="@{/js/scrollreveal.min.js}"></script>
+    <script th:src="@{/js/gsap.min.js}"></script>
+    <script th:src="@{/js/ScrollToPlugin.min.js}"></script>
+    <script th:src="@{/js/ScrollTrigger.min.js}"></script>
+    <script th:src="@{/js/lenis.min.js}"></script>
+    <script th:src="@{/js/split-type.min.js}"></script>
+    <script th:src="@{/js/echarts.min.js}"></script>
+    <script th:src="@{/js/echarts-wordcloud.min.js}"></script>
+    <script th:src="@{/js/flatpickr.js}"></script>
+    <script th:src="@{/js/ko.js}"></script>
+    <script th:src="@{/js/swiper-bundle.min.js}"></script>
+    <script th:src="@{/js/countUp.umd.js}"></script>
+    <script th:src="@{/js/common.js}"></script>
+    <script th:src="@{/js/jquery-3.6.4.min.js}"></script>
+</head>
+<body>
+<!-- 헤더 -->
+<app-header></app-header>
+<!-- 본문 -->
+<!-- 본문 -->
+<main class="main">
+    <div class="section-top section-top--startup">
+        <div class="section-top-wrap">
+            <nav aria-label="Breadcrumb" class="breadcrumb" data-breadcrub-theme="transparent">
+                <ul>
+                    <li><a th:href="@{/static}"><i class="icon icon-home"></i><span class="blind">HOME</span></a></li>
+                    <li><a th:href="@{/startup/list}">스타트업 정보</a></li>
+                    <li><span aria-current="page">정보검색</span></li>
+                </ul>
+            </nav>
+            <h2 class="title" th:text="${startupInfo.ent_nm}">
+                <th:block th:if="${startupInfo.kb_starters_yn == 'Y'}">
+                    <span class="badge">KB 스타터스</span>
+                </th:block>
+            </h2>
+            <p class="text" th:text="${startupInfo.main_biz}"></p>
+            <ul class="dashboard">
+                <li>
+                    <div class="box">
+                        <p class="name"><i class="icon icon-1"></i>최종투자단계</p>
+                        <th:block th:if="${startupInfo.series_nm != null and startupInfo.series_nm != ''}">
+                            <p class="value"><em th:text="${startupInfo.series_nm}"></em></p>
+                        </th:block>
+                        <th:block th:if="${startupInfo.series_nm == null or startupInfo.series_nm == ''}">
+                            <p class="value"><em>-</em></p>
+                        </th:block>
+                    </div>
+                </li>
+                <li>
+                    <div class="box">
+                        <p class="name"><i class="icon icon-2"></i>누적투자금액</p>
+                        <p class="value"><em th:text="${startupInfo.invest_amt_str}"></em></p>
+                    </div>
+                </li>
+                <li>
+                    <div class="box">
+                        <p class="name"><i class="icon icon-3"></i>근무자</p>
+                        <p class="value"><em th:text="${startupInfo.now_wrkr_nocs}"></em>명</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="proximal-view">
+        <div class="proximal-view-wrap">
+            <div class="proximal-section">
+                <p class="top-note">*스타트업정보는 KB스타터스 기업 '피치덱'에서 제공합니다.</p>
+                <div class="top-info">
+                    <div class="thumbnail">
+                        <img th:src="@{/images/sub/startup/top-info-thumbnail-icon.svg}" alt="">
+                    </div>
+                    <div class="contents">
+                        <p class="name" th:text="${startupInfo.ent_nm}"></p>
+                        <div class="context">
+                            <p class="text" th:text="${startupInfo.main_biz}"></p>
+                            <p class="location" th:text="${startupInfo.addr}"><i class="icon icon-pin"></i></p>
+                        </div>
+                    </div>
+                </div>
+                <p class="heading line">기업정보</p>
+                <dl class="datatable">
+                    <div class="row">
+                        <div class="col">
+                            <dt>CEO</dt><dd th:text="${startupInfo.rprsv_nm}"></dd>
+                        </div>
+                        <div class="col">
+                            <dt>설립일</dt><dd th:text="${startupInfo.fndn_ymd}"></dd>
+                        </div>
+                        <div class="col">
+                            <dt>사업자번호</dt><dd th:text="${startupInfo.brno}"></dd>
+                        </div>
+                        <div class="col">
+                            <dt>법인등록번호</dt><dd th:text="${startupInfo.corp_no}"></dd>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <dt>자본금(원)</dt><dd th:text="${#numbers.formatInteger(startupInfo.cptl_amt, 0, 'COMMA')}"></dd>
+                        </div>
+                        <div class="col">
+                            <dt>형태</dt><dd th:text="${startupInfo.ent_shape}"></dd>
+                        </div>
+                        <div class="col">
+                            <dt>외감</dt><dd th:text="${startupInfo.external_audit_yn}"></dd>
+                        </div>
+                        <div class="col">
+                            <dt>벤처인증</dt><dd th:text="${startupInfo.venture_cert_yn}">Y</dd>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-3">
+                            <dt>주소</dt><dd th:text="${startupInfo.addr}"></dd>
+                        </div>
+                        <div class="col">
+                            <dt>규모</dt><dd th:text="${startupInfo.ent_scale}"></dd>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <dt>업종</dt>
+                            <dd>
+                                <ol class="process">
+                                    <li>
+                                        <div class="box">
+                                            <span class="number">01</span>
+                                            <span class="text">정보통신업</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="box">
+                                            <span class="number">02</span>
+                                            <span class="text">출판업</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="box">
+                                            <span class="number">03</span>
+                                            <span class="text">소프트웨어 개발 및 공급업</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="box">
+                                            <span class="number">04</span>
+                                            <span class="text">시스템·응용 소프트웨어 개발 및 공급업</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="box">
+                                            <span class="number">05</span>
+                                            <span class="text">시스템 소프트웨어 개발 및 공급업</span>
+                                        </div>
+                                    </li>
+                                </ol>
+                            </dd>
+                        </div>
+                    </div>
+                </dl>
+                <div class="grid">
+                    <div class="col">
+                        <p class="heading line">사업</p>
+                        <dl class="datatable">
+                            <div class="row">
+                                <div class="col">
+                                    <dt>제품</dt><dd th:text="${startupInfo.prdct}"></dd>
+                                </div>
+                                <div class="col">
+                                    <dt>주요 사업</dt><dd th:text="${startupInfo.main_biz}"></dd>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <!--<dt>홈페이지</dt><dd><a class="text-link" id="hmpg" th:onclick="pageMove([[${startupInfo.hmpg}]], 1)" target="_blank" th:text="${startupInfo.hmpg}"><i class="icon icon-certify"></i></a></dd>-->
+                                    <dt>홈페이지</dt><dd><a class="text-link" id="hmpg" th:href="${startupInfo.hmpg}" target="_blank" th:text="${startupInfo.hmpg}"><i class="icon icon-certify"></i></a></dd>
+                                </div>
+                            </div>
+                        </dl>
+                    </div>
+                    <div class="col">
+                        <p class="heading line">고용</p>
+                        <dl class="datatable">
+                            <div class="row">
+                                <div class="col">
+                                    <dt>근무자 (명)</dt><dd th:text="${#numbers.formatInteger(startupInfo.now_wrkr_nocs, 0, 'COMMA')}"></dd>
+                                </div>
+                                <div class="col">
+                                    <dt>연간 입사자 (명)</dt><dd th:text="${#numbers.formatInteger(startupInfo.mm12_jncmp_nocs, 0, 'COMMA')}"></dd>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <dt>연간 퇴사자 (명)</dt><dd th:text="${#numbers.formatInteger(startupInfo.mm12_rsgntn_nocs, 0, 'COMMA')}"></dd>
+                                </div>
+                                <div class="col">
+                                    <dt>연간 퇴사율</dt><dd th:text="${startupInfo.mm12_rsgntn_rt} + '%'"></dd>
+                                </div>
+                            </div>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+            <div class="proximal-section" th:unless="${selectBizList == null or selectBizList.isEmpty()}">
+                <p class="heading line">제공 서비스/제품</p>
+                <dl class="datatable">
+                    <div class="row">
+                        <!--<div class="row" th:unless="${selectBizList == null or selectBizList.isEmpty()}" th:each="bizList : ${selectBizList}">-->
+                        <div class="col" th:each="bizList : ${selectBizList}">
+                            <dt class="fw" th:text="${bizList.srvc_nm}"></dt>
+                            <dd>
+                                <div class="chips">
+                                    <th:block th:if="${bizList.web_srvc_link != null and bizList.web_srvc_link != ''}">
+                                        <a th:href="${bizList.web_srvc_link.startsWith('http') ? bizList.web_srvc_link : 'https://' + bizList.web_srvc_link}" target="_blank"><span class="chip"><i class="icon icon-web"></i> Web</span></a>
+                                    </th:block>
+                                    <th:block th:if="${bizList.apple_app_link != null and bizList.apple_app_link != ''}">
+                                        <a th:href="${bizList.apple_app_link.startsWith('http') ? bizList.apple_app_link : 'https://' + bizList.apple_app_link}" target="_blank"><span class="chip"><i class="icon icon-ios"></i> iOS</span></a>
+                                    </th:block>
+                                    <th:block th:if="${bizList.google_app_link != null and bizList.google_app_link != ''}">
+                                        <a th:href="${bizList.google_app_link.startsWith('http') ? bizList.google_app_link : 'https://' + bizList.google_app_link}" target="_blank"><span class="chip"><i class="icon icon-android green"></i> Android</span></a>
+                                    </th:block>
+                                    <!--<span class="chip"><i class="icon icon-ios"></i> iOS</span>
+                                    <span class="chip"><i class="icon icon-android"></i> Android</span>-->
+                                </div>
+                            </dd>
+                            <!--<dt class="fw" th:text="${bizList.srvc_nm}"></dt><dd><span class="chip chip-web"><i class="icon icon-web"></i> Web</span></dd>-->
+                        </div>
+                        <!--
+                        <div class="col">
+                            <dt class="fw">ION</dt>
+                            <dd>
+                                <div class="chips">
+                                    <span class="chip"><i class="icon icon-web"></i> Web</span>
+                                    <span class="chip"><i class="icon icon-ios"></i> iOS</span>
+                                    <span class="chip"><i class="icon icon-android"></i> Android</span>
+                                </div>
+                            </dd>
+                        </div>
+                        -->
+                    </div>
+                </dl>
+            </div>
+            <div class="proximal-section" th:unless="${selectInvestList.isEmpty() and selectEmploList.isEmpty() and selectSlsList.isEmpty() and selectAstList.isEmpty() and selectNewsList.isEmpty() and selectKeywdList.isEmpty()}">
+                <!-- 투자유치 -->
+                <div class="section-row" th:unless="${selectInvestList == null or selectInvestList.isEmpty()}">
+                    <p class="heading">투자유치</p>
+                    <div class="table-dashboard">
+                        <div class="col">
+                            <div class="box">
+                                <p class="title">최종투자단계</p>
+                                <th:block th:if="${startupInfo.series_nm != null and startupInfo.series_nm != ''}">
+                                    <th:block th:if="${startupInfo.series_nm == 'SEED'}">
+                                        <p class="badge-round" style="background:#f43545" th:text="${startupInfo.series_nm}"></p>
+                                    </th:block>
+                                    <th:block th:if="${startupInfo.series_nm == 'Pre-A'}">
+                                        <p class="badge-round" style="background:#ff8901" th:text="${startupInfo.series_nm}"></p>
+                                    </th:block>
+                                    <th:block th:if="${startupInfo.series_nm == 'Series A'}">
+                                        <p class="badge-round" style="background:#ff8901" th:text="${startupInfo.series_nm}"></p>
+                                    </th:block>
+                                    <th:block th:if="${startupInfo.series_nm == 'Series B'}">
+                                        <p class="badge-round" style="background:#fad717" th:text="${startupInfo.series_nm}"></p>
+                                    </th:block>
+                                    <th:block th:if="${startupInfo.series_nm == 'Series C'}">
+                                        <p class="badge-round" style="background:#fad717" th:text="${startupInfo.series_nm}"></p>
+                                    </th:block>
+                                    <th:block th:if="${startupInfo.series_nm == 'Series D'}">
+                                        <p class="badge-round" style="background:#00c2de" th:text="${startupInfo.series_nm}"></p>
+                                    </th:block>
+                                    <th:block th:if="${startupInfo.series_nm == 'Series E'}">
+                                        <p class="badge-round" style="background:#00418d" th:text="${startupInfo.series_nm}"></p>
+                                    </th:block>
+                                    <th:block th:if="${startupInfo.series_nm == 'Series F'}">
+                                        <p class="badge-round" style="background:#5f2879" th:text="${startupInfo.series_nm}"></p>
+                                    </th:block>
+                                    <th:block th:if="${startupInfo.series_nm == 'Series G'}">
+                                        <p class="badge-round" style="background:#792842" th:text="${startupInfo.series_nm}"></p>
+                                    </th:block>
+                                    <th:block th:if="${startupInfo.series_nm == 'Pre-IPO'}">
+                                        <p class="badge-round" style="background:#ff1fa5" th:text="${startupInfo.series_nm}"></p>
+                                    </th:block>
+                                    <th:block th:if="${startupInfo.series_nm == 'IPO'}">
+                                        <p class="badge-round" style="background:#ca2186" th:text="${startupInfo.series_nm}"></p>
+                                    </th:block>
+                                    <th:block th:if="${startupInfo.series_nm == 'M&A'}">
+                                        <p class="badge-round" style="background:#000" th:text="${startupInfo.series_nm}"></p>
+                                    </th:block>
+                                    <th:block th:if="${startupInfo.series_nm == 'TIPS'}">
+                                        <p class="badge-round" style="background:#d60053" th:text="${startupInfo.series_nm}"></p>
+                                    </th:block>
+                                    <!--<th:block th:if="${startupInfo.series_color == 'BLUE'}">
+                                        <p class="badge-round blue" th:text="${startupInfo.series_nm}"></p>
+                                    </th:block>
+                                    <th:block th:if="${startupInfo.series_color == 'GREEN'}">
+                                        <p class="badge-round green" th:text="${startupInfo.series_nm}"></p>
+                                    </th:block>
+                                    <th:block th:if="${startupInfo.series_color == 'ORANGE'}">
+                                        <p class="badge-round orange" th:text="${startupInfo.series_nm}"></p>
+                                    </th:block>-->
+                                    <th:block th:if="${startupInfo.series_nm == '알수없음'}">
+                                        <p class="badge-round" style="background:#ACACAC" th:text="${startupInfo.series_nm}"></p>
+                                    </th:block>
+                                </th:block>
+                                <!--<th:block th:if="${startupInfo.series_nm == null or startupInfo.series_nm == ''}">
+                                    <p class="badge-round blue">-</p>
+                                </th:block>-->
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="box">
+                                <p class="title">누적투자유치금액</p>
+                                <!--<p class="text" th:text="${startupInfo.invest_amt} +'억원'"></p>-->
+                                <p class="text" th:text="${startupInfo.invest_amt_str}"></p>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="box">
+                                <p class="title">투자유치횟수</p>
+                                <p class="text" th:text="${#numbers.formatInteger(startupInfo.invest_cnt, 0, 'COMMA')} + ' 회'"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <table class="table-basic">
+                        <thead>
+                        <tr>
+                            <th style="width:16.66666%">날짜</th>
+                            <th style="width:16.66666%">투자단계</th>
+                            <th style="width:16.66666%">투자유치금액</th>
+                            <th class="width:50%">투자자</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="invList : ${selectInvestList}">
+                            <td th:text="${invList.invest_ymd}"></td>
+                            <th:block th:if="${invList.series_nm != null and invList.series_nm != ''}">
+                                <th:block th:if="${invList.series_nm == 'SEED'}">
+                                    <td><p class="badge-round" style="background:#f43545" th:text="${invList.series_nm}"></p></td>
+                                </th:block>
+                                <th:block th:if="${invList.series_nm == 'Pre-A'}">
+                                    <td><p class="badge-round" style="background:#ff8901" th:text="${invList.series_nm}"></p></td>
+                                </th:block>
+                                <th:block th:if="${invList.series_nm == 'Series A'}">
+                                    <td><p class="badge-round" style="background:#ff8901" th:text="${invList.series_nm}"></p></td>
+                                </th:block>
+                                <th:block th:if="${invList.series_nm == 'Pre-B'}">
+                                    <td><p class="badge-round" style="background:#fad717" th:text="${invList.series_nm}"></p></td>
+                                </th:block>
+                                <th:block th:if="${invList.series_nm == 'Series B'}">
+                                    <td><p class="badge-round" style="background:#fad717" th:text="${invList.series_nm}"></p></td>
+                                </th:block>
+                                <th:block th:if="${invList.series_nm == 'Pre-C'}">
+                                    <td><p class="badge-round" style="background:#00ba71" th:text="${invList.series_nm}"></p></td>
+                                </th:block>
+                                <th:block th:if="${invList.series_nm == 'Series C'}">
+                                    <td><p class="badge-round" style="background:#00ba71" th:text="${invList.series_nm}"></p></td>
+                                </th:block>
+                                <th:block th:if="${invList.series_nm == 'Prd-D'}">
+                                    <td><p class="badge-round" style="background:#00c2de" th:text="${invList.series_nm}"></p></td>
+                                </th:block>
+                                <th:block th:if="${invList.series_nm == 'Series D'}">
+                                    <td><p class="badge-round" style="background:#00c2de" th:text="${invList.series_nm}"></p></td>
+                                </th:block>
+                                <th:block th:if="${invList.series_nm == 'Pre-E'}">
+                                    <td><p class="badge-round" style="background:#00418d" th:text="${invList.series_nm}"></p></td>
+                                </th:block>
+                                <th:block th:if="${invList.series_nm == 'Series E'}">
+                                    <td><p class="badge-round" style="background:#00418d" th:text="${invList.series_nm}"></p></td>
+                                </th:block>
+                                <th:block th:if="${invList.series_nm == 'Pre-F'}">
+                                    <td><p class="badge-round" style="background:#5f2879" th:text="${invList.series_nm}"></p></td>
+                                </th:block>
+                                <th:block th:if="${invList.series_nm == 'Series F'}">
+                                    <td><p class="badge-round" style="background:#5f2879" th:text="${invList.series_nm}"></p></td>
+                                </th:block>
+                                <th:block th:if="${invList.series_nm == 'Pre-G'}">
+                                    <td><p class="badge-round" style="background:#792842" th:text="${invList.series_nm}"></p></td>
+                                </th:block>
+                                <th:block th:if="${invList.series_nm == 'Series G'}">
+                                    <td><p class="badge-round" style="background:#792842" th:text="${invList.series_nm}"></p></td>
+                                </th:block>
+                                <th:block th:if="${invList.series_nm == 'Pre-IPO'}">
+                                    <td><p class="badge-round" style="background:#ff1fa5" th:text="${invList.series_nm}"></p></td>
+                                </th:block>
+                                <th:block th:if="${invList.series_nm == 'IPO'}">
+                                    <td><p class="badge-round" style="background:#ca2186" th:text="${invList.series_nm}"></p></td>
+                                </th:block>
+                                <th:block th:if="${invList.series_nm == 'M&A'}">
+                                    <td><p class="badge-round" style="background:#000" th:text="${invList.series_nm}"></p></td>
+                                </th:block>
+                                <th:block th:if="${invList.series_nm == 'TIPS'}">
+                                    <td><p class="badge-round" style="background:#d60053" th:text="${invList.series_nm}"></p></td>
+                                </th:block>
+                                <th:block th:if="${invList.series_nm == '알수없음'}">
+                                    <td><p class="badge-round" style="background:#ACACAC" th:text="${invList.series_nm}"></p></td>
+                                </th:block>
+                            </th:block>
+                            <!--<th:block th:if="${invList.series_nm == null or invList.series_nm == ''}">
+                                <td><p class="badge-round">알수없음</p></td>
+                            </th:block>-->
+                            <!--<td th:text="${#numbers.formatInteger(invList.invest_amt, 0, 'COMMA')} + '억원'"></td>-->
+                            <td th:text="${invList.invest_amt_str}"></td>
+                            <td class="text-left" th:text="${invList.investor}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- 조직분석 -->
+                <div class="section-row" th:unless="${selectEmploList == null or selectEmploList.isEmpty()}">
+                    <p class="heading">조직분석-고용현황</p>
+                    <div class="chart chart-organization">
+                        <div id="organizationChart" class="item"></div>
+                        <!--<input type="text" id="empYear" name="empYear" th:value="${empYear}">-->
+                    </div>
+                </div>
+                <!-- 손익계산서 -->
+                <div class="section-row" th:unless="${selectSlsList == null or selectSlsList.isEmpty()}">
+                    <div class="heading">
+                        <p>주요 손익계산서</p>
+                        <p class="note">단위: 백만원</p>
+                    </div>
+                    <table class="table-basic table-basic-theme" >
+                        <thead>
+                        <tr>
+                            <th>항목</th>
+                            <th th:each="slsInfo : ${selectSlsList}" th:text="${slsInfo.yr}">
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                        <tr>
+                            <th>매출액</th>
+                            <td th:if="${selectSlsChgList1 != null}"><span class="" th:classappend="${selectSlsChgList1.sls_amt_col == 'RED'} ? 'color-red' : ''" th:text="${selectSlsChgList1.sls_amt_str}"></span></td>
+                            <td th:if="${selectSlsChgList2 != null}"><span class="" th:classappend="${selectSlsChgList2.sls_amt_col == 'RED'} ? 'color-red' : ''" th:text="${selectSlsChgList2.sls_amt_str}"></span></td>
+                            <td th:if="${selectSlsChgList3 != null}"><span class="" th:classappend="${selectSlsChgList3.sls_amt_col == 'RED'} ? 'color-red' : ''" th:text="${selectSlsChgList3.sls_amt_str}"></span></td>
+                            <td th:if="${selectSlsChgList4 != null}"><span class="" th:classappend="${selectSlsChgList4.sls_amt_col == 'RED'} ? 'color-red' : ''" th:text="${selectSlsChgList4.sls_amt_str}"></span></td>
+                            <td th:if="${selectSlsChgList5 != null}"><span class="" th:classappend="${selectSlsChgList5.sls_amt_col == 'RED'} ? 'color-red' : ''" th:text="${selectSlsChgList5.sls_amt_str}"></span></td>
+                        </tr>
+                        <tr>
+                            <th>매출원가</th>
+                            <td th:if="${selectSlsChgList1 != null}"><span class="" th:classappend="${selectSlsChgList1.sls_cost_amt_col == 'RED'} ? 'color-red' : ''" th:text="${selectSlsChgList1.sls_cost_amt_str}"></span></td>
+                            <td th:if="${selectSlsChgList2 != null}"><span class="" th:classappend="${selectSlsChgList2.sls_cost_amt_col == 'RED'} ? 'color-red' : ''" th:text="${selectSlsChgList2.sls_cost_amt_str}"></span></td>
+                            <td th:if="${selectSlsChgList3 != null}"><span class="" th:classappend="${selectSlsChgList3.sls_cost_amt_col == 'RED'} ? 'color-red' : ''" th:text="${selectSlsChgList3.sls_cost_amt_str}"></span></td>
+                            <td th:if="${selectSlsChgList4 != null}"><span class="" th:classappend="${selectSlsChgList4.sls_cost_amt_col == 'RED'} ? 'color-red' : ''" th:text="${selectSlsChgList4.sls_cost_amt_str}"></span></td>
+                            <td th:if="${selectSlsChgList5 != null}"><span class="" th:classappend="${selectSlsChgList5.sls_cost_amt_col == 'RED'} ? 'color-red' : ''" th:text="${selectSlsChgList5.sls_cost_amt_str}"></span></td>
+                        </tr>
+                        <tr>
+                            <th>매출총이익</th>
+                            <td th:if="${selectSlsChgList1 != null}"><span class="" th:classappend="${selectSlsChgList1.sls_gramt_col == 'RED'} ? 'color-red' : ''" th:text="${selectSlsChgList1.sls_gramt_str}"></span></td>
+                            <td th:if="${selectSlsChgList2 != null}"><span class="" th:classappend="${selectSlsChgList2.sls_gramt_col == 'RED'} ? 'color-red' : ''" th:text="${selectSlsChgList2.sls_gramt_str}"></span></td>
+                            <td th:if="${selectSlsChgList3 != null}"><span class="" th:classappend="${selectSlsChgList3.sls_gramt_col == 'RED'} ? 'color-red' : ''" th:text="${selectSlsChgList3.sls_gramt_str}"></span></td>
+                            <td th:if="${selectSlsChgList4 != null}"><span class="" th:classappend="${selectSlsChgList4.sls_gramt_col == 'RED'} ? 'color-red' : ''" th:text="${selectSlsChgList4.sls_gramt_str}"></span></td>
+                            <td th:if="${selectSlsChgList5 != null}"><span class="" th:classappend="${selectSlsChgList5.sls_gramt_col == 'RED'} ? 'color-red' : ''" th:text="${selectSlsChgList5.sls_gramt_str}"></span></td>
+                        </tr>
+                        <tr>
+                            <th>판관비</th>
+                            <td th:if="${selectSlsChgList1 != null}"><span class="" th:classappend="${selectSlsChgList1.sga_amt_col == 'RED'} ? 'color-red' : ''" th:text="${selectSlsChgList1.sga_amt_str}"></span></td>
+                            <td th:if="${selectSlsChgList2 != null}"><span class="" th:classappend="${selectSlsChgList2.sga_amt_col == 'RED'} ? 'color-red' : ''" th:text="${selectSlsChgList2.sga_amt_str}"></span></td>
+                            <td th:if="${selectSlsChgList3 != null}"><span class="" th:classappend="${selectSlsChgList3.sga_amt_col == 'RED'} ? 'color-red' : ''" th:text="${selectSlsChgList3.sga_amt_str}"></span></td>
+                            <td th:if="${selectSlsChgList4 != null}"><span class="" th:classappend="${selectSlsChgList4.sga_amt_col == 'RED'} ? 'color-red' : ''" th:text="${selectSlsChgList4.sga_amt_str}"></span></td>
+                            <td th:if="${selectSlsChgList5 != null}"><span class="" th:classappend="${selectSlsChgList5.sga_amt_col == 'RED'} ? 'color-red' : ''" th:text="${selectSlsChgList5.sga_amt_str}"></span></td>
+                        </tr>
+                        <tr>
+                            <th>영업이익</th>
+                            <td th:if="${selectSlsChgList1 != null}"><span class="" th:classappend="${selectSlsChgList1.operating_profit_col == 'RED'} ? 'color-red' : ''" th:text="${selectSlsChgList1.operating_profit_str}"></span></td>
+                            <td th:if="${selectSlsChgList2 != null}"><span class="" th:classappend="${selectSlsChgList2.operating_profit_col == 'RED'} ? 'color-red' : ''" th:text="${selectSlsChgList2.operating_profit_str}"></span></td>
+                            <td th:if="${selectSlsChgList3 != null}"><span class="" th:classappend="${selectSlsChgList3.operating_profit_col == 'RED'} ? 'color-red' : ''" th:text="${selectSlsChgList3.operating_profit_str}"></span></td>
+                            <td th:if="${selectSlsChgList4 != null}"><span class="" th:classappend="${selectSlsChgList4.operating_profit_col == 'RED'} ? 'color-red' : ''" th:text="${selectSlsChgList4.operating_profit_str}"></span></td>
+                            <td th:if="${selectSlsChgList5 != null}"><span class="" th:classappend="${selectSlsChgList5.operating_profit_col == 'RED'} ? 'color-red' : ''" th:text="${selectSlsChgList5.operating_profit_str}"></span></td>
+                        </tr>
+                        <tr>
+                            <th>순이익</th>
+                            <td th:if="${selectSlsChgList1 != null}"><span class="" th:classappend="${selectSlsChgList1.net_profit_col == 'RED'} ? 'color-red' : ''" th:text="${selectSlsChgList1.net_profit_str}"></span></td>
+                            <td th:if="${selectSlsChgList2 != null}"><span class="" th:classappend="${selectSlsChgList2.net_profit_col == 'RED'} ? 'color-red' : ''" th:text="${selectSlsChgList2.net_profit_str}"></span></td>
+                            <td th:if="${selectSlsChgList3 != null}"><span class="" th:classappend="${selectSlsChgList3.net_profit_col == 'RED'} ? 'color-red' : ''" th:text="${selectSlsChgList3.net_profit_str}"></span></td>
+                            <td th:if="${selectSlsChgList4 != null}"><span class="" th:classappend="${selectSlsChgList4.net_profit_col == 'RED'} ? 'color-red' : ''" th:text="${selectSlsChgList4.net_profit_str}"></span></td>
+                            <td th:if="${selectSlsChgList5 != null}"><span class="" th:classappend="${selectSlsChgList5.net_profit_col == 'RED'} ? 'color-red' : ''" th:text="${selectSlsChgList5.net_profit_str}"></span></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- 재무상태표 -->
+                <div class="section-row" th:unless="${selectAstList == null or selectAstList.isEmpty()}">
+                    <div class="heading">
+                        <p>주요 재무상태표</p>
+                        <p class="note">단위: 백만원</p>
+                    </div>
+                    <table class="table-basic table-basic-theme">
+                        <thead>
+                        <tr>
+                            <th>항목</th>
+                            <th th:each="astInfo : ${selectAstList}" th:text="${astInfo.yr}">
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <th>유동자산</th>
+                            <td th:if="${selectAstChgList1 != null}"><span class="" th:classappend="${selectAstChgList1.current_assets_col == 'RED'} ? 'color-red' : ''" th:text="${selectAstChgList1.current_assets_str}"></span></td>
+                            <td th:if="${selectAstChgList2 != null}"><span class="" th:classappend="${selectAstChgList2.current_assets_col == 'RED'} ? 'color-red' : ''" th:text="${selectAstChgList2.current_assets_str}"></span></td>
+                            <td th:if="${selectAstChgList3 != null}"><span class="" th:classappend="${selectAstChgList3.current_assets_col == 'RED'} ? 'color-red' : ''" th:text="${selectAstChgList3.current_assets_str}"></span></td>
+                            <td th:if="${selectAstChgList4 != null}"><span class="" th:classappend="${selectAstChgList4.current_assets_col == 'RED'} ? 'color-red' : ''" th:text="${selectAstChgList4.current_assets_str}"></span></td>
+                            <td th:if="${selectAstChgList5 != null}"><span class="" th:classappend="${selectAstChgList5.current_assets_col == 'RED'} ? 'color-red' : ''" th:text="${selectAstChgList5.current_assets_str}"></span></td>
+                        </tr>
+                        <tr>
+                            <th>비유동자</th>
+                            <td th:if="${selectAstChgList1 != null}"><span class="" th:classappend="${selectAstChgList1.non_current_assets_col == 'RED'} ? 'color-red' : ''" th:text="${selectAstChgList1.non_current_assets_str}"></span></td>
+                            <td th:if="${selectAstChgList2 != null}"><span class="" th:classappend="${selectAstChgList2.non_current_assets_col == 'RED'} ? 'color-red' : ''" th:text="${selectAstChgList2.non_current_assets_str}"></span></td>
+                            <td th:if="${selectAstChgList3 != null}"><span class="" th:classappend="${selectAstChgList3.non_current_assets_col == 'RED'} ? 'color-red' : ''" th:text="${selectAstChgList3.non_current_assets_str}"></span></td>
+                            <td th:if="${selectAstChgList4 != null}"><span class="" th:classappend="${selectAstChgList4.non_current_assets_col == 'RED'} ? 'color-red' : ''" th:text="${selectAstChgList4.non_current_assets_str}"></span></td>
+                            <td th:if="${selectAstChgList5 != null}"><span class="" th:classappend="${selectAstChgList5.non_current_assets_col == 'RED'} ? 'color-red' : ''" th:text="${selectAstChgList5.non_current_assets_str}"></span></td>
+                        </tr>
+                        <tr>
+                            <th>자산총계</th>
+                            <td th:if="${selectAstChgList1 != null}"><span class="" th:classappend="${selectAstChgList1.ast_gramt_col == 'RED'} ? 'color-red' : ''" th:text="${selectAstChgList1.ast_gramt_str}"></span></td>
+                            <td th:if="${selectAstChgList2 != null}"><span class="" th:classappend="${selectAstChgList2.ast_gramt_col == 'RED'} ? 'color-red' : ''" th:text="${selectAstChgList2.ast_gramt_str}"></span></td>
+                            <td th:if="${selectAstChgList3 != null}"><span class="" th:classappend="${selectAstChgList3.ast_gramt_col == 'RED'} ? 'color-red' : ''" th:text="${selectAstChgList3.ast_gramt_str}"></span></td>
+                            <td th:if="${selectAstChgList4 != null}"><span class="" th:classappend="${selectAstChgList4.ast_gramt_col == 'RED'} ? 'color-red' : ''" th:text="${selectAstChgList4.ast_gramt_str}"></span></td>
+                            <td th:if="${selectAstChgList5 != null}"><span class="" th:classappend="${selectAstChgList5.ast_gramt_col == 'RED'} ? 'color-red' : ''" th:text="${selectAstChgList5.ast_gramt_str}"></span></td>
+                        </tr>
+                        <tr>
+                            <th>부채총계</th>
+                            <td th:if="${selectAstChgList1 != null}"><span class="" th:classappend="${selectAstChgList1.debt_gramt_col == 'RED'} ? 'color-red' : ''" th:text="${selectAstChgList1.debt_gramt_str}"></span></td>
+                            <td th:if="${selectAstChgList2 != null}"><span class="" th:classappend="${selectAstChgList2.debt_gramt_col == 'RED'} ? 'color-red' : ''" th:text="${selectAstChgList2.debt_gramt_str}"></span></td>
+                            <td th:if="${selectAstChgList3 != null}"><span class="" th:classappend="${selectAstChgList3.debt_gramt_col == 'RED'} ? 'color-red' : ''" th:text="${selectAstChgList3.debt_gramt_str}"></span></td>
+                            <td th:if="${selectAstChgList4 != null}"><span class="" th:classappend="${selectAstChgList4.debt_gramt_col == 'RED'} ? 'color-red' : ''" th:text="${selectAstChgList4.debt_gramt_str}"></span></td>
+                            <td th:if="${selectAstChgList5 != null}"><span class="" th:classappend="${selectAstChgList5.debt_gramt_col == 'RED'} ? 'color-red' : ''" th:text="${selectAstChgList5.debt_gramt_str}"></span></td>
+                        </tr>
+                        <tr>
+                            <th>자본금</th>
+                            <td th:if="${selectAstChgList1 != null}"><span class="" th:classappend="${selectAstChgList1.cptl_col == 'RED'} ? 'color-red' : ''" th:text="${selectAstChgList1.cptl_str}"></span></td>
+                            <td th:if="${selectAstChgList2 != null}"><span class="" th:classappend="${selectAstChgList2.cptl_col == 'RED'} ? 'color-red' : ''" th:text="${selectAstChgList2.cptl_str}"></span></td>
+                            <td th:if="${selectAstChgList3 != null}"><span class="" th:classappend="${selectAstChgList3.cptl_col == 'RED'} ? 'color-red' : ''" th:text="${selectAstChgList3.cptl_str}"></span></td>
+                            <td th:if="${selectAstChgList4 != null}"><span class="" th:classappend="${selectAstChgList4.cptl_col == 'RED'} ? 'color-red' : ''" th:text="${selectAstChgList4.cptl_str}"></span></td>
+                            <td th:if="${selectAstChgList5 != null}"><span class="" th:classappend="${selectAstChgList5.cptl_col == 'RED'} ? 'color-red' : ''" th:text="${selectAstChgList5.cptl_str}"></span></td>
+                        </tr>
+                        <tr>
+                            <th>자본총계</th>
+                            <td th:if="${selectAstChgList1 != null}"><span class="" th:classappend="${selectAstChgList1.cptl_gramt_col == 'RED'} ? 'color-red' : ''" th:text="${selectAstChgList1.cptl_gramt_str}"></span></td>
+                            <td th:if="${selectAstChgList2 != null}"><span class="" th:classappend="${selectAstChgList2.cptl_gramt_col == 'RED'} ? 'color-red' : ''" th:text="${selectAstChgList2.cptl_gramt_str}"></span></td>
+                            <td th:if="${selectAstChgList3 != null}"><span class="" th:classappend="${selectAstChgList3.cptl_gramt_col == 'RED'} ? 'color-red' : ''" th:text="${selectAstChgList3.cptl_gramt_str}"></span></td>
+                            <td th:if="${selectAstChgList4 != null}"><span class="" th:classappend="${selectAstChgList4.cptl_gramt_col == 'RED'} ? 'color-red' : ''" th:text="${selectAstChgList4.cptl_gramt_str}"></span></td>
+                            <td th:if="${selectAstChgList5 != null}"><span class="" th:classappend="${selectAstChgList5.cptl_gramt_col == 'RED'} ? 'color-red' : ''" th:text="${selectAstChgList5.cptl_gramt_str}"></span></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- 뉴스 리스트 시작 -->
+            <div class="proximal-section" th:unless="${selectNewsMain == null }">
+                <p class="heading">뉴스</p>
+                <div class="news">
+                    <article class="headline-main">
+                        <th:block th:if="${selectNewsMain.thumb_url == null or selectNewsMain.thumb_url == ''}">
+                            <div class="thumbnail"><img src="/images/sub/startup/no_news_image.png" alt="" style="transform:none;"></div>
+                        </th:block>
+                        <th:block th:if="${selectNewsMain.thumb_url != null and selectNewsMain.thumb_url != ''}">
+                            <div class="thumbnail"><img th:src="${selectNewsMain.thumb_url}" alt=""></div>
+                        </th:block>
+                        <div class="item">
+                            <a class="link" th:href="${selectNewsMain.news_link}" target="_blank">
+                                <div class="title" th:text="${selectNewsMain.news_ttl}"></div>
+                                <div class="name" th:text="${selectNewsMain.provider}"></div>
+                            </a>
+                        </div>
+                    </article>
+                    <article class="headline-sub" th:if="${!#lists.isEmpty(selectNewsList)}">
+                        <article class="item" th:each="newsList, newsStat : ${selectNewsList}">
+                            <a class="link" th:href="${newsList.news_link}" target="_blank">
+                                <div class="title" th:text="${newsList.news_ttl}"></div>
+                                <div class="name" th:text="${newsList.provider}"></div>
+                            </a>
+                        </article>
+                    </article>
+                </div>
+            </div>
+            <!-- 뉴스 리스트 종료 -->
+            <!-- 키워드 리스트 시작 -->
+            <div class="proximal-section" th:unless="${selectKeywdList == null or selectKeywdList.isEmpty()}">
+                <p class="heading">자주 언급된 키워드</p>
+                <div class="keyword">
+                    <div class="keyword-main">
+                        <div class="chart chart-word">
+                            <div id="wordChart" class="item"></div>
+                        </div>
+                    </div>
+                    <div class="keyword-sub">
+                        <div class="title">
+                            <p>전체 키워드</p>
+                            <p class="note" th:text="${startupInfo.now_date} + ' 기준'"></p>
+                        </div>
+                        <div class="chart chart-word2">
+                            <div id="wordChart2" class="item"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 키워드 리스트 종료 -->
+        </div>
+    </div>
+</main>
+
+<script th:inline="javascript">
+    window.staticPath = /*[[${@environment.getProperty('staticpath')} + '/']]*/'/';
+    if(window.staticPath === '//') {
+        window.staticPath = '/';
+    }
+</script>
+<!-- 푸터 -->
+<app-footer></app-footer>
+
+<!-- 스크립트 -->
+<script th:inline="javascript">
+    var empList = [[${selectEmploList}]];
+    var kewList = [[${selectKeywdList}]];
+    window.addEventListener('DOMContentLoaded', () => {
+        const counters = document.querySelectorAll("[data-count]");
+
+        counters.forEach((item) => {
+            const value = item.dataset.count;
+            const counter = new countUp.CountUp(item, value, {
+                // enableScrollSpy: true,
+                // scrollSpyDelay: 0,
+                decimalPlaces: value % 1 !== 0 ? 1 : 0,
+                decimal: '.',
+                duration: 2
+            });
+            counter.start();
+        });
+
+        if (empList.length > 0) {
+            organizationChart();
+        }
+        if (kewList.length > 0) {
+            wordChart();
+        }
+    });
+
+    function organizationChart() {
+        const chart = echarts.init(document.getElementById('organizationChart'), null, {
+            renderer: 'svg',
+        });
+
+        window.addEventListener('resize', () => chart.resize());
+
+        const xAxisData = [];
+        const seriesIn = [];
+        const seriesOut = [];
+        const seriesNow = [];
+        empList.forEach((data) => {
+            xAxisData.push(data.crtr_ym);
+            seriesIn.push(data.jncmp_nocs);
+            seriesOut.push(data.rsgntn_nocs);
+            seriesNow.push(data.hdof_nocs);
+        });
+        //console.log("xAxisData :: "+xAxisData);
+        //console.log("seriesIn :: "+seriesIn);
+        //console.log("seriesOut :: "+seriesOut);
+        //console.log("seriesNow :: "+seriesNow);
+        let data1 = seriesIn; // 입사자
+        let data2 = seriesOut; // 퇴사자
+        let data3 = seriesNow;
+        let maxValue = Math.max(Math.max(...data1), Math.max(...data2)); // 입사자/퇴사자 데이터 중 최대값
+        let maxValue1 = Math.max(...data3);
+        const maxYAxisValue = Math.ceil(maxValue * 1.1); // Y축 최대값을 10% 증가된 값으로 설정
+        const maxYAxisValue1 = Math.ceil(maxValue1 * 1.3);
+
+        chart.setOption({
+            // title: {
+            //     text: 'ECharts Getting Started Example'
+            // },
+            grid: {
+                left: '2%',
+                right: '2%',
+                top: '2%',
+                bottom: '18%'
+            },
+            useCoarsePointer: true,
+            tooltip: {},
+            xAxis: {
+                //data: ['202105', '202106', '202107', '202108', '202109', '202110', '202111', '202112', '202201', '202202', '202203', '202204', '202205', '202206', '202207', '202208', '202209', '202210', '202211', '202212', '202301', '202302', '202303', '202304', '202305', '202306', '202307', '202308'],
+                //data: [202004,202005,202006,202007,202008,202009,202010,202011,202012,202101,202102,202103,202104,202105,202106,202107,202108,202109,202110,202111,202112,202201,202202,202203,202204,202205,202206,202207,202208,202209,202210,202211,202212,202301,202302,202303,202304,202305,202306,202307,202308,202309,202310,202311,202312,202401,202402,202403,202404,202405,202406,202407,202408,202409,202410],
+                data: xAxisData,
+                axisLabel: {
+                    interval: 2
+                },
+                axisTick: {
+                    alignWithLabel: true
+                },
+            },
+            yAxis: [
+                {
+                    type: 'value',
+                    name: '입사자/퇴사자', // 왼쪽 Y축
+                    position: 'left',
+                    interval: 2, // 증가값
+                    max: maxYAxisValue, // Y축 최대값
+                    splitLine: {
+                        show: false, // 가로 눈금선을 숨김
+                    },
+                },
+                {
+                    type: 'value',
+                    name: '근무자', // 오른쪽 Y축
+                    max: maxYAxisValue1,
+                    position: 'right',
+                    axisLabel: {
+                        show: false
+                    }
+                },
+            ],
+            legend: {
+                orient: 'horizontal',
+                // left: '0',
+                // right: '0',
+                top: 'bottom',
+                width: '100%',
+                backgroundColor: '#F8F8F8',
+                borderRadius: 10,
+                padding: 16,
+                itemGap: 30,
+                itemWidth: 18,
+                itemHeight: 18,
+                textStyle: {
+                    fontFamily: 'KBFG Display',
+                    fontSize: (handler.device === 'desktop') ? 20 : 15,
+                    fontWeight: 500,
+                    color: '#111111'
+                },
+            },
+            series: [
+                {
+                    name: '입사자(명)',
+                    type: 'bar',
+                    color: '#00D9A6',
+                    itemStyle: {
+                        borderRadius: [50, 50, 0, 0],
+                    },
+                    //data: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0]
+                    data: seriesIn,
+                    yAxisIndex: 0
+                },
+                {
+                    name: '퇴사자(명)',
+                    type: 'bar',
+                    color: '#D3D3D3',
+                    itemStyle: {
+                        borderRadius: [50, 50, 0, 0],
+                    },
+                    //data: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+                    data: seriesOut,
+                    yAxisIndex: 0
+                },
+                // 근무자 데이터 (뒤에 배경용)
+                {
+                    name: '근무자(명)',
+                    type: 'line',
+                    color: '#246BEB',
+                    areaStyle: {
+                        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                            {
+                                offset: 0,
+                                color: 'rgba(36, 107, 235, .2)'
+                            },
+                            {
+                                offset: 1,
+                                color: 'rgba(36, 107, 235, 0)'
+                            }
+                        ]),
+                    },
+                    //data: [6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,5,6,6,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,8,8,8,8,8,8,8,8,8,8,8],
+                    data: seriesNow,
+                    silent: true,
+                    tooltip: { show: false },
+                    z: 0,
+                    yAxisIndex: 1
+                },
+                // 근무자 데이터 (위에 배경용과 같은 데이터로 설정해주시면 됩니다.)
+                {
+                    name: '근무자(명)',
+                    type: 'line',
+                    color: '#246BEB',
+                    //data: [6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,5,6,6,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,8,8,8,8,8,8,8,8,8,8,8],
+                    data: seriesNow,
+                    z: 10,
+                    yAxisIndex: 1
+                }
+            ]
+        });
+    }
+
+    function wordChart() {
+
+        // 워드 차트 생성
+        const chart = echarts.init(document.getElementById('wordChart'), null, {
+            renderer: 'svg',
+        });
+        // 키워드 막대 차트 생성
+        const chart2 = echarts.init(document.getElementById('wordChart2'), null, {
+            renderer: 'svg',
+        });
+
+        window.addEventListener('resize', () => {
+            chart.resize();
+            chart2.resize();
+        });
+
+        // API 데이터
+        /*
+        const apiData = [
+            { keyword: '사업', count: 23 },
+            { keyword: '에너지', count: 16 },
+            { keyword: '지사', count: 15 },
+            { keyword: '한지', count: 14 },
+            { keyword: '운전자', count: 14 },
+            { keyword: '홍보', count: 13 },
+            { keyword: '젓갈', count: 12 },
+            { keyword: '대표', count: 12 },
+            { keyword: '연장', count: 11 },
+            { keyword: '이양', count: 10 },
+            { keyword: '농지', count: 10 },
+            { keyword: '논산', count: 10 },
+            { keyword: '한국농어촌공사', count: 10 },
+            { keyword: '사용', count: 10 },
+            { keyword: '선루프', count: 10 },
+            { keyword: '닥나무', count: 9 },
+            { keyword: '강경', count: 9 },
+            { keyword: '축제', count: 9 },
+            { keyword: '전기차', count: 9 },
+            { keyword: '지이디', count: 9 },
+            { keyword: '지원', count: 9 },
+            { keyword: '은퇴직불', count: 8 },
+            { keyword: '미군', count: 8 },
+            { keyword: '변경', count: 7 },
+            { keyword: '방식', count: 7 },
+            { keyword: '체험', count: 7 },
+            { keyword: '가능', count: 7 },
+            { keyword: '시장', count: 7 },
+            { keyword: '평택', count: 7 },
+            { keyword: '비상문', count: 6 }
+        ];
+        */
+        //console.log("apiData :: "+ JSON.stringify(apiData));
+        //const chartData = kewList;
+        const chartData = kewList.map(item => ({
+            name: item.keywd,
+            value: item.nocs
+        }));
+
+        //console.log("chartData :: "+JSON.stringify(chartData));
+
+        // 키워드 데이터 값을 상위 10위 까지만 필터링
+        const topData = chartData.sort((a, b) => b.value - a.value).slice(0, 10);
+        // 그래프 최대 수치 적용
+        const maxValue = chartData.sort((a, b) => b.value - a.value).slice(0, 1)[0].value * 2;
+
+        // 10위권 중 가장 긴 키워드 반환
+        const longestNameItem = topData.reduce((max, item) => {
+            return item.name.length > max.name.length ? item : max;
+        }, topData[0]);
+
+        // 가장 긴 키워드 순위
+        const longestNameRank = topData.findIndex(item => item === longestNameItem) + 1;
+        const word = longestNameRank + '. ' + longestNameItem.name;
+
+        function calculateTextWidth(text) {
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+            context.font = (handler.device === 'desktop') ? '19px "KBFG Text"' : '15px "KBFG Text"';
+
+            let totalWidth = 0;
+
+            for (let i = 0; i < text.length; i++) {
+                const char = text[i];
+                totalWidth += context.measureText(char).width;
+            }
+
+            return Math.round(totalWidth);
+        }
+
+        // x, y축으로 변환
+        const yAxisData = topData.map((item, index) => `${index + 1}. ${item.name}`);
+        const xAxisData = topData.map((item) => item.value );
+        const gradientColors = [
+            ['#FE6C6C', '#FE464B'],
+            ['#FF9364', '#F25F33'],
+            ['#FFD572', '#FEBD38'],
+            ['#B2E95F', '#8ED129'],
+            ['#5CDFD0', '#20BEAC'],
+            ['#5CE1B1', '#2DC38D'],
+            ['#7AD3FF', '#4FBAF0'],
+            ['#82B3FF', '#478CF7'],
+            ['#B09FFF', '#8D79F6'],
+            ['#F3A1FF', '#DB52F0']
+        ];
+        const resultData = xAxisData.map((value, index) => ({
+            value: value,
+            itemStyle: {
+                borderRadius: 50,
+                color: {
+                    type: 'linear',
+                    x: 0,
+                    y: 0,
+                    x2: 0,
+                    y2: 1,
+                    colorStops: [
+                        { offset: 0, color: gradientColors[index][0] },
+                        { offset: 1, color: gradientColors[index][1] }
+                    ]
+                }
+            }
+        }));
+        const longestLabel = yAxisData.reduce((max, label) => Math.max(max, label.length), 0);
+        const dynamicMargin = -(longestLabel / 0.075);
+
+        // 워드 차트 옵션
+        chart.setOption({
+            tooltip: {},
+            series: [{
+                type: 'wordCloud',
+                shape: 'circle',
+                sizeRange: [16, 64],
+                rotationRange: [0, 0],
+                gridSize: 32,
+                width: '100%',
+                height: '100%',
+                drawOutOfBound: false,
+                textStyle: {
+                    fontFamily: 'KBFG Text',
+                    fontWeight: 'bold',
+                    color: function() {
+                        if (Math.random() < 0.03) {
+                            const lightness = Math.random() * 50;
+                            return `hsl(0, 0%, ${lightness}%)`;
+                        }
+
+                        const hue = Math.round(Math.random() * 360);
+                        const saturation = 80 + Math.random() * 30;
+                        const lightness = 30 + Math.random() * 13;
+
+                        return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+                    }
+                },
+                data: chartData
+            }]
+        });
+
+        // 키워드 막대 차트 옵션
+        chart2.setOption({
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'shadow'
+                }
+            },
+            grid: {
+                top: '0%',
+                // left: -dynamicMargin + 20,
+                left: '0%',
+                right: '0%',
+                bottom: '0%',
+                containLabel: true
+            },
+            xAxis: {
+                type: 'value',
+                axisLabel: false,
+                splitLine: false,
+                min: 0,
+                max: maxValue
+            },
+            yAxis: {
+                type: 'category',
+                axisLine: false,
+                axisTick: false,
+                axisLabel: {
+                    padding: [0, 0, 0, -(calculateTextWidth(word))],
+                    // margin: 200,
+                    // inside: true,
+                    // width: 100,
+                    align: 'left',
+                    fontFamily: 'KBFG Text',
+                    color: '#222',
+                    fontSize: (handler.device === 'desktop') ? 19 : 15,
+                    fontWeight: 500,
+                },
+                inverse: true,
+                data: yAxisData
+            },
+            series: [
+                {
+                    name: '2011',
+                    type: 'bar',
+                    barWidth: 16,
+                    itemStyle: {
+                        color: {
+                            type: 'linear',
+                            x: 0,
+                            y: 0,
+                            x2: 0,
+                            y2: 1,
+                            colorStops: [
+                                { offset: 0, color: '#FE6C6C' },
+                                { offset: 1, color: '#FE464B' }
+                            ],
+                        },
+                    },
+                    showBackground: true,
+                    backgroundStyle: {
+                        color: '#E0E0E0',
+                        borderRadius: 50
+                    },
+                    data: resultData
+                },
+            ]
+        });
+    }
+</script>
+</body>
+</html>

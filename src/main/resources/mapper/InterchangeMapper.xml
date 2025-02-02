@@ -143,6 +143,7 @@
         SELECT EXCH.EXCH_SN        AS EXCH_SN
              , EXCH.EXCH_TTL       AS EXCH_TTL
              , EXCH.EXCH_CN        AS EXCH_CN
+             , EXCH.SORT_NO       AS SORT_NO
              , REPLACE(FILES.FILE_PATH, '\', '/')     AS INTER_PATH1
              , FILES.FILE_NM       AS INTER_FILE_NAME1
         FROM KB_EXCH_INFO EXCH

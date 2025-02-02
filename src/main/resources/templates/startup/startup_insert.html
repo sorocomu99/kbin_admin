@@ -186,7 +186,7 @@
                                             <tr>
                                                 <th class="bg-light" width="20%">연간 퇴사율(%)</th>
                                                 <td>
-                                                    <input type="text" class="form-control" id="mm12_rsgntn_rt" name="mm12_rsgntn_rt" value="" placeholder="ex) 22.84" maxlength="5">
+                                                    <input type="number" class="form-control" id="mm12_rsgntn_rt" name="mm12_rsgntn_rt" value="" placeholder="ex) 22.84" oninput="splitAmt(this, 5)" onblur="splitAmt(this, 5)">
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -273,7 +273,7 @@
                                                         <option value="TIPS">TIPS</option>
                                                     </select>
                                                 </td>
-                                                <td><input type="number" class="form-control" id="invest_amt" name="invest_amt" value="" placeholder="ex)  10.5" oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)"></td>
+                                                <td><input type="number" class="form-control" id="invest_amt" name="invest_amt" value="" placeholder="ex)  100000000" oninput="splitAmt(this, 15);onlyNumber(this)" onblur="splitAmt(this, 15);onlyNumber(this)"></td>
                                                 <td><input type="text" class="form-control" id="investor" name="investor" value="" placeholder="ex) 글로벌팁스" maxlength="500"></td>
                                                 <td class="text-center">
                                                     <button type="button" class="btn btn-sm btn-outline-primary" onclick="addInputInvest()">
@@ -337,51 +337,51 @@
                                         <tbody>
                                             <tr>
                                                 <th>매출액</th>
-                                                <td><input type="number" class="form-control" name="sls_amt1" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)"></td>
-                                                <td><input type="number" class="form-control" name="sls_amt2" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)"></td>
-                                                <td><input type="number" class="form-control" name="sls_amt3" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)"></td>
-                                                <td><input type="number" class="form-control" name="sls_amt4" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)"></td>
-                                                <td><input type="number" class="form-control" name="sls_amt5" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)"></td>
+                                                <td><input type="text" class="form-control" name="sls_amt1" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15);onlyNumber(this);" onblur="splitAmt(this, 15);onlyNumber(this);"></td>
+                                                <td><input type="text" class="form-control" name="sls_amt2" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15);onlyNumber(this);" onblur="splitAmt(this, 15);onlyNumber(this);"></td>
+                                                <td><input type="text" class="form-control" name="sls_amt3" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15);onlyNumber(this);" onblur="splitAmt(this, 15);onlyNumber(this);"></td>
+                                                <td><input type="text" class="form-control" name="sls_amt4" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15);onlyNumber(this);" onblur="splitAmt(this, 15);onlyNumber(this);"></td>
+                                                <td><input type="text" class="form-control" name="sls_amt5" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15);onlyNumber(this);" onblur="splitAmt(this, 15);onlyNumber(this);"></td>
                                             </tr>
                                             <tr>
                                                 <th>매출원가</th>
-                                                <td><input type="number" class="form-control" name="sls_cost_amt1" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)"></td>
-                                                <td><input type="number" class="form-control" name="sls_cost_amt2" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)"></td>
-                                                <td><input type="number" class="form-control" name="sls_cost_amt3" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)"></td>
-                                                <td><input type="number" class="form-control" name="sls_cost_amt4" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)"></td>
-                                                <td><input type="number" class="form-control" name="sls_cost_amt5" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)"></td>
+                                                <td><input type="text" class="form-control" name="sls_cost_amt1" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15);onlyNumber(this);" onblur="splitAmt(this, 15);onlyNumber(this);"></td>
+                                                <td><input type="text" class="form-control" name="sls_cost_amt2" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15);onlyNumber(this);" onblur="splitAmt(this, 15);onlyNumber(this);"></td>
+                                                <td><input type="text" class="form-control" name="sls_cost_amt3" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15);onlyNumber(this);" onblur="splitAmt(this, 15);onlyNumber(this);"></td>
+                                                <td><input type="text" class="form-control" name="sls_cost_amt4" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15);onlyNumber(this);" onblur="splitAmt(this, 15);onlyNumber(this);"></td>
+                                                <td><input type="text" class="form-control" name="sls_cost_amt5" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15);onlyNumber(this);" onblur="splitAmt(this, 15);onlyNumber(this);"></td>
                                             </tr>
                                             <tr>
                                                 <th>매출총이익</th>
-                                                <td><input type="number" class="form-control" name="sls_gramt1" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)"></td>
-                                                <td><input type="number" class="form-control" name="sls_gramt2" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)"></td>
-                                                <td><input type="number" class="form-control" name="sls_gramt3" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)"></td>
-                                                <td><input type="number" class="form-control" name="sls_gramt4" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)"></td>
-                                                <td><input type="number" class="form-control" name="sls_gramt5" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)"></td>
+                                                <td><input type="text" class="form-control" name="sls_gramt1" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15);onlyNumber(this);" onblur="splitAmt(this, 15);onlyNumber(this);"></td>
+                                                <td><input type="text" class="form-control" name="sls_gramt2" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15);onlyNumber(this);" onblur="splitAmt(this, 15);onlyNumber(this);"></td>
+                                                <td><input type="text" class="form-control" name="sls_gramt3" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15);onlyNumber(this);" onblur="splitAmt(this, 15);onlyNumber(this);"></td>
+                                                <td><input type="text" class="form-control" name="sls_gramt4" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15);onlyNumber(this);" onblur="splitAmt(this, 15);onlyNumber(this);"></td>
+                                                <td><input type="text" class="form-control" name="sls_gramt5" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15);onlyNumber(this);" onblur="splitAmt(this, 15);onlyNumber(this);"></td>
                                             </tr>
                                             <tr>
                                                 <th>판관비</th>
-                                                <td><input type="number" class="form-control" name="sga_amt1" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)"></td>
-                                                <td><input type="number" class="form-control" name="sga_amt2" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)"></td>
-                                                <td><input type="number" class="form-control" name="sga_amt3" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)"></td>
-                                                <td><input type="number" class="form-control" name="sga_amt4" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)"></td>
-                                                <td><input type="number" class="form-control" name="sga_amt5" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)"></td>
+                                                <td><input type="text" class="form-control" name="sga_amt1" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15);onlyNumber(this);" onblur="splitAmt(this, 15);onlyNumber(this);"></td>
+                                                <td><input type="text" class="form-control" name="sga_amt2" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15);onlyNumber(this);" onblur="splitAmt(this, 15);onlyNumber(this);"></td>
+                                                <td><input type="text" class="form-control" name="sga_amt3" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15);onlyNumber(this);" onblur="splitAmt(this, 15);onlyNumber(this);"></td>
+                                                <td><input type="text" class="form-control" name="sga_amt4" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15);onlyNumber(this);" onblur="splitAmt(this, 15);onlyNumber(this);"></td>
+                                                <td><input type="text" class="form-control" name="sga_amt5" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15);onlyNumber(this);" onblur="splitAmt(this, 15);onlyNumber(this);"></td>
                                             </tr>
                                             <tr>
                                                 <th>영업이익</th>
-                                                <td><input type="number" class="form-control" name="operating_profit1" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)"></td>
-                                                <td><input type="number" class="form-control" name="operating_profit2" value="" placeholder="ex) -100000" oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)"></td>
-                                                <td><input type="number" class="form-control" name="operating_profit3" value="" placeholder="ex) -100000" oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)"></td>
-                                                <td><input type="number" class="form-control" name="operating_profit4" value="" placeholder="ex) -100000" oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)"></td>
-                                                <td><input type="number" class="form-control" name="operating_profit5" value="" placeholder="ex) -100000" oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)"></td>
+                                                <td><input type="text" class="form-control" name="operating_profit1" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15);onlyNumber(this);" onblur="splitAmt(this, 15);onlyNumber(this);"></td>
+                                                <td><input type="text" class="form-control" name="operating_profit2" value="" placeholder="ex) -100000" oninput="splitAmt(this, 15);onlyNumber(this);" onblur="splitAmt(this, 15);onlyNumber(this);"></td>
+                                                <td><input type="text" class="form-control" name="operating_profit3" value="" placeholder="ex) -100000" oninput="splitAmt(this, 15);onlyNumber(this);" onblur="splitAmt(this, 15);onlyNumber(this);"></td>
+                                                <td><input type="text" class="form-control" name="operating_profit4" value="" placeholder="ex) -100000" oninput="splitAmt(this, 15);onlyNumber(this);" onblur="splitAmt(this, 15);onlyNumber(this);"></td>
+                                                <td><input type="text" class="form-control" name="operating_profit5" value="" placeholder="ex) -100000" oninput="splitAmt(this, 15);onlyNumber(this);" onblur="splitAmt(this, 15);onlyNumber(this);"></td>
                                             </tr>
                                             <tr>
                                                 <th>순이익</th>
-                                                <td><input type="number" class="form-control" name="net_profit1" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)"></td>
-                                                <td><input type="number" class="form-control" name="net_profit2" value="" placeholder="ex) -100000" oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)"></td>
-                                                <td><input type="number" class="form-control" name="net_profit3" value="" placeholder="ex) -100000" oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)"></td>
-                                                <td><input type="number" class="form-control" name="net_profit4" value="" placeholder="ex) -100000" oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)"></td>
-                                                <td><input type="number" class="form-control" name="net_profit5" value="" placeholder="ex) -100000" oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)"></td>
+                                                <td><input type="text" class="form-control" name="net_profit1" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15);onlyNumber(this);" onblur="splitAmt(this, 15);onlyNumber(this);"></td>
+                                                <td><input type="text" class="form-control" name="net_profit2" value="" placeholder="ex) -100000" oninput="splitAmt(this, 15);onlyNumber(this);" onblur="splitAmt(this, 15);onlyNumber(this);"></td>
+                                                <td><input type="text" class="form-control" name="net_profit3" value="" placeholder="ex) -100000" oninput="splitAmt(this, 15);onlyNumber(this);" onblur="splitAmt(this, 15);onlyNumber(this);"></td>
+                                                <td><input type="text" class="form-control" name="net_profit4" value="" placeholder="ex) -100000" oninput="splitAmt(this, 15);onlyNumber(this);" onblur="splitAmt(this, 15);onlyNumber(this);"></td>
+                                                <td><input type="text" class="form-control" name="net_profit5" value="" placeholder="ex) -100000" oninput="splitAmt(this, 15);onlyNumber(this);" onblur="splitAmt(this, 15);onlyNumber(this);"></td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -401,51 +401,51 @@
                                         <tbody>
                                             <tr>
                                                 <th>유동자산</th>
-                                                <td><input type="number" class="form-control" name="current_assets1" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)"></td>
-                                                <td><input type="number" class="form-control" name="current_assets2" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)"></td>
-                                                <td><input type="number" class="form-control" name="current_assets3" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)"></td>
-                                                <td><input type="number" class="form-control" name="current_assets4" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)"></td>
-                                                <td><input type="number" class="form-control" name="current_assets5" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)"></td>
+                                                <td><input type="text" class="form-control" name="current_assets1" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15);onlyNumber(this);" onblur="splitAmt(this, 15);onlyNumber(this);"></td>
+                                                <td><input type="text" class="form-control" name="current_assets2" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15);onlyNumber(this);" onblur="splitAmt(this, 15);onlyNumber(this);"></td>
+                                                <td><input type="text" class="form-control" name="current_assets3" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15);onlyNumber(this);" onblur="splitAmt(this, 15);onlyNumber(this);"></td>
+                                                <td><input type="text" class="form-control" name="current_assets4" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15);onlyNumber(this);" onblur="splitAmt(this, 15);onlyNumber(this);"></td>
+                                                <td><input type="text" class="form-control" name="current_assets5" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15);onlyNumber(this);" onblur="splitAmt(this, 15);onlyNumber(this);"></td>
                                             </tr>
                                             <tr>
                                                 <th>비유동자</th>
-                                                <td><input type="number" class="form-control" name="non_current_assets1" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)"></td>
-                                                <td><input type="number" class="form-control" name="non_current_assets2" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)"></td>
-                                                <td><input type="number" class="form-control" name="non_current_assets3" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)"></td>
-                                                <td><input type="number" class="form-control" name="non_current_assets4" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)"></td>
-                                                <td><input type="number" class="form-control" name="non_current_assets5" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)"></td>
+                                                <td><input type="text" class="form-control" name="non_current_assets1" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15);onlyNumber(this);" onblur="splitAmt(this, 15);onlyNumber(this);"></td>
+                                                <td><input type="text" class="form-control" name="non_current_assets2" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15);onlyNumber(this);" onblur="splitAmt(this, 15);onlyNumber(this);"></td>
+                                                <td><input type="text" class="form-control" name="non_current_assets3" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15);onlyNumber(this);" onblur="splitAmt(this, 15);onlyNumber(this);"></td>
+                                                <td><input type="text" class="form-control" name="non_current_assets4" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15);onlyNumber(this);" onblur="splitAmt(this, 15);onlyNumber(this);"></td>
+                                                <td><input type="text" class="form-control" name="non_current_assets5" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15);onlyNumber(this);" onblur="splitAmt(this, 15);onlyNumber(this);"></td>
                                             </tr>
                                             <tr>
                                                 <th>자산총계</th>
-                                                <td><input type="number" class="form-control" name="ast_gramt1" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)"></td>
-                                                <td><input type="number" class="form-control" name="ast_gramt2" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)"></td>
-                                                <td><input type="number" class="form-control" name="ast_gramt3" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)"></td>
-                                                <td><input type="number" class="form-control" name="ast_gramt4" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)"></td>
-                                                <td><input type="number" class="form-control" name="ast_gramt5" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)"></td>
+                                                <td><input type="text" class="form-control" name="ast_gramt1" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15);onlyNumber(this);" onblur="splitAmt(this, 15);onlyNumber(this);"></td>
+                                                <td><input type="text" class="form-control" name="ast_gramt2" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15);onlyNumber(this);" onblur="splitAmt(this, 15);onlyNumber(this);"></td>
+                                                <td><input type="text" class="form-control" name="ast_gramt3" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15);onlyNumber(this);" onblur="splitAmt(this, 15);onlyNumber(this);"></td>
+                                                <td><input type="text" class="form-control" name="ast_gramt4" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15);onlyNumber(this);" onblur="splitAmt(this, 15);onlyNumber(this);"></td>
+                                                <td><input type="text" class="form-control" name="ast_gramt5" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15);onlyNumber(this);" onblur="splitAmt(this, 15);onlyNumber(this);"></td>
                                             </tr>
                                             <tr>
                                                 <th>부채총계</th>
-                                                <td><input type="number" class="form-control" name="debt_gramt1" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)"></td>
-                                                <td><input type="number" class="form-control" name="debt_gramt2" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)"></td>
-                                                <td><input type="number" class="form-control" name="debt_gramt3" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)"></td>
-                                                <td><input type="number" class="form-control" name="debt_gramt4" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)"></td>
-                                                <td><input type="number" class="form-control" name="debt_gramt5" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)"></td>
+                                                <td><input type="text" class="form-control" name="debt_gramt1" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15);onlyNumber(this);" onblur="splitAmt(this, 15);onlyNumber(this);"></td>
+                                                <td><input type="text" class="form-control" name="debt_gramt2" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15);onlyNumber(this);" onblur="splitAmt(this, 15);onlyNumber(this);"></td>
+                                                <td><input type="text" class="form-control" name="debt_gramt3" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15);onlyNumber(this);" onblur="splitAmt(this, 15);onlyNumber(this);"></td>
+                                                <td><input type="text" class="form-control" name="debt_gramt4" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15);onlyNumber(this);" onblur="splitAmt(this, 15);onlyNumber(this);"></td>
+                                                <td><input type="text" class="form-control" name="debt_gramt5" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15);onlyNumber(this);" onblur="splitAmt(this, 15);onlyNumber(this);"></td>
                                             </tr>
                                             <tr>
                                                 <th>자본금</th>
-                                                <td><input type="number" class="form-control" name="cptl1" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)"></td>
-                                                <td><input type="number" class="form-control" name="cptl2" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)"></td>
-                                                <td><input type="number" class="form-control" name="cptl3" value="" placeholder="ex) -100000" oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)"></td>
-                                                <td><input type="number" class="form-control" name="cptl4" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)"></td>
-                                                <td><input type="number" class="form-control" name="cptl5" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)"></td>
+                                                <td><input type="text" class="form-control" name="cptl1" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15);onlyNumber(this);" onblur="splitAmt(this, 15);onlyNumber(this);"></td>
+                                                <td><input type="text" class="form-control" name="cptl2" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15);onlyNumber(this);" onblur="splitAmt(this, 15);onlyNumber(this);"></td>
+                                                <td><input type="text" class="form-control" name="cptl3" value="" placeholder="ex) -100000" oninput="splitAmt(this, 15);onlyNumber(this);" onblur="splitAmt(this, 15);onlyNumber(this);"></td>
+                                                <td><input type="text" class="form-control" name="cptl4" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15);onlyNumber(this);" onblur="splitAmt(this, 15);onlyNumber(this);"></td>
+                                                <td><input type="text" class="form-control" name="cptl5" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15);onlyNumber(this);" onblur="splitAmt(this, 15);onlyNumber(this);"></td>
                                             </tr>
                                             <tr>
                                                 <th>자본총계</th>
-                                                <td><input type="number" class="form-control" name="cptl_gramt1" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)"></td>
-                                                <td><input type="number" class="form-control" name="cptl_gramt2" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)"></td>
-                                                <td><input type="number" class="form-control" name="cptl_gramt3" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)"></td>
-                                                <td><input type="number" class="form-control" name="cptl_gramt4" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)"></td>
-                                                <td><input type="number" class="form-control" name="cptl_gramt5" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)"></td>
+                                                <td><input type="text" class="form-control" name="cptl_gramt1" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15);onlyNumber(this);" onblur="splitAmt(this, 15);onlyNumber(this);"></td>
+                                                <td><input type="text" class="form-control" name="cptl_gramt2" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15);onlyNumber(this);" onblur="splitAmt(this, 15);onlyNumber(this);"></td>
+                                                <td><input type="text" class="form-control" name="cptl_gramt3" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15);onlyNumber(this);" onblur="splitAmt(this, 15);onlyNumber(this);"></td>
+                                                <td><input type="text" class="form-control" name="cptl_gramt4" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15);onlyNumber(this);" onblur="splitAmt(this, 15);onlyNumber(this);"></td>
+                                                <td><input type="text" class="form-control" name="cptl_gramt5" value="" placeholder="ex) 100000" oninput="splitAmt(this, 15);onlyNumber(this);" onblur="splitAmt(this, 15);onlyNumber(this);"></td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -643,6 +643,7 @@
 
                                     <div class="button-container">
                                         <!--<a href="/html_ko/preview/startup.html" target="_blank" class="btn btn-outline-primary">미리보기</a>-->
+                                        <a id="preview-button" href="javascript:previewPage()" class="btn btn-outline-primary">미리보기</a>
                                         <a th:href="@{/startup/list/{menuId}(menuId=${menuId})}" class="btn btn-outline-dark">목록보기</a>
                                         <button type="button" class="btn btn-primary" onclick="javascript:startupInsert();">등록하기</button>
                                     </div>
@@ -701,8 +702,6 @@
             $('.table-service').last().after(dom);
 
             removeServeiceButton.removeClass('d-none');
-
-            $('.table-service').last().prev()[0].scrollIntoView({ behavior: 'smooth' });
         }
 
         function removeInputService(e) {
@@ -853,31 +852,31 @@
             //제공 서비스 입력값 콤마를 파이프 라인으로 변경
             const srvc_nm_inputs = document.querySelectorAll('input[name="srvc_nm"]');
             srvc_nm_inputs.forEach(input => {
-                input.value = input.value.replaceAll(',', '|');
+                input.value = input.value.replaceAll(',', '@@RP@@');
             });
 
             //투자일자 입력값 콤마를 파이프 라인으로 변경
             const invest_ymd_inputs = document.querySelectorAll('input[name="invest_ymd"]');
             invest_ymd_inputs.forEach(input => {
-               input.value = input.value.replaceAll(',', '|');
+               input.value = input.value.replaceAll(',', '@@RP@@');
             });
 
             //투자자 입력값 콤마를 파이프 라인으로 변경
             investor_inputs = document.querySelectorAll('input[name="investor"]');
             investor_inputs.forEach(input => {
-                input.value = input.value.replaceAll(',', '|');
+                input.value = input.value.replaceAll(',', '@@RP@@');
             });
 
-            //누스제목 입력값 콤마를 파이프 라인으로 변경
+            //뉴스제목 입력값 콤마를 파이프 라인으로 변경
             news_ttl_inputs = document.querySelectorAll('input[name="news_ttl"]');
             news_ttl_inputs.forEach(input => {
-                input.value = input.value.replaceAll(',', '|');
+                input.value = input.value.replaceAll(',', '@@RP@@');
             });
 
             //뉴스 제공자 입력값 콤마를 파이프 라인으로 변경
             provider_inputs = document.querySelectorAll('input[name="provider"]');
             provider_inputs.forEach(input => {
-                input.value = input.value.replaceAll(',', '|');
+                input.value = input.value.replaceAll(',', '@@RP@@');
             });
 
             let result = confirm("등록 하시겠습니까?");
@@ -894,6 +893,65 @@
             if(obj.value.length > len) {
                 obj.value = obj.value.slice(0, len);
             }
+        }
+
+        function onlyNumber(input) {
+            if (input.value.startsWith("-")) {
+                input.value = '-' + input.value.replace(/[^0-9]/g, '');
+            }else{
+                input.value = input.value.replace(/[^0-9]/g, '');
+            }
+        }
+
+        // 프리뷰 페이지로 이동
+        function previewPage() {
+            if(checkDupYear('sls_yr')){
+                alert('주요 손익계산서의 항목(연도)은 중복될 수 없습니다\n항목 입력값을 확인하세요.');
+                $('input[name=sls_yr1]').focus();
+                return false;
+            }
+
+            if(checkDupYear('ast_yr')){
+                alert('주요 재무상태표의 항목(연도)은 중복될 수 없습니다\n항목 입력값을 확인하세요.');
+                $('input[name=ast_yr1]').focus();
+                return false;
+            }
+
+            //제공 서비스 입력값 콤마를 파이프 라인으로 변경
+            const srvc_nm_inputs = document.querySelectorAll('input[name="srvc_nm"]');
+            srvc_nm_inputs.forEach(input => {
+                input.value = input.value.replaceAll(',', '@@RP@@');
+            });
+
+            //투자일자 입력값 콤마를 파이프 라인으로 변경
+            const invest_ymd_inputs = document.querySelectorAll('input[name="invest_ymd"]');
+            invest_ymd_inputs.forEach(input => {
+                input.value = input.value.replaceAll(',', '@@RP@@');
+            });
+
+            //투자자 입력값 콤마를 파이프 라인으로 변경
+            investor_inputs = document.querySelectorAll('input[name="investor"]');
+            investor_inputs.forEach(input => {
+                input.value = input.value.replaceAll(',', '@@RP@@');
+            });
+
+            //뉴스제목 입력값 콤마를 파이프 라인으로 변경
+            news_ttl_inputs = document.querySelectorAll('input[name="news_ttl"]');
+            news_ttl_inputs.forEach(input => {
+                input.value = input.value.replaceAll(',', '@@RP@@');
+            });
+
+            //뉴스 제공자 입력값 콤마를 파이프 라인으로 변경
+            provider_inputs = document.querySelectorAll('input[name="provider"]');
+            provider_inputs.forEach(input => {
+                input.value = input.value.replaceAll(',', '@@RP@@');
+            });
+
+            const form = document.forms['startup_form'];
+            form.action = window.staticPath + 'startup/preview'; // 전송할 URL
+            form.method = 'POST';            // 전송 방식
+            form.target = '_blank';          // 새 창에서 열기
+            form.submit();                   // 폼 제출
         }
     </script>
 </body>

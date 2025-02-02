@@ -11,6 +11,7 @@
 package com.kb.inno.admin.Controller;
 
 import com.kb.inno.admin.DTO.FaqDTO;
+import com.kb.inno.admin.DTO.MenuDTO;
 import com.kb.inno.admin.Service.FaqService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -109,5 +110,15 @@ public class FaqController {
     public String delete(@RequestParam("faq_sn") int faq_sn) {
         faqService.delete(faq_sn);
         return "success";
+    }
+
+    /**
+     * FAQ 미리보기
+     */
+    @PostMapping("/preview")
+    public String preview(FaqDTO faqDTO, Model model) {
+        faqService.getPreview(faqDTO, model);
+
+        return directory + "/faq_preview";
     }
 }

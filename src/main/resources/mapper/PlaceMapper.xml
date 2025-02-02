@@ -10,6 +10,7 @@
          FROM (
                SELECT PLC_SN
                     , PLC_NM
+                    , SORT_NO
                  FROM KB_PLC_INFO
                 ORDER BY PLC_SN ASC
               ) PLC_PAGE
@@ -141,6 +142,7 @@
         SELECT PLC.PLC_SN           AS PLC_SN
              , PLC.PLC_NM           AS PLC_NM
              , PLC.PLC_ADDR         AS PLC_ADDR
+             , PLC.SORT_NO          AS SORT_NO
              , REPLACE(FILES1.FILE_PATH, '\', '/')     AS PLC_PATH1
              , FILES1.FILE_NM       AS PLC_FILE_NAME1
              , REPLACE(FILES2.FILE_PATH, '\', '/')     AS PLC_PATH2

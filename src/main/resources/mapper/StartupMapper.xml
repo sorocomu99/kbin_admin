@@ -139,7 +139,7 @@
         )
         VALUES
         ( #{ent_cd}
-        , REPLACE(#{srvc_nm}, '|', ',')
+        , REPLACE(#{srvc_nm}, '@@RP@@', ',')
         , #{google_app_link}
         , #{apple_app_link}
         , #{web_srvc_link}
@@ -160,10 +160,10 @@
         )
         VALUES
         ( #{ent_cd}
-        , REPLACE(#{investor}, '|', ',')
+        , REPLACE(#{investor}, '@@RP@@', ',')
         , #{series_nm}
         , #{invest_amt}
-        , #{invest_ymd}
+        , REPLACE(#{invest_ymd}, '@@RP@@', ',')
         , SYSDATE
         , SYSDATE
         )
@@ -258,8 +258,8 @@
         VALUES
         ( #{ent_cd}
         , #{news_id}
-        , #{provider}
-        , #{news_ttl}
+        , REPLACE(#{provider}, '@@RP@@', ',')
+        , REPLACE(#{news_ttl}, '@@RP@@', ',')
         , #{news_link}
         , #{thumb_url}
         , SYSDATE

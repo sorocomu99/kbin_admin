@@ -95,7 +95,7 @@ button::-moz-focus-inner { padding: 0; border: 0 }
 button:disabled { cursor: default }
 input { padding: 16px 20px; height: 65px; font-family: inherit; font-size: inherit; color: #333333; background-color: #ffffff; border: 1px solid #DDDDDD; border-radius: 8px; -webkit-transition: all ease 0.1s; transition: all ease 0.1s }
 textarea { vertical-align: middle; padding: 16px 20px; line-height: inherit; font-family: inherit; font-size: inherit; color: #333333; background-color: #ffffff; border: 1px solid #DDDDDD; border-radius: 0; -webkit-transition: all ease 0.1s; transition: all ease 0.1s; resize: none; overflow-y: auto; -ms-overflow-style: auto }
-select { margin: 0; padding: 16px 50px 16px 20px; height: 65px; font-family: inherit; font-size: inherit; color: #333333; -moz-appearance: none; -webkit-appearance: none; appearance: none; -webkit-appearance: none; background-image: url("/images/select-arrow-fill.svg"); background-color: #ffffff; background-size: auto 14px; background-repeat: no-repeat; background-position: right 18px center; border: 1px solid #DDDDDD; border-radius: 8px; box-shadow: none }
+select { margin: 0; padding: 16px 50px 16px 20px; height: 65px; font-family: inherit; font-size: inherit; color: #333333; -moz-appearance: none; -webkit-appearance: none; appearance: none; -webkit-appearance: none; background-image: url("../images/select-arrow-fill.svg"); background-color: #ffffff; background-size: auto 14px; background-repeat: no-repeat; background-position: right 18px center; border: 1px solid #DDDDDD; border-radius: 8px; box-shadow: none }
 select::-ms-expand { display: none }
 input[type=number] { -moz-appearance: textfield }
 input:-moz-read-only, textarea:-moz-read-only { background-color: #f8f8f8 }

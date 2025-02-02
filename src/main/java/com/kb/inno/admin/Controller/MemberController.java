@@ -119,8 +119,10 @@ public class MemberController {
     // 관리자 삭제
     @ResponseBody
     @PostMapping("/delete")
-    public String delete(@RequestParam("mngr_sn") int mngr_sn) {
-        memberService.delete(mngr_sn);
+    public String delete(@RequestParam("mngr_sn") int mngr_sn, HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        int loginId = (int) session.getAttribute("mngrSn");
+        memberService.delete(mngr_sn, loginId);
         return "success";
     }
 }

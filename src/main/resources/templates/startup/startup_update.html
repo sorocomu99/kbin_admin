@@ -148,7 +148,7 @@
                                             <tr>
                                                 <th class="bg-light" width="20%">연간 퇴사율(%)</th>
                                                 <td>
-                                                    <input type="text" class="form-control" id="mm12_rsgntn_rt" name="mm12_rsgntn_rt" th:value="${selectStarterInfo.mm12_rsgntn_rt}" placeholder="ex) 22.84" maxlength="5">
+                                                    <input type="number" class="form-control" id="mm12_rsgntn_rt" name="mm12_rsgntn_rt" th:value="${selectStarterInfo.mm12_rsgntn_rt}" placeholder="ex) 22.84" oninput="splitAmt(this, 5)" onblur="splitAmt(this, 5)">
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -347,7 +347,7 @@
                                                             <input type="number" class="form-control" th:name="'sls_yr' + ${iterStat.count}"
                                                                    th:value="${iterStat.index < #lists.size(list)} ? ${list[iterStat.index]?.sls_yr} : ''"
                                                                    th:placeholder="'ex) ' + ${2019 + iterStat.index}"
-                                                                   oninput="splitAmt(this, 4)" onblur="splitAmt(this, 4)">
+                                                                   oninput="splitAmt(this, 4);" onblur="splitAmt(this, 4)">
                                                         </th>
                                                     </th:block>
                                                 </th:block>
@@ -359,9 +359,9 @@
                                                 <th:block th:with="list=${selectSlsInfoList ?: {}}">
                                                     <th:block th:each="item, iterStat : ${#numbers.sequence(1, 5)}">
                                                         <td>
-                                                            <input type="number" class="form-control" th:name="'sls_amt' + ${iterStat.count}"
+                                                            <input type="text" class="form-control" th:name="'sls_amt' + ${iterStat.count}"
                                                                    th:value="${iterStat.index < #lists.size(list)} ? ${list[iterStat.index]?.sls_amt} : ''"
-                                                                   placeholder="ex) 100000"  oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)">
+                                                                   placeholder="ex) 100000"  oninput="splitAmt(this, 15);onlyNumber(this)" onblur="splitAmt(this, 15);onlyNumber(this)">
                                                         </td>
                                                     </th:block>
                                                 </th:block>
@@ -371,9 +371,9 @@
                                                 <th:block th:with="list=${selectSlsInfoList ?: {}}">
                                                     <th:block th:each="item, iterStat : ${#numbers.sequence(1, 5)}">
                                                         <td>
-                                                            <input type="number" class="form-control" th:name="'sls_cost_amt' + ${iterStat.count}"
+                                                            <input type="text" class="form-control" th:name="'sls_cost_amt' + ${iterStat.count}"
                                                                    th:value="${iterStat.index < #lists.size(list)} ? ${list[iterStat.index]?.sls_cost_amt} : ''"
-                                                                   placeholder="ex) 100000"  oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)">
+                                                                   placeholder="ex) 100000"  oninput="splitAmt(this, 15);onlyNumber(this)" onblur="splitAmt(this, 15);onlyNumber(this)">
                                                         </td>
                                                     </th:block>
                                                 </th:block>
@@ -383,9 +383,9 @@
                                                 <th:block th:with="list=${selectSlsInfoList ?: {}}">
                                                     <th:block th:each="item, iterStat : ${#numbers.sequence(1, 5)}">
                                                         <td>
-                                                            <input type="number" class="form-control" th:name="'sls_gramt' + ${iterStat.count}"
+                                                            <input type="text" class="form-control" th:name="'sls_gramt' + ${iterStat.count}"
                                                                    th:value="${iterStat.index < #lists.size(list)} ? ${list[iterStat.index]?.sls_gramt} : ''"
-                                                                   placeholder="ex) 100000"  oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)">
+                                                                   placeholder="ex) 100000"  oninput="splitAmt(this, 15);onlyNumber(this)" onblur="splitAmt(this, 15);onlyNumber(this)">
                                                         </td>
                                                     </th:block>
                                                 </th:block>
@@ -395,9 +395,9 @@
                                                 <th:block th:with="list=${selectSlsInfoList ?: {}}">
                                                     <th:block th:each="item, iterStat : ${#numbers.sequence(1, 5)}">
                                                         <td>
-                                                            <input type="number" class="form-control" th:name="'sga_amt' + ${iterStat.count}"
+                                                            <input type="text" class="form-control" th:name="'sga_amt' + ${iterStat.count}"
                                                                    th:value="${iterStat.index < #lists.size(list)} ? ${list[iterStat.index]?.sga_amt} : ''"
-                                                                   placeholder="ex) 100000"  oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)">
+                                                                   placeholder="ex) 100000"  oninput="splitAmt(this, 15);onlyNumber(this)" onblur="splitAmt(this, 15);onlyNumber(this)">
                                                         </td>
                                                     </th:block>
                                                 </th:block>
@@ -407,9 +407,9 @@
                                                 <th:block th:with="list=${selectSlsInfoList ?: {}}">
                                                     <th:block th:each="item, iterStat : ${#numbers.sequence(1, 5)}">
                                                         <td>
-                                                            <input type="number" class="form-control" th:name="'operating_profit' + ${iterStat.count}"
+                                                            <input type="text" class="form-control" th:name="'operating_profit' + ${iterStat.count}"
                                                                    th:value="${iterStat.index < #lists.size(list)} ? ${list[iterStat.index]?.operating_profit} : ''"
-                                                                   placeholder="ex) 100000"  oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)">
+                                                                   placeholder="ex) 100000"  oninput="splitAmt(this, 15);onlyNumber(this)" onblur="splitAmt(this, 15);onlyNumber(this)">
                                                         </td>
                                                     </th:block>
                                                 </th:block>
@@ -419,9 +419,9 @@
                                                 <th:block th:with="list=${selectSlsInfoList ?: {}}">
                                                     <th:block th:each="item, iterStat : ${#numbers.sequence(1, 5)}">
                                                         <td>
-                                                            <input type="number" class="form-control" th:name="'net_profit' + ${iterStat.count}"
+                                                            <input type="text" class="form-control" th:name="'net_profit' + ${iterStat.count}"
                                                                    th:value="${iterStat.index < #lists.size(list)} ? ${list[iterStat.index]?.net_profit} : ''"
-                                                                   placeholder="ex) 100000"  oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)">
+                                                                   placeholder="ex) 100000"  oninput="splitAmt(this, 15);onlyNumber(this)" onblur="splitAmt(this, 15);onlyNumber(this)">
                                                         </td>
                                                     </th:block>
                                                 </th:block>
@@ -452,9 +452,9 @@
                                                 <th:block th:with="list=${selectListAstInfo ?: {}}">
                                                     <th:block th:each="item, iterStat : ${#numbers.sequence(1, 5)}">
                                                         <td>
-                                                            <input type="number" class="form-control" th:name="'current_assets' + ${iterStat.count}"
+                                                            <input type="text" class="form-control" th:name="'current_assets' + ${iterStat.count}"
                                                                    th:value="${iterStat.index < #lists.size(list)} ? ${list[iterStat.index]?.current_assets} : ''"
-                                                                   placeholder="ex) 100000"  oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)">
+                                                                   placeholder="ex) 100000"  oninput="splitAmt(this, 15);onlyNumber(this)" onblur="splitAmt(this, 15);onlyNumber(this)">
                                                         </td>
                                                     </th:block>
                                                 </th:block>
@@ -464,9 +464,9 @@
                                                 <th:block th:with="list=${selectListAstInfo ?: {}}">
                                                     <th:block th:each="item, iterStat : ${#numbers.sequence(1, 5)}">
                                                         <td>
-                                                            <input type="number" class="form-control" th:name="'non_current_assets' + ${iterStat.count}"
+                                                            <input type="text" class="form-control" th:name="'non_current_assets' + ${iterStat.count}"
                                                                    th:value="${iterStat.index < #lists.size(list)} ? ${list[iterStat.index]?.non_current_assets} : ''"
-                                                                   placeholder="ex) 100000"  oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)">
+                                                                   placeholder="ex) 100000"  oninput="splitAmt(this, 15);onlyNumber(this)" onblur="splitAmt(this, 15);onlyNumber(this)">
                                                         </td>
                                                     </th:block>
                                                 </th:block>
@@ -476,9 +476,9 @@
                                                 <th:block th:with="list=${selectListAstInfo ?: {}}">
                                                     <th:block th:each="item, iterStat : ${#numbers.sequence(1, 5)}">
                                                         <td>
-                                                            <input type="number" class="form-control" th:name="'ast_gramt' + ${iterStat.count}"
+                                                            <input type="text" class="form-control" th:name="'ast_gramt' + ${iterStat.count}"
                                                                    th:value="${iterStat.index < #lists.size(list)} ? ${list[iterStat.index]?.ast_gramt} : ''"
-                                                                   placeholder="ex) 100000"  oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)">
+                                                                   placeholder="ex) 100000"  oninput="splitAmt(this, 15);onlyNumber(this)" onblur="splitAmt(this, 15);onlyNumber(this)">
                                                         </td>
                                                     </th:block>
                                                 </th:block>
@@ -488,9 +488,9 @@
                                                 <th:block th:with="list=${selectListAstInfo ?: {}}">
                                                     <th:block th:each="item, iterStat : ${#numbers.sequence(1, 5)}">
                                                         <td>
-                                                            <input type="number" class="form-control" th:name="'debt_gramt' + ${iterStat.count}"
+                                                            <input type="text" class="form-control" th:name="'debt_gramt' + ${iterStat.count}"
                                                                    th:value="${iterStat.index < #lists.size(list)} ? ${list[iterStat.index]?.debt_gramt} : ''"
-                                                                   placeholder="ex) 100000"  oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)">
+                                                                   placeholder="ex) 100000"  oninput="splitAmt(this, 15);onlyNumber(this)" onblur="splitAmt(this, 15);onlyNumber(this)">
                                                         </td>
                                                     </th:block>
                                                 </th:block>
@@ -500,9 +500,9 @@
                                                 <th:block th:with="list=${selectListAstInfo ?: {}}">
                                                     <th:block th:each="item, iterStat : ${#numbers.sequence(1, 5)}">
                                                         <td>
-                                                            <input type="number" class="form-control" th:name="'cptl' + ${iterStat.count}"
+                                                            <input type="text" class="form-control" th:name="'cptl' + ${iterStat.count}"
                                                                    th:value="${iterStat.index < #lists.size(list)} ? ${list[iterStat.index]?.cptl} : ''"
-                                                                   placeholder="ex) 100000"  oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)">
+                                                                   placeholder="ex) 100000"  oninput="splitAmt(this, 15);onlyNumber(this)" onblur="splitAmt(this, 15);onlyNumber(this)">
                                                         </td>
                                                     </th:block>
                                                 </th:block>
@@ -512,9 +512,9 @@
                                                 <th:block th:with="list=${selectListAstInfo ?: {}}">
                                                     <th:block th:each="item, iterStat : ${#numbers.sequence(1, 5)}">
                                                         <td>
-                                                            <input type="number" class="form-control" th:name="'cptl_gramt' + ${iterStat.count}"
+                                                            <input type="text" class="form-control" th:name="'cptl_gramt' + ${iterStat.count}"
                                                                    th:value="${iterStat.index < #lists.size(list)} ? ${list[iterStat.index]?.cptl_gramt} : ''"
-                                                                   placeholder="ex) 100000"  oninput="splitAmt(this, 15)" onblur="splitAmt(this, 15)">
+                                                                   placeholder="ex) 100000"  oninput="splitAmt(this, 15);onlyNumber(this)" onblur="splitAmt(this, 15);onlyNumber(this)">
                                                         </td>
                                                     </th:block>
                                                 </th:block>
@@ -785,6 +785,7 @@
 
                                     <div class="button-container">
                                         <!--<a href="/html_ko/preview/startup.html" target="_blank" class="btn btn-outline-primary">미리보기</a>-->
+                                        <a id="preview-button" href="javascript:previewPage()" class="btn btn-outline-primary">미리보기</a>
                                         <a th:href="@{/startup/list/{menuId}(menuId=${menuId})}" class="btn btn-outline-dark">목록보기</a>
                                         <button type="button" class="btn btn-primary" onclick="javascript:startupUpdate();">수정하기</button>
                                     </div>
@@ -843,8 +844,6 @@
             $('.table-service').last().after(dom);
 
             removeServeiceButton.removeClass('d-none');
-
-            $('.table-service').last().prev()[0].scrollIntoView({ behavior: 'smooth' });
         }
 
         function removeInputService(e) {
@@ -996,31 +995,31 @@
             //제공 서비스 입력값 콤마를 파이프 라인으로 변경
             const srvc_nm_inputs = document.querySelectorAll('input[name="srvc_nm"]');
             srvc_nm_inputs.forEach(input => {
-                input.value = input.value.replaceAll(',', '|');
+                input.value = input.value.replaceAll(',', '@@RP@@');
             });
 
             //투자일자 입력값 콤마를 파이프 라인으로 변경
             const invest_ymd_inputs = document.querySelectorAll('input[name="invest_ymd"]');
             invest_ymd_inputs.forEach(input => {
-               input.value = input.value.replaceAll(',', '|');
+               input.value = input.value.replaceAll(',', '@@RP@@');
             });
 
             //투자자 입력값 콤마를 파이프 라인으로 변경
             investor_inputs = document.querySelectorAll('input[name="investor"]');
             investor_inputs.forEach(input => {
-                input.value = input.value.replaceAll(',', '|');
+                input.value = input.value.replaceAll(',', '@@RP@@');
             });
 
-            //누스제목 입력값 콤마를 파이프 라인으로 변경
+            //뉴스제목 입력값 콤마를 파이프 라인으로 변경
             news_ttl_inputs = document.querySelectorAll('input[name="news_ttl"]');
             news_ttl_inputs.forEach(input => {
-                input.value = input.value.replaceAll(',', '|');
+                input.value = input.value.replaceAll(',', '@@RP@@');
             });
 
             //뉴스 제공자 입력값 콤마를 파이프 라인으로 변경
             provider_inputs = document.querySelectorAll('input[name="provider"]');
             provider_inputs.forEach(input => {
-                input.value = input.value.replaceAll(',', '|');
+                input.value = input.value.replaceAll(',', '@@RP@@');
             });
 
             let result = confirm("등록 하시겠습니까?");
@@ -1037,6 +1036,76 @@
             if(obj.value.length > len) {
                 obj.value = obj.value.slice(0, len);
             }
+        }
+
+        function onlyNumber(input) {
+            if (input.value.startsWith("-")) {
+                input.value = '-' + input.value.replace(/[^0-9]/g, '');
+            }else{
+                input.value = input.value.replace(/[^0-9]/g, '');
+            }
+        }
+
+        $(document).ready(function() {
+            // previewPage 호출 후 복귀시 input 값 원복 처리
+            $(window).on('focus', function() {
+                $('input').each(function() {
+                    var $input = $(this);
+                    var newValue = $input.val().replaceAll('@@RP@@', ',');
+                    $input.val(newValue);
+                });
+            });
+        });
+
+        // 프리뷰 페이지로 이동
+        function previewPage() {
+            if(checkDupYear('sls_yr')){
+                alert('주요 손익계산서의 항목(연도)은 중복될 수 없습니다\n항목 입력값을 확인하세요.');
+                $('input[name=sls_yr1]').focus();
+                return false;
+            }
+
+            if(checkDupYear('ast_yr')){
+                alert('주요 재무상태표의 항목(연도)은 중복될 수 없습니다\n항목 입력값을 확인하세요.');
+                $('input[name=ast_yr1]').focus();
+                return false;
+            }
+
+            //제공 서비스 입력값 콤마를 파이프 라인으로 변경
+            const srvc_nm_inputs = document.querySelectorAll('input[name="srvc_nm"]');
+            srvc_nm_inputs.forEach(input => {
+                input.value = input.value.replaceAll(',', '@@RP@@');
+            });
+
+            //투자일자 입력값 콤마를 파이프 라인으로 변경
+            const invest_ymd_inputs = document.querySelectorAll('input[name="invest_ymd"]');
+            invest_ymd_inputs.forEach(input => {
+                input.value = input.value.replaceAll(',', '@@RP@@');
+            });
+
+            //투자자 입력값 콤마를 파이프 라인으로 변경
+            investor_inputs = document.querySelectorAll('input[name="investor"]');
+            investor_inputs.forEach(input => {
+                input.value = input.value.replaceAll(',', '@@RP@@');
+            });
+
+            //뉴스제목 입력값 콤마를 파이프 라인으로 변경
+            news_ttl_inputs = document.querySelectorAll('input[name="news_ttl"]');
+            news_ttl_inputs.forEach(input => {
+                input.value = input.value.replaceAll(',', '@@RP@@');
+            });
+
+            //뉴스 제공자 입력값 콤마를 파이프 라인으로 변경
+            provider_inputs = document.querySelectorAll('input[name="provider"]');
+            provider_inputs.forEach(input => {
+                input.value = input.value.replaceAll(',', '@@RP@@');
+            });
+
+            const form = document.forms['startup_form'];
+            form.action = window.staticPath + 'startup/preview'; // 전송할 URL
+            form.method = 'POST';            // 전송 방식
+            form.target = '_blank';          // 새 창에서 열기
+            form.submit();                   // 폼 제출
         }
     </script>
 </body>

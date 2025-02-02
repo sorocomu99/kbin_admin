@@ -139,4 +139,93 @@
           FROM KB_FAQ_INFO
          WHERE FAQ_SN = #{faq_sn}
     </delete>
+
+
+    <select id="selectPreviewPageCount" parameterType="com.kb.inno.admin.DTO.SearchDTO" resultType="int">
+        /* FAQ 리스트 갯수 조회(전체) */
+        SELECT COUNT(*)
+        FROM KB_FAQ_INFO
+        WHERE 1=1
+        <if test='keyword != null and keyword != ""'>
+            <choose>
+                <when test="type == 'all'">
+                    OR FAQ_QSTN LIKE '%'|| #{keyword} ||'%'
+                    OR FAQ_ANS  LIKE '%'|| #{keyword} ||'%'
+                </when>
+                <when test="type == 'title'">
+                    AND FAQ_QSTN LIKE '%'|| #{keyword} ||'%'
+                </when>
+                <when test="type == 'content'">
+                    AND FAQ_ANS  LIKE '%'|| #{keyword} ||'%'
+                </when>
+            </choose>
+        </if>
+        <if test='ctgry != null and ctgry != ""'>
+            AND FAQ_CTGRY = #{ctgry}
+        </if>
+    </select>
+    <!-- FAQ 리스트 조회 -->
+    <select id="selectPreviewList" parameterType="com.kb.inno.admin.DTO.SearchDTO" resultType="com.kb.inno.admin.DTO.FaqDTO">
+        /* FAQ 리스트 조회 */
+        SELECT FAQ_PAGE.FAQ_SN
+        , FAQ_PAGE.CTGRY_NM
+        , FAQ_PAGE.FAQ_QSTN
+        , FAQ_PAGE.FAQ_ANS
+        , FAQ_PAGE.FAQ_ID
+        , FAQ_PAGE.FAQ_SEC
+        FROM (
+        /* 순번 매기기 */
+        SELECT ROWNUM ROWNUMBER
+        , FAQ.*
+        FROM (
+        /* 리스트 조회 */
+        SELECT FAQ_CTGRY.FAQ_SN
+        , FAQ_CTGRY.FAQ_CTGRY
+        , FAQ_CTGRY.CTGRY_NM
+        , FAQ_CTGRY.FAQ_QSTN
+        , FAQ_CTGRY.FAQ_ANS
+        , 'tab' || FAQ_CTGRY.FAQ_SN AS FAQ_ID
+        , 'tab' || FAQ_CTGRY.FAQ_SN || '-section' AS FAQ_SEC
+        FROM (
+        SELECT FAQ.*
+        , CTGRY.CTGRY_NM
+        FROM KB_FAQ_INFO FAQ
+        , KB_CTGRY_INFO CTGRY
+        WHERE FAQ.FAQ_CTGRY = CTGRY.CTGRY_SN
+        ) FAQ_CTGRY
+        WHERE 1=1
+        AND EXPSR_YN = 'Y'
+        <if test='keyword != null and keyword != ""'>
+            <choose>
+                <when test="type == 'all'">
+                    AND FAQ_CTGRY.FAQ_QSTN LIKE '%'|| #{keyword} ||'%'
+                    OR FAQ_CTGRY.FAQ_ANS  LIKE '%'|| #{keyword} ||'%'
+                </when>
+                <when test="type == 'title'">
+                    AND FAQ_CTGRY.FAQ_QSTN LIKE '%'|| #{keyword} ||'%'
+                </when>
+                <when test="type == 'content'">
+                    AND FAQ_CTGRY.FAQ_ANS  LIKE '%'|| #{keyword} ||'%'
+                </when>
+            </choose>
+        </if>
+        <if test='ctgry != null and ctgry != ""'>
+            AND FAQ_CTGRY.FAQ_CTGRY = #{ctgry}
+        </if>
+        <if test='faq_sn != null and faq_sn != ""'>
+            AND FAQ.FAQ_SN = #{faq_sn}
+        </if>
+        ORDER BY FAQ_CTGRY.SORT_NO, FAQ_CTGRY.FAQ_SN DESC
+        ) FAQ
+        ) FAQ_PAGE
+        WHERE ROWNUMBER BETWEEN #{start} AND #{end}
+    </select>
+    <!-- FAQ 카테고리 조회 -->
+    <select id="selectCategoryAll" resultType="com.kb.inno.admin.DTO.CategoryDTO">
+        /* FAQ 카테고리 조회 */
+        SELECT CTGRY_SN
+             , CTGRY_NM
+        FROM KB_CTGRY_INFO
+        ORDER BY CTGRY_SN
+    </select>
 </mapper>

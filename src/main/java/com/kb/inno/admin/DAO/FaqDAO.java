@@ -10,6 +10,7 @@
  */
 package com.kb.inno.admin.DAO;
 
+import com.kb.inno.admin.DTO.CategoryDTO;
 import com.kb.inno.admin.DTO.FaqDTO;
 import com.kb.inno.admin.DTO.SearchDTO;
 import org.apache.ibatis.annotations.Mapper;
@@ -35,5 +36,10 @@ public interface FaqDAO {
     void delete(int faq_sn);
     // FAQ 카테고리 조회
     Map<String, Object> selectCategory(int ctgry);
-    
+
+    //preview
+    int selectPreviewPageCount(SearchDTO search);
+    List<FaqDTO> selectPreviewList(SearchDTO search);
+    // 카테고리 조회
+    List<CategoryDTO> selectCategoryAll();
 }

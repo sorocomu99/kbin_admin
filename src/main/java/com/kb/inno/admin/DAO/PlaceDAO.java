@@ -38,5 +38,5 @@ public interface PlaceDAO {
     void delete(Integer integer);
     // 육성공간 리스트 조회 (미리보기용)
     //List<VisualDTO> selectListAll(int mainSn);
-    List<VisualDTO> selectListAll(PlaceDTO placeDTO);
+    List<PlaceDTO> selectListAll(PlaceDTO placeDTO);
 }

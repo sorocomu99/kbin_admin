@@ -52,15 +52,6 @@
                     <div class="slider-container">
                         <div class="swiper slider">
                             <div class="swiper-wrapper">
-                                <th:block th:if="${interchange.expsr_yn == 'Y'}">
-                                    <div class="swiper-slide">
-                                        <div class="thumbnail">
-                                            <img th:src="${(@environment.getProperty('staticpath') == '/' ? '' : @environment.getProperty('staticpath')) + interchange.inter_path1 + interchange.inter_file_name1}" alt="">
-                                        </div>
-                                        <p class="title" th:text="${interchange.exch_ttl}"></p>
-                                        <p class="text" th:text="${interchange.exch_cn}"></p>
-                                    </div>
-                                </th:block>
                                 <div class="swiper-slide" th:each="list : ${selectList}" th:if="${list.inter_path1 != null}">
                                     <div class="thumbnail">
                                         <img th:src="${(@environment.getProperty('staticpath') == '/' ? '' : @environment.getProperty('staticpath')) + list.inter_path1 + list.inter_file_name1}" alt="">

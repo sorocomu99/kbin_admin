@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -119,10 +120,24 @@ public class MemberService {
 
     /**
      * 관리자 계정 삭제
+     *
      * @param memberId
+     * @param loginId
      * @return
      */
-    public int delete(int memberId) {
-        return memberDAO.delete(memberId);
+    public int delete(int memberId, int loginId) {
+        //return memberDAO.delete(memberId);
+
+        // 계정 삭제는 없음. 삭제 시, 공지사항 등 조회 쿼리에서 join 오류 발생
+        // 아이디를 DEL_SORO.concat(기존아이디) 로 치환. 비밀번호 난수 처리
+        MemberDTO memberDTO = new MemberDTO();
+        memberDTO.setLast_mdfr(loginId);
+        memberDTO.setLast_cntn_dt(new Date());
+        memberDTO.setMngr_sn(memberId);
+        try {
+            memberDTO.setMngr_pswd(Sha256.encrypt(UUID.randomUUID().toString().replace("-", "").substring(0, 8)));
+        } catch (Exception ignored) {
+        }
+        return memberDAO.updateMemberDeleteStatus(memberDTO);
     }
 }

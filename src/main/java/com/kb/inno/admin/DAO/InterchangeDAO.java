@@ -38,5 +38,5 @@ public interface InterchangeDAO {
     void delete(int exch_sn);
     // 글로벌 - 현지교류 리스트 조회 (미리보기용)
     //List<VisualDTO> selectListAll(int exch_sn);
-    List<VisualDTO> selectListAll(InterchangeDTO interchangeDTO);
+    List<InterchangeDTO> selectListAll(InterchangeDTO interchangeDTO);
 }

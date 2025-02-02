@@ -28,5 +28,5 @@ public interface CooperationDAO {
     void delete(int coope_sn);
     // 협력 기관 리스트 조회 (미리보기용)
     //List<VisualDTO> selectListAll(int coope_sn);
-    List<VisualDTO> selectListAll(CooperationDTO cooperationDTO);
+    List<CooperationDTO> selectListAll(CooperationDTO cooperationDTO);
 }

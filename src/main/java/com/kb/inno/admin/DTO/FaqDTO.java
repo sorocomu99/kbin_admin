@@ -20,4 +20,9 @@ public class FaqDTO {
     private Date last_mdfcn_dt;  // 최종 수정 일시
     private int menu_id;         // 메뉴 ID
     private int rownumber;          // 순번
+
+
+    private String faq_id;
+    private String faq_sec;
+    private String ctgry_nm; // FAQ 카테고리명
 }

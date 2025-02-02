@@ -11,11 +11,9 @@
 package com.kb.inno.admin.Service;
 
 import com.kb.inno.admin.DAO.InterchangeDAO;
-import com.kb.inno.admin.DTO.FileDTO;
-import com.kb.inno.admin.DTO.InterchangeDTO;
-import com.kb.inno.admin.DTO.PlaceDTO;
-import com.kb.inno.admin.DTO.VisualDTO;
+import com.kb.inno.admin.DTO.*;
 import com.kb.inno.common.FileUploader;
+import com.kb.inno.common.StringUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -26,9 +24,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -149,8 +145,8 @@ public class InterchangeService {
     public void selectListAll(Model model, InterchangeDTO interchangeDTO) {
         int exch_sn = interchangeDTO.getExch_sn();
         //List<VisualDTO> selectList = interchangeDAO.selectListAll(exch_sn);
-        List<VisualDTO> selectList = interchangeDAO.selectListAll(interchangeDTO);
-        model.addAttribute("selectList", selectList);
+        List<InterchangeDTO> selectList = interchangeDAO.selectListAll(interchangeDTO);
+        //model.addAttribute("selectList", selectList);
 
         // 기존 파일 확인
         if(exch_sn > 0) {
@@ -170,6 +166,21 @@ public class InterchangeService {
         }
 
         // 파일 화면에 전달
-        model.addAttribute("interchange", interchangeDTO);
+        //model.addAttribute("interchange", interchangeDTO);
+        // 기존 데이터와 현재 처리중인 데이터를 병합하고 sort_no 기준 재정렬
+        // 노출중인 경우 표출
+        if(StringUtil.hasText(interchangeDTO.getExpsr_yn())
+                && interchangeDTO.getExpsr_yn().equals("Y")) {
+            selectList.add(interchangeDTO);
+
+            Collections.sort(selectList, new Comparator<InterchangeDTO>() {
+                @Override
+                public int compare(InterchangeDTO v1, InterchangeDTO v2) {
+                    return Integer.compare(v1.getSort_no(), v2.getSort_no());
+                }
+            });
+        }
+
+        model.addAttribute("selectList", selectList);
     }
 }

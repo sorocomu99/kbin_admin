@@ -141,6 +141,7 @@
            , KB_FILE_INFO FILES
         WHERE 1=1
           AND VISUAL.ATCH_FILE_SN = FILES.FILE_SN(+)
+          AND VISUAL.EXPSR_YN = 'Y'
         <if test="main_sn != 0">
           AND NOT MAIN_SN IN (#{main_sn})
         </if>

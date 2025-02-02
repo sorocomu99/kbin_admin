@@ -50,11 +50,6 @@
                         <p class="section-text">정부기관 등 외부 육성기관과 연계한 외부 IR 기회 제공, 사업화 자금 지원 추천 등 스타트업 성장 단계별 외부 프로그램 연계를 통해 스타트업의 성장을 지원합니다.</p>
                     </div>
                     <ul class="cooperation-list">
-                        <li>
-                            <div class="thumbnail">
-                                <img th:src="${(@environment.getProperty('staticpath') == '/' ? '' : @environment.getProperty('staticpath')) + cooperation.coope_path + cooperation.coope_file_name}" alt="">
-                            </div>
-                        </li>
                         <li th:each="list : ${selectList}">
                             <div class="thumbnail">
                                 <img th:src="${(@environment.getProperty('staticpath') == '/' ? '' : @environment.getProperty('staticpath')) + list.coope_path + list.coope_file_name}" alt="">

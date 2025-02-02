@@ -139,6 +139,7 @@
     <select id="selectListAll" resultType="com.kb.inno.admin.DTO.CooperationDTO">
         /* 협력 기관 리스트 조회 (미리보기용) */
         SELECT COOPE.COOPE_SN      AS COOPE_SN
+             , COOPE.SORT_NO       AS SORT_NO
              , FILES.FILE_NM       AS COOPE_FILE_NAME
              , REPLACE(FILES.FILE_PATH, '\', '/')     AS COOPE_PATH
           FROM KB_COOPE_INFO COOPE

@@ -55,37 +55,6 @@
                          <div class="slider-container">
                             <div class="swiper roomy-parent-slider">
                                 <div class="swiper-wrapper">
-                                    <div class="swiper-slide">
-                                        <!-- roomy-child-slider: 썸네일 슬라이드 -->
-                                        <div class="swiper roomy-child-slider">
-                                            <div class="swiper-wrapper">
-                                                <div class="swiper-slide" th:if="${place.plc_path1 != null}">
-                                                    <div class="thumbnail">
-                                                        <img th:src="${(@environment.getProperty('staticpath') == '/' ? '' : @environment.getProperty('staticpath')) + place.plc_path1 + place.plc_file_name1}" alt="">
-                                                    </div>
-                                                </div>
-                                                <div class="swiper-slide" th:if="${place.plc_path2 != null}">
-                                                    <div class="thumbnail">
-                                                        <img th:src="${(@environment.getProperty('staticpath') == '/' ? '' : @environment.getProperty('staticpath')) + place.plc_path2 + place.plc_file_name2}" alt="">
-                                                    </div>
-                                                </div>
-                                                <div class="swiper-slide" th:if="${place.plc_path3 != null}">
-                                                    <div class="thumbnail">
-                                                        <img th:src="${(@environment.getProperty('staticpath') == '/' ? '' : @environment.getProperty('staticpath')) + place.plc_path3 + place.plc_file_name3}" alt="">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="controls">
-                                                <div class="swiper-pagination"></div>
-                                                <div class="swiper-button-prev"></div>
-                                                <div class="swiper-button-next"></div>
-                                            </div>
-                                        </div>
-                                        <div class="context">
-                                            <p class="title" th:text="${place.plc_nm}"></p>
-                                            <p class="text" th:text="${place.plc_addr}"></p>
-                                        </div>
-                                    </div>
                                     <div class="swiper-slide" th:each="list : ${selectList}">
                                         <!-- roomy-child-slider: 썸네일 슬라이드 -->
                                         <div class="swiper roomy-child-slider">

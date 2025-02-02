@@ -77,7 +77,7 @@
                                                 </div>
                                             </td>
                                             <td th:text="${list.hub_ttl}">HUB Day 게시글 제목입니다.</td>
-                                            <td th:text="${list.expsr_yn}">미노출</td>
+                                            <td th:text="${list.expsr_yn == 'Y' ? '노출' : '미노출'}">미노출</td>
                                             <td th:text="${list.sort_no}">2</td>
                                             <td>
                                                 <button th:onclick="|updatePage('${list.hub_sn}', '${menuId}')|" class="btn btn-outline-dark btn-sm">수정</button>

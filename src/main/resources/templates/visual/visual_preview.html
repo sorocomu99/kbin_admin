@@ -42,19 +42,6 @@
             <div class="section-visual">
                 <div class="swiper">
                     <div class="swiper-wrapper">
-                        <div class="swiper-slide">
-                            <div class="background">
-                                <!-- 새로 등록한 파일 -->
-                                <img th:if="${visual.main_path != null}" class="item" th:src="${(@environment.getProperty('staticpath') == '/' ? '' : @environment.getProperty('staticpath'))
-                                 + visual.main_path + visual.main_file_name}" alt="">
-                                <!-- 기존 등록한 파일 -->
-                                <img th:unless="${visual.main_path != null}" class="item" th:src="${(@environment.getProperty('staticpath') == '/' ? '' : @environment.getProperty('staticpath'))
-                                 + visual.file_path + visual.file_nm}" alt="">
-                            </div>
-                            <div class="context">
-                                <p class="text" data-split th:utext="${visual.main_cn}"></p>
-                            </div>
-                        </div>
                         <div class="swiper-slide" th:each="list : ${selectList}" th:if="${list.main_file_name != null}">
                             <div class="background">
                                 <img class="item" th:src="${(@environment.getProperty('staticpath') == '/' ? '' : @environment.getProperty('staticpath')) + list.main_path + list.main_file_name}" alt="">

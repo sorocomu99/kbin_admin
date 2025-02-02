@@ -40,7 +40,8 @@
                                     <thead>
                                         <tr>
                                             <th style="width:5%">NO</th>
-                                            <th style="width:75%">공간이름</th>
+                                            <th style="width:65%">공간이름</th>
+                                            <th style="width:10%">정렬</th>
                                             <th style="width:20%">관리</th>
                                         </tr>
                                     </thead>
@@ -53,6 +54,7 @@
                                         <tr th:unless="${selectList == null or selectList.isEmpty()}" th:each="list : ${selectList}">
                                             <td th:text="${list.rownumber}"></td>
                                             <td th:text="${list.plc_nm}"></td>
+                                            <td th:text="${list.sort_no}"></td>
                                             <td>
                                                 <a th:onclick="|updatePage('${list.plc_sn}', '${menuId}')|" class="btn btn-outline-dark btn-sm">수정</a>
                                                 <button type="button" class="btn btn-outline-danger btn-sm" th:onclick="|deleteAlert('${list.plc_sn}')|">삭제</button>
