@@ -35,6 +35,9 @@ public class MailUtil {
         //tls1.2 이슈로 false 처리
         props.setProperty("mail.smtp.starttls.enable", "false");
 
+        System.out.println("=====mail_log====");
+        System.out.println(mailInfo.getHost() + " :: " + mailInfo.getPort() + " :: " + mailInfo.getFrom() + " :: " + mailInfo.getPw());
+
         Session session; //Session.getDefaultInstance(props);
 
         if(CommonUtil.isProd(PropertiesValue.profilesActive)

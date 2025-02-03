@@ -65,7 +65,7 @@
                 <li class="file">
                     <ul class="list">
                         <li>
-                            <a th:href="${notice?.ntc_path + notice?.ntc_file_name}" th:download="${notice?.origin_file_name}" title="첨부파일 다운로드">
+                            <a th:href="@{${notice?.ntc_path + notice?.ntc_file_name}}" th:attr="download=${notice?.origin_file_name}" title="첨부파일 다운로드">
                                 <i class="icon icon-download"></i>
                                 <span th:text="${notice?.origin_file_name}"></span>
                             </a>

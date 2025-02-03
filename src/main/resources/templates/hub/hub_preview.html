@@ -71,7 +71,7 @@
                 <li class="file">
                     <ul class="list">
                         <li>
-                            <a th:href="${hub.hub_path + hub.hub_file_name}" th:download="${hub.origin_file_name}">
+                            <a th:href="@{${hub?.hub_path + hub?.hub_file_name}}" th:attr="download=${hub?.origin_file_name}" title="첨부파일 다운로드">
                                 <i class="icon icon-download"></i>
                                 <span th:text="${hub.origin_file_name}"></span>
                             </a>

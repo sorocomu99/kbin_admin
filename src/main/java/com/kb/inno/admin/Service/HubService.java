@@ -10,8 +10,10 @@
  */
 package com.kb.inno.admin.Service;
 
+import com.jcraft.jsch.*;
 import com.kb.inno.admin.DAO.HubDAO;
 import com.kb.inno.admin.DTO.*;
+import com.kb.inno.common.CommonUtil;
 import com.kb.inno.common.FilePathUtil;
 import com.kb.inno.common.FileUploader;
 import com.kb.inno.common.PropertiesValue;
@@ -22,6 +24,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -30,6 +33,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import java.util.UUID;
 
 @Service
@@ -165,9 +169,62 @@ public class HubService {
                 try (InputStream fileStream = files.get(i).getInputStream()) {
                     // 파일 복사
                     Files.copy(fileStream, targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
+                    if(CommonUtil.isProd(PropertiesValue.profilesActive)) {
+                        // SFTP 서버 정보
+                        String hostname1 = "10.170.6.13"; // SFTP 서버 주소
+                        String hostname2 = "10.170.6.14";
+                        int port = 22; // 기본 SFTP 포트
+                        String username = "wasadm"; // 사용자명
+                        String password = "Kb!wasadm77"; // 비밀번호
+                        String localFile = "/fsfile/kbinnovation/" + fileName; // 로컬 파일 경로
+                        String remoteDir = "/fsfile/kbinnovation/"; // 원격 디렉토리
+
+                        // JSch 객체 생성
+                        JSch jsch = new JSch();
+                        JSch jsch2 = new JSch();
+                        // 세션 설정
+                        Session session = jsch.getSession(username, hostname1, port);
+                        Session session2 = jsch2.getSession(username, hostname2, port);
+                        session.setPassword(password);
+                        session2.setPassword(password);
+                        // SSH 세션의 옵션 설정
+                        Properties config = new Properties();
+                        config.put("StrictHostKeyChecking", "no");
+                        session.setConfig(config);
+                        session2.setConfig(config);
+                        // 세션 연결
+                        session.connect();
+                        session2.connect();
+                        // SFTP 채널 생성
+                        Channel channel = session.openChannel("sftp");
+                        ChannelSftp sftpChannel = (ChannelSftp) channel;
+                        Channel channel2 = session2.openChannel("sftp");
+                        ChannelSftp sftpChannel2 = (ChannelSftp) channel2;
+                        // SFTP 채널 연결
+                        sftpChannel.connect();
+                        sftpChannel2.connect();
+                        // 로컬 파일을 원격 서버로 업로드
+                        FileInputStream fis = new FileInputStream(new File(localFile));
+                        sftpChannel.put(fis, remoteDir + new File(localFile).getName());
+                        FileInputStream fis2 = new FileInputStream(new File(localFile));
+                        sftpChannel2.put(fis2, remoteDir + new File(localFile).getName());
+                        // 파일 스트림 및 채널 종료
+                        fis.close();
+                        fis2.close();
+                        sftpChannel.exit();
+                        sftpChannel2.exit();
+                        session.disconnect();
+                        session2.disconnect();
+                    }
                 } catch (IOException e) {
                     throw new RuntimeException(e);
+                } catch (JSchException e) {
+                    throw new RuntimeException(e);
+                } catch (SftpException e) {
+                    throw new RuntimeException(e);
                 }
+
                 /*
                 try {
                     files.get(i).transferTo(new File(savePath, fileName));
