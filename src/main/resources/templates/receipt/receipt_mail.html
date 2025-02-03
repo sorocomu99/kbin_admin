@@ -14,7 +14,7 @@
                             <h2 class="h4">메일 발송</h2>
                             <div class="mt-4">
                             	<input type="hidden" name="menu_id" th:value="${menuId}"/>
-                                <form th:action="@{/receipt/sendMail}" enctype="multipart/form-data" method="post">
+                                <form th:action="@{/receipt/sendMail}" name="form" enctype="multipart/form-data" method="post">
                                     <table class="table table-bordered align-middle">
                                         <tbody>
                                             <tr>
@@ -22,14 +22,14 @@
                                                 <td>최고관리자(hwan@kbfg.com)</td>
                                             </tr>
                                             <tr>
-                                                <th class="bg-light">받는사람</th>
+                                                <th class="bg-light">받는 사람</th>
                                                 <td>
-                                                    <input th:if="${receivers != null and receivers.size() != 0}" type="text" name="receivers[]" class="form-control" placeholder="받는사람 이메일 주소" th:value="${#strings.listJoin(receivers, ',')}">
-                                                    <input th:unless="${receivers != null and receivers.size() != 0}" type="text" name="receivers[]" class="form-control" placeholder="받는사람 이메일 주소">
+                                                    <input th:if="${receivers != null and receivers.size() != 0}" type="text" id="receivers" name="receivers[]" class="form-control" placeholder="받는사람 이메일 주소" th:value="${#strings.listJoin(receivers, ',')}">
+                                                    <input th:unless="${receivers != null and receivers.size() != 0}" type="text" id="receivers" name="receivers[]" class="form-control" placeholder="받는사람 이메일 주소">
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <th class="bg-light">메일제목</th>
+                                                <th class="bg-light">메일 제목</th>
                                                 <td>
                                                     <input type="text" name="subject" class="form-control" maxlength="150">
                                                 </td>
@@ -53,7 +53,7 @@
                                     </table>
                                     <div class="button-container">
                                         <a href="javascript:" class="btn btn-outline-primary" onclick="window.close();">목록보기</a>
-                                        <button type="submit" class="btn btn-primary">메일전송</button>
+                                        <button type="button" onclick="confirmMsg()" class="btn btn-primary">메일전송</button>
                                     </div>
                                 </form>
                             </div>
@@ -63,6 +63,32 @@
             </div>
         </main>
     </div>
+    <script>
+        function confirmMsg() {
+            if($.trim($('#receivers').val()) === ''){
+                alert('받는 사람을 입력하시기 바랍니다.');
+                $('#receivers').focus();
+                return false;
+            }
+
+            if($.trim($('input[name=subject]').val()) === ''){
+                alert('메일 제목을 입력하시기 바랍니다.');
+                $('input[name=subject]').focus();
+                return false;
+            }
+
+            if($.trim($('textarea[name=content]').val()) === ''){
+                alert('메일 내용을 입력하시기 바랍니다.');
+                $('textarea[name=content]').focus();
+                return false;
+            }
+
+            if(confirm('메일을 전송하시겠습니까?')) {
+                document.form.method = 'POST';                                    //전송 방식
+                document.form.submit();                          // 폼 제출
+            }
+        }
+    </script>
     
     <script th:src="@{/js/admin.js}"></script>
 
