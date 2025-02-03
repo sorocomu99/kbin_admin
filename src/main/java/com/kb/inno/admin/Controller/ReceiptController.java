@@ -162,8 +162,43 @@ public class ReceiptController {
         // TODO : 파일 경로를 설정해주세요 또는 기존 파일경로를 설정했던 방식으로 사용해주세요
         //String filePath = "/Users/johuiyang/Documents/web/uploads/kbinno/" + applyAnswer.getAnswer_filename();
 
-        //TODO: author krh 2025-02-03, 월, 12:37 : sftp 파일을 받아야 할텐데...
-        String filePath = FilePathUtil.getSavePath(PropertiesValue.profilesActive) + File.separator + applyAnswer.getAnswer_filename();
+        String filePath = applyAnswer.getAnswer_file_path() + File.separator + applyAnswer.getAnswer_filename();
+
+        // 운영은 sftp 로 다운로드 및 저장
+        if(CommonUtil.isProd(PropertiesValue.profilesActive)) {
+            String savePath = FilePathUtil.getSavePath(PropertiesValue.profilesActive)
+                    + File.separator + "download"
+                    + File.separator + "apply"
+                    + File.separator + DateUtil.getToDay("yyyyMMdd");
+
+            File directory = new File(savePath);
+
+            if(!directory.exists()) {
+                directory.mkdirs();
+            }
+
+            // 다운로드 파일 경로. /download/apply/yyyyMMdd/파일명
+            filePath = savePath + File.separator + applyAnswer.getAnswer_filename();
+
+            String remoteFilePath = applyAnswer.getAnswer_file_path().concat(File.separator).concat(applyAnswer.getAnswer_filename());
+
+            try{
+                SFTPDownloader downloader = new SFTPDownloader("10.170.6.13", 22, "wasadm", "Kb!wasadm77");
+                if(downloader.isServerReachable(downloader.getHost(), downloader.getPort(), 2000)) {
+                    downloader.downloadFile(remoteFilePath, filePath);
+                }
+            }catch (Exception ignored) {
+            }
+
+            try{
+                SFTPDownloader downloader = new SFTPDownloader("10.170.6.14", 22, "wasadm", "Kb!wasadm77");
+                if(downloader.isServerReachable(downloader.getHost(), downloader.getPort(), 2000)) {
+                    downloader.downloadFile(remoteFilePath, filePath);
+                }
+
+            }catch (Exception ignored) {
+            }
+        }
 
         // 파일이 존재하는지 확인
         File file = new File(filePath);
@@ -184,7 +219,7 @@ public class ReceiptController {
         decodedFileName = decodedFileName.replaceAll("\\+", "%20");
 
         String contentDisposition = "attachment; filename=\"" + decodedFileName + "\"";
-        
+
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition)
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
