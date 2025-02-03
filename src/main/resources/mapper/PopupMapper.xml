@@ -46,7 +46,7 @@
     <!-- 팝업 등록 -->
     <insert id="insert" parameterType="com.kb.inno.admin.DTO.PopupDTO">
         /* 팝업 등록 */
-        INSERT INTO KBUSER.KB_POPUP_INFO
+        INSERT INTO KB_POPUP_INFO
          (
           POPUP_SN
          , MNGR_TTL

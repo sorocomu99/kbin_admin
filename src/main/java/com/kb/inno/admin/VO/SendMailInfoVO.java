@@ -17,7 +17,8 @@ public class SendMailInfoVO {
     String smtpEnable;
 
     public static SendMailInfoVO getInfo() {
-        if(CommonUtil.isProd(PropertiesValue.profilesActive)) {
+        if(CommonUtil.isProd(PropertiesValue.profilesActive)
+                || CommonUtil.isDev(PropertiesValue.profilesActive)) {
             return SendMailInfoVO.builder()
                     .host("10.200.85.103")
                     .port("25")

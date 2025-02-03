@@ -18,7 +18,7 @@ import java.util.Properties;
 
 public class MailUtil {
 
-    public boolean sendMail(List<String> receivers, String subject, String content, MultipartFile attachment) {
+    public boolean sendMail(List<String> receivers, String subject, String content, MultipartFile attachment) throws Exception {
 
         if(receivers == null || receivers.size() == 0) {
             return false;
@@ -37,7 +37,8 @@ public class MailUtil {
 
         Session session; //Session.getDefaultInstance(props);
 
-        if(CommonUtil.isProd(PropertiesValue.profilesActive)) {
+        if(CommonUtil.isProd(PropertiesValue.profilesActive)
+            || CommonUtil.isDev(PropertiesValue.profilesActive)) {
             session = Session.getDefaultInstance(props);
         }else{
             final String finalFrom = mailInfo.getFrom();
@@ -54,6 +55,9 @@ public class MailUtil {
             for (String receiver : receivers) {
                 sb.append(receiver);
                 sb.append(",");
+            }
+            if (sb.length() > 0) {
+                sb.setLength(sb.length() - 1);  // 마지막 쉼표 제거
             }
         }
         else{
@@ -91,8 +95,8 @@ public class MailUtil {
             Transport.send(message);
 
             return true;
-        } catch (MessagingException | IOException e) {
-            throw new RuntimeException(e);
+        } catch (Exception e) {
+            throw new Exception(e);
         }
     }
 

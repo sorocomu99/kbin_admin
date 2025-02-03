@@ -90,8 +90,9 @@ public class FileUploader {
                 JSch jsch2 = new JSch();
                 // 세션 설정
                 Session session = jsch.getSession(username, hostname1, port);
-                Session session2 = jsch.getSession(username, hostname2, port);
-                //session.setPassword(password);
+                Session session2 = jsch2.getSession(username, hostname2, port);
+                session.setPassword(password);
+                session2.setPassword(password);
                 // SSH 세션의 옵션 설정
                 Properties config = new Properties();
                 config.put("StrictHostKeyChecking", "no");
@@ -112,7 +113,7 @@ public class FileUploader {
                 FileInputStream fis = new FileInputStream(new File(localFile));
                 sftpChannel.put(fis, remoteDir + new File(localFile).getName());
                 FileInputStream fis2 = new FileInputStream(new File(localFile));
-                sftpChannel.put(fis2, remoteDir + new File(localFile).getName());
+                sftpChannel2.put(fis2, remoteDir + new File(localFile).getName());
                 // 파일 스트림 및 채널 종료
                 fis.close();
                 fis2.close();
@@ -195,8 +196,9 @@ public class FileUploader {
                         JSch jsch2 = new JSch();
                         // 세션 설정
                         Session session = jsch.getSession(username, hostname1, port);
-                        Session session2 = jsch.getSession(username, hostname2, port);
-                        //session.setPassword(password);
+                        Session session2 = jsch2.getSession(username, hostname2, port);
+                        session.setPassword(password);
+                        session2.setPassword(password);
                         // SSH 세션의 옵션 설정
                         Properties config = new Properties();
                         config.put("StrictHostKeyChecking", "no");
@@ -217,7 +219,7 @@ public class FileUploader {
                         FileInputStream fis = new FileInputStream(new File(localFile));
                         sftpChannel.put(fis, remoteDir + new File(localFile).getName());
                         FileInputStream fis2 = new FileInputStream(new File(localFile));
-                        sftpChannel.put(fis2, remoteDir + new File(localFile).getName());
+                        sftpChannel2.put(fis2, remoteDir + new File(localFile).getName());
                         // 파일 스트림 및 채널 종료
                         fis.close();
                         fis2.close();
@@ -332,8 +334,9 @@ public class FileUploader {
                 JSch jsch2 = new JSch();
                 // 세션 설정
                 Session session = jsch.getSession(username, hostname1, port);
-                Session session2 = jsch.getSession(username, hostname2, port);
-                //session.setPassword(password);
+                Session session2 = jsch2.getSession(username, hostname2, port);
+                session.setPassword(password);
+                session2.setPassword(password);
                 // SSH 세션의 옵션 설정
                 Properties config = new Properties();
                 config.put("StrictHostKeyChecking", "no");
@@ -354,7 +357,7 @@ public class FileUploader {
                 FileInputStream fis = new FileInputStream(new File(localFile));
                 sftpChannel.put(fis, remoteDir + new File(localFile).getName());
                 FileInputStream fis2 = new FileInputStream(new File(localFile));
-                sftpChannel.put(fis2, remoteDir + new File(localFile).getName());
+                sftpChannel2.put(fis2, remoteDir + new File(localFile).getName());
                 // 파일 스트림 및 채널 종료
                 fis.close();
                 fis2.close();

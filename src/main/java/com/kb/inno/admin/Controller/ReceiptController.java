@@ -219,7 +219,7 @@ public class ReceiptController {
     }
 
     @PostMapping("/sendMail")
-    public ModelAndView sendMail(@RequestParam("receivers[]") List<String> receivers, String subject, String content, MultipartFile attachment, HttpServletRequest request) {
+    public ModelAndView sendMail(@RequestParam("receivers[]") List<String> receivers, String subject, String content, MultipartFile attachment, HttpServletRequest request) throws Exception {
         ModelAndView mv = new ModelAndView("alert");
         MailUtil mailUtil = new MailUtil();
 
