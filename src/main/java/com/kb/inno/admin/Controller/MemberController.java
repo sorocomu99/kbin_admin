@@ -122,6 +122,13 @@ public class MemberController {
     public String delete(@RequestParam("mngr_sn") int mngr_sn, HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         int loginId = (int) session.getAttribute("mngrSn");
+
+        List<MemberDTO> selectList = memberService.selectList();
+
+        if(selectList == null
+            || selectList.size() == 1) {
+            return "once";
+        }
         memberService.delete(mngr_sn, loginId);
         return "success";
     }

@@ -162,6 +162,7 @@ public class ReceiptController {
         // TODO : 파일 경로를 설정해주세요 또는 기존 파일경로를 설정했던 방식으로 사용해주세요
         //String filePath = "/Users/johuiyang/Documents/web/uploads/kbinno/" + applyAnswer.getAnswer_filename();
 
+        //TODO: author krh 2025-02-03, 월, 12:37 : sftp 파일을 받아야 할텐데...
         String filePath = FilePathUtil.getSavePath(PropertiesValue.profilesActive) + File.separator + applyAnswer.getAnswer_filename();
 
         // 파일이 존재하는지 확인
@@ -183,7 +184,7 @@ public class ReceiptController {
         decodedFileName = decodedFileName.replaceAll("\\+", "%20");
 
         String contentDisposition = "attachment; filename=\"" + decodedFileName + "\"";
-
+        
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition)
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)

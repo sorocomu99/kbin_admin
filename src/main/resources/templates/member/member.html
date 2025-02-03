@@ -97,6 +97,11 @@
 
     // 삭제 성공/실패 알림창 띄우기
     function deleteAlert(mngr_sn) {
+        if($('tbody tr').length === 1){
+            alert('현재 등록된 계정이 1건으로 삭제하실 수 없습니다.');
+            return false;
+        }
+
         let result = confirm("정말 삭제 하시겠습니까?");
         if(result) {
             $.ajax({
@@ -105,6 +110,10 @@
                 contentType: 'application/x-www-form-urlencoded',
                 data: { mngr_sn: mngr_sn },
                 success: function(response) {
+                    if(response === 'once') {
+                        alert('현재 등록된 계정이 1건으로 삭제하실 수 없습니다.');
+                        return false;
+                    }
                     alert("삭제에 성공하였습니다.");
                     window.location.reload();
                 },
