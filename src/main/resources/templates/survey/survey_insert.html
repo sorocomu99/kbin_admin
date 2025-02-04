@@ -14,7 +14,7 @@
                             <h2 class="h4">지원서 설문 관리</h2>
                             <div class="mt-4">
                                 <form id="survey_form" name="survey_form" th:action="@{/survey/insert}" method="post" onsubmit="return checkInput();" enctype="multipart/form-data">
-                                    <input type="hidden" id="menu_id" name="menu_id" th:value="${menuId}"/>
+                                    <input type="hidden" id="menu_id" name="menuId" th:value="${menuId}"/>
                                     <input type="hidden" id="file_yn" name="file_yn" value="0">
                                     <table class="table table-bordered align-middle">
                                         <tbody>
