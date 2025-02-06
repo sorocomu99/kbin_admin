@@ -1,6 +1,7 @@
 package com.kb.inno.common;
 
 import com.kb.inno.admin.VO.SendMailInfoVO;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.activation.DataHandler;
@@ -81,7 +82,7 @@ public class MailUtil {
             Multipart multipart = new MimeMultipart();
             multipart.addBodyPart(textPart);
 
-            if(attachment != null) {
+            if(attachment != null && StringUtils.hasText(attachment.getOriginalFilename())) {
                 MimeBodyPart filePart = new MimeBodyPart();
                 // 파일 데이터를 DataSource로 변환
                 ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(attachment.getBytes());

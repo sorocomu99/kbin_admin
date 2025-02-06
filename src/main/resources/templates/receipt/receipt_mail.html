@@ -24,8 +24,8 @@
                                             <tr>
                                                 <th class="bg-light">받는 사람</th>
                                                 <td>
-                                                    <input th:if="${receivers != null and receivers.size() != 0}" type="text" id="receivers" name="receivers[]" class="form-control" placeholder="받는사람 이메일 주소" th:value="${#strings.listJoin(receivers, ',')}">
-                                                    <input th:unless="${receivers != null and receivers.size() != 0}" type="text" id="receivers" name="receivers[]" class="form-control" placeholder="받는사람 이메일 주소">
+                                                    <input th:if="${receivers != null and receivers.size() != 0}" type="text" name="receivers[]" class="form-control" placeholder="받는사람 이메일 주소" th:value="${#strings.listJoin(receivers, ',')}">
+                                                    <input th:unless="${receivers != null and receivers.size() != 0}" type="text" name="receivers[]" class="form-control" placeholder="받는사람 이메일 주소">
                                                 </td>
                                             </tr>
                                             <tr>
@@ -65,9 +65,9 @@
     </div>
     <script>
         function confirmMsg() {
-            if($.trim($('#receivers').val()) === ''){
+            if($.trim($('input[name^=receivers]').val()) === ''){
                 alert('받는 사람을 입력하시기 바랍니다.');
-                $('#receivers').focus();
+                $('input[name^=receivers]').focus();
                 return false;
             }
 
