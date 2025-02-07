@@ -18,8 +18,10 @@
                                     <table class="table table-bordered align-middle">
                                         <tbody>
                                             <tr>
-                                                <th class="bg-light">담당자</th>
-                                                <td>최고관리자(hwan@kbfg.com)</td>
+                                                <th class="bg-light">보내는 사람</th>
+                                                <td>
+                                                    <input type="text" name="sender" class="form-control" placeholder="보내는 사람 이메일 주소 ex) hwan@kbfg.com" th:value="${session.mngrEml}">
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <th class="bg-light">받는 사람</th>
@@ -65,8 +67,40 @@
     </div>
     <script>
         function confirmMsg() {
+            if($.trim($('input[name=sender]').val()) === ''){
+                alert('보내는 사람을 입력하시기 바랍니다.');
+                $('input[name=sender]').focus();
+                return false;
+            }
+
+            if (!emailCheck($('input[name=sender]').val())) {
+                alert("유효하지 않은 이메일 주소입니다.");
+                $('input[name=sender]').focus();
+                return false;
+            }
+
             if($.trim($('input[name^=receivers]').val()) === ''){
                 alert('받는 사람을 입력하시기 바랍니다.');
+                $('input[name^=receivers]').focus();
+                return false;
+            }
+
+            let allValid = true;
+            let validEmail = '';
+
+            const emails =  $('input[name^=receivers]').val().split(',');
+
+            for (let email of emails) {
+                email = email.trim();
+                if (!emailCheck(email)) {
+                    validEmail = email;
+                    allValid = false;
+                    break;
+                }
+            }
+
+            if (!allValid) {
+                alert(`${validEmail} 는 유효하지 않은 이메일 주소입니다.`)
                 $('input[name^=receivers]').focus();
                 return false;
             }
@@ -87,6 +121,11 @@
                 document.form.method = 'POST';                                    //전송 방식
                 document.form.submit();                          // 폼 제출
             }
+        }
+
+        function emailCheck(email_address){
+            var email_regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i;
+            return email_regex.test(email_address);
         }
     </script>
     

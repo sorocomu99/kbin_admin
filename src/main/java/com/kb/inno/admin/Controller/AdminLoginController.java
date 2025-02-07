@@ -166,11 +166,20 @@ public class AdminLoginController {
         String randomPw = sb.toString();
 
         try {
-            String shaPw = Sha256.encrypt(randomPw);  //입력받은 비밀번호 암호화
-            int pwSave = adminLoginService.findPw((String)params.get("pwdMailId"), shaPw);
-            if (pwSave != 1) {
+            int chkAdmCnt = adminLoginService.adminInfo((String) params.get("pwdMailId"), (String) params.get("pwdMailAddr"));
+
+            if(chkAdmCnt > 0) {
+                String shaPw = Sha256.encrypt(randomPw);  //입력받은 비밀번호 암호화
+                int pwSave = adminLoginService.findPw((String)params.get("pwdMailId"), shaPw);
+                if (pwSave != 1) {
+                    resultMap.put("success", "fail");
+                    resultMap.put("message", "임시 비밀번호 발급 중 오류가 발생했습니다.");
+
+                    return resultMap;
+                }
+            }else{
                 resultMap.put("success", "fail");
-                resultMap.put("message", "임시 비밀번호 발급 중 오류가 발생했습니다.");
+                resultMap.put("message", "일치하는 정보가 없습니다.");
 
                 return resultMap;
             }

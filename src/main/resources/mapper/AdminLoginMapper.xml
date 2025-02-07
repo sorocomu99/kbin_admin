@@ -13,6 +13,14 @@
          WHERE MNGR_ID = #{mngrId}
     </select>
 
+    <select id="adminInfo" parameterType="com.kb.inno.admin.DTO.AdminLoginDTO" resultType="int">
+        /* 로그인 관리자 계정 조회 */
+        SELECT COUNT(*)
+        FROM KB_MNGR_MBR_INFO
+        WHERE MNGR_ID = #{mngr_id}
+          AND MNGR_EML = #{mngr_eml}
+    </select>
+
     <update id="findPw" parameterType="com.kb.inno.admin.DTO.AdminLoginDTO">
         UPDATE KB_MNGR_MBR_INFO
            SET MNGR_PSWD = #{mngr_pswd}

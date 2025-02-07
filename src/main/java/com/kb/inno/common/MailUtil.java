@@ -13,13 +13,16 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.util.ByteArrayDataSource;
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.util.List;
 import java.util.Properties;
 
 public class MailUtil {
 
-    public boolean sendMail(List<String> receivers, String subject, String content, MultipartFile attachment) throws Exception {
+    public boolean sendMail(String sender, List<String> receivers, String subject, String content, MultipartFile attachment) throws Exception {
+
+        if(!StringUtils.hasText(sender)) {
+            return false;
+        }
 
         if(receivers == null || receivers.size() == 0) {
             return false;
@@ -47,6 +50,7 @@ public class MailUtil {
         }else{
             final String finalFrom = mailInfo.getFrom();
             final String finalPw = mailInfo.getPw();
+            sender = mailInfo.getFrom();
             session = Session.getInstance(props, new Authenticator() {
                 protected PasswordAuthentication getPasswordAuthentication() {
                     return new PasswordAuthentication(finalFrom, finalPw);
@@ -71,7 +75,7 @@ public class MailUtil {
         try {
             // 메일 메시지 생성
             MimeMessage message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(mailInfo.getFrom())); // 발신자 이메일 주소
+            message.setFrom(new InternetAddress(sender)); // 발신자 이메일 주소
             message.addRecipients(Message.RecipientType.BCC, InternetAddress.parse(sb.toString())); // 수신자 이메일 주소
             message.setSubject(subject); // 이메일 제목
 

@@ -254,11 +254,11 @@ public class ReceiptController {
     }
 
     @PostMapping("/sendMail")
-    public ModelAndView sendMail(@RequestParam("receivers[]") List<String> receivers, String subject, String content, MultipartFile attachment, HttpServletRequest request) throws Exception {
+    public ModelAndView sendMail(@RequestParam("receivers[]") List<String> receivers, String sender, String subject, String content, MultipartFile attachment, HttpServletRequest request) throws Exception {
         ModelAndView mv = new ModelAndView("alert");
         MailUtil mailUtil = new MailUtil();
 
-        if(mailUtil.sendMail(receivers, subject, content, attachment)){
+        if(mailUtil.sendMail(sender, receivers, subject, content, attachment)){
             String referer = request.getHeader("Referer");
 
             HttpSession session = request.getSession(false);
