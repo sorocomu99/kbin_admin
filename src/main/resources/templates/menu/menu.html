@@ -120,8 +120,11 @@
             //alert(menu_sn);
             //$('input[name=menu_sn]').val(menu_sn);
             // 폼 태그 서브밋 보내기
-            f=document.menu_form;
-            f.submit();
+            const form = document.forms['menu_form'];
+            form.action = window.staticPath + 'menu/update'; // 전송할 URL
+            form.method = 'POST';            // 전송 방식
+            form.target = '_blank';          // 새 창에서 열기
+            form.submit();                   // 폼 제출
         }
     }
 
