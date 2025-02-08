@@ -37,6 +37,13 @@ public class AdminLoginService {
         return adminLoginDTO;
     }
 
+    public int adminInfo(String userId, String email) {
+        AdminLoginDTO adminLoginDTO = new AdminLoginDTO();
+        adminLoginDTO.setMngr_id(userId);
+        adminLoginDTO.setMngr_eml(email);
+        return adminLoginDAO.adminInfo(adminLoginDTO);
+    }
+
     public int findPw(String userId, String pw) {
         AdminLoginDTO adminLoginDTO = new AdminLoginDTO();
         adminLoginDTO.setMngr_id(userId);

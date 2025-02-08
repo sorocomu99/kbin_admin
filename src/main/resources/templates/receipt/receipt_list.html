@@ -305,7 +305,7 @@
 
     function exportExcel(onlySelected = false) {
         const table = document.getElementById("mytable");
-        const excludeCols = [0, 3, 4, $("#mytable thead th").length - 1];
+        const excludeCols = [0, 4, $("#mytable thead th").length - 1];
         const tableData = [];
 
         // 헤더 추가
@@ -327,7 +327,11 @@
             const rowData = [];
             for (let i = 0; i < row.cells.length; i++) {
                 if (!excludeCols.includes(i)) {
-                    rowData.push(row.cells[i].innerText.trim());
+                    if($(row.cells[i]).find('select').length > 0) {
+                        rowData.push($(row.cells[i]).children(0).val());
+                    }else{
+                        rowData.push(row.cells[i].innerText.trim());
+                    }
                 }
             }
             tableData.push(rowData);
