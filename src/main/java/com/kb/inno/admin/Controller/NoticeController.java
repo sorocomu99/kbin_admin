@@ -81,6 +81,19 @@ public class NoticeController {
     }
 
     /**
+     *
+     * @param menuId
+     * @param model
+     * @return
+     * 에디터 시연용 URL
+     */
+    @RequestMapping("/editor/{menuId}")
+    public String editor(@PathVariable int menuId, Model model) {
+        model.addAttribute("menuId", menuId);
+        return directory + "/notice_editor_sample";
+    }
+
+    /**
      * @param file
      * @return
      * 이미지 업로드
