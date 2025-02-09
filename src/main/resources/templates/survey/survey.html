@@ -11,8 +11,8 @@
             <div class="row">
                 <div class="col">
                     <div class="paper">
-                        <h2 class="h4">지원서 설문  <span id="helpSurvey" class="help"><i class="mb-1"
-                                                                                       data-feather="help-circle"></i></span>
+                        <h2 class="h4">지원서 설문 <span id="helpSurvey" class="help"><i class="mb-1"
+                                                                                    data-feather="help-circle"></i></span>
                         </h2>
                         <div class="mt-4">
                             <input type="hidden" name="menu_id" th:value="${menuId}"/>
@@ -71,17 +71,27 @@
                                     </td>
                                     <td th:text="${row.survey_title}"></td>
                                     <td>
-                                        <button type="button" th:onclick="|deleteAlert('${row.survey_no}')|"
-                                                class="btn btn-outline-danger btn-sm">삭제
-                                        </button>
+                                        <a th:href="@{|/survey/guide/${menuId}?surveyNo=${row.survey_no}|}"
+                                           class="btn btn-outline-dark btn-sm">모집개요관리
+                                        </a>
                                         <a th:href="@{|/survey/manageSurvey/${menuId}?surveyNo=${row.survey_no}|}"
                                            class="btn btn-outline-dark btn-sm">문항관리</a>
-                                        <a th:href="@{|/survey/guide/${menuId}?surveyNo=${row.survey_no}|}"
-                                                class="btn btn-outline-dark btn-sm">모집개요관리
-                                        </a>
-                                        <button type="button" th:onclick="|copyAlert('${row.survey_no}')|"
-                                                class="btn btn-outline-danger btn-sm">복사
-                                        </button>
+                                        <a th:href="@{|/receipt/receiptList/402000?surveyNo=${row.survey_no}|}"
+                                           class="btn btn-outline-dark btn-sm">접수관리</a>
+                                        <div style="margin-top: 10px;">
+                                            <button th:if="${row.delete_yn == 'N'}" type="button" th:onclick="|choiceAlert('${row.survey_no}')|"
+                                                    class="btn btn-outline-danger btn-sm">선택안함
+                                            </button>
+                                            <button th:if="${row.delete_yn == 'C'}" type="button" th:onclick="|choiceCancelAlert('${row.survey_no}')|"
+                                                    class="btn btn-outline-danger btn-sm" style="background-color: var(--bs-btn-color);color: var(--bs-btn-active-color)">선택 중
+                                            </button>
+                                            <button type="button" th:onclick="|deleteAlert('${row.survey_no}')|"
+                                                    class="btn btn-outline-danger btn-sm">삭제
+                                            </button>
+                                            <button type="button" th:onclick="|copyAlert('${row.survey_no}')|"
+                                                    class="btn btn-outline-danger btn-sm">복사
+                                            </button>
+                                        </div>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -164,6 +174,54 @@
         if (msg) alert(msg);
     }
 
+    function choiceAlert(srvy_sn) {
+        let result = confirm("해당 지원서를 [선택 중]으로 변경 하시겠습니까?");
+        if (result) {
+            $.ajax({
+                url: /*[[@{/survey/choice}]]*/, // 요청 URL
+                type: 'POST', // HTTP 메서드
+                data: {survey_no: srvy_sn}, // 보내는 데이터
+                dataType: "JSON",
+                success: function (response) {
+                    if (response.result == "success") {
+                        alert("지원서가 [선택 중]으로 변경 되었습니다.");
+                        window.location.reload();
+                    } else {
+                        alert(response.message);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    alert("지원서 상태 변경에 실패하였습니다.");
+                    console.error('Error:', error);
+                }
+            });
+        }
+    }
+
+    function choiceCancelAlert(srvy_sn) {
+        let result = confirm("해당 지원서를 [선택안함]으로 변경 하시겠습니까?");
+        if (result) {
+            $.ajax({
+                url: /*[[@{/survey/choiceCancelAlert}]]*/, // 요청 URL
+                type: 'POST', // HTTP 메서드
+                data: {survey_no: srvy_sn}, // 보내는 데이터
+                dataType: "JSON",
+                success: function (response) {
+                    if (response.result == "success") {
+                        alert("지원서가 [선택안함]으로 변경 되었습니다.");
+                        window.location.reload();
+                    } else {
+                        alert(response.message);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    alert("지원서 상태 변경에 실패하였습니다.");
+                    console.error('Error:', error);
+                }
+            });
+        }
+    }
+
     function deleteAlert(srvy_sn) {
         let result = confirm("정말 삭제 하시겠습니까? 삭제시 문항 및 해당 설문의 지원까지 전부 삭제됩니다.");
         if (result) {
@@ -176,8 +234,7 @@
                     if (response.result == "success") {
                         alert("삭제에 성공하였습니다.");
                         window.location.reload();
-                    }
-                    else{
+                    } else {
                         alert(response.message);
                     }
                 },
@@ -198,11 +255,10 @@
                 data: {surveyNo: surveyNo}, // 보내는 데이터
                 dataType: "JSON",
                 success: function (response) {
-                    if(response.result == 'success') {
+                    if (response.result == 'success') {
                         alert("복사에 성공하였습니다.");
                         window.location.reload();
-                    }
-                    else{
+                    } else {
                         alert(response.message);
                     }
                 },

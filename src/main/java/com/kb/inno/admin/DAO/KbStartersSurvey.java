@@ -89,4 +89,8 @@ public interface KbStartersSurvey {
 
     int updateApplyStatus(KbStartersApplyDTO apply);
 
+    int updatePrevChoiceSurvey(KbStartersSurveyDTO survey);
+
+    int updateChoiceSurvey(KbStartersSurveyDTO survey);
+
 }

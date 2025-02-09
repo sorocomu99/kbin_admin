@@ -460,12 +460,14 @@
 
         // 문항 삭제
         function removeList(e) {
-            const element = $(e);
-            const questionNo = element.data('question-no');
-            if (questionNo) {
-                deleteQuestionList.push(questionNo);
+            if(confirm('문항을 삭제하시겠습니까?')) {
+                const element = $(e);
+                const questionNo = element.data('question-no');
+                if (questionNo) {
+                    deleteQuestionList.push(questionNo);
+                }
+                element.closest('.question-list').remove();
             }
-            element.closest('.question-list').remove();
         }
 
         // 질문 유형 선택

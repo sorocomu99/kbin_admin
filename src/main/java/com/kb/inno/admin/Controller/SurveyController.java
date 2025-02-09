@@ -250,4 +250,18 @@ public class SurveyController {
         Map<String, Object> result = surveyService.deleteSurvey(survey_no);
         return ResponseEntity.ok(result);
     }
+
+    @PostMapping("/choice")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> choiceSurvey(int survey_no) {
+        Map<String, Object> result = surveyService.choiceSurvey(survey_no);
+        return ResponseEntity.ok(result);
+    }
+
+    @PostMapping("/choiceCancelAlert")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> choiceCancelAlert(int survey_no) {
+        Map<String, Object> result = surveyService.choiceCancelAlert(survey_no);
+        return ResponseEntity.ok(result);
+    }
 }

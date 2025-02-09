@@ -16,7 +16,14 @@
             </choose>
         </if>
         <if test="delete_yn != null and delete_yn != ''">
-            AND DELETE_YN = #{delete_yn}
+            <choose>
+                <when test='delete_yn == "N"'>
+                    AND DELETE_YN in ('N', 'C')
+                </when>
+                <otherwise>
+                    AND DELETE_YN = #{delete_yn}
+                </otherwise>
+            </choose>
         </if>
         ORDER BY FRST_REG_DT DESC
         OFFSET #{start} ROWS FETCH NEXT 10 ROWS ONLY
@@ -45,7 +52,14 @@
             </choose>
         </if>
         <if test="delete_yn != null and delete_yn != ''">
-            AND DELETE_YN = #{delete_yn}
+            <choose>
+                <when test='delete_yn == "N"'>
+                    AND DELETE_YN in ('N', 'C')
+                </when>
+                <otherwise>
+                    AND DELETE_YN = #{delete_yn}
+                </otherwise>
+            </choose>
         </if>
     </select>
 
@@ -442,5 +456,15 @@
         WHERE APPLY_NO = #{apply_no}
     </update>
 
+    <update id="updatePrevChoiceSurvey" parameterType="com.kb.inno.admin.DTO.KbStartersSurveyDTO">
+        UPDATE KB_STARTERS_SURVEY
+        SET DELETE_YN = 'N'
+        WHERE DELETE_YN = 'C'
+    </update>
 
+    <update id="updateChoiceSurvey" parameterType="com.kb.inno.admin.DTO.KbStartersSurveyDTO">
+        UPDATE KB_STARTERS_SURVEY
+        SET DELETE_YN = #{delete_yn}
+        WHERE SURVEY_NO = #{survey_no}
+    </update>
 </mapper>

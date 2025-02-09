@@ -39,7 +39,6 @@
                                 <table class="table text-center align-middle">
                                     <thead>
                                         <tr>
-                                            <th style="width:5%">NO</th>
                                             <th style="width:25%">로고</th>
                                             <th style="width:30%">업체명</th>
                                             <th style="width:10%">노출여부</th>
@@ -54,7 +53,6 @@
                                             </td>
                                         </tr>
                                         <tr th:unless="${selectList == null or selectList.isEmpty()}" th:each="list : ${selectList}">
-                                            <td th:text="${list.rownumber}"></td>
                                             <!-- <td><img th:src="${'/upload/' + list.coope_file_name}" width="200" alt=""></td> -->
                                             <td><img th:src="${(@environment.getProperty('staticpath') == '/' ? '' : @environment.getProperty('staticpath'))
                                              + '/upload/' + list.coope_file_name}" width="200" alt=""></td>

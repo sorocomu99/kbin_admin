@@ -20,7 +20,7 @@
                 WHERE COOPE.ATCH_FILE_ID = FILES.FILE_SN(+)
                 ORDER BY COOPE_SN ASC
               ) COOPE_PAGE
-          ORDER BY ROWNUMBER DESC
+          ORDER BY SORT_NO ASC
     </select>
     <!-- 협력 기관 파일 저장 -->
     <insert id="insertFile" parameterType="com.kb.inno.admin.DTO.FileDTO">

@@ -1841,4 +1841,36 @@ public class SurveyService {
 		}
 		return result;
 	}
+
+	@Transactional
+	public Map<String, Object> choiceSurvey(int surveyNo) {
+		Map<String, Object> result = new HashMap<>();
+
+		KbStartersSurveyDTO survey = new KbStartersSurveyDTO();
+		survey.setSurvey_no(surveyNo);
+
+		surveyRepository.updatePrevChoiceSurvey(survey);
+
+		survey.setDelete_yn("C");
+		surveyRepository.updateChoiceSurvey(survey);
+
+		result.put("result", "success");
+		return result;
+	}
+
+	public Map<String, Object> choiceCancelAlert(int surveyNo) {
+		Map<String, Object> result = new HashMap<>();
+		try {
+			KbStartersSurveyDTO survey = new KbStartersSurveyDTO();
+			survey.setSurvey_no(surveyNo);
+			survey.setDelete_yn("N");
+			surveyRepository.updateChoiceSurvey(survey);
+
+			result.put("result", "success");
+		} catch (Exception e) {
+			result.put("result", "fail");
+			result.put("message", e.getMessage());
+		}
+		return result;
+	}
 }
