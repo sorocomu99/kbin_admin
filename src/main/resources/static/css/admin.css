@@ -133,7 +133,10 @@ body { font-family: 'Pretendard'; font-size: .875rem; background: #f7f7f7; }
 .note-editor,
 .note-editable { font-family: 'KBFG Text' !important; }
 .note-editor.note-airframe.fullscreen, .note-editor.note-frame.fullscreen { background: #fff; }
-
+.note-editable ol {
+    list-style: decimal !important;
+    list-style-position: inside !important;
+}
 
 /* ------- Login ------- */
 .form-signin { display: flex; align-items: center; justify-content: center; width: 100%; min-height: 100vh; max-width: 330px; padding: 15px; margin: auto; }
