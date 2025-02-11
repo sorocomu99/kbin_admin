@@ -19,7 +19,7 @@ public class SendMailInfoVO {
     public static SendMailInfoVO getInfo() {
         if(CommonUtil.isProd(PropertiesValue.profilesActive)) {
             return SendMailInfoVO.builder()
-                    .host("10.200.85.103")
+                    .host("10.200.81.175")
                     .port("25")
                     .from("hwan@kbfg.com")
                     .pw("")
