@@ -35,6 +35,6 @@ public class SchedulerTask {
                 }
             }
         }
-        log.info("End survey deletion batch...");
+        log.info("Survey deletion batch process completed...");
     }
 }
