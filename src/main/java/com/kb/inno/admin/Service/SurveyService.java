@@ -1521,6 +1521,10 @@ public class SurveyService {
 		return surveyRepository.getSurveyList(searchDTO);
 	}
 
+	public List<KbStartersSurveyDTO> getSurveyList2(SearchDTO searchDTO) {
+		return surveyRepository.getSurveyList2(searchDTO);
+	}
+
 	public int getSurveyListCnt(SearchDTO searchDTO) {
 		return surveyRepository.countSurvey(searchDTO);
 	}
@@ -1871,6 +1875,19 @@ public class SurveyService {
 			result.put("result", "fail");
 			result.put("message", e.getMessage());
 		}
+		return result;
+	}
+
+	public Map<String, Object> closeSurvey(int surveyNo, String type) {
+		Map<String, Object> result = new HashMap<>();
+
+		KbStartersSurveyDTO survey = new KbStartersSurveyDTO();
+		survey.setSurvey_no(surveyNo);
+
+		survey.setDelete_yn(type);
+		surveyRepository.updateChoiceSurvey(survey);
+
+		result.put("result", "success");
 		return result;
 	}
 }

@@ -82,7 +82,7 @@ public class SurveyController {
         ModelAndView mv = new ModelAndView("survey/survey");
         searchDTO.setDelete_yn("N");
         int totalCount = surveyService.getSurveyListCnt(searchDTO);
-        List<KbStartersSurveyDTO> surveyDTOList = surveyService.getSurveyList(searchDTO);
+        List<KbStartersSurveyDTO> surveyDTOList = surveyService.getSurveyList2(searchDTO);
         Pagination pagination = new Pagination(totalCount, searchDTO.getStart(), 10, 10);
         mv.addObject("surveyList", surveyDTOList);
         mv.addObject("pagination", pagination);
@@ -262,6 +262,13 @@ public class SurveyController {
     @ResponseBody
     public ResponseEntity<Map<String, Object>> choiceCancelAlert(int survey_no) {
         Map<String, Object> result = surveyService.choiceCancelAlert(survey_no);
+        return ResponseEntity.ok(result);
+    }
+
+    @PostMapping("/close")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> funCloseSurvey(int survey_no, String type) {
+        Map<String, Object> result = surveyService.closeSurvey(survey_no, type);
         return ResponseEntity.ok(result);
     }
 }

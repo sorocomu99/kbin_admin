@@ -18,7 +18,36 @@
         <if test="delete_yn != null and delete_yn != ''">
             <choose>
                 <when test='delete_yn == "N"'>
-                    AND DELETE_YN in ('N', 'C')
+                    AND DELETE_YN in ('N', 'C', 'D')
+                </when>
+                <otherwise>
+                    AND DELETE_YN = #{delete_yn}
+                </otherwise>
+            </choose>
+        </if>
+        ORDER BY FRST_REG_DT DESC
+        OFFSET #{start} ROWS FETCH NEXT 10 ROWS ONLY
+    </select>
+
+    <select id="getSurveyList2" parameterType="com.kb.inno.admin.DTO.SearchDTO"
+            resultType="com.kb.inno.admin.DTO.KbStartersSurveyDTO">
+        SELECT ksv.*, (select count(*) as apply_cnt
+                     from KB_STARTERS_APPLY aa
+                    where ksv.SURVEY_NO = aa.SURVEY_NO) as apply_cnt FROM KB_STARTERS_SURVEY ksv WHERE 1=1
+        <if test="type != null and type != ''">
+            <choose>
+                <when test="type == 'all'">
+                    AND (SURVEY_TITLE like '%' || #{keyword} || '%')
+                </when>
+                <when test="type == 'title'">
+                    AND (SURVEY_TITLE like '%' || #{keyword} || '%')
+                </when>
+            </choose>
+        </if>
+        <if test="delete_yn != null and delete_yn != ''">
+            <choose>
+                <when test='delete_yn == "N"'>
+                    AND DELETE_YN in ('N', 'C', 'D')
                 </when>
                 <otherwise>
                     AND DELETE_YN = #{delete_yn}
@@ -54,7 +83,7 @@
         <if test="delete_yn != null and delete_yn != ''">
             <choose>
                 <when test='delete_yn == "N"'>
-                    AND DELETE_YN in ('N', 'C')
+                    AND DELETE_YN in ('N', 'C', 'D')
                 </when>
                 <otherwise>
                     AND DELETE_YN = #{delete_yn}
@@ -459,7 +488,7 @@
     <update id="updatePrevChoiceSurvey" parameterType="com.kb.inno.admin.DTO.KbStartersSurveyDTO">
         UPDATE KB_STARTERS_SURVEY
         SET DELETE_YN = 'N'
-        WHERE DELETE_YN = 'C'
+        WHERE DELETE_YN in ('C', 'D')
     </update>
 
     <update id="updateChoiceSurvey" parameterType="com.kb.inno.admin.DTO.KbStartersSurveyDTO">
@@ -467,4 +496,11 @@
         SET DELETE_YN = #{delete_yn}
         WHERE SURVEY_NO = #{survey_no}
     </update>
+
+    <select id="getSurveyListForRemoval" resultType="java.lang.Integer">
+        SELECT SURVEY_NO
+         FROM KB_STARTERS_SURVEY
+        WHERE DELETE_YN = 'Y'
+          AND LAST_MDFCN_DT <![CDATA[<]]>= (select sysdate - 180 FROM DUAL)
+    </select>
 </mapper>

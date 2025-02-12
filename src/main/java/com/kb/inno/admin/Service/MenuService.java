@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -47,15 +48,33 @@ public class MenuService {
 
     public void getPreview(MenuDTO menuDTO, Model model) {
         List<MenuDTO> selectList = this.selectList();
+        List<MenuDTO> updatedList = new ArrayList<>();
 
-        if(menuDTO.getMenu_sn() != 0) {
-            for(int i = 0; i < selectList.size(); i++) {
-                if(selectList.get(i).getMenu_sn() == menuDTO.getMenu_sn()){
-                    selectList.get(i).setMenu_nm(menuDTO.getMenu_nm());
-                    selectList.get(i).setUse_yn(menuDTO.getUse_yn());
+        if (menuDTO.getMenu_sn() != 0) {
+            for (MenuDTO menu : selectList) {
+                if (menu.getMenu_sn() == menuDTO.getMenu_sn()) {
+                    menu.setMenu_nm(menuDTO.getMenu_nm());
+                    menu.setUse_yn(menuDTO.getUse_yn());
                 }
             }
         }
-        model.addAttribute("selectList", selectList);
+
+        for (MenuDTO menu : selectList) {
+            if (menu.getMenu_depth() == 1) {
+                boolean hasActiveSubMenu = false;
+                for (MenuDTO subMenu : selectList) {
+                    if (subMenu.getMenu_depth() == 2 && subMenu.getMenu_up_sn() == menu.getMenu_sn() && "Y".equals(subMenu.getUse_yn())) {
+                        hasActiveSubMenu = true;
+                        break;
+                    }
+                }
+                if (hasActiveSubMenu) {
+                    updatedList.add(menu);
+                }
+            } else if (menu.getMenu_depth() == 2 && "Y".equals(menu.getUse_yn())) {
+                updatedList.add(menu);
+            }
+        }
+        model.addAttribute("selectList", updatedList);
     }
 }

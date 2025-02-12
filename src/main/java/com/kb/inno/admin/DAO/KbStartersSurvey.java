@@ -10,6 +10,7 @@ import java.util.List;
 public interface KbStartersSurvey {
 
     List<KbStartersSurveyDTO> getSurveyList(SearchDTO search);
+    List<KbStartersSurveyDTO> getSurveyList2(SearchDTO search);
 
     int countSurvey(SearchDTO search);
 
@@ -93,4 +94,5 @@ public interface KbStartersSurvey {
 
     int updateChoiceSurvey(KbStartersSurveyDTO survey);
 
+    List<Integer> getSurveyListForRemoval();
 }

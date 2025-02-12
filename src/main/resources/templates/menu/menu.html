@@ -28,12 +28,13 @@
                                             <ul>
                                                 <li th:each="list : ${selectList}">
                                                     <p class="mb-2 fs-6 fw-bold" th:if="${list.menu_depth == 1}">
+                                                        <input type="hidden" name="menu_sn_list" th:value="${list.menu_sn}"/>
                                                         <i class="me-1 align-text-top" data-feather="folder"></i>
-                                                        <span th:text="${list.menu_nm}"></span>
+                                                        <span th:text="${list.menu_nm}" style="cursor: pointer"></span>
                                                     </p>
                                                     <ol>
                                                         <li th:if="${list.menu_depth == 2}">
-                                                            <input type="hidden" id="menu_sn" th:value="${list.menu_sn}"/>
+                                                            <input type="hidden" name="menu_sn_list" th:value="${list.menu_sn}"/>
                                                             <a class="" href="javascript:" th:text="${list.menu_nm}"></a>
                                                         </li>
                                                     </ol>
@@ -95,7 +96,7 @@
     // 수정 시 메시지
     function confirmMsg() {
         // 1. 조회 했는 지의 여부
-        if(!$('.menu-setup ol li a').hasClass('on')) {
+        if( $('input[name=menu_sn]').val() === '') {
             alert("메뉴 조회를 먼저 해 주세요.");
             return false;
         }
@@ -123,17 +124,17 @@
             const form = document.forms['menu_form'];
             form.action = window.staticPath + 'menu/update'; // 전송할 URL
             form.method = 'POST';            // 전송 방식
-            form.target = '_blank';          // 새 창에서 열기
+            form.target = '';          // 새 창에서 열기
             form.submit();                   // 폼 제출
         }
     }
 
     // 메뉴 클릭 이벤트
     $(function(){
-        $('.menu-setup ol li a').click(function(e){
+        $('.menu-setup ol li a, .menu-setup ul li p span').click(function(e){
             // 메뉴 선택하면 on 클래스 추가
             e.preventDefault();
-            $('.menu-setup ol li a').removeClass('on');
+            $('.menu-setup ol li a, .menu-setup ul li p span').removeClass('on');
             $(this).addClass('on');
 
             // 메뉴 넘버

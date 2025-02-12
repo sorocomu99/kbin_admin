@@ -287,6 +287,7 @@ body { font-family: 'Pretendard'; font-size: .875rem; background: #f7f7f7; }
 .menu-setup ol li a { display: inline-block; position: relative; padding-left: 12px; color: var(--bs-body-color); text-decoration: none; }
 .menu-setup ol li a::before { content: ''; position: absolute; top: 0; left: 0; bottom: 0; margin: auto; width: 4px; height: 4px; background: #212529; border-radius: 50%; }
 .menu-setup ol li a.on { color: var(--point); font-weight: 700; text-decoration: underline; text-underline-offset: 0.25em; }
+.menu-setup ul li p span.on { color: var(--point); font-weight: 700; text-decoration: underline; text-underline-offset: 0.25em; }
 
 
 /* ------- 지원서 설문 관리 ------- */

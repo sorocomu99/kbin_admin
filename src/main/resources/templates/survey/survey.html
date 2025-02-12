@@ -23,7 +23,8 @@
                                             <div class="input-group">
                                                 <select class="form-select" aria-label="" name="type">
                                                     <option value="all">전체</option>
-                                                    <option value="title" th:selected="${search.type == 'title'}">설문명</option>
+                                                    <option value="title" th:selected="${search.type == 'title'}">설문명
+                                                    </option>
                                                 </select>
                                                 <input type="text" class="form-control" placeholder="검색어를 입력해주세요."
                                                        aria-label="" name="keyword" th:value="${search.keyword}">
@@ -49,8 +50,9 @@
                             <table class="table text-center align-middle">
                                 <thead>
                                 <tr>
-                                    <th style="width:20%">배너 이미지</th>
-                                    <th style="width:50%">설문내용</th>
+                                    <th style="width:40%">설문내용</th>
+                                    <th style="width:10%">지원자수</th>
+                                    <th style="width:20%">노출/마감</th>
                                     <th style="width:30%">관리</th>
                                 </tr>
                                 </thead>
@@ -63,13 +65,47 @@
                                 </tr>
                                 <!-- 리스팅 -->
                                 <tr th:each="row : ${surveyList}">
-                                    <td>
-                                        <th:block th:if="${row.banner_file_path != null}">
-                                            <img th:src="@{/survey/banner(filename=${row.banner_filename})}"
-                                                 width="200" alt="">
-                                        </th:block>
-                                    </td>
                                     <td th:text="${row.survey_title}"></td>
+                                    <td th:text="${row.apply_cnt}"></td>
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <span th:if="${row.delete_yn == 'N'}">
+                                                <input class="form-check-input" style="cursor: pointer" type="checkbox"
+                                                       name="proc_yn" th:id="${'proc_yn' + row.survey_no}"
+                                                       th:value="${row.survey_no}"
+                                                       th:onclick="|funProcSurvey(${row.survey_no}, event)|">
+                                                <label class="form-check-label" style="cursor: pointer"
+                                                       th:for="${'proc_yn' + row.survey_no}">노출</label>
+                                            </span>
+                                            <span th:if="${row.delete_yn == 'C' or row.delete_yn == 'D'}">
+                                                <input checked class="form-check-input" style="cursor: pointer"
+                                                       type="checkbox" name="proc_yn"
+                                                       th:id="${'proc_yn' + row.survey_no}" th:value="${row.survey_no}"
+                                                       th:onclick="|funProcCancelSurvey(${row.survey_no}, event)|">
+                                                <label class="form-check-label" style="cursor: pointer"
+                                                       th:for="${'proc_yn' + row.survey_no}">노출</label>
+                                            </span>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <span th:if="${row.delete_yn == 'N' or row.delete_yn == 'C'}">
+                                                <input class="form-check-input"
+                                                       th:style="${row.delete_yn == 'N' ? '' : 'cursor:pointer'}"
+                                                       type="checkbox" name="close_yn"
+                                                       th:id="${'close_yn' + row.survey_no}" th:value="${row.survey_no}"
+                                                       th:onclick="|funCloseSurvey(${row.survey_no}, 'D', event)|"
+                                                       th:disabled="${row.delete_yn == 'N'}">
+                                                <label class="form-check-label" th:style="${row.delete_yn == 'N' ? '' : 'cursor:pointer'}" th:for="${'close_yn' + row.survey_no}">마감</label>
+                                            </span>
+                                            <span th:if="${row.delete_yn == 'D'}">
+                                                <input th:if="${row.delete_yn == 'D'}" style="cursor: pointer" checked
+                                                       class="form-check-input" type="checkbox" name="close_yn"
+                                                       th:id="${'close_yn' + row.survey_no}" th:value="${row.survey_no}"
+                                                       th:onclick="|funCloseSurvey(${row.survey_no}, 'C', event)|">
+                                                <label class="form-check-label" style="cursor: pointer"
+                                                       th:for="${'close_yn' + row.survey_no}">마감</label>
+                                            </span>
+                                        </div>
+                                    </td>
                                     <td>
                                         <a th:href="@{|/survey/guide/${menuId}?surveyNo=${row.survey_no}|}"
                                            class="btn btn-outline-dark btn-sm">모집개요관리
@@ -79,14 +115,7 @@
                                         <a th:href="@{|/receipt/receiptList/402000?surveyNo=${row.survey_no}|}"
                                            class="btn btn-outline-dark btn-sm">접수관리</a>
                                         <div style="margin-top: 10px;">
-                                            <button th:if="${row.delete_yn == 'N'}" type="button" th:onclick="|choiceAlert('${row.survey_no}')|"
-                                                    class="btn btn-outline-danger btn-sm">선택안함
-                                            </button>
-                                            <button th:if="${row.delete_yn == 'C'}" type="button" th:onclick="|choiceCancelAlert('${row.survey_no}')|"
-                                                    class="btn btn-outline-danger btn-sm" style="background-color: var(--bs-btn-color);color: var(--bs-btn-active-color)">선택 중
-                                            </button>
-                                            <button type="button" th:onclick="|deleteAlert('${row.survey_no}')|"
-                                                    class="btn btn-outline-danger btn-sm">삭제
+                                            <button type="button" th:onclick="|deleteAlert('${row.survey_no}')|" class="btn btn-outline-danger btn-sm">임시 삭제</button>
                                             </button>
                                             <button type="button" th:onclick="|copyAlert('${row.survey_no}')|"
                                                     class="btn btn-outline-danger btn-sm">복사
@@ -174,8 +203,11 @@
         if (msg) alert(msg);
     }
 
-    function choiceAlert(srvy_sn) {
-        let result = confirm("해당 지원서를 [선택 중]으로 변경 하시겠습니까?");
+    function funProcSurvey(srvy_sn, event) {
+        let result = confirm("해당 지원서를 사용자에게 [노출] 처리 하시겠습니까?");
+        const checkbox = event.target;
+        const originalState = checkbox.checked;
+
         if (result) {
             $.ajax({
                 url: /*[[@{/survey/choice}]]*/, // 요청 URL
@@ -184,7 +216,7 @@
                 dataType: "JSON",
                 success: function (response) {
                     if (response.result == "success") {
-                        alert("지원서가 [선택 중]으로 변경 되었습니다.");
+                        alert("지원서가 [노출] 상태로 변경 되었습니다.");
                         window.location.reload();
                     } else {
                         alert(response.message);
@@ -195,11 +227,17 @@
                     console.error('Error:', error);
                 }
             });
+        } else {
+            // 사용자가 '아니오'를 선택한 경우, 체크박스 상태를 원래대로 되돌림
+            checkbox.checked = !originalState;
         }
     }
 
-    function choiceCancelAlert(srvy_sn) {
-        let result = confirm("해당 지원서를 [선택안함]으로 변경 하시겠습니까?");
+    function funProcCancelSurvey(srvy_sn, event) {
+        let result = confirm("해당 지원서를 [미노출] 처리 하시겠습니까?");
+        const checkbox = event.target;
+        const originalState = checkbox.checked;
+
         if (result) {
             $.ajax({
                 url: /*[[@{/survey/choiceCancelAlert}]]*/, // 요청 URL
@@ -208,7 +246,7 @@
                 dataType: "JSON",
                 success: function (response) {
                     if (response.result == "success") {
-                        alert("지원서가 [선택안함]으로 변경 되었습니다.");
+                        alert("지원서가 [미노출] 상태로 변경 되었습니다.");
                         window.location.reload();
                     } else {
                         alert(response.message);
@@ -219,27 +257,61 @@
                     console.error('Error:', error);
                 }
             });
+        } else {
+            // 사용자가 '아니오'를 선택한 경우, 체크박스 상태를 원래대로 되돌림
+            checkbox.checked = !originalState;
         }
     }
 
-    function deleteAlert(srvy_sn) {
-        let result = confirm("정말 삭제 하시겠습니까? 삭제시 문항 및 해당 설문의 지원까지 전부 삭제됩니다.");
+    function funCloseSurvey(srvy_sn, type, event) {
+        let alert_msg = '마감 - 지원 불가';
+
+        if (type === 'C') {
+            alert_msg = '지원 가능'
+        }
+
+        let result = confirm("해당 지원서를 [" + alert_msg + "] 처리 하시겠습니까?");
+        const checkbox = event.target;
+        const originalState = checkbox.checked;
+
         if (result) {
             $.ajax({
-                url: /*[[@{/survey/delete}]]*/, // 요청 URL
+                url: /*[[@{/survey/close}]]*/, // 요청 URL
                 type: 'POST', // HTTP 메서드
-                data: {survey_no: srvy_sn}, // 보내는 데이터
+                data: {survey_no: srvy_sn, type: type}, // 보내는 데이터
                 dataType: "JSON",
                 success: function (response) {
                     if (response.result == "success") {
-                        alert("삭제에 성공하였습니다.");
+                        alert("지원서가 [" + alert_msg + "] 상태로 변경 되었습니다.");
                         window.location.reload();
                     } else {
                         alert(response.message);
                     }
                 },
                 error: function (xhr, status, error) {
-                    alert("삭제를 실패하였습니다.");
+                    alert("지원서 상태 변경에 실패하였습니다.");
+                    console.error('Error:', error);
+                }
+            });
+        } else {
+            // 사용자가 '아니오'를 선택한 경우, 체크박스 상태를 원래대로 되돌림
+            checkbox.checked = !originalState;
+        }
+    }
+
+    function deleteAlert(survey_no) {
+        let result = confirm("정말 임시 삭제 하시겠습니까?");
+        if (result) {
+            $.ajax({
+                url: /*[[@{/receipt/tempDelete}]]*/, // 요청 URL
+                type: 'POST', // HTTP 메서드
+                data: { survey_no: survey_no, delete_yn: 'Y' }, // 보내는 데이터
+                success: function(response) {
+                    alert("임시 삭제에 성공하였습니다.");
+                    window.location.reload();
+                },
+                error: function(xhr, status, error) {
+                    alert("임시 삭제를 실패하였습니다.");
                     console.error('Error:', error);
                 }
             });
