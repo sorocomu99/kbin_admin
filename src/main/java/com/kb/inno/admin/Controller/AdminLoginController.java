@@ -207,7 +207,8 @@ public class AdminLoginController {
 
         Session session; //Session.getDefaultInstance(props);
 
-        if(CommonUtil.isProd(PropertiesValue.profilesActive)) {
+        if(CommonUtil.isProd(PropertiesValue.profilesActive)
+                || CommonUtil.isDev(PropertiesValue.profilesActive)) {
             session = Session.getDefaultInstance(props);
         }else{
             final String finalFrom = mailInfo.getFrom();

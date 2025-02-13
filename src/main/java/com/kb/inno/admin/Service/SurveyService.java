@@ -1568,6 +1568,41 @@ public class SurveyService {
 		return result;
 	}
 
+	public Map<String, Object> makeSurvey(KbStartersSurveyDTO survey, int loginId) {
+		Map<String, Object> result = new HashMap<>();
+		try {
+			// 배너는 문항 관리에서 추가 됨
+			survey.setBanner_file_path("empty");
+			survey.setBanner_filename("empty");
+			survey.setLast_mdfr(loginId);
+
+			survey.setFrst_rgtr(loginId);
+			int maxSurveyNo = surveyRepository.getMaxSurveyNo();
+			survey.setSurvey_no(maxSurveyNo);
+			surveyRepository.insertSurvey(survey);
+
+			result.put("result", "success");
+		} catch (Exception e) {
+			result.put("result", "fail");
+			result.put("message", e.getMessage());
+		}
+		return result;
+	}
+
+	public Map<String, Object> updateSurvey(KbStartersSurveyDTO survey, int loginId) {
+		Map<String, Object> result = new HashMap<>();
+		try {
+			survey.setLast_mdfr(loginId);
+			surveyRepository.updateSurvey(survey);
+
+			result.put("result", "success");
+		} catch (Exception e) {
+			result.put("result", "fail");
+			result.put("message", e.getMessage());
+		}
+		return result;
+	}
+
 	@Transactional
 	public Map<String, Object> deleteSurvey(int surveyNo) {
 		Map<String, Object> result = new HashMap<>();

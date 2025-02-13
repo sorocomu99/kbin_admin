@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragment/config :: configFragment"></head>
+<style>
+    .button-wrap > .btn {
+        padding: 9px 18px !important;
+        margin: 0 5px;
+    }
+
+    .search-btn {
+        margin-right: 5px;
+    }
+</style>
+<body>
+<div class="wrap">
+    <div th:replace="fragment/header :: headerFragment"></div>
+
+    <main class="main">
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <div class="paper">
+                        <h2 class="h4">처리상태 설정</h2>
+                        <div class="mt-4">
+                            <input type="hidden" name="menu_id" th:value="${menuId}"/>
+                            <input type="hidden" name="surveyNo" th:value="${surveyNo}"/>
+                            <div class="top-search d-flex mt-4" style="justify-self: end">
+                                <div class="col-auto">
+                                    <div class="button-wrap d-flex justify-content-end">
+                                        <a href="javascript:saveSurveyApplyStatusAlert()" class="btn btn-primary">
+                                            <i data-feather="save"></i> 저장
+                                        </a>
+                                        <a href="#" onclick="history.back()" class="btn btn-outline-primary">접수관리 돌아가기</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <div class="table">
+                                <table id="mytable" class="table table-min table-small text-center align-middle">
+                                    <thead>
+                                    <tr>
+                                        <th style="width:100px">처리상태</th>
+                                        <th style="width:100px">관리</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <th:block th:each="i : ${#numbers.sequence(1, 20)}">
+                                        <tr>
+                                            <td>
+                                                <input class="form-control" maxlength="20" type="text" name="apply_status"
+                                                       th:value="${statusList != null and statusList.size() >= i ? statusList[i-1].apply_status : ''}"
+                                                       th:checked="${statusList != null and statusList.size() >= i}">
+                                            </td>
+                                            <td>
+                                                <button type="button"
+                                                        th:onclick="|deleteAlert(this)|"
+                                                        class="btn btn-outline-danger btn-sm"
+                                                        th:text="'삭제'">
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </th:block>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script th:src="@{/js/admin.js}"></script>
+<script th:inline="javascript">
+
+    // 페이지 로드 시 실행
+    window.onload = function () {
+        // 페이지 로드 시 메시지 확인 및 알림 표시
+        // 수정 및 등록 시 띄울 알림창
+        const msg = /*[[${msg}]]*/ '';
+        if (msg) alert(msg);
+    }
+
+    function saveSurveyApplyStatusAlert(el, applyNo) {
+        let noDataCnt = 0;
+
+        $('input[name=apply_status]').each(function() {
+            if($.trim($(this).val()) === ''){
+                noDataCnt++;
+            }
+        })
+
+        if($('input[name=apply_status]').length === noDataCnt) {
+            alert('입력된 처리상태가 0건입니다.');
+            return false;
+        }
+
+        let result = confirm("지원서의 처리상태를 저장하시겠습니까?");
+        if (result) {
+            let statuses = [];
+            let inputs = document.getElementsByName('apply_status');
+            let surveyNo = parseInt($('input[name=surveyNo]').val());
+
+            for (let i = 0; i < inputs.length; i++) {
+                if (inputs[i].value.trim() !== '') {
+                    statuses.push(inputs[i].value);
+                }
+            }
+
+            $.ajax({
+                url: /*[[@{/receipt/saveApplyStatusList}]]*/, // 요청 URL
+                type: 'POST', // HTTP 메서드
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    surveyNo: surveyNo
+                    , applyStatus: statuses
+                }), // 보내는 데이터
+                success: function (response) {
+                    if(response.result == 'success'){
+                        alert("처리 상태 변경에 성공하였습니다.");
+                        window.location.reload();
+                    }
+                    else{
+                        alert("처리 상태 변경에 실패하였습니다.");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    alert("처리 상태 변경에 실패하였습니다.");
+                    console.error('Error:', error);
+                }
+            });
+        }
+    }
+
+    function deleteAlert(obj) {
+        $(obj).closest('tr').remove();
+    }
+</script>
+
+</body>
+</html>

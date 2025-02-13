@@ -1,18 +1,22 @@
 package com.kb.inno.admin.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.InputStream;
+import java.util.*;
 
 import com.kb.inno.admin.DAO.SendMailDAO;
 import com.kb.inno.admin.DTO.*;
+import com.kb.inno.common.StringUtil;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 
 import com.kb.inno.admin.DAO.ReceiptDAO;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -294,5 +298,159 @@ System.out.println("ReceiptService : receiptTenList--------------type["+type+"] 
             }
         }catch (Exception ignored) {
         }
+    }
+
+
+    public boolean uploadXlsForApplyStatus(MultipartFile file, Integer surveyNo) {
+        try {
+            List<KbStartersApplyDTO> updateList = parseExcel(file, surveyNo);
+
+            if(updateList != null && updateList.size() > 0) {
+                for (KbStartersApplyDTO dto : updateList) {
+                    receiptDAO.updateApplyStatus(dto);
+                }
+            }
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public List<KbStartersApplyDTO> parseExcel(MultipartFile file, Integer surveyNo) throws Exception {
+        Workbook workbook = null;
+
+        try {
+            InputStream inputStream = file.getInputStream();
+            if (file.getOriginalFilename().endsWith(".xlsx")) {
+                workbook = new XSSFWorkbook(inputStream);
+            } else if (file.getOriginalFilename().endsWith(".xls")) {
+                workbook = new HSSFWorkbook(inputStream);
+            } else {
+                throw new IllegalArgumentException("지원하지 않는 파일 형식입니다.");
+            }
+
+            Sheet sheet = workbook.getSheetAt(0);
+            Iterator<Row> rowIterator = sheet.iterator();
+
+            // 첫 행(제목) 제외
+            if (rowIterator.hasNext()) {
+                rowIterator.next();
+            }
+
+            List<KbStartersApplyDTO> updateList = new ArrayList<>();
+
+            while (rowIterator.hasNext()) {
+                Row row = rowIterator.next();
+
+                // 1열과 4열 데이터 추출
+                Cell firstCell = row.getCell(0); // 첫 번째 열 (지원 번호)
+                Cell fourthCell = row.getCell(3); // 네 번째 열 (처리 상태)
+
+                String applyNo = getCellValue(firstCell);
+                String applyStatus = getCellValue(fourthCell);
+
+                if(StringUtil.hasText(applyNo)
+                        && StringUtil.hasText(applyStatus)){
+                    try{
+                        KbStartersApplyDTO dto = new KbStartersApplyDTO();
+                        dto.setApply_no(Integer.parseInt(applyNo));
+                        dto.setApply_status(applyStatus);
+                        dto.setSurvey_no(surveyNo);
+                        updateList.add(dto);
+                    }catch (Exception ignored) {
+                    }
+                }
+            }
+            return updateList;
+        } finally {
+            if (workbook != null) {
+                try {
+                    workbook.close();
+                } catch (Exception e) {
+                }
+            }
+        }
+    }
+
+    private String getCellValue(Cell cell) {
+        if (cell == null) {
+            return null;
+        }
+
+        switch (cell.getCellType()) {
+            case Cell.CELL_TYPE_STRING:
+                return cell.getStringCellValue();
+            case Cell.CELL_TYPE_NUMERIC:
+                if (DateUtil.isCellDateFormatted(cell)) {
+                    return cell.getDateCellValue().toString();
+                } else {
+                    return String.valueOf(cell.getNumericCellValue());
+                }
+            case Cell.CELL_TYPE_BOOLEAN:
+                return String.valueOf(cell.getBooleanCellValue());
+            case Cell.CELL_TYPE_FORMULA:
+                return cell.getCellFormula();
+            default:
+                return "";
+        }
+    }
+
+    public List<KbStartersApplyDTO> getSurveyApplyStatusList(int surveyNo) {
+        List<KbStartersApplyDTO> surveyApplyStatusList = receiptDAO.getSurveyApplyStatusList(surveyNo);
+
+        if(surveyApplyStatusList == null || surveyApplyStatusList.size() == 0) {
+            surveyApplyStatusList = createDefaultStatusList();
+        }
+
+        return surveyApplyStatusList;
+    }
+
+    private List<KbStartersApplyDTO> createDefaultStatusList() {
+        List<KbStartersApplyDTO> defaultList = new ArrayList<KbStartersApplyDTO>();
+        String[] defaultStatuses = {"접수", "1차", "2차", "3차", "4차", "5차", "심사", "합격", "불합격"};
+
+        for (String status : defaultStatuses) {
+            KbStartersApplyDTO dto = new KbStartersApplyDTO();
+            dto.setApply_status(status);
+            defaultList.add(dto);
+        }
+
+        return defaultList;
+    }
+
+    @Transactional
+    public Map<String, Object> saveApplyStatusList(Map<String, Object> requestData, int loginId) {
+        Map<String, Object> result = new HashMap<>();
+        result.put("result", "fail");
+        try {
+            int surveyNo = (int) requestData.get("surveyNo");
+            List<String> applyStatusList = (List<String>) requestData.get("applyStatus");
+
+            if(applyStatusList != null && applyStatusList.size() > 0) {
+                KbStartersApplyDTO apply = new KbStartersApplyDTO();
+                apply.setSurvey_no(surveyNo);
+                apply.setFrst_rgtr(loginId);
+                apply.setLast_mdfr(loginId);
+
+                receiptDAO.deleteApplyStatus(apply);
+
+                int i = 0;
+
+                for(String status : applyStatusList){
+                    try{
+                        if(StringUtil.hasText(status)) {
+                            apply.setSeq(++i);
+                            apply.setApply_status(status);
+                            receiptDAO.saveApplyStatus(apply);
+                        }
+                    }catch (Exception ignored) {
+                    }
+                }
+            }
+            result.put("result", "success");
+        } catch (Exception e) {
+        }
+        return result;
     }
 }

@@ -43,8 +43,8 @@
                                             </td>
                                         </tr>
                                         <tr th:unless="${selectListYear == null or selectListYear.isEmpty()}" th:each="list : ${selectListYear}">
-                                            <td th:text="${list.port_yr}">2024</td>
-                                            <td th:text="${list.cnt}">56</td>
+                                            <td th:text="${list.port_yr}" th:onclick="|updatePage('${list.port_yr}', '${menuId}')|" style="text-decoration: underline;cursor: pointer">2024</td>
+                                            <td th:text="${list.cnt}" th:onclick="|portListPage('${list.port_yr}', '${menuId}')|" style="text-decoration: underline;cursor: pointer">56</td>
                                             <td>
                                                 <!--<a href="starters.html" class="btn btn-outline-dark btn-sm">보기</a>-->
                                                 <!--<a th:href="@{/portfolio/portList/{menuId}/port_yr/{port_yr}(menuId=${menuId}, port_yr=${list.port_yr})}" class="btn btn-outline-dark btn-sm">보기</a>-->

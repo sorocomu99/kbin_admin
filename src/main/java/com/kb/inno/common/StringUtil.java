@@ -277,6 +277,9 @@ public class StringUtil extends StringUtils {
 
     public static boolean isNumeric(String val) {
         try {
+            if (val == null || val.isEmpty()) {
+                return false;
+            }
             Double.parseDouble(val);
             return true;
         } catch (NumberFormatException e) {

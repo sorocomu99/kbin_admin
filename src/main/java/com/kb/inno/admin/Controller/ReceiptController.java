@@ -15,12 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import com.kb.inno.admin.Service.ReceiptService;
 
@@ -36,6 +31,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -138,6 +134,9 @@ public class ReceiptController {
 
         List<KbStartersQuestionDTO> questionList = surveyService.getQuestionList(surveyNo);
         mv.addObject("questionList", questionList);
+
+        List<KbStartersApplyDTO> statusList = receiptService.getSurveyApplyStatusList(surveyNo);
+        mv.addObject("statusList", statusList);
 
         int colCount = 0;
         for (KbStartersQuestionDTO question : questionList) {
@@ -299,5 +298,55 @@ public class ReceiptController {
         return ResponseEntity.ok(surveyService.deleteApplyList(applyNos));
     }
 
+    @PostMapping("/uploadXlsForApplyStatus")
+    public ResponseEntity<Map<String, Object>> uploadXlsForApplyStatus(@RequestParam("file") MultipartFile file, @RequestParam("surveyNo") Integer surveyNo) {
+        Map<String, Object> result = new HashMap<>();
 
+        try {
+            if(surveyNo == null) {
+                result.put("result", "fail");
+                return ResponseEntity.ok(result);
+            }
+
+            if (file.isEmpty()) {
+                result.put("result", "1");
+                return ResponseEntity.ok(result);
+            }
+
+            String fileName = file.getOriginalFilename();
+
+            if (!fileName.endsWith(".xls") && !fileName.endsWith(".xlsx")) {
+                result.put("result", "2");
+                return ResponseEntity.ok(result);
+            }
+            boolean retVal = receiptService.uploadXlsForApplyStatus(file, surveyNo);
+
+            result.put("result", retVal ? "6" : "fail");
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.put("result", "fail");
+            return ResponseEntity.status(500).body(result);
+        }
+    }
+
+    @RequestMapping("/apply/status/{menuId}/{surveyNo}")
+    public ModelAndView applyStatus(@PathVariable int menuId, @PathVariable int surveyNo) {
+        List<KbStartersApplyDTO> statusList = receiptService.getSurveyApplyStatusList(surveyNo);
+
+        ModelAndView mv = new ModelAndView("receipt/apply_status");
+        mv.addObject("menuId", menuId);
+        mv.addObject("surveyNo", surveyNo);
+        mv.addObject("statusList", statusList);
+        return mv;
+    }
+
+    @PostMapping("/saveApplyStatusList")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> saveApplyStatusList(@RequestBody Map<String, Object> requestData, HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        int loginId = (int) session.getAttribute("mngrSn");
+
+        return ResponseEntity.ok(receiptService.saveApplyStatusList(requestData, loginId));
+    }
 }

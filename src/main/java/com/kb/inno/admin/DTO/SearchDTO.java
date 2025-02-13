@@ -12,4 +12,6 @@ public class SearchDTO {
     private int faq_sn;     // FAQ 검색을 위한 시리얼 번호
 
     private String delete_yn; // 삭제 여부
+
+    private String srhSelect;
 }

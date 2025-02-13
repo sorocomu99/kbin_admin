@@ -12,6 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 public class KbStartersApplyDTO {
     private int apply_no;
+    private int seq;
     private int survey_no;
     private String apply_status;
     private String email;

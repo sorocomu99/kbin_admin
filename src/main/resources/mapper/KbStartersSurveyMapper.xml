@@ -354,6 +354,28 @@
         <if test="search.type != null and search.type != ''">
             AND APPLY_STATUS = #{search.type}
         </if>
+
+        <if test="search.srhSelect != null and search.srhSelect != ''">
+            <choose>
+                <when test="search.srhSelect == 'applyNo'">
+                    AND APPLY_NO = #{search.keyword}
+                </when>
+                <when test="search.srhSelect == 'companyName'">
+                    AND COMPANY_NAME LIKE '%' || #{search.keyword} || '%'
+                </when>
+                <when test="search.srhSelect == 'all'">
+                    <choose>
+                        <when test="@com.kb.inno.common.StringUtil@isNumeric(search.keyword)">
+                            AND (APPLY_NO = #{search.keyword} OR COMPANY_NAME LIKE '%' || #{search.keyword} || '%')
+                        </when>
+                        <otherwise>
+                            AND COMPANY_NAME LIKE '%' || #{search.keyword} || '%'
+                        </otherwise>
+                    </choose>
+                </when>
+            </choose>
+        </if>
+        ORDER BY APPLY_NO ASC
     </select>
 
     <select id="getOneApplyAnswer" parameterType="int" resultType="com.kb.inno.admin.DTO.KbStartersApplyAnswerDTO">

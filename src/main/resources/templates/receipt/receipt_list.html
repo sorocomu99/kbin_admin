@@ -21,6 +21,21 @@
                 <div class="col">
                     <div class="paper">
                         <h2 class="h4">지원서 접수</h2>
+                        <div class="mt-4" style="justify-self: end">
+                            <div class="top-search d-flex mt-4">
+                                <div class="col-auto">
+                                    <div class="button-wrap d-flex justify-content-end">
+                                        <a th:href="@{'/receipt/apply/status/' + ${menuId} + '/' + ${surveyNo}}" class="btn btn-outline-dark">
+                                            <i data-feather="settings"></i> 처리상태 설정
+                                        </a>
+                                        <input type="file" id="excelFile" accept=".xlsx, .xls" style="display: none;">
+                                        <a href="#" class="btn btn-outline-dark" id="uploadBtn" onclick="xlsUpload()">
+                                            <i data-feather="upload"></i> 처리상태 엑셀 업로드
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="mt-4">
                             <input type="hidden" name="menu_id" th:value="${menuId}"/>
                             <div class="top-search d-flex mt-4">
@@ -29,22 +44,23 @@
                                         <input type="hidden" name="surveyNo" th:value="${surveyNo}"/>
                                         <div class="d-flex align-items-center">
                                             <div class="input-group">
-                                                <div class="title" style="margin-right: 1rem;">처리상태</div>
-                                                <select id="filterType" class="form-select" aria-label="" name="type">
-                                                    <option value="">전체</option>
-                                                    <option value="접수" th:selected="${search.type} == '접수'">접수</option>
-                                                    <option value="1차" th:selected="${search.type} == '1차'">1차</option>
-                                                    <option value="2차" th:selected="${search.type} == '2차'">2차</option>
-                                                    <option value="3차" th:selected="${search.type} == '3차'">3차</option>
-                                                    <option value="4차" th:selected="${search.type} == '4차'">4차</option>
-                                                    <option value="5차" th:selected="${search.type} == '5차'">5차</option>
-                                                    <option value="심사" th:selected="${search.type} == '심사'">심사</option>
-                                                    <option value="합격" th:selected="${search.type} == '합격'">합격</option>
-                                                    <option value="불합격" th:selected="${search.type} == '불합격'">불합격
+                                                <select class="form-select" aria-label="" name="srhSelect">
+                                                    <option th:selected="${search.srhSelect} ==  'all'" value="all" selected>전체</option>
+                                                    <option th:selected="${search.srhSelect} ==  'applyNo'" value="applyNo">접수번호</option>
+                                                    <option th:selected="${search.srhSelect} ==  'companyName'" value="companyName">회사명</option>
+                                                </select>
+                                                <input type="text" class="form-control" placeholder="검색어를 입력해주세요." aria-label="" name="keyword" style="width: 45%"
+                                                       th:value="${search.keyword}">
+                                                <button class="btn btn-dark" type="submit">
+                                                    <span data-feather="search"></span>
+                                                </button>
+                                            </div>
+                                            <div class="input-group" style="width: 30%;margin: 0 10px;">
+                                                <select id="filterType" class="form-select" aria-label="" name="type" onchange="this.form.submit()">
+                                                    <option value="">처리상태</option>
+                                                    <option th:each="status : ${statusList}" th:selected="${search.type} == ${status.apply_status}" th:text="${status.apply_status}">
                                                     </option>
                                                 </select>
-                                                <button type="submit" class="btn btn-dark search-btn"><span
-                                                        data-feather="search"></span></button>
                                             </div>
                                         </div>
                                     </form>
@@ -60,14 +76,8 @@
                                         <a href="javascript:exportExcel()" class="btn btn-outline-dark">
                                             <i data-feather="download"></i> 전체 엑셀 다운로드
                                         </a>
-                                        <a href="javascript:exportExcel(true)" class="btn btn-outline-dark">
-                                            <i data-feather="download"></i> 선택 엑셀 다운로드
-                                        </a>
                                         <a href="javascript:selectMailSend()" class="btn btn-outline-dark">
                                             <i data-feather="mail"></i> 선택 메일 발송
-                                        </a>
-                                        <a href="javascript:moveMailSend()" class="btn btn-outline-dark">
-                                            <i data-feather="mail"></i> 메일 발송
                                         </a>
                                         <a th:href="@{/receipt/list/{menuId}(menuId=${menuId})}"
                                            class="btn btn-outline-primary">목록보기</a>
@@ -83,10 +93,10 @@
                                         <th style="width:60px">
                                             <input class="form-check-input" type="checkbox" value="" id="checkAll">
                                         </th>
+                                        <th style="width:100px">접수번호</th>
                                         <th style="width:200px">회사명</th>
                                         <th style="width:200px">이메일</th>
                                         <th style="width:120px">처리상태</th>
-                                        <th style="width:100px">상태변경</th>
                                         <th th:each="question : ${questionList}"
                                             th:if="${question.question_type_no != 4}" th:text="${question.question_title}">
                                         </th>
@@ -107,37 +117,15 @@
                                         <td>
                                             <input class="form-check-input" type="checkbox" name="applyCheck" th:value="${list.apply_no}">
                                         </td>
+                                        <td th:text="${list.apply_no}"></td>
                                         <td th:text="${list.company_name}">-</td>
                                         <td>
                                             <span class="apply-email" th:text="${list.email}"></span>
                                         </td>
                                         <td>
-                                            <select name="apply_status" class="form-select form-select-sm">
-                                                <option value="접수" th:selected="${list.apply_status} == '접수'">접수
-                                                </option>
-                                                <option value="1차" th:selected="${list.apply_status} == '1차'">1차
-                                                </option>
-                                                <option value="2차" th:selected="${list.apply_status} == '2차'">2차
-                                                </option>
-                                                <option value="3차" th:selected="${list.apply_status} == '3차'">3차
-                                                </option>
-                                                <option value="4차" th:selected="${list.apply_status} == '4차'">4차
-                                                </option>
-                                                <option value="5차" th:selected="${list.apply_status} == '5차'">5차
-                                                </option>
-                                                <option value="심사" th:selected="${list.apply_status} == '심사'">심사
-                                                </option>
-                                                <option value="합격" th:selected="${list.apply_status} == '합격'">합격
-                                                </option>
-                                                <option value="불합격" th:selected="${list.apply_status} == '불합격'">불합격
-                                                </option>
+                                            <select name="apply_status" class="form-select form-select-sm" th:onchange="|updateAlert(this, '${list.apply_no}')|">
+                                                <option th:each="status : ${statusList}" th:selected="${list.apply_status} == ${status.apply_status}" th:text="${status.apply_status}">
                                             </select>
-                                        </td>
-
-                                        <td>
-                                            <button type="button" th:onclick="|updateAlert(this, '${list.apply_no}')|"
-                                                    class="btn btn-outline-warning btn-sm">변경
-                                            </button>
                                         </td>
                                         <td th:each="question : ${questionList}"
                                             th:if="${question.question_type_no != 4}">
@@ -305,7 +293,7 @@
 
     function exportExcel(onlySelected = false) {
         const table = document.getElementById("mytable");
-        const excludeCols = [0, 4, $("#mytable thead th").length - 1];
+        const excludeCols = [0, $("#mytable thead th").length - 1];
         const tableData = [];
 
         // 헤더 추가
@@ -347,7 +335,6 @@
         XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
         XLSX.writeFile(workbook, "survey_export.xlsx");
     }
-
 
     function updateAlert(el, applyNo) {
         let status = $(el).parent().parent().find('select[name=apply_status]').val();
@@ -420,6 +407,73 @@
             });
         }
     }
+
+    function xlsUpload() {
+        if($('.apply-email').length === 0) {
+            alert('현재 접수된 지원서가 없습니다.');
+            return false;
+        }
+
+        document.getElementById('excelFile').click()
+    }
+
+    $(document).ready(function () {
+        const fileInput = document.getElementById('excelFile');
+
+        fileInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const fileName = file.name;
+                const fileExt = fileName.match(/\.([^.]+)$/)?.[1]?.toLowerCase();
+
+                if (!fileExt || (fileExt !== 'xlsx' && fileExt !== 'xls')) {
+                    alert('엑셀 파일(.xlsx 또는 .xls)만 업로드 가능합니다.');
+                    fileInput.value = ''; // 파일 선택 초기화
+                    return;
+                }
+
+                if (file.size > 10 * 1024 * 1024) {
+                    alert('파일 크기는 10MB를 초과할 수 없습니다.');
+                    fileInput.value = '';
+                    return;
+                }
+
+                if(confirm('선택한 엑셀 파일의 정보로 접수번호의 처리상태가 일괄 변경됩니다.\r계속하시겠습니까?')) {
+                    // 파일 업로드 처리
+                    uploadExcelFile(file);
+                }
+            }
+        });
+
+        function uploadExcelFile(file) {
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('surveyNo', $('input[name=surveyNo]').val());
+
+            $.ajax({
+                url: /*[[@{/receipt/uploadXlsForApplyStatus}]]*/, // 요청 URL
+                type: 'POST', // HTTP 메서드
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    if(response.result == '6') {
+                        alert("처리상태가 변경되었습니다.");
+                        window.location.reload();
+                    } else if(response.result == '1') {
+                        alert('업로드 파일을 확인해주세요.');
+                    } else if(response.result == '2') {
+                        alert('엑셀 파일만 업로드 가능합니다.');
+                    } else {
+                        alert("처리상태 변경 실패하였습니다.");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    alert("오류가 발생했습니다.");
+                }
+            });
+        }
+    })
 
 
 </script>

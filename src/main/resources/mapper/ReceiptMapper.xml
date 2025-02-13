@@ -376,4 +376,48 @@
          WHERE 1 = 1
            AND SRVY_SN = #{srvy_sn}
     </delete> -->
+
+	<update id="updateApplyStatus" parameterType="com.kb.inno.admin.DTO.KbStartersApplyDTO">
+		UPDATE KB_STARTERS_APPLY
+		SET APPLY_STATUS = #{apply_status}
+		WHERE APPLY_NO = #{apply_no}
+		  AND SURVEY_NO = #{survey_no}
+	</update>
+
+	<select id="getSurveyApplyStatusList" parameterType="int" resultType="com.kb.inno.admin.DTO.KbStartersApplyDTO">
+		SELECT SURVEY_NO
+		       , APPLY_STATUS
+		FROM KB_STARTERS_APPLY_STATUS
+		WHERE SURVEY_NO = #{survey_no}
+		ORDER BY SEQ ASC
+	</select>
+
+
+	<delete id="deleteApplyStatus" parameterType="java.lang.Integer">
+		DELETE
+		FROM KB_STARTERS_APPLY_STATUS
+		WHERE SURVEY_NO = #{survey_no}
+	</delete>
+
+	<insert id="saveApplyStatus" parameterType="com.kb.inno.admin.DTO.KbStartersApplyDTO">
+		INSERT INTO KB_STARTERS_APPLY_STATUS
+		( SURVEY_NO
+		, SEQ
+		, APPLY_STATUS
+		, FRST_RGTR
+		, FRST_REG_DT
+		, LAST_MDFR
+		, LAST_MDFCN_DT
+		)
+		VALUES
+			( #{survey_no}
+			, #{seq}
+			, #{apply_status}
+			, #{frst_rgtr}
+			, SYSDATE
+			, #{last_mdfr}
+			, SYSDATE
+			)
+	</insert>
+
 </mapper>

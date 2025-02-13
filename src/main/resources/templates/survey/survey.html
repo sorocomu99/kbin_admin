@@ -23,7 +23,7 @@
                                             <div class="input-group">
                                                 <select class="form-select" aria-label="" name="type">
                                                     <option value="all">전체</option>
-                                                    <option value="title" th:selected="${search.type == 'title'}">설문명
+                                                    <option value="title" th:selected="${search.type == 'title'}">설문 제목
                                                     </option>
                                                 </select>
                                                 <input type="text" class="form-control" placeholder="검색어를 입력해주세요."
@@ -37,20 +37,25 @@
                                 </div>
                                 <div class="col-auto">
                                     <div class="button-wrap d-flex justify-content-end">
-                                        <a th:href="@{/survey/insert/{menuId}(menuId=${menuId})}"
-                                           class="btn btn-primary">
+                                        <a href="#" onclick="addSurvey()" class="btn btn-primary">
                                             <!--<a href="survey_input.html" class="btn btn-primary">-->
                                             <i data-feather="edit"></i> 신규 등록
                                         </a>
+                                        <form id="survey_form" name="survey_form" method="post">
+                                            <input type="hidden" id="srvy_ttl" name="survey_title">
+                                            <input type="hidden" id="survey_no" name="survey_no" th:value="0">
+                                            <input type="hidden" id="menu_id" name="menuId" th:value="${menuId}"/>
+                                            <input type="hidden" id="file_yn" name="file_yn" value="0">
+                                        </form>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="mt-4">
-                            <table class="table text-center align-middle">
+                            <table class="table text-center align-middle survey-table">
                                 <thead>
                                 <tr>
-                                    <th style="width:40%">설문내용</th>
+                                    <th style="width:40%">설문 제목</th>
                                     <th style="width:10%">지원자수</th>
                                     <th style="width:20%">노출/마감</th>
                                     <th style="width:30%">관리</th>
@@ -59,13 +64,16 @@
                                 <tbody>
                                 <!-- 검색 결과 없을 때 -->
                                 <tr th:if="${surveyList.isEmpty()}">
-                                    <td class="py-5" colspan="10">
+                                    <td class="py-5 no-result" colspan="10">
                                         검색 결과가 없습니다.
                                     </td>
                                 </tr>
                                 <!-- 리스팅 -->
                                 <tr th:each="row : ${surveyList}">
-                                    <td th:text="${row.survey_title}"></td>
+                                    <td>
+                                        <span th:text="${row.survey_title}" style="margin-right: 10px;"></span>
+                                        <button class="btn btn-outline-dark btn-sm" th:onclick="|funTitleModify(${row.survey_no}, event)|">수정</button>
+                                    </td>
                                     <td th:text="${row.apply_cnt}"></td>
                                     <td>
                                         <div class="form-check form-check-inline">
@@ -94,7 +102,9 @@
                                                        th:id="${'close_yn' + row.survey_no}" th:value="${row.survey_no}"
                                                        th:onclick="|funCloseSurvey(${row.survey_no}, 'D', event)|"
                                                        th:disabled="${row.delete_yn == 'N'}">
-                                                <label class="form-check-label" th:style="${row.delete_yn == 'N' ? '' : 'cursor:pointer'}" th:for="${'close_yn' + row.survey_no}">마감</label>
+                                                <label class="form-check-label"
+                                                       th:style="${row.delete_yn == 'N' ? '' : 'cursor:pointer'}"
+                                                       th:for="${'close_yn' + row.survey_no}">마감</label>
                                             </span>
                                             <span th:if="${row.delete_yn == 'D'}">
                                                 <input th:if="${row.delete_yn == 'D'}" style="cursor: pointer" checked
@@ -115,7 +125,9 @@
                                         <a th:href="@{|/receipt/receiptList/402000?surveyNo=${row.survey_no}|}"
                                            class="btn btn-outline-dark btn-sm">접수관리</a>
                                         <div style="margin-top: 10px;">
-                                            <button type="button" th:onclick="|deleteAlert('${row.survey_no}')|" class="btn btn-outline-danger btn-sm">임시 삭제</button>
+                                            <button type="button" th:onclick="|deleteAlert('${row.survey_no}')|"
+                                                    class="btn btn-outline-danger btn-sm">임시 삭제
+                                            </button>
                                             </button>
                                             <button type="button" th:onclick="|copyAlert('${row.survey_no}')|"
                                                     class="btn btn-outline-danger btn-sm">복사
@@ -300,17 +312,17 @@
     }
 
     function deleteAlert(survey_no) {
-        let result = confirm("정말 임시 삭제 하시겠습니까?");
+        let result = confirm("임시 삭제 하시겠습니까?\n삭제된 지원서는 [지원서 임시 보관함]에서 복구하실 수 있습니다");
         if (result) {
             $.ajax({
                 url: /*[[@{/receipt/tempDelete}]]*/, // 요청 URL
                 type: 'POST', // HTTP 메서드
-                data: { survey_no: survey_no, delete_yn: 'Y' }, // 보내는 데이터
-                success: function(response) {
+                data: {survey_no: survey_no, delete_yn: 'Y'}, // 보내는 데이터
+                success: function (response) {
                     alert("임시 삭제에 성공하였습니다.");
                     window.location.reload();
                 },
-                error: function(xhr, status, error) {
+                error: function (xhr, status, error) {
                     alert("임시 삭제를 실패하였습니다.");
                     console.error('Error:', error);
                 }
@@ -340,6 +352,131 @@
                 }
             });
         }
+    }
+
+    function addSurvey() {
+        if ($('#srvy_ttl_ins').length > 0) {
+            alert('신규 등록 폼이 있습니다.');
+            $('#srvy_ttl_ins').focus();
+            return false;
+        }
+
+        var newRow = $('<tr>').append(
+            $('<td colspan="3">').append(
+                $('<input>', {
+                    type: 'text',
+                    id: 'srvy_ttl_ins',
+                    maxLength: 50,
+                    class: 'form-control',
+                    placeholder: '설문명을 입력하세요'
+                })
+            ),
+            $('<td>').append(
+                $('<button>', {
+                    class: 'btn btn-primary',
+                    text: '등록'
+                }).on('click', function () {
+                    // 버튼 클릭 시 수행할 동작
+                    surveyInsert()
+                })
+            )
+        );
+
+        $('.survey-table tbody tr:first').before(newRow);
+
+        $('.no-result').hide();
+    }
+
+    function surveyInsert() {
+        var srvyTtl = $("#srvy_ttl_ins").val();
+        if (srvyTtl === null || srvyTtl === '') {
+            alert("설문 제목을 입력하세요.")
+            $("#srvy_ttl_ins").focus();
+            return false;
+        }
+
+        $('#srvy_ttl').val($("#srvy_ttl_ins").val());
+
+
+        let result = confirm("등록 하시겠습니까?");
+        if (result) {
+            const form = document.forms['survey_form'];
+            form.action = window.staticPath + 'survey/makeSurvey';   //전송할 URL
+            form.method = 'POST';                                    //전송 방식
+            form.target = '';                                        //새 창에서 열기
+            form.submit();                                           //폼 제출
+        }
+    }
+
+    function funTitleModify(survey_no, event) {
+        var $button = $(event.target);
+        var $span = $button.prev('span');
+        var currentTitle = $span.text().trim();
+
+        if ($button.text() === '수정') {
+            // 수정 모드로 전환
+            var $input = $('<input>', {
+                type: 'text',
+                id: 'srvy_ttl_ins_' + survey_no,
+                maxLength: 50,
+                class: 'form-control d-inline-block w-auto',
+                value: currentTitle
+            });
+
+            var $saveButton = $('<button>', {
+                class: 'btn btn-outline-success btn-sm ml-2',
+                style: 'margin-left: 10px;',
+                text: '수정'
+            });
+
+            var $cancelButton = $('<button>', {
+                class: 'btn btn-outline-secondary btn-sm ml-2',
+                style: 'margin-left: 10px;',
+                text: '취소'
+            });
+
+            $span.hide().after($input, $saveButton, $cancelButton);
+            $button.hide();
+
+            $saveButton.on('click', function () {
+                updateSurveyTitle(survey_no, $input.val().trim(), $span, $input, $button, $saveButton, $cancelButton);
+            });
+
+            $cancelButton.on('click', function () {
+                cancelEdit($span, $input, $button, $saveButton, $cancelButton);
+            });
+        }
+    }
+    function updateSurveyTitle(survey_no, newTitle, $span, $input, $button, $saveButton, $cancelButton) {
+        if(newTitle === '') {
+            alert('설문 제목을 입력하세요');
+            $input.focus();
+            return false
+        }
+
+        if (newTitle && newTitle !== $span.text().trim()) {
+            $('#srvy_ttl').val(newTitle);
+            $('#survey_no').val(survey_no);
+
+            let result = confirm("수정 하시겠습니까?");
+            if (result) {
+                const form = document.forms['survey_form'];
+                form.action = window.staticPath + 'survey/updateSurvey';   //전송할 URL
+                form.method = 'POST';                                    //전송 방식
+                form.target = '';                                        //새 창에서 열기
+                form.submit();                                           //폼 제출
+            }
+        } else {
+            cancelEdit($span, $input, $button, $saveButton, $cancelButton);
+        }
+    }
+
+    function cancelEdit($span, $input, $button, $saveButton, $cancelButton) {
+        $span.show();
+        $input.remove();
+        $saveButton.remove();
+        $cancelButton.remove();
+        $button.show();
     }
 </script>
 

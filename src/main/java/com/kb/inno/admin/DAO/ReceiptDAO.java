@@ -2,13 +2,9 @@ package com.kb.inno.admin.DAO;
 
 import java.util.List;
 
+import com.kb.inno.admin.DTO.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
-
-import com.kb.inno.admin.DTO.ReceiptConmDTO;
-import com.kb.inno.admin.DTO.ReceiptDTO;
-import com.kb.inno.admin.DTO.ReceiptListDTO;
-import com.kb.inno.admin.DTO.SurveyDTO;
 
 
 @Mapper
@@ -42,5 +38,12 @@ public interface ReceiptDAO {
     List<String> selectConm(String srvy_sn);
     
     List<ReceiptConmDTO> selectConmList(String conm);
-    
+
+    void updateApplyStatus(KbStartersApplyDTO dto);
+
+    List<KbStartersApplyDTO> getSurveyApplyStatusList(int surveyNo);
+
+    void deleteApplyStatus(KbStartersApplyDTO apply);
+
+    void saveApplyStatus(KbStartersApplyDTO apply);
 }

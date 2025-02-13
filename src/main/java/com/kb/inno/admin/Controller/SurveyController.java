@@ -146,6 +146,42 @@ public class SurveyController {
         return mv;
     }
 
+    @PostMapping("/makeSurvey")
+    public ModelAndView makeSurvey(HttpServletRequest request, KbStartersSurveyDTO survey, int menuId) {
+        ModelAndView mv = new ModelAndView("redirect:/survey/list/" + menuId);
+
+        int loginId = 0;
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            loginId = (int) session.getAttribute("mngrSn");
+        }
+
+        Map<String, Object> result = surveyService.makeSurvey(survey, loginId);
+        if(!result.get("result").equals("success")){
+            mv.setViewName("alertBack");
+            mv.addObject("message", result.get("message"));
+        }
+        return mv;
+    }
+
+    @PostMapping("/updateSurvey")
+    public ModelAndView updateSurvey(HttpServletRequest request, KbStartersSurveyDTO survey, int menuId) {
+        ModelAndView mv = new ModelAndView("redirect:/survey/list/" + menuId);
+
+        int loginId = 0;
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            loginId = (int) session.getAttribute("mngrSn");
+        }
+
+        Map<String, Object> result = surveyService.updateSurvey(survey, loginId);
+        if(!result.get("result").equals("success")){
+            mv.setViewName("alertBack");
+            mv.addObject("message", result.get("message"));
+        }
+        return mv;
+    }
+
     @PostMapping("/surverCopy")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> surverCopy(int surveyNo, HttpServletRequest request) {

@@ -20,7 +20,8 @@
                                             <tr>
                                                 <th class="bg-light">보내는 사람</th>
                                                 <td>
-                                                    <input type="text" name="sender" class="form-control" placeholder="보내는 사람 이메일 주소 ex) hwan@kbfg.com" th:value="${session.mngrEml}">
+                                                    <span th:text="${session.mngrEml}"></span>
+                                                    <input type="hidden" name="sender" th:value="${session.mngrEml}">
                                                 </td>
                                             </tr>
                                             <tr>
@@ -67,18 +68,6 @@
     </div>
     <script>
         function confirmMsg() {
-            if($.trim($('input[name=sender]').val()) === ''){
-                alert('보내는 사람을 입력하시기 바랍니다.');
-                $('input[name=sender]').focus();
-                return false;
-            }
-
-            if (!emailCheck($('input[name=sender]').val())) {
-                alert("유효하지 않은 이메일 주소입니다.");
-                $('input[name=sender]').focus();
-                return false;
-            }
-
             if($.trim($('input[name^=receivers]').val()) === ''){
                 alert('받는 사람을 입력하시기 바랍니다.');
                 $('input[name^=receivers]').focus();
@@ -100,7 +89,7 @@
             }
 
             if (!allValid) {
-                alert(`${validEmail} 는 유효하지 않은 이메일 주소입니다.`)
+                alert(`${validEmail} 유효하지 않은 이메일 주소입니다.`)
                 $('input[name^=receivers]').focus();
                 return false;
             }
