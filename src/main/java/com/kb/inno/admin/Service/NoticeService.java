@@ -90,6 +90,7 @@ public class NoticeService {
         model.addAttribute("repeat", repeat);
         model.addAttribute("currentPage", page);
         model.addAttribute("selectList", selectList);
+        model.addAttribute("pageCount", allCount);
         model.addAttribute("menuId", menuId);
     }
 

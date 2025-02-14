@@ -61,7 +61,7 @@
                                                         <input type="text" class="form-control form-control-sm"
                                                                name="choice_content" th:value="${choice.choice_content}"
                                                                th:placeholder="${'보기' + (choiceStat.index + 1)}">
-                                                        <select class="form-select form-select-sm move-question-type">
+                                                        <select class="form-select form-select-sm move-question-type" onchange="toggleRequireFieldBySelect(this)">
                                                             <option value="0">다음 문항</option>
                                                             <option value="1"
                                                                     th:selected="${choice.move_question_no != 0 and choice.move_question_no != 99}">
@@ -69,6 +69,9 @@
                                                             </option>
                                                             <option value="99"
                                                                     th:selected="${choice.move_question_no == 99}">설문 제출
+                                                            </option>
+                                                            <option value="98"
+                                                                    th:selected="${choice.move_question_no == 98}">설문 진행 불가
                                                             </option>
                                                         </select>
                                                         <input th:if="${choice.move_question_no != 0 and choice.move_question_no != 99}"
@@ -284,8 +287,8 @@
                                 }
                                 choice_object["move_question_no"] = move_question_no;
                             }
-                        } else if ($(this).find(".move-question-type").val() == 99) {
-                            choice_object["move_question_no"] = 99;
+                        } else if ($(this).find(".move-question-type").val() == 99 || $(this).find(".move-question-type").val() == 98) {
+                            choice_object["move_question_no"] = $(this).find(".move-question-type").val();
                         }
                         choice_list.push(choice_object);
                     });
@@ -493,10 +496,11 @@
             $element.parent().find(".item-list").append(`<div class="item">
                                                         <div class="column">
                                                             <input type="text" class="form-control form-control-sm" name="choice_content" placeholder="보기 ${itemListCount + 1}">
-                                                            <select class="form-select form-select-sm move-question-type ${moveYn ? 'on' : ''}">
+                                                            <select class="form-select form-select-sm move-question-type ${moveYn ? 'on' : ''}"  onchange="toggleRequireFieldBySelect(this)">
                                                                 <option value="0">다음 문항</option>
                                                                 <option value="1">문항 번호 선택</option>
                                                                 <option value="99">설문 제출</option>
+                                                                <option value="98">설문 진행 불가</option>
                                                             </select>
                                                         </div>
                                                         <div class="column">
@@ -504,6 +508,7 @@
                                                         </div>
                                                     </div>`);
 
+            feather.replace();
         }
 
         $("body").on("change", ".move-question-type", function () {
@@ -544,6 +549,14 @@
                     }
                 });
                 element.closest('.question-list').find('.form-select').removeClass('on')
+            }
+        }
+
+        function toggleRequireFieldBySelect(obj) {
+            if($(obj).val() == 98) {
+                $(obj).closest('.question-list').find('input[name=required_yn]').prop('checked', true);
+            }else{
+                $(obj).closest('.question-list').find('input[name=required_yn]').prop('checked', false);
             }
         }
     </script>

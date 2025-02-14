@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -1784,7 +1785,7 @@ public class SurveyService {
 				choice.setQuestion_choice_no(answer.getQuestion_choice_no());
 				answer.setQuestionChoiceDTO(surveyRepository.getOneQuestionChoice(choice));
 				if(answer.getAnswer_original_filename() != null && !answer.getAnswer_original_filename().equals("")){
-					String decodedFileName = new String(Base64.decodeBase64(answer.getAnswer_original_filename()));
+					String decodedFileName = new String(Base64.decodeBase64(answer.getAnswer_original_filename()), StandardCharsets.UTF_8);
 					answer.setAnswer_original_filename(decodedFileName);
 				}
 			}

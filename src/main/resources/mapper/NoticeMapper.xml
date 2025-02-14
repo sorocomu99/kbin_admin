@@ -33,6 +33,7 @@
              , NOTICE_PAGE.SORT_NO
              , NOTICE_PAGE.ATCH_FILE_SN
              , NOTICE_PAGE.EXPSR_YN
+             , NOTICE_PAGE.NTC_YN
           FROM
               (
                /* 순번 매기기 */
@@ -46,7 +47,8 @@
                             , SORT_NO
                             , ATCH_FILE_SN
                             , EXPSR_YN
-                            , ROW_NUMBER() OVER(ORDER BY NTC_SN DESC) RNUM
+                            , NTC_YN
+                            , ROW_NUMBER() OVER(ORDER BY SORT_NO, NTC_SN DESC) RNUM
                          FROM KB_NTC_INFO
                         WHERE 1=1
                         <if test='keyword != null and keyword != ""'>
